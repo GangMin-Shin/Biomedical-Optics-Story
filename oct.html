@@ -5,13 +5,24 @@
   <title>Optical Coherence Tomography (OCT)</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
+      width: 100%;
       min-height: 100vh;
       font-family: cursive;
       color: white;
+      overflow-x: hidden;
       background-color: #000000;
+      background-image: url("images/OCT%20background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
 
     body::before {
@@ -21,11 +32,11 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url("images/background.jpg");
+      background-image: url("images/OCT%20background.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      opacity: 0.5;
+      opacity: 0.3;
       z-index: -2;
     }
 
@@ -38,63 +49,108 @@
       height: 100vh;
       background: linear-gradient(
         rgba(0, 0, 0, 0.35),
-        rgba(0, 0, 0, 0.75)
+        rgba(0, 0, 0, 0.72)
       );
       z-index: -1;
     }
 
-    .page {
-      padding: 50px;
-      box-sizing: border-box;
+    .page-container {
+      min-height: 100vh;
+      position: relative;
+      padding: 45px;
+      z-index: 1;
+    }
+
+    .content-card {
+      max-width: 900px;
+      padding: 34px 38px;
+      border-radius: 24px;
+      background: rgba(0, 0, 0, 0.48);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 0 18px rgba(255, 255, 255, 0.18),
+        0 0 40px rgba(125, 255, 122, 0.22);
+      backdrop-filter: blur(4px);
     }
 
     h1 {
-      font-size: 44px;
-      color: #7dff7a;
+      margin: 0 0 20px 0;
+      font-size: 46px;
+      color: rgba(255, 255, 255, 0.98);
       text-shadow:
-        0 0 8px #7dff7a,
-        0 0 18px rgba(125, 255, 122, 0.6);
+        0 0 8px rgba(125, 255, 122, 0.55),
+        0 0 18px rgba(125, 255, 122, 0.35);
     }
 
     p {
-      max-width: 850px;
-      font-size: 20px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.92);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+      margin: 0 0 16px 0;
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.93);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
     }
 
-    a {
+    .back-link {
       display: inline-block;
-      margin-top: 30px;
-      font-size: 20px;
-      color: white;
+      margin-top: 24px;
       text-decoration: none;
-      transition: 0.25s ease;
+      font-size: 18px;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.10);
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
     }
 
-    a:hover {
-      color: #7dff7a;
-      font-weight: bold;
-      text-shadow:
-        0 0 6px #7dff7a,
-        0 0 14px #7dff7a;
-      transform: translateX(-5px);
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-4px);
+      box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.40),
+        0 0 22px rgba(125, 255, 122, 0.40);
+    }
+
+    @media screen and (max-width: 850px) {
+      .page-container {
+        padding: 24px;
+      }
+
+      .content-card {
+        padding: 26px 24px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      p {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="page">
-    <h1>Optical Coherence Tomography (OCT)</h1>
+  <div class="page-container">
+    <div class="content-card">
+      <h1>Optical Coherence Tomography (OCT)</h1>
 
-    <p>
-      This page will contain learning materials and interactive simulations
-      for optical coherence tomography, including low-coherence interferometry,
-      axial resolution, lateral resolution, A-scan, B-scan, and OCT image formation.
-    </p>
+      <p>
+        Optical Coherence Tomography (OCT) is an interferometric optical imaging method that provides depth-resolved
+        structural information with micrometer-scale resolution.
+      </p>
 
-    <a href="index.html">← Back to Home</a>
+      <p>
+        This page will summarize low-coherence interferometry, axial resolution, A-scan/B-scan concepts, and biomedical
+        OCT applications.
+      </p>
+
+      <a class="back-link" href="index.html">← Back to Homepage</a>
+    </div>
   </div>
 </body>
 </html>
