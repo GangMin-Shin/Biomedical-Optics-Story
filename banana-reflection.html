@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Reflection Geometry - Banana-shaped Sensitivity Kernel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: cursive;
+      color: white;
+      background: #000 url("images/Geometry background.png") center / cover fixed no-repeat;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(70, 180, 255, 0.18), transparent 32%),
+        linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.72));
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 34px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 24px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .viewer-card,
+    .option-card,
+    .result-card {
+      border-radius: 24px;
+      background: rgba(0, 0, 0, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow:
+        0 0 18px rgba(255, 255, 255, 0.14),
+        0 0 36px rgba(110, 210, 255, 0.20);
+      backdrop-filter: blur(5px);
+    }
+
+    .viewer-card {
+      padding: 28px;
+    }
+
+    .option-card {
+      position: sticky;
+      top: 28px;
+      padding: 24px;
+    }
+
+    .result-card {
+      margin-top: 18px;
+      padding: 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 40px;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow:
+        0 0 8px rgba(102, 204, 255, 0.55),
+        0 0 18px rgba(102, 204, 255, 0.35);
+    }
+
+    .subtitle {
+      margin: 0 0 20px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      max-width: 900px;
+      margin: 18px auto 0;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .colorbar {
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #1b0c41, #1a4fb8, #18b6d3, #78e75a, #ffe74a, #ff8c2a, #d7191c);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+    }
+
+    .option-card h2,
+    .result-card h2 {
+      margin: 0 0 18px;
+      font-size: 27px;
+      color: rgba(170, 230, 255, 0.98);
+      text-shadow: 0 0 8px rgba(102, 204, 255, 0.36);
+    }
+
+    .control-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.11);
+      color: white;
+      font-family: cursive;
+      font-size: 15px;
+      outline: none;
+    }
+
+    option {
+      color: black;
+    }
+
+    .run-button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(102, 204, 255, 0.22);
+      color: white;
+      font-family: cursive;
+      font-size: 18px;
+      cursor: pointer;
+      border: 1px solid rgba(102, 204, 255, 0.55);
+      transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .run-button:hover {
+      background: rgba(102, 204, 255, 0.34);
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 10px rgba(102, 204, 255, 0.58),
+        0 0 24px rgba(102, 204, 255, 0.32);
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .metric span:first-child {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .metric span:last-child {
+      color: #fff27a;
+      text-align: right;
+    }
+
+    .back-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .back-link {
+      display: inline-block;
+      padding: 9px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: white;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-3px);
+      box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
+    }
+
+    .note {
+      margin-top: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    @media screen and (max-width: 1000px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .option-card {
+        position: static;
+      }
+    }
+
+    @media screen and (max-width: 680px) {
+      .page-container {
+        padding: 22px;
+      }
+
+      .viewer-card,
+      .option-card {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 31px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-container">
+    <div class="layout">
+      <main class="viewer-card">
+        <h1>Reflection Geometry</h1>
+        <p class="subtitle">
+          This browser simulation visualizes a banana-shaped sensitivity kernel for source-detector pairs placed on
+          the same surface. The Brain model follows a simplified 4-layer head structure, while the Radial model follows
+          a simplified multilayer wrist structure with radial artery ROI.
+        </p>
+
+        <canvas id="kernelCanvas" width="900" height="620"></canvas>
+
+        <div class="legend">
+          <div class="colorbar"></div>
+          <span>Normalized sensitivity W / Wmax</span>
+        </div>
+      </main>
+
+      <aside>
+        <section class="option-card">
+          <h2>Simulation Options</h2>
+
+          <div class="control-group">
+            <label for="modelSelect">Model</label>
+            <select id="modelSelect">
+              <option value="brain">Brain</option>
+              <option value="radial">Radial</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="sdsSelect">SDS</label>
+            <select id="sdsSelect">
+              <option value="10">1.0 cm</option>
+              <option value="20" selected>2.0 cm</option>
+              <option value="30">3.0 cm</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="photonInput">Simulation photon number</label>
+            <input id="photonInput" type="number" min="1000" max="1000000" step="1000" value="300000">
+          </div>
+
+          <button class="run-button" id="runButton" type="button">Run Simulation</button>
+
+          <p class="note">
+            This static webpage uses a diffusion-based sensitivity approximation for interactive visualization.
+            The original Python code uses Numba-based Monte Carlo simulation, which cannot run directly on GitHub Pages.
+          </p>
+
+          <div class="back-links">
+            <a class="back-link" href="dot.html">← Back to DOT</a>
+            <a class="back-link" href="index.html">Homepage</a>
+          </div>
+        </section>
+
+        <section class="result-card">
+          <h2>Results</h2>
+          <div id="resultPanel"></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("kernelCanvas");
+    const ctx = canvas.getContext("2d");
+    const modelSelect = document.getElementById("modelSelect");
+    const sdsSelect = document.getElementById("sdsSelect");
+    const photonInput = document.getElementById("photonInput");
+    const runButton = document.getElementById("runButton");
+    const resultPanel = document.getElementById("resultPanel");
+
+    const models = {
+      brain: {
+        title: "Brain model",
+        xMin: -35,
+        xMax: 35,
+        zMin: -4,
+        zMax: 35,
+        targetName: "Cortex",
+        targetRange: [12, 35],
+        layers: [
+          { name: "Scalp", top: 0.0, bottom: 3.0, mua: 0.017, musp: 0.85, color: "rgba(244,194,161,0.38)" },
+          { name: "Skull", top: 3.0, bottom: 10.0, mua: 0.012, musp: 1.15, color: "rgba(230,210,170,0.38)" },
+          { name: "CSF", top: 10.0, bottom: 12.0, mua: 0.004, musp: 0.02, color: "rgba(160,210,255,0.38)" },
+          { name: "Cortex", top: 12.0, bottom: 40.0, mua: 0.017, musp: 0.90, color: "rgba(200,145,145,0.38)" }
+        ],
+        roi: null
+      },
+      radial: {
+        title: "Radial artery wrist model",
+        xMin: -25,
+        xMax: 25,
+        zMin: -4,
+        zMax: 35,
+        targetName: "Radial artery ROI",
+        layers: [
+          { name: "Palmar skin", top: 0.0, bottom: 1.2, mua: 0.020, musp: 1.00, color: "rgba(244,194,161,0.38)" },
+          { name: "Palmar fat", top: 1.2, bottom: 2.8, mua: 0.010, musp: 0.65, color: "rgba(246,226,179,0.38)" },
+          { name: "Vascular/fascia", top: 2.8, bottom: 5.0, mua: 0.060, musp: 0.95, color: "rgba(170,220,220,0.38)" },
+          { name: "Flexor tendon", top: 5.0, bottom: 11.0, mua: 0.018, musp: 1.10, color: "rgba(199,178,153,0.38)" },
+          { name: "Carpal bone", top: 11.0, bottom: 24.0, mua: 0.012, musp: 1.35, color: "rgba(184,199,217,0.38)" },
+          { name: "Extensor tendon", top: 24.0, bottom: 29.0, mua: 0.018, musp: 1.05, color: "rgba(199,178,153,0.38)" },
+          { name: "Dorsal fat", top: 29.0, bottom: 33.8, mua: 0.010, musp: 0.65, color: "rgba(246,226,179,0.38)" },
+          { name: "Dorsal skin", top: 33.8, bottom: 35.0, mua: 0.020, musp: 1.00, color: "rgba(244,194,161,0.38)" }
+        ],
+        roi: { name: "RA", x: 0.0, z: 3.8, radius: 1.2 }
+      }
+    };
+
+    function getLayer(model, z) {
+      for (const layer of model.layers) {
+        if (z >= layer.top && z < layer.bottom) return layer;
+      }
+      return model.layers[model.layers.length - 1];
+    }
+
+    function muEff(layer) {
+      const d = 1 / (3 * (layer.mua + layer.musp));
+      return Math.sqrt(layer.mua / d);
+    }
+
+    function fieldAt(model, x, z, sx, sz) {
+      const layer = getLayer(model, Math.max(0, z));
+      const r = Math.sqrt((x - sx) ** 2 + (z - sz) ** 2 + 0.35 ** 2);
+      const mue = muEff(layer);
+      const depthPenalty = Math.exp(-0.012 * z);
+      return Math.exp(-mue * r) / (r + 0.5) * depthPenalty;
+    }
+
+    function colorMap(v) {
+      v = Math.max(0, Math.min(1, v));
+      const stops = [
+        [0.00, [27, 12, 65]],
+        [0.18, [26, 79, 184]],
+        [0.36, [24, 182, 211]],
+        [0.55, [120, 231, 90]],
+        [0.74, [255, 231, 74]],
+        [0.90, [255, 140, 42]],
+        [1.00, [215, 25, 28]]
+      ];
+
+      for (let i = 0; i < stops.length - 1; i++) {
+        const [p0, c0] = stops[i];
+        const [p1, c1] = stops[i + 1];
+        if (v >= p0 && v <= p1) {
+          const t = (v - p0) / (p1 - p0);
+          return [
+            Math.round(c0[0] + t * (c1[0] - c0[0])),
+            Math.round(c0[1] + t * (c1[1] - c0[1])),
+            Math.round(c0[2] + t * (c1[2] - c0[2]))
+          ];
+        }
+      }
+
+      return stops[stops.length - 1][1];
+    }
+
+    function drawSimulation() {
+      const model = models[modelSelect.value];
+      const sds = Number(sdsSelect.value);
+      const photons = Math.max(1000, Number(photonInput.value) || 300000);
+
+      const width = canvas.width;
+      const height = canvas.height;
+      const marginLeft = 70;
+      const marginRight = 25;
+      const marginTop = 45;
+      const marginBottom = 62;
+      const plotW = width - marginLeft - marginRight;
+      const plotH = height - marginTop - marginBottom;
+
+      const nx = 220;
+      const nz = 160;
+      const image = ctx.createImageData(nx, nz);
+
+      const xs = -sds / 2;
+      const xd = sds / 2;
+      const sz = 0;
+      const dz = 0;
+
+      const values = new Float64Array(nx * nz);
+      let maxVal = 0;
+      let total = 0;
+      let target = 0;
+      const layerSums = new Map();
+
+      for (const layer of model.layers) {
+        layerSums.set(layer.name, 0);
+      }
+
+      for (let j = 0; j < nz; j++) {
+        const z = model.zMin + (j / (nz - 1)) * (model.zMax - model.zMin);
+
+        for (let i = 0; i < nx; i++) {
+          const x = model.xMin + (i / (nx - 1)) * (model.xMax - model.xMin);
+
+          let w = 0;
+          if (z >= 0) {
+            const phiS = fieldAt(model, x, z, xs, sz);
+            const phiD = fieldAt(model, x, z, xd, dz);
+            const suppressS = 1 - Math.exp(-(((x - xs) ** 2 + z ** 2) / (1.2 ** 2)));
+            const suppressD = 1 - Math.exp(-(((x - xd) ** 2 + z ** 2) / (1.2 ** 2)));
+            const noise = 1 + (Math.random() - 0.5) * Math.min(0.18, 50 / Math.sqrt(photons));
+            w = phiS * phiD * suppressS * suppressD * noise;
+          }
+
+          const idx = j * nx + i;
+          values[idx] = w;
+          if (w > maxVal) maxVal = w;
+        }
+      }
+
+      for (let j = 0; j < nz; j++) {
+        const z = model.zMin + (j / (nz - 1)) * (model.zMax - model.zMin);
+
+        for (let i = 0; i < nx; i++) {
+          const x = model.xMin + (i / (nx - 1)) * (model.xMax - model.xMin);
+          const idx = j * nx + i;
+          const v = values[idx] / (maxVal + 1e-30);
+          const displayV = Math.min(1, v / 0.35);
+          const [r, g, b] = colorMap(displayV);
+          const p = idx * 4;
+
+          image.data[p] = r;
+          image.data[p + 1] = g;
+          image.data[p + 2] = b;
+          image.data[p + 3] = z >= 0 ? 255 : 0;
+
+          if (z >= 0) {
+            total += v;
+            const layer = getLayer(model, z);
+            layerSums.set(layer.name, layerSums.get(layer.name) + v);
+
+            if (model.roi) {
+              const roi = model.roi;
+              if ((x - roi.x) ** 2 + (z - roi.z) ** 2 <= roi.radius ** 2) {
+                target += v;
+              }
+            } else if (z >= model.targetRange[0] && z < model.targetRange[1]) {
+              target += v;
+            }
+          }
+        }
+      }
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.96)";
+      ctx.fillRect(0, 0, width, height);
+
+      const offscreen = document.createElement("canvas");
+      offscreen.width = nx;
+      offscreen.height = nz;
+      offscreen.getContext("2d").putImageData(image, 0, 0);
+
+      ctx.drawImage(offscreen, marginLeft, marginTop, plotW, plotH);
+
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.85)";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(marginLeft, marginTop, plotW, plotH);
+
+      function xToPx(x) {
+        return marginLeft + ((x - model.xMin) / (model.xMax - model.xMin)) * plotW;
+      }
+
+      function zToPx(z) {
+        return marginTop + ((z - model.zMin) / (model.zMax - model.zMin)) * plotH;
+      }
+
+      for (const layer of model.layers) {
+        const yTop = zToPx(layer.top);
+        const yBot = zToPx(layer.bottom);
+        ctx.fillStyle = layer.color;
+        ctx.fillRect(marginLeft, yTop, plotW, yBot - yTop);
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+        ctx.setLineDash([5, 4]);
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, yTop);
+        ctx.lineTo(marginLeft + plotW, yTop);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+        ctx.font = "13px cursive";
+        ctx.fillText(layer.name, marginLeft + 8, yTop + 17);
+      }
+
+      ctx.fillStyle = "black";
+      ctx.fillRect(xToPx(xs) - 3, zToPx(-3), 6, zToPx(0) - zToPx(-3));
+      ctx.fillRect(xToPx(xd) - 3, zToPx(-3), 6, zToPx(0) - zToPx(-3));
+
+      ctx.fillStyle = "black";
+      ctx.font = "bold 14px cursive";
+      ctx.fillText("S", xToPx(xs) - 5, zToPx(-3.4));
+      ctx.fillText("D", xToPx(xd) - 5, zToPx(-3.4));
+
+      if (model.roi) {
+        const roi = model.roi;
+        ctx.strokeStyle = "cyan";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(
+          xToPx(roi.x),
+          zToPx(roi.z),
+          roi.radius / (model.xMax - model.xMin) * plotW,
+          0,
+          Math.PI * 2
+        );
+        ctx.stroke();
+
+        ctx.fillStyle = "cyan";
+        ctx.font = "bold 14px cursive";
+        ctx.fillText(roi.name, xToPx(roi.x + roi.radius + 0.4), zToPx(roi.z) + 4);
+      }
+
+      ctx.fillStyle = "black";
+      ctx.font = "bold 18px cursive";
+      ctx.fillText(`${model.title} | Reflection geometry | SDS = ${(sds / 10).toFixed(1)} cm`, marginLeft, 26);
+
+      ctx.fillStyle = "black";
+      ctx.font = "15px cursive";
+      ctx.fillText("Lateral position x (mm)", marginLeft + plotW / 2 - 80, height - 18);
+
+      ctx.save();
+      ctx.translate(22, marginTop + plotH / 2 + 70);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText("Depth z (mm)", 0, 0);
+      ctx.restore();
+
+      const targetPct = 100 * target / (total + 1e-30);
+
+      let html = "";
+      html += `<div class="metric"><span>Model</span><span>${model.title}</span></div>`;
+      html += `<div class="metric"><span>SDS</span><span>${(sds / 10).toFixed(1)} cm</span></div>`;
+      html += `<div class="metric"><span>Photon number</span><span>${photons.toLocaleString()}</span></div>`;
+      html += `<div class="metric"><span>${model.targetName}</span><span>${targetPct.toFixed(3)} %</span></div>`;
+
+      for (const layer of model.layers) {
+        const pct = 100 * layerSums.get(layer.name) / (total + 1e-30);
+        html += `<div class="metric"><span>${layer.name}</span><span>${pct.toFixed(2)} %</span></div>`;
+      }
+
+      resultPanel.innerHTML = html;
+    }
+
+    runButton.addEventListener("click", drawSimulation);
+    modelSelect.addEventListener("change", drawSimulation);
+    sdsSelect.addEventListener("change", drawSimulation);
+    window.addEventListener("load", drawSimulation);
+  </script>
+</body>
+</html>
