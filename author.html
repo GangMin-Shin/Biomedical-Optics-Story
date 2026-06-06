@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>About Gang Min Shin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: cursive;
+      color: white;
+      overflow-x: hidden;
+      background-color: #000;
+    }
+
+    body {
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("images/Author background.jpg") center / cover no-repeat;
+      opacity: 0.7;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.25),
+        rgba(0, 0, 0, 0.65)
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 45px;
+    }
+
+    .content-card {
+      max-width: 980px;
+      padding: 34px 38px;
+      border-radius: 24px;
+      background: rgba(0, 0, 0, 0.52);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 0 18px rgba(255, 255, 255, 0.18),
+        0 0 40px rgba(100, 180, 255, 0.20);
+      backdrop-filter: blur(4px);
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: 46px;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.45),
+        0 0 18px rgba(120, 190, 255, 0.35);
+    }
+
+    h2 {
+      margin: 30px 0 12px;
+      font-size: 28px;
+      color: rgba(180, 220, 255, 0.98);
+      text-shadow: 0 0 8px rgba(120, 190, 255, 0.35);
+    }
+
+    p {
+      margin: 0 0 16px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.93);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    }
+
+    ul {
+      margin: 0 0 18px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin: 10px 0;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    }
+
+    em {
+      color: rgba(220, 240, 255, 0.98);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.10);
+      color: white;
+      font-size: 18px;
+      text-decoration: none;
+      transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-4px);
+      box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.40),
+        0 0 22px rgba(100, 180, 255, 0.35);
+    }
+
+    @media screen and (max-width: 850px) {
+      .page-container {
+        padding: 24px;
+      }
+
+      .content-card {
+        padding: 26px 24px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      p,
+      li {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-container">
+    <main class="content-card">
+      <h1>About Gang Min Shin</h1>
+
+      <p>
+        Gang Min Shin completed his master's degree in the Department of Electrical Engineering and Computer Science
+        at DGIST. His thesis was titled
+        <em>Pulsatile Waveform Analysis Using Diffuse Optical Flowmetry: A Study of the Prefrontal Cortex and Finger</em>.
+      </p>
+
+      <h2>Research Field</h2>
+
+      <p>
+        His research focuses on biomedical optics, diffuse optical flowmetry, and noninvasive measurement of
+        microcirculatory blood-flow dynamics. In particular, he studies physiological signals obtained using
+        Multi-Mode Fiber Diffuse Speckle Contrast Analysis (MMF-DSCA).
+      </p>
+
+      <h2>Main Research Theme</h2>
+
+      <p>
+        The main goal of his research is to analyze pulsatile blood-flow waveforms rather than relying only on
+        average blood-flow changes. For this purpose, Blood Flow Index (BFI), Blood Volume Index (BVI),
+        heart-rate-related features, and frequency-domain components are analyzed together.
+      </p>
+
+      <h2>Prefrontal Cortex Study</h2>
+
+      <p>
+        One part of the research investigated hemodynamic responses in the right prefrontal cortex during
+        cognitive-load tasks. Measurements were performed using source-detector separation channels, and the
+        resulting BFI and BVI signals were analyzed in both the time domain and the frequency domain.
+      </p>
+
+      <p>
+        The study examined how cognitive workload affects optical blood-flow signals, including task-related
+        waveform changes and spectral components such as cardiac, low-frequency oscillation, and very-low-frequency
+        oscillation bands.
+      </p>
+
+      <h2>Finger Microcirculation Study</h2>
+
+      <p>
+        Another part of the research analyzed peripheral microcirculatory responses in the finger during ST36
+        stimulation and the Cold Pressor Test (CPT). These experiments were designed to examine autonomic and
+        vascular responses through BFI, BVI, heart rate, heart rate variability, and inter-beat interval analysis.
+      </p>
+
+      <p>
+        This work emphasized that physiological interpretation should consider blood flow, blood volume,
+        pulsatile waveform morphology, and frequency-domain features together.
+      </p>
+
+      <h2>Keywords</h2>
+
+      <ul>
+        <li>MMF-DSCA: Multi-Mode Fiber Diffuse Speckle Contrast Analysis</li>
+        <li>BFI: Blood Flow Index</li>
+        <li>BVI: Blood Volume Index</li>
+        <li>SDS: Source-Detector Separation</li>
+        <li>HR: Heart Rate</li>
+        <li>HRV: Heart Rate Variability</li>
+        <li>IBI: Inter-Beat Interval</li>
+        <li>CPT: Cold Pressor Test</li>
+        <li>ST36: Zusanli Acupoint</li>
+        <li>LFO: Low-Frequency Oscillation</li>
+        <li>VLFO: Very-Low-Frequency Oscillation</li>
+      </ul>
+
+      <a class="back-link" href="index.html">← Back to Homepage</a>
+    </main>
+  </div>
+</body>
+</html>
