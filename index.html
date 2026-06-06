@@ -18,6 +18,11 @@
       color: white;
       overflow-x: hidden;
       background-color: #000000;
+      background-image: url("images/background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
 
     /* 배경 이미지만 50% 투명도로 표시 */
@@ -55,6 +60,7 @@
       min-height: 100vh;
       position: relative;
       padding: 40px;
+      z-index: 1;
     }
 
     /* 홈페이지 제목 및 설명: 오른쪽 상단 */
@@ -69,7 +75,7 @@
 
     .intro-box h1 {
       margin: 0 0 18px 0;
-      font-size: 46px;
+      font-size: 56px;
       letter-spacing: 1px;
       color: rgba(255, 255, 255, 0.98);
       text-shadow:
@@ -99,6 +105,11 @@
       text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
+    .author-link {
+      display: inline-block;
+      text-decoration: none;
+    }
+
     /* 작성자 사진 */
     .author-photo {
       display: inline-block;
@@ -114,6 +125,18 @@
         0 0 10px rgba(255, 255, 255, 0.55),
         0 0 24px rgba(100, 180, 255, 0.45),
         0 0 40px rgba(100, 180, 255, 0.25);
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+
+    .author-photo:hover {
+      transform: scale(1.04);
+      box-shadow:
+        0 0 14px rgba(255, 255, 255, 0.75),
+        0 0 32px rgba(100, 180, 255, 0.65),
+        0 0 55px rgba(100, 180, 255, 0.35);
     }
 
     /* 컨텐츠: 왼쪽 하단 */
@@ -125,7 +148,7 @@
 
     .contents-box h2 {
       margin: 0 0 18px 0;
-      font-size: 30px;
+      font-size: 42px;
       letter-spacing: 1px;
       color: rgba(255, 255, 255, 0.96);
       text-shadow:
@@ -201,12 +224,16 @@
       }
 
       .intro-box h1 {
-        font-size: 34px;
+        font-size: 40px;
       }
 
       .contents-box {
         position: static;
         margin-top: 80px;
+      }
+
+      .contents-box h2 {
+        font-size: 36px;
       }
 
       .content-list a {
@@ -228,8 +255,7 @@
       <h1>Biomedical-Optics-Story (BOS)</h1>
 
       <p>
-        A learning simulation page created by a student with a B.S. in Electronic Engineering
-        and an M.S. in Biomedical Optics.
+        This page summarizes biomedical optics and optical simulations.
       </p>
 
       <div class="degree-info">
@@ -241,7 +267,9 @@
         - Gang Min Shin -
       </div>
 
-      <img class="author-photo" src="images/Author.jpg" alt="Author photo">
+      <a class="author-link" href="author.html" aria-label="About Gang Min Shin">
+        <img class="author-photo" src="images/Author.jpg" alt="Author photo">
+      </a>
     </div>
 
     <div class="contents-box">
