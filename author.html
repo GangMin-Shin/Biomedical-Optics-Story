@@ -39,10 +39,10 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.25),
-        rgba(0, 0, 0, 0.65)
-      );
+      background:
+        radial-gradient(circle at 20% 20%, rgba(120, 70, 180, 0.32), transparent 35%),
+        radial-gradient(circle at 80% 25%, rgba(60, 160, 220, 0.25), transparent 38%),
+        linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.78));
       z-index: 0;
       pointer-events: none;
     }
@@ -55,64 +55,311 @@
     }
 
     .content-card {
-      max-width: 980px;
-      padding: 34px 38px;
-      border-radius: 24px;
-      background: rgba(0, 0, 0, 0.52);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 38px;
+      border-radius: 28px;
+      background: rgba(0, 0, 0, 0.54);
+      border: 1px solid rgba(255, 255, 255, 0.26);
       box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.18),
-        0 0 40px rgba(100, 180, 255, 0.20);
-      backdrop-filter: blur(4px);
+        0 0 18px rgba(255, 255, 255, 0.16),
+        0 0 46px rgba(80, 180, 255, 0.22);
+      backdrop-filter: blur(5px);
     }
 
-    h1 {
-      margin: 0 0 20px;
-      font-size: 46px;
-      color: rgba(255, 255, 255, 0.98);
+    .hero {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 30px;
+      align-items: center;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .profile-photo {
+      width: 170px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      padding: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.45),
+        0 0 34px rgba(110, 210, 255, 0.34);
+    }
+
+    .hero-text h1 {
+      margin: 0 0 12px;
+      font-size: 50px;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.99);
       text-shadow:
         0 0 8px rgba(255, 255, 255, 0.45),
-        0 0 18px rgba(120, 190, 255, 0.35);
+        0 0 20px rgba(120, 190, 255, 0.38);
     }
 
-    h2 {
-      margin: 30px 0 12px;
-      font-size: 28px;
-      color: rgba(180, 220, 255, 0.98);
-      text-shadow: 0 0 8px rgba(120, 190, 255, 0.35);
-    }
-
-    p {
+    .hero-text .name-ko {
       margin: 0 0 16px;
+      font-size: 25px;
+      color: rgba(200, 235, 255, 0.96);
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .tagline {
+      display: inline-block;
+      margin: 0 0 18px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255, 230, 70, 0.13);
+      border: 1px solid rgba(255, 230, 70, 0.55);
+      color: #fff27a;
+      font-size: 22px;
+      line-height: 1.5;
+      text-shadow: 0 0 8px rgba(255, 230, 70, 0.35);
+    }
+
+    .summary {
+      max-width: 820px;
+      margin: 0;
       font-size: 18px;
       line-height: 1.8;
-      color: rgba(255, 255, 255, 0.93);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
-    }
-
-    ul {
-      margin: 0 0 18px;
-      padding-left: 24px;
-    }
-
-    li {
-      margin: 10px 0;
-      font-size: 17px;
-      line-height: 1.7;
       color: rgba(255, 255, 255, 0.92);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
     }
 
-    em {
-      color: rgba(220, 240, 255, 0.98);
+    .section {
+      margin-top: 36px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 18px;
+      font-size: 30px;
+      color: rgba(180, 230, 255, 0.98);
+      text-shadow: 0 0 8px rgba(120, 190, 255, 0.38);
+    }
+
+    .section-title::before {
+      content: "";
+      width: 9px;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(#66e0ff, #9d66ff);
+      box-shadow: 0 0 12px rgba(110, 220, 255, 0.75);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .info-card,
+    .project-card,
+    .skill-card,
+    .vision-card {
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 22px rgba(0, 0, 0, 0.25);
+    }
+
+    .info-card {
+      padding: 22px;
+      min-height: 220px;
+    }
+
+    .info-card h3,
+    .project-card h3,
+    .skill-card h3 {
+      margin: 0 0 14px;
+      font-size: 23px;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow: 0 0 7px rgba(0, 0, 0, 0.85);
+    }
+
+    .info-card ul,
+    .project-card ul,
+    .skill-card ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .info-card li,
+    .project-card li,
+    .skill-card li {
+      margin: 9px 0;
+      font-size: 16px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.91);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .highlight {
+      color: #fff27a;
+    }
+
+    .research-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .skill-card {
+      position: relative;
+      padding: 24px;
+      min-height: 190px;
+      overflow: hidden;
+    }
+
+    .skill-card::after {
+      content: "";
+      position: absolute;
+      right: -42px;
+      bottom: -42px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(100, 220, 255, 0.12);
+      box-shadow: 0 0 32px rgba(100, 220, 255, 0.16);
+    }
+
+    .skill-number {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 14px;
+      border-radius: 50%;
+      background: rgba(120, 220, 255, 0.18);
+      border: 1px solid rgba(120, 220, 255, 0.55);
+      color: #9eeaff;
+      font-weight: bold;
+      box-shadow: 0 0 12px rgba(120, 220, 255, 0.28);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .project-card {
+      padding: 24px;
+      min-height: 290px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04));
+    }
+
+    .project-label {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(145, 95, 255, 0.20);
+      border: 1px solid rgba(180, 150, 255, 0.45);
+      color: rgba(225, 215, 255, 0.98);
+      font-size: 14px;
+    }
+
+    .vision-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .vision-card {
+      padding: 28px;
+      background:
+        linear-gradient(145deg, rgba(255, 235, 80, 0.11), rgba(120, 210, 255, 0.08));
+    }
+
+    .vision-card h3 {
+      margin: 0 0 16px;
+      font-size: 31px;
+      color: #fff27a;
+      text-shadow: 0 0 10px rgba(255, 230, 70, 0.35);
+    }
+
+    .vision-card p {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.96);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .vision-points {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .vision-point {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.30);
+      border: 1px solid rgba(255, 255, 255, 0.17);
+    }
+
+    .vision-point strong {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(160, 230, 255, 0.98);
+      font-size: 18px;
+    }
+
+    .vision-point span {
+      display: block;
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.90);
+    }
+
+    .keyword-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .keyword {
+      display: inline-block;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 15px;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.75);
+    }
+
+    .keyword.blue {
+      border-color: rgba(90, 210, 255, 0.55);
+      box-shadow: 0 0 12px rgba(90, 210, 255, 0.12);
+    }
+
+    .keyword.purple {
+      border-color: rgba(180, 120, 255, 0.55);
+      box-shadow: 0 0 12px rgba(180, 120, 255, 0.12);
+    }
+
+    .keyword.yellow {
+      border-color: rgba(255, 230, 80, 0.55);
+      box-shadow: 0 0 12px rgba(255, 230, 80, 0.12);
     }
 
     .back-link {
       display: inline-block;
-      margin-top: 24px;
-      padding: 10px 18px;
+      margin-top: 34px;
+      padding: 11px 20px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.72);
       background: rgba(255, 255, 255, 0.10);
       color: white;
       font-size: 18px;
@@ -128,26 +375,82 @@
         0 0 22px rgba(100, 180, 255, 0.35);
     }
 
-    @media screen and (max-width: 850px) {
+    @media screen and (max-width: 1000px) {
+      .hero,
+      .vision-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .info-grid,
+      .research-map,
+      .project-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .profile-photo {
+        width: 150px;
+        height: 195px;
+      }
+    }
+
+    @media screen and (max-width: 680px) {
       .page-container {
         padding: 24px;
       }
 
       .content-card {
-        padding: 26px 24px;
+        padding: 26px 22px;
       }
 
-      h1 {
+      .hero {
+        gap: 20px;
+      }
+
+      .hero-text h1 {
         font-size: 34px;
       }
 
-      h2 {
-        font-size: 24px;
+      .hero-text .name-ko {
+        font-size: 21px;
       }
 
-      p,
-      li {
+      .tagline {
+        font-size: 18px;
+      }
+
+      .summary {
         font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 25px;
+      }
+
+      .info-grid,
+      .research-map,
+      .project-grid,
+      .vision-points {
+        grid-template-columns: 1fr;
+      }
+
+      .info-card,
+      .project-card,
+      .skill-card,
+      .vision-card {
+        padding: 20px;
+      }
+
+      .vision-card h3 {
+        font-size: 25px;
+      }
+
+      .vision-card p {
+        font-size: 18px;
+      }
+
+      .profile-photo {
+        width: 130px;
+        height: 170px;
       }
     }
   </style>
@@ -156,72 +459,229 @@
 <body>
   <div class="page-container">
     <main class="content-card">
-      <h1>About Gang Min Shin</h1>
+      <section class="hero">
+        <img class="profile-photo" src="images/Author.jpg" alt="Gang Min Shin profile photo">
 
-      <p>
-        Gang Min Shin completed his master's degree in the Department of Electrical Engineering and Computer Science
-        at DGIST. His thesis was titled
-        <em>Pulsatile Waveform Analysis Using Diffuse Optical Flowmetry: A Study of the Prefrontal Cortex and Finger</em>.
-      </p>
+        <div class="hero-text">
+          <h1>Gang Min Shin</h1>
+          <p class="name-ko">신강민</p>
+          <div class="tagline">“An engineer who designs with electronics and validates with optics.”</div>
+          <p class="summary">
+            Gang Min Shin is trained in electronic engineering and biomedical optics, with experience in optical
+            measurement systems, camera-based image acquisition, biomedical signal analysis, and inspection software
+            development. His work connects hardware, optical sensing, data acquisition, and software-based validation.
+          </p>
+        </div>
+      </section>
 
-      <h2>Research Field</h2>
+      <section class="section">
+        <h2 class="section-title">Profile Overview</h2>
 
-      <p>
-        His research focuses on biomedical optics, diffuse optical flowmetry, and noninvasive measurement of
-        microcirculatory blood-flow dynamics. In particular, he studies physiological signals obtained using
-        Multi-Mode Fiber Diffuse Speckle Contrast Analysis (MMF-DSCA).
-      </p>
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>Education</h3>
+            <ul>
+              <li><span class="highlight">B.S.</span> in Electronic Engineering, Keimyung University</li>
+              <li>Early graduation</li>
+              <li>GPA: 4.46 / 4.50</li>
+              <li><span class="highlight">M.S. Candidate</span> in Electrical Engineering and Computer Science, DGIST</li>
+              <li>Quantum and Biomedical Optics Laboratory, QBOL</li>
+              <li>Expected graduation, GPA: 4.12 / 4.30</li>
+            </ul>
+          </article>
 
-      <h2>Main Research Theme</h2>
+          <article class="info-card">
+            <h3>Experience</h3>
+            <ul>
+              <li>Internship at Innereye Co., Ltd. from 2021 to 2022</li>
+              <li>On-site support for nondestructive testing equipment in an EV battery manufacturing line</li>
+              <li>Equipment management, welding defect inspection support, and production-line integration</li>
+              <li>University exchange training program in Vietnam in 2023</li>
+            </ul>
+          </article>
 
-      <p>
-        The main goal of his research is to analyze pulsatile blood-flow waveforms rather than relying only on
-        average blood-flow changes. For this purpose, Blood Flow Index (BFI), Blood Volume Index (BVI),
-        heart-rate-related features, and frequency-domain components are analyzed together.
-      </p>
+          <article class="info-card">
+            <h3>Awards & Honors</h3>
+            <ul>
+              <li>1st Place, Capstone Design Competition, Keimyung University</li>
+              <li>3rd Place, Undergraduate Paper Competition, Korean Society of Rehabilitation Welfare Engineering</li>
+              <li>4th Place, Military Literature Award, Ministry of National Defense, Republic of Korea</li>
+            </ul>
+          </article>
+        </div>
+      </section>
 
-      <h2>Prefrontal Cortex Study</h2>
+      <section class="section">
+        <h2 class="section-title">Research and Major Fields</h2>
 
-      <p>
-        One part of the research investigated hemodynamic responses in the right prefrontal cortex during
-        cognitive-load tasks. Measurements were performed using source-detector separation channels, and the
-        resulting BFI and BVI signals were analyzed in both the time domain and the frequency domain.
-      </p>
+        <div class="research-map">
+          <article class="skill-card">
+            <div class="skill-number">01</div>
+            <h3>Optical Metrology</h3>
+            <ul>
+              <li>Design and validation of optical measurement systems</li>
+              <li>Diffuse optical sensor development and application</li>
+              <li>Quantitative validation using optical metrology data</li>
+            </ul>
+          </article>
 
-      <p>
-        The study examined how cognitive workload affects optical blood-flow signals, including task-related
-        waveform changes and spectral components such as cardiac, low-frequency oscillation, and very-low-frequency
-        oscillation bands.
-      </p>
+          <article class="skill-card">
+            <div class="skill-number">02</div>
+            <h3>Image and Signal Analysis</h3>
+            <ul>
+              <li>Image noise, blur, contrast, and intensity fluctuation analysis</li>
+              <li>Detection of abnormal optical signals and defect-related patterns</li>
+              <li>Motion artifact analysis and correction</li>
+            </ul>
+          </article>
 
-      <h2>Finger Microcirculation Study</h2>
+          <article class="skill-card">
+            <div class="skill-number">03</div>
+            <h3>Software Automation</h3>
+            <ul>
+              <li>Python-based image processing, signal processing, and data analysis automation</li>
+              <li>LabVIEW-based camera, DAQ, and sensor control software</li>
+              <li>Data acquisition pipeline development for experimental systems</li>
+            </ul>
+          </article>
 
-      <p>
-        Another part of the research analyzed peripheral microcirculatory responses in the finger during ST36
-        stimulation and the Cold Pressor Test (CPT). These experiments were designed to examine autonomic and
-        vascular responses through BFI, BVI, heart rate, heart rate variability, and inter-beat interval analysis.
-      </p>
+          <article class="skill-card">
+            <div class="skill-number">04</div>
+            <h3>Camera-Based Acquisition</h3>
+            <ul>
+              <li>Camera-based optical image acquisition and analysis</li>
+              <li>ROI-based image extraction and signal conversion</li>
+              <li>Experimental image quality assessment</li>
+            </ul>
+          </article>
 
-      <p>
-        This work emphasized that physiological interpretation should consider blood flow, blood volume,
-        pulsatile waveform morphology, and frequency-domain features together.
-      </p>
+          <article class="skill-card">
+            <div class="skill-number">05</div>
+            <h3>Biomedical Data Analysis</h3>
+            <ul>
+              <li>Preclinical and clinical data analysis using time-series bio-signals</li>
+              <li>Image-based biomedical signal interpretation</li>
+              <li>Integrated analysis of optical and physiological measurements</li>
+            </ul>
+          </article>
 
-      <h2>Keywords</h2>
+          <article class="skill-card">
+            <div class="skill-number">06</div>
+            <h3>System Validation</h3>
+            <ul>
+              <li>System-level interpretation of optical, electronic, and software errors</li>
+              <li>Inspection reliability analysis</li>
+              <li>Hardware-software integrated validation</li>
+            </ul>
+          </article>
+        </div>
+      </section>
 
-      <ul>
-        <li>MMF-DSCA: Multi-Mode Fiber Diffuse Speckle Contrast Analysis</li>
-        <li>BFI: Blood Flow Index</li>
-        <li>BVI: Blood Volume Index</li>
-        <li>SDS: Source-Detector Separation</li>
-        <li>HR: Heart Rate</li>
-        <li>HRV: Heart Rate Variability</li>
-        <li>IBI: Inter-Beat Interval</li>
-        <li>CPT: Cold Pressor Test</li>
-        <li>ST36: Zusanli Acupoint</li>
-        <li>LFO: Low-Frequency Oscillation</li>
-        <li>VLFO: Very-Low-Frequency Oscillation</li>
-      </ul>
+      <section class="section">
+        <h2 class="section-title">Key Projects & Achievements</h2>
+
+        <div class="project-grid">
+          <article class="project-card">
+            <span class="project-label">Manufacturing Inspection</span>
+            <h3>Nondestructive Inspection SW Experience</h3>
+            <ul>
+              <li>Participated in inspection processes for an EV battery manufacturing line during internship</li>
+              <li>Supported camera-based welding image analysis and welding defect discrimination</li>
+              <li>Handled equipment management, inspection system linkage, and production-line issue response</li>
+              <li>Built practical experience in field-oriented inspection software</li>
+            </ul>
+          </article>
+
+          <article class="project-card">
+            <span class="project-label">Capstone Design</span>
+            <h3>RFID and Image-Based Motorcycle Violation System</h3>
+            <ul>
+              <li>1st Place project in the undergraduate Capstone Design Competition</li>
+              <li>Led team “Aireye” and managed both software and hardware integration</li>
+              <li>Trained a motorcycle detection deep-learning model using directly collected image data</li>
+              <li>Implemented RFID tag recognition, LED display output, and real-time enforcement linkage</li>
+            </ul>
+          </article>
+
+          <article class="project-card">
+            <span class="project-label">Research Collaboration</span>
+            <h3>Experimental SW and Data Management System</h3>
+            <ul>
+              <li>Developed experimental software and data analysis workflows in collaborative medical research</li>
+              <li>Analyzed, classified, and removed motion noise and thermal noise from intensity images</li>
+              <li>Participated in software work and large-scale bio-data server management in collaborative research</li>
+              <li>Supported multi-device data management server construction for ICT-integrated acupuncture systems</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Career Direction</h2>
+
+        <div class="vision-layout">
+          <article class="vision-card">
+            <h3>“I am an Industrial Infighter.”</h3>
+            <p>
+              I aim to become a developer who stays close to the field, observes defects directly, traces causes
+              through data, and solves problems through software.
+            </p>
+          </article>
+
+          <div class="vision-points">
+            <div class="vision-point">
+              <strong>Field-Oriented Problem Solving</strong>
+              <span>
+                Problems are not limited to code. They often arise from optics, electronics, equipment conditions,
+                data acquisition environments, and process variables.
+              </span>
+            </div>
+
+            <div class="vision-point">
+              <strong>Defect Detection and Yield Improvement</strong>
+              <span>
+                The goal is to contribute to defect feature extraction, abnormal signal discrimination,
+                correction, and process yield improvement.
+              </span>
+            </div>
+
+            <div class="vision-point">
+              <strong>Optical Inspection SW</strong>
+              <span>
+                Experience in camera, DAQ, sensor control, image processing, signal processing, and automated
+                data analysis can be connected to inspection equipment software.
+              </span>
+            </div>
+
+            <div class="vision-point">
+              <strong>Collaborative Development</strong>
+              <span>
+                The direction is not to work alone, but to collaborate with experts while solving practical
+                equipment and data problems near the manufacturing field.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Keywords</h2>
+
+        <div class="keyword-wrap">
+          <span class="keyword blue">Optical Metrology</span>
+          <span class="keyword blue">Biomedical Optics</span>
+          <span class="keyword blue">Diffuse Optical Sensors</span>
+          <span class="keyword purple">Image Processing</span>
+          <span class="keyword purple">Signal Processing</span>
+          <span class="keyword purple">Motion Artifact Analysis</span>
+          <span class="keyword yellow">Python Automation</span>
+          <span class="keyword yellow">LabVIEW Control</span>
+          <span class="keyword yellow">Camera and DAQ Acquisition</span>
+          <span class="keyword blue">Defect Detection</span>
+          <span class="keyword purple">Intensity Fluctuation</span>
+          <span class="keyword yellow">System Validation</span>
+        </div>
+      </section>
 
       <a class="back-link" href="index.html">← Back to Homepage</a>
     </main>
