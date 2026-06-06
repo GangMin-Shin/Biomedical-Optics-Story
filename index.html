@@ -18,37 +18,30 @@
       font-family: cursive;
       color: white;
       overflow-x: hidden;
-      background-color: #000000;
+      background-color: #000;
     }
 
     body {
       position: relative;
     }
 
-    /* 배경 이미지만 50% 투명도로 표시 */
-    .background-layer {
+    body::before {
+      content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-image: url("images/background.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      inset: 0;
+      background: url("images/background.jpg") center / cover no-repeat;
       opacity: 0.5;
       z-index: 0;
       pointer-events: none;
     }
 
     .page-container {
-      min-height: 100vh;
       position: relative;
-      padding: 40px;
       z-index: 1;
+      min-height: 100vh;
+      padding: 40px;
     }
 
-    /* 홈페이지 제목 및 설명: 오른쪽 상단 */
     .intro-box {
       position: absolute;
       top: 35px;
@@ -59,27 +52,31 @@
     }
 
     .intro-box h1 {
-      margin: 0 0 18px 0;
+      margin: 0 0 18px;
       font-size: 56px;
       letter-spacing: 1px;
       color: rgba(255, 255, 255, 0.98);
       text-shadow:
-        0 0 8px rgba(255, 255, 255, 0.50),
-        0 0 18px rgba(120, 190, 255, 0.40);
+        0 0 8px rgba(255, 255, 255, 0.5),
+        0 0 18px rgba(120, 190, 255, 0.4);
+    }
+
+    .intro-box p,
+    .degree-info,
+    .author {
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
     .intro-box p {
       margin: 0;
       font-size: 17px;
       color: rgba(255, 255, 255, 0.92);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
     .degree-info {
       margin-top: 18px;
       font-size: 15px;
       color: rgba(255, 255, 255, 0.88);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
     .author {
@@ -87,7 +84,6 @@
       font-size: 18px;
       font-weight: bold;
       color: rgba(255, 255, 255, 0.98);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
     .author-link {
@@ -95,12 +91,11 @@
       text-decoration: none;
     }
 
-    /* 작성자 사진 */
     .author-photo {
       display: inline-block;
-      margin-top: 14px;
       width: 120px;
       height: 155px;
+      margin-top: 14px;
       object-fit: cover;
       border-radius: 20px;
       border: 2px solid rgba(255, 255, 255, 0.8);
@@ -110,9 +105,7 @@
         0 0 10px rgba(255, 255, 255, 0.55),
         0 0 24px rgba(100, 180, 255, 0.45),
         0 0 40px rgba(100, 180, 255, 0.25);
-      transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
       cursor: pointer;
     }
 
@@ -124,7 +117,6 @@
         0 0 55px rgba(100, 180, 255, 0.35);
     }
 
-    /* 컨텐츠: 왼쪽 하단 */
     .contents-box {
       position: absolute;
       left: 45px;
@@ -132,12 +124,12 @@
     }
 
     .contents-box h2 {
-      margin: 0 0 18px 0;
+      margin: 0 0 18px;
       font-size: 42px;
       letter-spacing: 1px;
       color: rgba(255, 255, 255, 0.96);
       text-shadow:
-        0 0 6px rgba(255, 255, 255, 0.40),
+        0 0 6px rgba(255, 255, 255, 0.4),
         0 0 14px rgba(255, 255, 255, 0.25);
     }
 
@@ -170,7 +162,6 @@
       transform: translateX(8px);
     }
 
-    /* DOT hover 효과 */
     .dot:hover {
       color: #66ccff;
       text-shadow:
@@ -179,7 +170,6 @@
         0 0 24px #66ccff;
     }
 
-    /* PAT hover 효과 */
     .pat:hover {
       color: #ff9966;
       text-shadow:
@@ -188,7 +178,6 @@
         0 0 24px #ff9966;
     }
 
-    /* OCT hover 효과 */
     .oct:hover {
       color: #7dff7a;
       text-shadow:
@@ -234,10 +223,7 @@
 </head>
 
 <body>
-  <div class="background-layer"></div>
-
   <div class="page-container">
-
     <div class="intro-box">
       <h1>Biomedical-Optics-Story (BOS)</h1>
 
@@ -268,7 +254,6 @@
         <li><a class="oct" href="oct.html">Optical Coherence Tomography (OCT)</a></li>
       </ul>
     </div>
-
   </div>
 </body>
 </html>
