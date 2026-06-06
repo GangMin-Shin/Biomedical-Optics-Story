@@ -9,7 +9,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -20,12 +21,16 @@
       background-color: #000000;
     }
 
+    body {
+      position: relative;
+      isolation: isolate;
+    }
+
     /* 배경 이미지만 50% 투명도로 표시 */
     body::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       background-image: url("images/background.jpg");
@@ -33,29 +38,30 @@
       background-position: center;
       background-repeat: no-repeat;
       opacity: 0.5;
-      z-index: -2;
+      z-index: 0;
+      pointer-events: none;
     }
 
     /* 글씨 가독성을 위한 어두운 오버레이 */
     body::after {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       background: linear-gradient(
-        rgba(0, 0, 0, 0.25),
-        rgba(0, 0, 0, 0.45)
+        rgba(0, 0, 0, 0.10),
+        rgba(0, 0, 0, 0.20)
       );
-      z-index: -1;
+      z-index: 1;
+      pointer-events: none;
     }
 
     .page-container {
       min-height: 100vh;
       position: relative;
       padding: 40px;
-      z-index: 1;
+      z-index: 2;
     }
 
     /* 홈페이지 제목 및 설명: 오른쪽 상단 */
@@ -162,17 +168,17 @@
     }
 
     .content-list a {
+      display: inline-block;
       text-decoration: none;
       font-size: 27px;
       font-weight: 400;
       color: white;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
       transition:
         color 0.25s ease,
         text-shadow 0.25s ease,
         font-weight 0.25s ease,
         transform 0.25s ease;
-      display: inline-block;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
     }
 
     .content-list a:hover {
