@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transmission Geometry - Banana-shaped Sensitivity Kernel</title>
 
   <style>
@@ -15,7 +16,7 @@
       padding: 0;
       width: 100%;
       min-height: 100vh;
-      font-family: cursive;
+      font-family: Arial, "Noto Sans KR", sans-serif;
       color: white;
       background: #000 url("images/Geometry background.png") center / cover fixed no-repeat;
       overflow-x: hidden;
@@ -27,7 +28,7 @@
       inset: 0;
       background:
         radial-gradient(circle at 18% 18%, rgba(70, 180, 255, 0.18), transparent 32%),
-        linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.72));
+        linear-gradient(rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.78));
       z-index: 0;
       pointer-events: none;
     }
@@ -41,21 +42,23 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1fr 330px;
+      grid-template-columns: minmax(0, 1fr) 360px;
       gap: 24px;
-      max-width: 1380px;
+      max-width: 1450px;
       margin: 0 auto;
     }
 
     .viewer-card,
     .option-card,
-    .result-card {
-      border-radius: 24px;
+    .result-card,
+    .layer-card,
+    .optical-card {
+      border-radius: 22px;
       background: rgba(0, 0, 0, 0.58);
       border: 1px solid rgba(255, 255, 255, 0.24);
       box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.14),
-        0 0 36px rgba(110, 210, 255, 0.20);
+        0 0 18px rgba(255, 255, 255, 0.12),
+        0 0 36px rgba(110, 210, 255, 0.18);
       backdrop-filter: blur(5px);
     }
 
@@ -69,14 +72,21 @@
       padding: 24px;
     }
 
-    .result-card {
+    .result-card,
+    .layer-card {
       margin-top: 18px;
+      padding: 18px;
+    }
+
+    .optical-card {
+      max-width: 980px;
+      margin: 18px auto 0;
       padding: 18px;
     }
 
     h1 {
       margin: 0 0 8px;
-      font-size: 40px;
+      font-size: 38px;
       color: rgba(255, 255, 255, 0.98);
       text-shadow:
         0 0 8px rgba(102, 204, 255, 0.55),
@@ -85,19 +95,48 @@
 
     .subtitle {
       margin: 0 0 20px;
-      font-size: 17px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.88);
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.86);
+      max-width: 980px;
+    }
+
+    .model-info {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      padding: 13px 15px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      line-height: 1.55;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 5px;
+      color: rgba(170, 230, 255, 0.98);
+      font-size: 14px;
+    }
+
+    .canvas-wrap {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
     }
 
     canvas {
       display: block;
       width: 100%;
-      max-width: 900px;
       height: auto;
-      margin: 0 auto;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       border: 1px solid rgba(255, 255, 255, 0.22);
     }
 
@@ -106,7 +145,7 @@
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: center;
-      max-width: 900px;
+      max-width: 980px;
       margin: 18px auto 0;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.86);
@@ -115,14 +154,16 @@
     .colorbar {
       height: 14px;
       border-radius: 999px;
-      background: linear-gradient(90deg, #1b0c41, #1a4fb8, #18b6d3, #78e75a, #ffe74a, #ff8c2a, #d7191c);
+      background: linear-gradient(90deg, #30123b, #4145ab, #2c7ef7, #1bcfd4, #61fc6c, #d1e834, #f99c24, #d7191c);
       border: 1px solid rgba(255, 255, 255, 0.42);
     }
 
     .option-card h2,
-    .result-card h2 {
+    .result-card h2,
+    .layer-card h2,
+    .optical-card h2 {
       margin: 0 0 18px;
-      font-size: 27px;
+      font-size: 25px;
       color: rgba(170, 230, 255, 0.98);
       text-shadow: 0 0 8px rgba(102, 204, 255, 0.36);
     }
@@ -134,7 +175,7 @@
     label {
       display: block;
       margin-bottom: 7px;
-      font-size: 16px;
+      font-size: 15px;
       color: rgba(255, 255, 255, 0.92);
     }
 
@@ -145,7 +186,7 @@
       border: 1px solid rgba(255, 255, 255, 0.35);
       background: rgba(255, 255, 255, 0.11);
       color: white;
-      font-family: cursive;
+      font-family: Arial, "Noto Sans KR", sans-serif;
       font-size: 15px;
       outline: none;
     }
@@ -159,6 +200,13 @@
       font-size: 15px;
     }
 
+    .input-hint {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
     .run-button {
       width: 100%;
       margin-top: 8px;
@@ -167,8 +215,8 @@
       border-radius: 999px;
       background: rgba(102, 204, 255, 0.22);
       color: white;
-      font-family: cursive;
-      font-size: 18px;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      font-size: 17px;
       cursor: pointer;
       border: 1px solid rgba(102, 204, 255, 0.55);
       transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
@@ -182,13 +230,19 @@
         0 0 24px rgba(102, 204, 255, 0.32);
     }
 
+    .run-button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      transform: none;
+    }
+
     .metric {
       display: flex;
       justify-content: space-between;
       gap: 12px;
       padding: 8px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.13);
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.5;
     }
 
@@ -199,6 +253,64 @@
     .metric span:last-child {
       color: #fff27a;
       text-align: right;
+    }
+
+    .layer-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .layer-item {
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .layer-title {
+      margin-bottom: 5px;
+      font-size: 13px;
+      color: rgba(255, 242, 122, 0.98);
+    }
+
+    .layer-desc {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .optical-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      font-size: 13px;
+    }
+
+    .optical-table th,
+    .optical-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+      text-align: left;
+      line-height: 1.45;
+    }
+
+    .optical-table th {
+      color: rgba(170, 230, 255, 0.98);
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 700;
+    }
+
+    .optical-table td {
+      color: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .optical-table td:nth-child(2),
+    .optical-table td:nth-child(3) {
+      color: #fff27a;
+      white-space: nowrap;
     }
 
     .back-links {
@@ -225,20 +337,25 @@
       box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
     }
 
-    .note {
-      margin-top: 16px;
-      font-size: 13px;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.72);
+    .status {
+      margin-top: 12px;
+      min-height: 18px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(170, 230, 255, 0.94);
     }
 
-    @media screen and (max-width: 1000px) {
+    @media screen and (max-width: 1050px) {
       .layout {
         grid-template-columns: 1fr;
       }
 
       .option-card {
         position: static;
+      }
+
+      .model-info {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -248,12 +365,23 @@
       }
 
       .viewer-card,
-      .option-card {
+      .option-card,
+      .result-card,
+      .layer-card,
+      .optical-card {
         padding: 20px;
       }
 
       h1 {
-        font-size: 31px;
+        font-size: 30px;
+      }
+
+      .legend {
+        grid-template-columns: 1fr;
+      }
+
+      .optical-table {
+        font-size: 12px;
       }
     }
   </style>
@@ -264,17 +392,26 @@
     <div class="layout">
       <main class="viewer-card">
         <h1>Transmission Geometry</h1>
+
+        <div class="model-info" id="modelInfo"></div>
+
         <p class="subtitle">
-          This page visualizes a palmar-to-dorsal transmission sensitivity kernel in a simplified multilayer wrist model.
-          The source is placed on the palmar side and the detector is placed on the dorsal side.
+          808 nm Monte Carlo sensitivity map for palmar-to-dorsal transmission geometry.
         </p>
 
-        <canvas id="kernelCanvas" width="900" height="620"></canvas>
+        <div class="canvas-wrap">
+          <canvas id="kernelCanvas" width="980" height="660"></canvas>
+        </div>
 
         <div class="legend">
           <div class="colorbar"></div>
-          <span>Normalized sensitivity W / Wmax</span>
+          <span>Linear MC sensitivity, W / Wmax</span>
         </div>
+
+        <section class="optical-card">
+          <h2>Optical Properties</h2>
+          <div id="opticalPanel"></div>
+        </section>
       </main>
 
       <aside>
@@ -289,19 +426,21 @@
           <div class="control-group">
             <label for="diameterInput">Wrist diameter (mm)</label>
             <input id="diameterInput" type="number" min="25" max="50" step="0.5" value="35">
+            <div class="input-hint">
+              Palmar-to-dorsal distance
+            </div>
           </div>
 
           <div class="control-group">
-            <label for="photonInput">Simulation photon number</label>
+            <label for="photonInput">Photon number</label>
             <input id="photonInput" type="number" min="1000" max="1000000" step="1000" value="300000">
+            <div class="input-hint">
+              정확도를 높이려면 photon 수를 크게 설정하세요. 실행 시간은 증가합니다.
+            </div>
           </div>
 
           <button class="run-button" id="runButton" type="button">Run Simulation</button>
-
-          <p class="note">
-            Transmission geometry is fixed to the wrist model. This browser version approximates the original
-            Monte Carlo sensitivity map using diffusion-based source and detector fields.
-          </p>
+          <div class="status" id="statusText"></div>
 
           <div class="back-links">
             <a class="back-link" href="dot.html">← Back to DOT</a>
@@ -313,6 +452,11 @@
           <h2>Results</h2>
           <div id="resultPanel"></div>
         </section>
+
+        <section class="layer-card">
+          <h2>Layer Settings</h2>
+          <div id="layerPanel" class="layer-list"></div>
+        </section>
       </aside>
     </div>
   </div>
@@ -320,163 +464,423 @@
   <script>
     const canvas = document.getElementById("kernelCanvas");
     const ctx = canvas.getContext("2d");
+
     const diameterInput = document.getElementById("diameterInput");
     const photonInput = document.getElementById("photonInput");
     const runButton = document.getElementById("runButton");
     const resultPanel = document.getElementById("resultPanel");
+    const layerPanel = document.getElementById("layerPanel");
+    const opticalPanel = document.getElementById("opticalPanel");
+    const modelInfo = document.getElementById("modelInfo");
+    const statusText = document.getElementById("statusText");
+
+    let currentWorker = null;
+    let currentModel = null;
 
     function buildWristModel(diameter) {
+      const d = Math.max(25, Math.min(50, diameter));
+
+      const carpalTop = 11.0;
+      const dorsalSkinTop = d - 1.2;
+      const dorsalFatTop = Math.max(d - 6.0, carpalTop + 2.0);
+      const extensorTop = Math.max(d - 11.0, carpalTop + 1.0);
+
       return {
         title: "Radial artery wrist model",
-        xMin: -25,
-        xMax: 25,
+        wavelength: 808,
+        xMinBase: -25,
+        xMaxBase: 25,
         zMin: -4,
-        zMax: diameter + 4,
-        diameter: diameter,
-        roi: { name: "RA", x: 0.0, z: 3.8, radius: 1.2 },
+        zMax: d + 4,
+        diameter: d,
+        rMax: 60,
+        dr: 0.25,
+        dz: 0.25,
+        sourceRadius: 0.75,
+        targetName: "Radial artery ROI",
+        geometryDescription: "Simplified multilayer wrist model.",
+        source: { x: 0.0, z: 0.0 },
+        detector: { x: 0.0, z: d },
+        roi: {
+          name: "RA",
+          fullName: "Radial artery",
+          x: 0.0,
+          z: 3.8,
+          radius: 1.2
+        },
         layers: [
-          { name: "Palmar skin", top: 0.0, bottom: 1.2, mua: 0.020, musp: 1.00, color: "rgba(244,194,161,0.38)" },
-          { name: "Palmar fat", top: 1.2, bottom: 2.8, mua: 0.010, musp: 0.65, color: "rgba(246,226,179,0.38)" },
-          { name: "Vascular/fascia", top: 2.8, bottom: 5.0, mua: 0.060, musp: 0.95, color: "rgba(170,220,220,0.38)" },
-          { name: "Flexor tendon", top: 5.0, bottom: 11.0, mua: 0.018, musp: 1.10, color: "rgba(199,178,153,0.38)" },
-          { name: "Carpal bone", top: 11.0, bottom: Math.max(24.0, diameter - 11.0), mua: 0.012, musp: 1.35, color: "rgba(184,199,217,0.38)" },
-          { name: "Extensor tendon", top: Math.max(24.0, diameter - 11.0), bottom: Math.max(29.0, diameter - 6.0), mua: 0.018, musp: 1.05, color: "rgba(199,178,153,0.38)" },
-          { name: "Dorsal fat", top: Math.max(29.0, diameter - 6.0), bottom: Math.max(diameter - 1.2, 30.0), mua: 0.010, musp: 0.65, color: "rgba(246,226,179,0.38)" },
-          { name: "Dorsal skin", top: Math.max(diameter - 1.2, 30.0), bottom: diameter, mua: 0.020, musp: 1.00, color: "rgba(244,194,161,0.38)" }
+          {
+            name: "Palmar skin",
+            top: 0.0,
+            bottom: 1.2,
+            mua: 0.020,
+            musp: 1.00,
+            g: 0.90,
+            n: 1.40,
+            description: "손바닥쪽 피부층입니다. source가 놓이는 표면층입니다."
+          },
+          {
+            name: "Palmar subcutaneous fat",
+            top: 1.2,
+            bottom: 2.8,
+            mua: 0.010,
+            musp: 0.65,
+            g: 0.90,
+            n: 1.44,
+            description: "손바닥쪽 피하지방층입니다. 흡수가 낮은 얕은 조직층입니다."
+          },
+          {
+            name: "Superficial vascular / fascia layer",
+            top: 2.8,
+            bottom: 5.0,
+            mua: 0.060,
+            musp: 0.95,
+            g: 0.90,
+            n: 1.40,
+            description: "요골동맥과 근막이 위치한다고 가정한 표재성 혈관층입니다."
+          },
+          {
+            name: "Flexor tendon / carpal tunnel region",
+            top: 5.0,
+            bottom: 11.0,
+            mua: 0.018,
+            musp: 1.10,
+            g: 0.90,
+            n: 1.43,
+            description: "굴곡건과 수근관 구조가 포함된 손목 내부층입니다."
+          },
+          {
+            name: "Carpal bone / joint region",
+            top: 11.0,
+            bottom: extensorTop,
+            mua: 0.012,
+            musp: 1.35,
+            g: 0.90,
+            n: 1.55,
+            description: "손목뼈와 관절 구조가 지배적인 깊은 층입니다."
+          },
+          {
+            name: "Extensor tendon region",
+            top: extensorTop,
+            bottom: dorsalFatTop,
+            mua: 0.018,
+            musp: 1.05,
+            g: 0.90,
+            n: 1.43,
+            description: "손등쪽 신전건 영역입니다."
+          },
+          {
+            name: "Dorsal subcutaneous fat",
+            top: dorsalFatTop,
+            bottom: dorsalSkinTop,
+            mua: 0.010,
+            musp: 0.65,
+            g: 0.90,
+            n: 1.44,
+            description: "손등쪽 피하지방층입니다."
+          },
+          {
+            name: "Dorsal skin",
+            top: dorsalSkinTop,
+            bottom: d,
+            mua: 0.020,
+            musp: 1.00,
+            g: 0.90,
+            n: 1.40,
+            description: "손등쪽 피부층입니다."
+          }
         ]
+      };
+    }
+
+    function prepareModelForWorker(model) {
+      return {
+        title: model.title,
+        wavelength: model.wavelength,
+        xMinBase: model.xMinBase,
+        xMaxBase: model.xMaxBase,
+        zMin: model.zMin,
+        zMax: model.zMax,
+        diameter: model.diameter,
+        rMax: model.rMax,
+        dr: model.dr,
+        dz: model.dz,
+        sourceRadius: model.sourceRadius,
+        source: { ...model.source },
+        detector: { ...model.detector },
+        targetName: model.targetName,
+        layers: model.layers.map(layer => ({
+          name: layer.name,
+          top: layer.top,
+          bottom: layer.bottom,
+          mua: layer.mua,
+          musp: layer.musp,
+          g: layer.g,
+          n: layer.n
+        })),
+        roi: model.roi ? { ...model.roi } : null
+      };
+    }
+
+    function getPlotRange(model) {
+      return {
+        xMin: model.xMinBase,
+        xMax: model.xMaxBase,
+        zMin: model.zMin,
+        zMax: model.zMax
       };
     }
 
     function getLayer(model, z) {
       for (const layer of model.layers) {
-        if (z >= layer.top && z < layer.bottom) return layer;
-      }
-      return model.layers[model.layers.length - 1];
-    }
-
-    function muEff(layer) {
-      const d = 1 / (3 * (layer.mua + layer.musp));
-      return Math.sqrt(layer.mua / d);
-    }
-
-    function fieldAt(model, x, z, sx, sz) {
-      const layer = getLayer(model, Math.max(0, Math.min(model.diameter - 0.001, z)));
-      const r = Math.sqrt((x - sx) ** 2 + (z - sz) ** 2 + 0.35 ** 2);
-      const mue = muEff(layer);
-      return Math.exp(-mue * r) / (r + 0.5);
-    }
-
-    function colorMap(v) {
-      v = Math.max(0, Math.min(1, v));
-      const stops = [
-        [0.00, [27, 12, 65]],
-        [0.18, [26, 79, 184]],
-        [0.36, [24, 182, 211]],
-        [0.55, [120, 231, 90]],
-        [0.74, [255, 231, 74]],
-        [0.90, [255, 140, 42]],
-        [1.00, [215, 25, 28]]
-      ];
-
-      for (let i = 0; i < stops.length - 1; i++) {
-        const [p0, c0] = stops[i];
-        const [p1, c1] = stops[i + 1];
-        if (v >= p0 && v <= p1) {
-          const t = (v - p0) / (p1 - p0);
-          return [
-            Math.round(c0[0] + t * (c1[0] - c0[0])),
-            Math.round(c0[1] + t * (c1[1] - c0[1])),
-            Math.round(c0[2] + t * (c1[2] - c0[2]))
-          ];
+        if (z >= layer.top && z < layer.bottom) {
+          return layer;
         }
       }
 
-      return stops[stops.length - 1][1];
+      return model.layers[model.layers.length - 1];
     }
 
-    function drawSimulation() {
-      const diameter = Math.max(25, Math.min(50, Number(diameterInput.value) || 35));
-      const photons = Math.max(1000, Number(photonInput.value) || 300000);
-      const model = buildWristModel(diameter);
+    function turboColor(v) {
+      v = Math.max(0, Math.min(1, v));
 
-      const width = canvas.width;
-      const height = canvas.height;
-      const marginLeft = 70;
-      const marginRight = 25;
-      const marginTop = 45;
-      const marginBottom = 62;
-      const plotW = width - marginLeft - marginRight;
-      const plotH = height - marginTop - marginBottom;
+      const r = 34.61 + v * (1172.33 + v * (-10793.56 + v * (33300.12 + v * (-38394.49 + v * 14825.05))));
+      const g = 23.31 + v * (557.33 + v * (1225.33 + v * (-3574.96 + v * (1073.77 + v * 707.56))));
+      const b = 27.20 + v * (3211.10 + v * (-15327.97 + v * (27814.00 + v * (-22569.18 + v * 6838.66))));
 
-      const nx = 220;
-      const nz = 170;
+      return [
+        Math.max(0, Math.min(255, Math.round(r))),
+        Math.max(0, Math.min(255, Math.round(g))),
+        Math.max(0, Math.min(255, Math.round(b)))
+      ];
+    }
+
+    function buildImageData(values, maxVal, nx, nz, range, diameter) {
       const image = ctx.createImageData(nx, nz);
 
-      const sx = 0;
-      const sz = 0;
-      const dx = 0;
-      const dz = diameter;
+      for (let j = 0; j < nz; j++) {
+        const z = range.zMin + (j / (nz - 1)) * (range.zMax - range.zMin);
 
-      const values = new Float64Array(nx * nz);
-      let maxVal = 0;
+        for (let i = 0; i < nx; i++) {
+          const idx = j * nx + i;
+          const p = idx * 4;
+
+          if (z < 0 || z > diameter) {
+            image.data[p] = 255;
+            image.data[p + 1] = 255;
+            image.data[p + 2] = 255;
+            image.data[p + 3] = 0;
+            continue;
+          }
+
+          const normalized = values[idx] / (maxVal + 1e-30);
+          const displayV = Math.min(1, normalized / 0.35);
+          const [r, g, b] = turboColor(displayV);
+
+          image.data[p] = r;
+          image.data[p + 1] = g;
+          image.data[p + 2] = b;
+          image.data[p + 3] = 255;
+        }
+      }
+
+      return image;
+    }
+
+    function calculateMetrics(model, values, maxVal, nx, nz, range) {
       let total = 0;
       let target = 0;
+
       const layerSums = new Map();
 
       for (const layer of model.layers) {
         layerSums.set(layer.name, 0);
       }
 
+      const dx = (range.xMax - range.xMin) / (nx - 1);
+      const dz = (range.zMax - range.zMin) / (nz - 1);
+
       for (let j = 0; j < nz; j++) {
-        const z = model.zMin + (j / (nz - 1)) * (model.zMax - model.zMin);
+        const z = range.zMin + (j / (nz - 1)) * (range.zMax - range.zMin);
 
-        for (let i = 0; i < nx; i++) {
-          const x = model.xMin + (i / (nx - 1)) * (model.xMax - model.xMin);
-
-          let w = 0;
-          if (z >= 0 && z <= diameter) {
-            const phiS = fieldAt(model, x, z, sx, sz);
-            const phiD = fieldAt(model, x, z, dx, dz);
-            const suppressS = 1 - Math.exp(-(((x - sx) ** 2 + (z - sz) ** 2) / (1.2 ** 2)));
-            const suppressD = 1 - Math.exp(-(((x - dx) ** 2 + (z - dz) ** 2) / (1.2 ** 2)));
-            const noise = 1 + (Math.random() - 0.5) * Math.min(0.18, 50 / Math.sqrt(photons));
-            w = phiS * phiD * suppressS * suppressD * noise;
-          }
-
-          const idx = j * nx + i;
-          values[idx] = w;
-          if (w > maxVal) maxVal = w;
+        if (z < 0 || z > model.diameter) {
+          continue;
         }
-      }
-
-      for (let j = 0; j < nz; j++) {
-        const z = model.zMin + (j / (nz - 1)) * (model.zMax - model.zMin);
 
         for (let i = 0; i < nx; i++) {
-          const x = model.xMin + (i / (nx - 1)) * (model.xMax - model.xMin);
+          const x = range.xMin + (i / (nx - 1)) * (range.xMax - range.xMin);
           const idx = j * nx + i;
           const v = values[idx] / (maxVal + 1e-30);
-          const displayV = Math.min(1, v / 0.35);
-          const [r, g, b] = colorMap(displayV);
-          const p = idx * 4;
+          const weightedV = v * dx * dz;
 
-          image.data[p] = r;
-          image.data[p + 1] = g;
-          image.data[p + 2] = b;
-          image.data[p + 3] = z >= 0 && z <= diameter ? 255 : 0;
+          total += weightedV;
 
-          if (z >= 0 && z <= diameter) {
-            total += v;
-            const layer = getLayer(model, z);
-            layerSums.set(layer.name, layerSums.get(layer.name) + v);
+          const layer = getLayer(model, z);
+          layerSums.set(layer.name, layerSums.get(layer.name) + weightedV);
 
-            const roi = model.roi;
-            if ((x - roi.x) ** 2 + (z - roi.z) ** 2 <= roi.radius ** 2) {
-              target += v;
-            }
+          const roi = model.roi;
+
+          if ((x - roi.x) ** 2 + (z - roi.z) ** 2 <= roi.radius ** 2) {
+            target += weightedV;
           }
         }
       }
+
+      return {
+        total,
+        target,
+        targetPct: 100 * target / (total + 1e-30),
+        layerSums
+      };
+    }
+
+    function drawAxes(ctx, range, marginLeft, marginTop, plotW, plotH, width, height) {
+      function xToPx(x) {
+        return marginLeft + ((x - range.xMin) / (range.xMax - range.xMin)) * plotW;
+      }
+
+      function zToPx(z) {
+        return marginTop + ((z - range.zMin) / (range.zMax - range.zMin)) * plotH;
+      }
+
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.85)";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([]);
+
+      ctx.beginPath();
+      ctx.moveTo(marginLeft, marginTop);
+      ctx.lineTo(marginLeft, marginTop + plotH);
+      ctx.lineTo(marginLeft + plotW, marginTop + plotH);
+      ctx.lineTo(marginLeft + plotW, marginTop);
+      ctx.stroke();
+
+      ctx.fillStyle = "black";
+      ctx.font = "13px Arial, sans-serif";
+      ctx.textAlign = "center";
+
+      for (let x = Math.ceil(range.xMin / 10) * 10; x <= range.xMax; x += 10) {
+        const px = xToPx(x);
+
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.72)";
+        ctx.beginPath();
+        ctx.moveTo(px, marginTop + plotH);
+        ctx.lineTo(px, marginTop + plotH + 6);
+        ctx.stroke();
+
+        ctx.fillText(String(x), px, marginTop + plotH + 22);
+      }
+
+      ctx.textAlign = "right";
+
+      for (let z = 0; z <= range.zMax; z += 5) {
+        const py = zToPx(z);
+
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.72)";
+        ctx.beginPath();
+        ctx.moveTo(marginLeft - 6, py);
+        ctx.lineTo(marginLeft, py);
+        ctx.stroke();
+
+        ctx.fillText(String(z), marginLeft - 10, py + 4);
+      }
+
+      ctx.textAlign = "center";
+      ctx.font = "16px Arial, sans-serif";
+      ctx.fillText("Lateral position x (mm)", marginLeft + plotW / 2, height - 20);
+
+      ctx.save();
+      ctx.translate(25, marginTop + plotH / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText("Depth z (mm)", 0, 0);
+      ctx.restore();
+
+      return { xToPx, zToPx };
+    }
+
+    function drawLayers(ctx, model, marginLeft, plotW, xToPx, zToPx) {
+      for (const layer of model.layers) {
+        const yTop = zToPx(layer.top);
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+        ctx.lineWidth = 1.0;
+        ctx.setLineDash([5, 4]);
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, yTop);
+        ctx.lineTo(marginLeft + plotW, yTop);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const yMid = zToPx(0.5 * (layer.top + layer.bottom));
+
+        ctx.fillStyle = "rgba(0, 0, 0, 0.42)";
+        ctx.fillRect(marginLeft + 8, yMid - 10, ctx.measureText(layer.name).width + 12, 18);
+
+        ctx.fillStyle = "white";
+        ctx.font = "13px Arial, sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(layer.name, marginLeft + 14, yMid + 4);
+      }
+    }
+
+    function drawOptodes(ctx, model, xToPx, zToPx) {
+      const sx = model.source.x;
+      const sz = model.source.z;
+      const dx = model.detector.x;
+      const dz = model.detector.z;
+
+      ctx.fillStyle = "black";
+      ctx.fillRect(xToPx(sx) - 3, zToPx(-3), 6, zToPx(sz) - zToPx(-3));
+      ctx.fillRect(xToPx(dx) - 3, zToPx(dz), 6, zToPx(dz + 3) - zToPx(dz));
+
+      ctx.fillStyle = "black";
+      ctx.font = "bold 15px Arial, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("S", xToPx(sx), zToPx(-3.35));
+      ctx.fillText("D", xToPx(dx), zToPx(dz + 3.55));
+    }
+
+    function drawRoi(ctx, model, range, xToPx, zToPx) {
+      const roi = model.roi;
+      const radiusPx = roi.radius / (range.xMax - range.xMin) * (xToPx(range.xMax) - xToPx(range.xMin));
+
+      ctx.strokeStyle = "cyan";
+      ctx.lineWidth = 2.0;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.arc(xToPx(roi.x), zToPx(roi.z), radiusPx, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = "cyan";
+      ctx.font = "bold 14px Arial, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(roi.name, xToPx(roi.x + roi.radius + 0.5), zToPx(roi.z) + 4);
+    }
+
+    function drawSideLabels(ctx, model, xToPx, zToPx) {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      ctx.fillRect(xToPx(-24), zToPx(0.6) - 12, 132, 20);
+      ctx.fillRect(xToPx(-24), zToPx(model.diameter - 0.8) - 12, 142, 20);
+
+      ctx.fillStyle = "white";
+      ctx.font = "12px Arial, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("Palmar source side", xToPx(-23.5), zToPx(0.6) + 3);
+      ctx.fillText("Dorsal detector side", xToPx(-23.5), zToPx(model.diameter - 0.8) + 3);
+    }
+
+    function renderCanvas(model, photons, values, maxVal, nx, nz, range) {
+      const width = canvas.width;
+      const height = canvas.height;
+
+      const marginLeft = 72;
+      const marginRight = 28;
+      const marginTop = 32;
+      const marginBottom = 68;
+
+      const plotW = width - marginLeft - marginRight;
+      const plotH = height - marginTop - marginBottom;
+
+      const image = buildImageData(values, maxVal, nx, nz, range, model.diameter);
 
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "rgba(255, 255, 255, 0.96)";
@@ -489,102 +893,628 @@
 
       ctx.drawImage(offscreen, marginLeft, marginTop, plotW, plotH);
 
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.85)";
-      ctx.lineWidth = 1.2;
-      ctx.strokeRect(marginLeft, marginTop, plotW, plotH);
+      const axes = drawAxes(ctx, range, marginLeft, marginTop, plotW, plotH, width, height);
 
-      function xToPx(x) {
-        return marginLeft + ((x - model.xMin) / (model.xMax - model.xMin)) * plotW;
-      }
+      drawLayers(ctx, model, marginLeft, plotW, axes.xToPx, axes.zToPx);
+      drawOptodes(ctx, model, axes.xToPx, axes.zToPx);
+      drawRoi(ctx, model, range, axes.xToPx, axes.zToPx);
+      drawSideLabels(ctx, model, axes.xToPx, axes.zToPx);
 
-      function zToPx(z) {
-        return marginTop + ((z - model.zMin) / (model.zMax - model.zMin)) * plotH;
-      }
+      const metrics = calculateMetrics(model, values, maxVal, nx, nz, range);
+      updateResultPanel(model, photons, metrics);
+    }
 
-      for (const layer of model.layers) {
-        const yTop = zToPx(layer.top);
-        const yBot = zToPx(layer.bottom);
-        ctx.fillStyle = layer.color;
-        ctx.fillRect(marginLeft, yTop, plotW, yBot - yTop);
-
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
-        ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        ctx.moveTo(marginLeft, yTop);
-        ctx.lineTo(marginLeft + plotW, yTop);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-        ctx.font = "13px cursive";
-        ctx.fillText(layer.name, marginLeft + 8, yTop + 17);
-      }
-
-      ctx.fillStyle = "black";
-      ctx.fillRect(xToPx(sx) - 3, zToPx(-3), 6, zToPx(0) - zToPx(-3));
-      ctx.fillRect(xToPx(dx) - 3, zToPx(diameter), 6, zToPx(diameter + 3) - zToPx(diameter));
-
-      ctx.fillStyle = "black";
-      ctx.font = "bold 14px cursive";
-      ctx.fillText("S", xToPx(sx) - 5, zToPx(-3.4));
-      ctx.fillText("D", xToPx(dx) - 5, zToPx(diameter + 3.5));
-
-      const roi = model.roi;
-      ctx.strokeStyle = "cyan";
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(
-        xToPx(roi.x),
-        zToPx(roi.z),
-        roi.radius / (model.xMax - model.xMin) * plotW,
-        0,
-        Math.PI * 2
-      );
-      ctx.stroke();
-
-      ctx.fillStyle = "cyan";
-      ctx.font = "bold 14px cursive";
-      ctx.fillText(roi.name, xToPx(roi.x + roi.radius + 0.4), zToPx(roi.z) + 4);
-
-      ctx.fillStyle = "black";
-      ctx.font = "bold 18px cursive";
-      ctx.fillText(`Radial wrist model | Transmission geometry | diameter = ${diameter.toFixed(1)} mm`, marginLeft, 26);
-
-      ctx.fillStyle = "black";
-      ctx.font = "15px cursive";
-      ctx.fillText("Lateral position x (mm)", marginLeft + plotW / 2 - 80, height - 18);
-
-      ctx.save();
-      ctx.translate(22, marginTop + plotH / 2 + 70);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText("Depth z (mm)", 0, 0);
-      ctx.restore();
-
-      ctx.fillStyle = "rgba(0, 0, 0, 0.86)";
-      ctx.font = "13px cursive";
-      ctx.fillText("Palmar source side", marginLeft + 8, zToPx(1.0));
-      ctx.fillText("Dorsal detector side", marginLeft + 8, zToPx(diameter - 1.0));
-
-      const targetPct = 100 * target / (total + 1e-30);
-
+    function updateResultPanel(model, photons, metrics) {
       let html = "";
-      html += `<div class="metric"><span>Model</span><span>Radial wrist</span></div>`;
+
+      html += `<div class="metric"><span>Model</span><span>${model.title}</span></div>`;
       html += `<div class="metric"><span>Geometry</span><span>Transmission</span></div>`;
-      html += `<div class="metric"><span>Wrist diameter</span><span>${diameter.toFixed(1)} mm</span></div>`;
+      html += `<div class="metric"><span>Wavelength</span><span>${model.wavelength} nm</span></div>`;
+      html += `<div class="metric"><span>Wrist diameter</span><span>${model.diameter.toFixed(1)} mm</span></div>`;
       html += `<div class="metric"><span>Photon number</span><span>${photons.toLocaleString()}</span></div>`;
-      html += `<div class="metric"><span>Radial artery ROI</span><span>${targetPct.toFixed(3)} %</span></div>`;
+      html += `<div class="metric"><span>${model.targetName}</span><span>${metrics.targetPct.toFixed(4)} %</span></div>`;
 
       for (const layer of model.layers) {
-        const pct = 100 * layerSums.get(layer.name) / (total + 1e-30);
+        const pct = 100 * metrics.layerSums.get(layer.name) / (metrics.total + 1e-30);
         html += `<div class="metric"><span>${layer.name}</span><span>${pct.toFixed(2)} %</span></div>`;
       }
 
       resultPanel.innerHTML = html;
     }
 
-    runButton.addEventListener("click", drawSimulation);
-    diameterInput.addEventListener("change", drawSimulation);
-    window.addEventListener("load", drawSimulation);
+    function updateLayerPanel(model) {
+      let html = "";
+
+      for (const layer of model.layers) {
+        html += `
+          <div class="layer-item">
+            <div class="layer-title">${layer.name}</div>
+            <p class="layer-desc">${layer.description}</p>
+          </div>
+        `;
+      }
+
+      layerPanel.innerHTML = html;
+    }
+
+    function updateOpticalPanel(model) {
+      let html = `
+        <table class="optical-table">
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>μa (mm⁻¹)</th>
+              <th>μs′ (mm⁻¹)</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (const layer of model.layers) {
+        html += `
+          <tr>
+            <td>${layer.name}</td>
+            <td>${layer.mua.toFixed(3)}</td>
+            <td>${layer.musp.toFixed(3)}</td>
+          </tr>
+        `;
+      }
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      opticalPanel.innerHTML = html;
+    }
+
+    function updateModelInfo(model) {
+      const roi = model.roi;
+
+      modelInfo.innerHTML = `
+        <div class="info-box">
+          <strong>${model.title}</strong>
+          ${model.geometryDescription}
+        </div>
+        <div class="info-box">
+          <strong>Transmission geometry</strong>
+          Source: palmar side, z = ${model.source.z.toFixed(1)} mm<br>
+          Detector: dorsal side, z = ${model.detector.z.toFixed(1)} mm
+        </div>
+        <div class="info-box">
+          <strong>Target region</strong>
+          ${roi.fullName}: x = ${roi.x.toFixed(1)} mm, z = ${roi.z.toFixed(1)} mm, radius = ${roi.radius.toFixed(1)} mm
+        </div>
+      `;
+    }
+
+    function setBusy(isBusy, text = "") {
+      runButton.disabled = isBusy;
+      statusText.textContent = text;
+    }
+
+    function createMonteCarloWorker() {
+      const workerCode = `
+        function createSeededRandom(seed) {
+          let state = seed >>> 0;
+
+          return function() {
+            state = (1664525 * state + 1013904223) >>> 0;
+            return (state + 1) / 4294967297;
+          };
+        }
+
+        function findLayer(z, zTop, zBot) {
+          for (let i = 0; i < zTop.length; i++) {
+            if (z >= zTop[i] && z < zBot[i]) {
+              return i;
+            }
+          }
+
+          if (z >= zBot[zBot.length - 1]) {
+            return zBot.length - 1;
+          }
+
+          return -1;
+        }
+
+        function spinHenyeyGreenstein(ux, uy, uz, g, rand) {
+          const rnd = rand();
+          let cosTheta;
+
+          if (Math.abs(g) < 1e-12) {
+            cosTheta = 2.0 * rnd - 1.0;
+          } else {
+            const temp = (1.0 - g * g) / (1.0 - g + 2.0 * g * rnd);
+            cosTheta = (1.0 + g * g - temp * temp) / (2.0 * g);
+          }
+
+          cosTheta = Math.max(-1.0, Math.min(1.0, cosTheta));
+
+          const sinTheta = Math.sqrt(Math.max(0.0, 1.0 - cosTheta * cosTheta));
+          const psi = 2.0 * Math.PI * rand();
+          const cosPsi = Math.cos(psi);
+          const sinPsi = Math.sin(psi);
+
+          let uxNew;
+          let uyNew;
+          let uzNew;
+
+          if (Math.abs(uz) > 0.99999) {
+            uxNew = sinTheta * cosPsi;
+            uyNew = sinTheta * sinPsi;
+            uzNew = Math.sign(uz || 1) * cosTheta;
+          } else {
+            const denom = Math.sqrt(1.0 - uz * uz);
+
+            uxNew = sinTheta * (ux * uz * cosPsi - uy * sinPsi) / denom + ux * cosTheta;
+            uyNew = sinTheta * (uy * uz * cosPsi + ux * sinPsi) / denom + uy * cosTheta;
+            uzNew = -sinTheta * cosPsi * denom + uz * cosTheta;
+          }
+
+          const norm = Math.sqrt(uxNew * uxNew + uyNew * uyNew + uzNew * uzNew) + 1e-30;
+
+          return [
+            uxNew / norm,
+            uyNew / norm,
+            uzNew / norm
+          ];
+        }
+
+        function monteCarloRZFluence(params) {
+          const {
+            nPhotons,
+            nr,
+            nz,
+            dr,
+            dz,
+            zMax,
+            sourceRadius,
+            zTop,
+            zBot,
+            muA,
+            muT,
+            g,
+            wThreshold,
+            rouletteChance,
+            maxSteps,
+            seed
+          } = params;
+
+          const rand = createSeededRandom(seed);
+          const fluence = new Float64Array(nz * nr);
+
+          for (let p = 0; p < nPhotons; p++) {
+            const rr = sourceRadius * Math.sqrt(rand());
+            const phi0 = 2.0 * Math.PI * rand();
+
+            let x = rr * Math.cos(phi0);
+            let y = rr * Math.sin(phi0);
+            let z = 1e-6;
+
+            let ux = 0.0;
+            let uy = 0.0;
+            let uz = 1.0;
+            let weight = 1.0;
+
+            for (let stepIdx = 0; stepIdx < maxSteps; stepIdx++) {
+              const layer = findLayer(z, zTop, zBot);
+
+              if (layer < 0) {
+                break;
+              }
+
+              const mua = muA[layer];
+              const mut = muT[layer];
+              const gg = g[layer];
+
+              const s = -Math.log(Math.max(rand(), 1e-12)) / mut;
+
+              const xNew = x + s * ux;
+              const yNew = y + s * uy;
+              const zNew = z + s * uz;
+
+              if (zNew < 0.0) {
+                if (uz < 0.0) {
+                  const sToBoundary = -z / uz;
+                  const xMid = x + 0.5 * sToBoundary * ux;
+                  const yMid = y + 0.5 * sToBoundary * uy;
+                  const zMid = z + 0.5 * sToBoundary * uz;
+
+                  if (zMid >= 0.0 && zMid < zMax) {
+                    const rMid = Math.sqrt(xMid * xMid + yMid * yMid);
+                    const ir = Math.floor(rMid / dr);
+                    const iz = Math.floor(zMid / dz);
+
+                    if (ir >= 0 && ir < nr && iz >= 0 && iz < nz) {
+                      fluence[iz * nr + ir] += weight * sToBoundary;
+                    }
+                  }
+                }
+
+                break;
+              }
+
+              if (zNew >= zMax) {
+                break;
+              }
+
+              const xMid = 0.5 * (x + xNew);
+              const yMid = 0.5 * (y + yNew);
+              const zMid = 0.5 * (z + zNew);
+              const rMid = Math.sqrt(xMid * xMid + yMid * yMid);
+
+              const ir = Math.floor(rMid / dr);
+              const iz = Math.floor(zMid / dz);
+
+              if (ir >= 0 && ir < nr && iz >= 0 && iz < nz) {
+                fluence[iz * nr + ir] += weight * s;
+              }
+
+              weight -= weight * mua / mut;
+
+              x = xNew;
+              y = yNew;
+              z = zNew;
+
+              const spin = spinHenyeyGreenstein(ux, uy, uz, gg, rand);
+              ux = spin[0];
+              uy = spin[1];
+              uz = spin[2];
+
+              if (weight < wThreshold) {
+                if (rand() <= rouletteChance) {
+                  weight /= rouletteChance;
+                } else {
+                  break;
+                }
+              }
+            }
+
+            if (p % 2000 === 0) {
+              postMessage({
+                type: "progress",
+                done: p,
+                total: nPhotons
+              });
+            }
+          }
+
+          return fluence;
+        }
+
+        function normalizeFluenceDensity(fluence, nPhotons, nr, nz, dr, dz) {
+          const density = new Float64Array(nz * nr);
+          let maxVal = 0;
+
+          for (let iz = 0; iz < nz; iz++) {
+            for (let ir = 0; ir < nr; ir++) {
+              const rCenter = (ir + 0.5) * dr;
+              const shellArea = ir === 0 ? Math.PI * dr * dr : 2.0 * Math.PI * rCenter * dr;
+              const voxelVolume = shellArea * dz;
+              const idx = iz * nr + ir;
+
+              density[idx] = fluence[idx] / (nPhotons * voxelVolume + 1e-30);
+
+              if (density[idx] > maxVal) {
+                maxVal = density[idx];
+              }
+            }
+          }
+
+          for (let k = 0; k < density.length; k++) {
+            density[k] /= maxVal + 1e-30;
+          }
+
+          return density;
+        }
+
+        function smoothRZ(F, nr, nz) {
+          const out = new Float64Array(F.length);
+
+          for (let iz = 0; iz < nz; iz++) {
+            for (let ir = 0; ir < nr; ir++) {
+              let sum = 0;
+              let count = 0;
+
+              for (let dz0 = -1; dz0 <= 1; dz0++) {
+                for (let dr0 = -1; dr0 <= 1; dr0++) {
+                  const zz = iz + dz0;
+                  const rr = ir + dr0;
+
+                  if (zz >= 0 && zz < nz && rr >= 0 && rr < nr) {
+                    sum += F[zz * nr + rr];
+                    count++;
+                  }
+                }
+              }
+
+              out[iz * nr + ir] = sum / count;
+            }
+          }
+
+          return out;
+        }
+
+        function interpolateRZ(F, nr, dr, iz, rQuery) {
+          if (rQuery <= 0) {
+            return F[iz * nr];
+          }
+
+          const fIndex = rQuery / dr - 0.5;
+
+          if (fIndex <= 0) {
+            return F[iz * nr];
+          }
+
+          const i0 = Math.floor(fIndex);
+          const i1 = i0 + 1;
+
+          if (i0 < 0) {
+            return F[iz * nr];
+          }
+
+          if (i1 >= nr) {
+            return 0.0;
+          }
+
+          const t = fIndex - i0;
+          const v0 = F[iz * nr + i0];
+          const v1 = F[iz * nr + i1];
+
+          return v0 * (1.0 - t) + v1 * t;
+        }
+
+        function makeTransmissionMap(params) {
+          const {
+            F,
+            nr,
+            nzRZ,
+            dr,
+            dz,
+            nx,
+            nz,
+            range,
+            sourceX,
+            detectorX,
+            diameter,
+            suppressRadius
+          } = params;
+
+          const W = new Float64Array(nx * nz);
+          let maxVal = 0;
+
+          for (let j = 0; j < nz; j++) {
+            const z = range.zMin + (j / (nz - 1)) * (range.zMax - range.zMin);
+
+            for (let i = 0; i < nx; i++) {
+              const x = range.xMin + (i / (nx - 1)) * (range.xMax - range.xMin);
+              const idx = j * nx + i;
+
+              if (z < 0 || z > diameter) {
+                W[idx] = 0;
+                continue;
+              }
+
+              const izSourceFloat = z / dz - 0.5;
+              const izDetectorFloat = (diameter - z) / dz - 0.5;
+
+              const izS0 = Math.floor(izSourceFloat);
+              const izS1 = izS0 + 1;
+              const izD0 = Math.floor(izDetectorFloat);
+              const izD1 = izD0 + 1;
+
+              if (izS0 < 0 || izS1 >= nzRZ || izD0 < 0 || izD1 >= nzRZ) {
+                W[idx] = 0;
+                continue;
+              }
+
+              const tzS = izSourceFloat - izS0;
+              const tzD = izDetectorFloat - izD0;
+
+              const rS = Math.abs(x - sourceX);
+              const rD = Math.abs(x - detectorX);
+
+              const phiS0 = interpolateRZ(F, nr, dr, izS0, rS);
+              const phiS1 = interpolateRZ(F, nr, dr, izS1, rS);
+              const phiD0 = interpolateRZ(F, nr, dr, izD0, rD);
+              const phiD1 = interpolateRZ(F, nr, dr, izD1, rD);
+
+              const phiS = phiS0 * (1.0 - tzS) + phiS1 * tzS;
+              const phiD = phiD0 * (1.0 - tzD) + phiD1 * tzD;
+
+              const RS = Math.sqrt((x - sourceX) * (x - sourceX) + z * z);
+              const RD = Math.sqrt((x - detectorX) * (x - detectorX) + (z - diameter) * (z - diameter));
+              const gateS = 1.0 - Math.exp(-Math.pow(RS / suppressRadius, 2.0));
+              const gateD = 1.0 - Math.exp(-Math.pow(RD / suppressRadius, 2.0));
+
+              const w = phiS * phiD * gateS * gateD;
+
+              W[idx] = w;
+
+              if (w > maxVal) {
+                maxVal = w;
+              }
+            }
+          }
+
+          for (let k = 0; k < W.length; k++) {
+            W[k] /= maxVal + 1e-30;
+          }
+
+          return W;
+        }
+
+        self.onmessage = function(event) {
+          const model = event.data.model;
+          const photons = event.data.photons;
+          const range = event.data.range;
+          const nx = event.data.nx;
+          const nz = event.data.nz;
+
+          const zTop = model.layers.map(layer => layer.top);
+          const zBot = model.layers.map(layer => layer.bottom);
+          const muA = model.layers.map(layer => layer.mua);
+          const muSp = model.layers.map(layer => layer.musp);
+          const g = model.layers.map(layer => layer.g);
+          const muS = muSp.map((musp, i) => musp / (1.0 - g[i]));
+          const muT = muS.map((mus, i) => mus + muA[i]);
+
+          const nr = Math.floor(model.rMax / model.dr);
+          const nzRZ = Math.floor(model.zMax / model.dz);
+
+          const fluence = monteCarloRZFluence({
+            nPhotons: photons,
+            nr,
+            nz: nzRZ,
+            dr: model.dr,
+            dz: model.dz,
+            zMax: model.zMax,
+            sourceRadius: model.sourceRadius,
+            zTop,
+            zBot,
+            muA,
+            muT,
+            g,
+            wThreshold: 1e-4,
+            rouletteChance: 0.1,
+            maxSteps: 20000,
+            seed: 7
+          });
+
+          let F = normalizeFluenceDensity(fluence, photons, nr, nzRZ, model.dr, model.dz);
+          F = smoothRZ(F, nr, nzRZ);
+
+          const W = makeTransmissionMap({
+            F,
+            nr,
+            nzRZ,
+            dr: model.dr,
+            dz: model.dz,
+            nx,
+            nz,
+            range,
+            sourceX: model.source.x,
+            detectorX: model.detector.x,
+            diameter: model.diameter,
+            suppressRadius: 1.2
+          });
+
+          postMessage({
+            type: "done",
+            values: W,
+            maxVal: 1.0,
+            nx,
+            nz
+          }, [W.buffer]);
+        };
+      `;
+
+      const blob = new Blob([workerCode], {
+        type: "application/javascript"
+      });
+
+      return new Worker(URL.createObjectURL(blob));
+    }
+
+    function runSimulation() {
+      const diameter = Math.max(25, Math.min(50, Number(diameterInput.value) || 35));
+      const photons = Math.max(1000, Math.min(1000000, Number(photonInput.value) || 300000));
+
+      diameterInput.value = diameter;
+      photonInput.value = photons;
+
+      const model = buildWristModel(diameter);
+      currentModel = model;
+
+      updateModelInfo(model);
+      updateLayerPanel(model);
+      updateOpticalPanel(model);
+
+      const range = getPlotRange(model);
+      const nx = 701;
+      const nz = Math.round((range.zMax - range.zMin) / 0.25) + 1;
+
+      if (currentWorker) {
+        currentWorker.terminate();
+        currentWorker = null;
+      }
+
+      setBusy(true, "Running Monte Carlo...");
+
+      currentWorker = createMonteCarloWorker();
+
+      currentWorker.onmessage = function(event) {
+        const data = event.data;
+
+        if (data.type === "progress") {
+          const pct = Math.round((data.done / data.total) * 100);
+          statusText.textContent = `Running Monte Carlo... ${pct}%`;
+          return;
+        }
+
+        if (data.type === "done") {
+          const values = new Float64Array(data.values);
+
+          renderCanvas(
+            model,
+            photons,
+            values,
+            data.maxVal,
+            data.nx,
+            data.nz,
+            range
+          );
+
+          setBusy(false, "Simulation updated.");
+
+          currentWorker.terminate();
+          currentWorker = null;
+        }
+      };
+
+      currentWorker.onerror = function(error) {
+        console.error(error);
+        setBusy(false, "Simulation failed. Photon number를 낮춰서 다시 실행해보세요.");
+
+        if (currentWorker) {
+          currentWorker.terminate();
+          currentWorker = null;
+        }
+      };
+
+      currentWorker.postMessage({
+        model: prepareModelForWorker(model),
+        photons,
+        range,
+        nx,
+        nz
+      });
+    }
+
+    diameterInput.addEventListener("change", function() {
+      const diameter = Math.max(25, Math.min(50, Number(diameterInput.value) || 35));
+      currentModel = buildWristModel(diameter);
+      updateModelInfo(currentModel);
+      updateLayerPanel(currentModel);
+      updateOpticalPanel(currentModel);
+      statusText.textContent = "Parameter changed. Run Simulation을 눌러 결과를 갱신하세요.";
+    });
+
+    photonInput.addEventListener("change", function() {
+      statusText.textContent = "Parameter changed. Run Simulation을 눌러 결과를 갱신하세요.";
+    });
+
+    runButton.addEventListener("click", runSimulation);
+
+    window.addEventListener("load", function() {
+      const diameter = Math.max(25, Math.min(50, Number(diameterInput.value) || 35));
+      currentModel = buildWristModel(diameter);
+      updateModelInfo(currentModel);
+      updateLayerPanel(currentModel);
+      updateOpticalPanel(currentModel);
+      statusText.textContent = "Set parameters and click Run Simulation.";
+    });
   </script>
 </body>
 </html>
