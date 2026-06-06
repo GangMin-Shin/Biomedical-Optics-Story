@@ -28,7 +28,7 @@
       inset: 0;
       background:
         radial-gradient(circle at 18% 18%, rgba(70, 180, 255, 0.18), transparent 32%),
-        linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.78));
+        linear-gradient(rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.78));
       z-index: 0;
       pointer-events: none;
     }
@@ -355,7 +355,9 @@
 
         <div class="model-info" id="modelInfo"></div>
 
-        <p class="subtitle" id="methodDescription"></p>
+        <p class="subtitle" id="methodDescription">
+          The sensitivity map is calculated by a browser-based Monte Carlo random-walk model. First, an axisymmetric R-Z fluence map is estimated from a surface source. Then the source and detector fluence fields are shifted according to SDS, and the final sensitivity is calculated as W = Φs × Φd.
+        </p>
 
         <div class="canvas-wrap">
           <canvas id="kernelCanvas" width="980" height="660"></canvas>
@@ -363,7 +365,7 @@
 
         <div class="legend">
           <div class="colorbar"></div>
-          <span>Normalized sensitivity W / Wmax</span>
+          <span>Linear MC sensitivity, W / Wmax</span>
         </div>
       </main>
 
@@ -380,29 +382,18 @@
           </div>
 
           <div class="control-group">
-            <label for="methodSelect">Simulation method</label>
-            <select id="methodSelect">
-              <option value="diffusion" selected>Fast diffusion / adjoint sensitivity</option>
-              <option value="browserMC">Browser Monte Carlo random walk</option>
-            </select>
-            <div class="input-hint">
-              Browser MC는 JavaScript Web Worker에서 source fluence와 detector adjoint fluence를 각각 추정한 뒤 곱합니다.
-            </div>
-          </div>
-
-          <div class="control-group">
             <label for="sdsInput">SDS (mm)</label>
             <input id="sdsInput" type="number" min="2" max="60" step="0.5" value="20">
             <div class="input-hint">
-              예: 10 mm = 1.0 cm, 20 mm = 2.0 cm, 30 mm = 3.0 cm
+              Source-detector separation입니다. 예: 10 mm = 1.0 cm, 20 mm = 2.0 cm, 30 mm = 3.0 cm
             </div>
           </div>
 
           <div class="control-group">
-            <label for="photonInput">Photon number per side</label>
-            <input id="photonInput" type="number" min="1000" max="200000" step="1000" value="12000">
+            <label for="photonInput">Photon number</label>
+            <input id="photonInput" type="number" min="1000" max="300000" step="1000" value="30000">
             <div class="input-hint">
-              Browser MC에서는 source와 detector 쪽에서 각각 이 photon 수만큼 random walk를 수행합니다.
+              브라우저 성능을 고려하면 30,000–80,000 정도가 적당합니다.
             </div>
           </div>
 
@@ -410,7 +401,7 @@
           <div class="status" id="statusText"></div>
 
           <p class="note">
-            이 페이지의 Browser MC는 교육용 2D random-walk approximation입니다. 논문용 정량 MC는 MCML, MCX, MMC 같은 전용 시뮬레이터에서 더 많은 photon packet과 정확한 boundary condition을 사용해야 합니다.
+            이 코드는 Python/Numba 코드와 동일한 방향의 MC 구조를 JavaScript Web Worker로 다시 구현한 교육용 버전입니다. 브라우저 환경이므로 Python의 300,000 photons보다 낮은 photon 수에서 사용하는 것이 안정적입니다.
           </p>
 
           <div class="back-links">
@@ -437,26 +428,30 @@
     const ctx = canvas.getContext("2d");
 
     const modelSelect = document.getElementById("modelSelect");
-    const methodSelect = document.getElementById("methodSelect");
     const sdsInput = document.getElementById("sdsInput");
     const photonInput = document.getElementById("photonInput");
     const runButton = document.getElementById("runButton");
     const resultPanel = document.getElementById("resultPanel");
     const layerPanel = document.getElementById("layerPanel");
     const modelInfo = document.getElementById("modelInfo");
-    const methodDescription = document.getElementById("methodDescription");
     const statusText = document.getElementById("statusText");
 
     const models = {
       brain: {
         title: "Brain model",
+        shortTitle: "Brain",
+        wavelength: 808,
         xMinBase: -35,
         xMaxBase: 35,
         zMin: -4,
         zMax: 35,
+        rMax: 70,
+        dr: 0.35,
+        dz: 0.35,
+        sourceRadius: 0.75,
         targetName: "Cortex",
         targetRange: [12.0, 35.0],
-        geometryDescription: "Same-surface reflection geometry for a simplified 4-layer head model.",
+        geometryDescription: "Simplified 4-layer head model for reflection geometry.",
         layers: [
           {
             name: "Scalp",
@@ -465,8 +460,9 @@
             mua: 0.017,
             musp: 0.85,
             g: 0.90,
+            n: 1.40,
             color: "rgba(244,194,161,0.34)",
-            description: "피부와 두피층입니다. source-detector가 놓이는 표면층이며, superficial signal contribution이 가장 크게 나타날 수 있습니다."
+            description: "피부와 두피층입니다. 표면 신호 기여가 큰 층입니다."
           },
           {
             name: "Skull",
@@ -475,8 +471,9 @@
             mua: 0.012,
             musp: 1.15,
             g: 0.90,
+            n: 1.55,
             color: "rgba(230,210,170,0.34)",
-            description: "두개골층입니다. 산란이 비교적 강하게 설정되어 cortex로 가는 photon path를 제한합니다."
+            description: "두개골층입니다. 산란이 강한 중간층입니다."
           },
           {
             name: "CSF",
@@ -485,8 +482,9 @@
             mua: 0.004,
             musp: 0.02,
             g: 0.90,
+            n: 1.33,
             color: "rgba(160,210,255,0.34)",
-            description: "Cerebrospinal fluid, 즉 뇌척수액층입니다. scattering이 낮은 얇은 층으로 단순화했습니다."
+            description: "Cerebrospinal fluid, 즉 뇌척수액층입니다. 산란이 매우 낮은 얇은 층입니다."
           },
           {
             name: "Cortex",
@@ -495,8 +493,9 @@
             mua: 0.017,
             musp: 0.90,
             g: 0.90,
+            n: 1.40,
             color: "rgba(200,145,145,0.34)",
-            description: "대뇌피질층입니다. 여기서는 target layer로 설정하여 전체 sensitivity 중 cortex contribution을 계산합니다."
+            description: "대뇌피질층입니다. 이 모델의 target layer입니다."
           }
         ],
         roi: null
@@ -504,12 +503,18 @@
 
       radial: {
         title: "Radial artery wrist model",
+        shortTitle: "Radial",
+        wavelength: 808,
         xMinBase: -30,
         xMaxBase: 30,
         zMin: -4,
         zMax: 35,
+        rMax: 60,
+        dr: 0.25,
+        dz: 0.25,
+        sourceRadius: 0.75,
         targetName: "Radial artery ROI",
-        geometryDescription: "Same-surface reflection geometry for a simplified multilayer wrist model with radial artery ROI.",
+        geometryDescription: "Simplified multilayer wrist model with radial artery ROI.",
         layers: [
           {
             name: "Palmar skin",
@@ -518,66 +523,73 @@
             mua: 0.020,
             musp: 1.00,
             g: 0.90,
+            n: 1.40,
             color: "rgba(244,194,161,0.34)",
-            description: "손바닥쪽 피부층입니다. probe가 palmar side에 놓인 상황을 단순화한 최상부 layer입니다."
+            description: "손바닥쪽 피부층입니다. source optode가 놓이는 표면층입니다."
           },
           {
-            name: "Palmar fat",
+            name: "Palmar subcutaneous fat",
             top: 1.2,
             bottom: 2.8,
             mua: 0.010,
             musp: 0.65,
             g: 0.90,
+            n: 1.44,
             color: "rgba(246,226,179,0.34)",
-            description: "피하지방층입니다. absorption은 낮고 scattering도 상대적으로 낮게 설정했습니다."
+            description: "손바닥쪽 피하지방층입니다. 흡수가 낮은 superficial tissue입니다."
           },
           {
-            name: "Vascular / fascia",
+            name: "Superficial vascular / fascia layer",
             top: 2.8,
             bottom: 5.0,
             mua: 0.060,
             musp: 0.95,
             g: 0.90,
+            n: 1.40,
             color: "rgba(170,220,220,0.34)",
-            description: "요골동맥과 근막 구조가 존재한다고 가정한 층입니다. 혈관 ROI가 이 영역 안에 위치합니다."
+            description: "요골동맥과 근막이 위치한다고 가정한 표재성 혈관층입니다."
           },
           {
-            name: "Flexor tendon",
+            name: "Flexor tendon / carpal tunnel region",
             top: 5.0,
             bottom: 11.0,
             mua: 0.018,
             musp: 1.10,
             g: 0.90,
+            n: 1.43,
             color: "rgba(199,178,153,0.34)",
-            description: "굴곡건 영역입니다. 손목 내부의 tendon-dominant region을 단순화했습니다."
+            description: "굴곡건과 수근관 구조가 포함된 손목 내부층입니다."
           },
           {
-            name: "Carpal bone",
+            name: "Carpal bone / joint region",
             top: 11.0,
             bottom: 24.0,
             mua: 0.012,
             musp: 1.35,
             g: 0.90,
+            n: 1.55,
             color: "rgba(184,199,217,0.34)",
-            description: "손목뼈 영역입니다. 높은 reduced scattering coefficient를 갖는 깊은 구조로 단순화했습니다."
+            description: "손목뼈와 관절 구조가 지배적인 깊은 층입니다."
           },
           {
-            name: "Extensor tendon",
+            name: "Extensor tendon region",
             top: 24.0,
             bottom: 29.0,
             mua: 0.018,
             musp: 1.05,
             g: 0.90,
+            n: 1.43,
             color: "rgba(199,178,153,0.34)",
-            description: "신전건 영역입니다. dorsal side 쪽 tendon region을 단순화했습니다."
+            description: "손등쪽 신전건 영역입니다."
           },
           {
-            name: "Dorsal fat",
+            name: "Dorsal subcutaneous fat",
             top: 29.0,
             bottom: 33.8,
             mua: 0.010,
             musp: 0.65,
             g: 0.90,
+            n: 1.44,
             color: "rgba(246,226,179,0.34)",
             description: "손등쪽 피하지방층입니다."
           },
@@ -588,12 +600,14 @@
             mua: 0.020,
             musp: 1.00,
             g: 0.90,
+            n: 1.40,
             color: "rgba(244,194,161,0.34)",
             description: "손등쪽 피부층입니다."
           }
         ],
         roi: {
           name: "RA",
+          fullName: "Radial artery",
           x: 0.0,
           z: 3.8,
           radius: 1.2
@@ -603,23 +617,29 @@
 
     let currentWorker = null;
 
-    function cloneSerializableModel(model) {
+    function prepareModelForWorker(model) {
       return {
         title: model.title,
+        shortTitle: model.shortTitle,
+        wavelength: model.wavelength,
         xMinBase: model.xMinBase,
         xMaxBase: model.xMaxBase,
         zMin: model.zMin,
         zMax: model.zMax,
+        rMax: model.rMax,
+        dr: model.dr,
+        dz: model.dz,
+        sourceRadius: model.sourceRadius,
         targetName: model.targetName,
         targetRange: model.targetRange || null,
-        geometryDescription: model.geometryDescription,
         layers: model.layers.map(layer => ({
           name: layer.name,
           top: layer.top,
           bottom: layer.bottom,
           mua: layer.mua,
           musp: layer.musp,
-          g: layer.g
+          g: layer.g,
+          n: layer.n
         })),
         roi: model.roi ? { ...model.roi } : null
       };
@@ -627,6 +647,7 @@
 
     function getPlotRange(model, sds) {
       const halfRange = Math.max(Math.abs(model.xMinBase), Math.abs(model.xMaxBase), sds * 0.85 + 15);
+
       return {
         xMin: -halfRange,
         xMax: halfRange,
@@ -641,69 +662,8 @@
           return layer;
         }
       }
+
       return model.layers[model.layers.length - 1];
-    }
-
-    function diffusionCoefficient(layer) {
-      return 1 / (3 * (layer.mua + layer.musp));
-    }
-
-    function muEff(layer) {
-      const d = diffusionCoefficient(layer);
-      return Math.sqrt(layer.mua / d);
-    }
-
-    function sourceField(model, x, z, sx) {
-      const layer = getLayer(model, Math.max(0, z));
-      const sourceDepth = 1 / (layer.mua + layer.musp + 1e-12);
-      const zs = sourceDepth;
-      const r = Math.sqrt((x - sx) ** 2 + (z - zs) ** 2 + 0.65 ** 2);
-      const mue = muEff(layer);
-
-      const green = Math.exp(-mue * r) / (r + 0.65);
-
-      const surfaceSuppression = 1 - Math.exp(-z / 1.8);
-      const sourceNeedleSuppression = 1 - Math.exp(-(((x - sx) ** 2 + z ** 2) / (1.15 ** 2)));
-      const deepRegularization = Math.exp(-0.0045 * z);
-
-      return green * surfaceSuppression * sourceNeedleSuppression * deepRegularization;
-    }
-
-    function computeDiffusionKernel(model, sds, nx, nz, range) {
-      const values = new Float64Array(nx * nz);
-      const xs = -sds / 2;
-      const xd = sds / 2;
-
-      let maxVal = 0;
-
-      for (let j = 0; j < nz; j++) {
-        const z = range.zMin + (j / (nz - 1)) * (range.zMax - range.zMin);
-
-        for (let i = 0; i < nx; i++) {
-          const x = range.xMin + (i / (nx - 1)) * (range.xMax - range.xMin);
-
-          let w = 0;
-
-          if (z >= 0) {
-            const phiS = sourceField(model, x, z, xs);
-            const phiD = sourceField(model, x, z, xd);
-            const lateralGate = Math.exp(-0.0009 * Math.abs(x) ** 1.55);
-            w = phiS * phiD * lateralGate;
-          }
-
-          const idx = j * nx + i;
-          values[idx] = w;
-
-          if (w > maxVal) {
-            maxVal = w;
-          }
-        }
-      }
-
-      return {
-        values,
-        maxVal
-      };
     }
 
     function colorMap(v) {
@@ -737,7 +697,7 @@
       return stops[stops.length - 1][1];
     }
 
-    function buildImageData(model, values, maxVal, nx, nz, range) {
+    function buildImageData(values, maxVal, nx, nz, range) {
       const image = ctx.createImageData(nx, nz);
 
       for (let j = 0; j < nz; j++) {
@@ -756,7 +716,7 @@
           }
 
           const normalized = values[idx] / (maxVal + 1e-30);
-          const displayV = Math.pow(Math.min(1, normalized / 0.32), 0.72);
+          const displayV = Math.min(1, normalized / 0.35);
           const [r, g, b] = colorMap(displayV);
 
           image.data[p] = r;
@@ -782,20 +742,24 @@
         layerSums.set(layer.name, 0);
       }
 
+      const dx = (range.xMax - range.xMin) / (nx - 1);
+      const dz = (range.zMax - range.zMin) / (nz - 1);
+
       for (let j = 0; j < nz; j++) {
         const z = range.zMin + (j / (nz - 1)) * (range.zMax - range.zMin);
+
+        if (z < 0) {
+          continue;
+        }
 
         for (let i = 0; i < nx; i++) {
           const x = range.xMin + (i / (nx - 1)) * (range.xMax - range.xMin);
           const idx = j * nx + i;
 
-          if (z < 0) {
-            continue;
-          }
-
           const v = values[idx] / (maxVal + 1e-30);
+          const weightedV = v * dx * dz;
 
-          total += v;
+          total += weightedV;
 
           if (v > localMax) {
             localMax = v;
@@ -804,15 +768,15 @@
           }
 
           const layer = getLayer(model, z);
-          layerSums.set(layer.name, layerSums.get(layer.name) + v);
+          layerSums.set(layer.name, layerSums.get(layer.name) + weightedV);
 
           if (model.roi) {
             const roi = model.roi;
             if ((x - roi.x) ** 2 + (z - roi.z) ** 2 <= roi.radius ** 2) {
-              target += v;
+              target += weightedV;
             }
           } else if (model.targetRange && z >= model.targetRange[0] && z < model.targetRange[1]) {
-            target += v;
+            target += weightedV;
           }
         }
       }
@@ -827,7 +791,7 @@
       };
     }
 
-    function drawAxes(ctx, model, range, marginLeft, marginTop, plotW, plotH, width, height) {
+    function drawAxes(ctx, range, marginLeft, marginTop, plotW, plotH, width, height) {
       function xToPx(x) {
         return marginLeft + ((x - range.xMin) / (range.xMax - range.xMin)) * plotW;
       }
@@ -847,27 +811,32 @@
 
       const xTickStep = 10;
       const xStart = Math.ceil(range.xMin / xTickStep) * xTickStep;
+
       for (let x = xStart; x <= range.xMax; x += xTickStep) {
         const px = xToPx(x);
+
         ctx.strokeStyle = "rgba(0, 0, 0, 0.72)";
         ctx.beginPath();
         ctx.moveTo(px, marginTop + plotH);
         ctx.lineTo(px, marginTop + plotH + 6);
         ctx.stroke();
+
         ctx.fillText(String(x), px, marginTop + plotH + 22);
       }
 
       ctx.textAlign = "right";
 
       const zTickStep = 5;
-      const zStart = Math.ceil(0 / zTickStep) * zTickStep;
-      for (let z = zStart; z <= range.zMax; z += zTickStep) {
+
+      for (let z = 0; z <= range.zMax; z += zTickStep) {
         const py = zToPx(z);
+
         ctx.strokeStyle = "rgba(0, 0, 0, 0.72)";
         ctx.beginPath();
         ctx.moveTo(marginLeft - 6, py);
         ctx.lineTo(marginLeft, py);
         ctx.stroke();
+
         ctx.fillText(String(z), marginLeft - 10, py + 4);
       }
 
@@ -887,7 +856,7 @@
       };
     }
 
-    function drawLayers(ctx, model, range, marginLeft, marginTop, plotW, plotH, xToPx, zToPx) {
+    function drawLayers(ctx, model, marginLeft, plotW, xToPx, zToPx) {
       for (const layer of model.layers) {
         const yTop = zToPx(layer.top);
         const yBot = zToPx(layer.bottom);
@@ -921,7 +890,7 @@
       ctx.setLineDash([]);
     }
 
-    function drawSourceDetector(ctx, range, sds, xToPx, zToPx) {
+    function drawSourceDetector(ctx, sds, xToPx, zToPx) {
       const xs = -sds / 2;
       const xd = sds / 2;
 
@@ -957,7 +926,7 @@
       ctx.fillText(roi.name, xToPx(roi.x + roi.radius + 0.5), zToPx(roi.z) + 4);
     }
 
-    function renderCanvas(model, sds, methodName, values, maxVal, nx, nz, range, photons) {
+    function renderCanvas(model, sds, photons, values, maxVal, nx, nz, range) {
       const width = canvas.width;
       const height = canvas.height;
 
@@ -969,7 +938,7 @@
       const plotW = width - marginLeft - marginRight;
       const plotH = height - marginTop - marginBottom;
 
-      const image = buildImageData(model, values, maxVal, nx, nz, range);
+      const image = buildImageData(values, maxVal, nx, nz, range);
 
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "rgba(255, 255, 255, 0.96)";
@@ -982,9 +951,9 @@
 
       ctx.drawImage(offscreen, marginLeft, marginTop, plotW, plotH);
 
-      const axes = drawAxes(ctx, model, range, marginLeft, marginTop, plotW, plotH, width, height);
-      drawLayers(ctx, model, range, marginLeft, marginTop, plotW, plotH, axes.xToPx, axes.zToPx);
-      drawSourceDetector(ctx, range, sds, axes.xToPx, axes.zToPx);
+      const axes = drawAxes(ctx, range, marginLeft, marginTop, plotW, plotH, width, height);
+      drawLayers(ctx, model, marginLeft, plotW, axes.xToPx, axes.zToPx);
+      drawSourceDetector(ctx, sds, axes.xToPx, axes.zToPx);
       drawRoi(ctx, model, range, axes.xToPx, axes.zToPx);
 
       const metrics = calculateMetrics(model, values, maxVal, nx, nz, range);
@@ -992,7 +961,7 @@
       ctx.fillStyle = "black";
       ctx.font = "bold 18px Arial, sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText(`${model.title} | SDS = ${sds.toFixed(1)} mm | ${methodName}`, marginLeft, 28);
+      ctx.fillText(`${model.title} | 808 nm MC sensitivity | SDS = ${sds.toFixed(1)} mm`, marginLeft, 28);
 
       ctx.fillStyle = "rgba(0, 0, 0, 0.78)";
       ctx.font = "bold 14px Arial, sans-serif";
@@ -1004,24 +973,18 @@
       ctx.textAlign = "left";
       ctx.fillText(`Expected banana depth scale: SDS / 2 ≈ ${(sds / 2).toFixed(1)} mm`, marginLeft + 10, marginTop + plotH - 16);
 
-      updateResultPanel(model, sds, methodName, photons, metrics);
+      updateResultPanel(model, sds, photons, metrics);
     }
 
-    function updateResultPanel(model, sds, methodName, photons, metrics) {
+    function updateResultPanel(model, sds, photons, metrics) {
       let html = "";
 
       html += `<div class="metric"><span>Model</span><span>${model.title}</span></div>`;
-      html += `<div class="metric"><span>Method</span><span>${methodName}</span></div>`;
+      html += `<div class="metric"><span>Wavelength</span><span>${model.wavelength} nm</span></div>`;
       html += `<div class="metric"><span>SDS</span><span>${sds.toFixed(1)} mm</span></div>`;
-
-      if (methodSelect.value === "browserMC") {
-        html += `<div class="metric"><span>Photon number</span><span>${photons.toLocaleString()} × 2</span></div>`;
-      } else {
-        html += `<div class="metric"><span>Photon number</span><span>Not used</span></div>`;
-      }
-
+      html += `<div class="metric"><span>Photon number</span><span>${photons.toLocaleString()}</span></div>`;
       html += `<div class="metric"><span>Peak depth</span><span>${metrics.zPeak.toFixed(2)} mm</span></div>`;
-      html += `<div class="metric"><span>${model.targetName}</span><span>${metrics.targetPct.toFixed(3)} %</span></div>`;
+      html += `<div class="metric"><span>${model.targetName}</span><span>${metrics.targetPct.toFixed(4)} %</span></div>`;
 
       for (const layer of model.layers) {
         const pct = 100 * metrics.layerSums.get(layer.name) / (metrics.total + 1e-30);
@@ -1048,8 +1011,7 @@
             <p class="layer-desc">
               Thickness = ${thickness.toFixed(1)} mm,
               μa = ${layer.mua.toFixed(3)} mm⁻¹,
-              μs′ = ${layer.musp.toFixed(3)} mm⁻¹,
-              g = ${layer.g.toFixed(2)}.
+              μs′ = ${layer.musp.toFixed(3)} mm⁻¹.
               ${layer.description}
             </p>
           </div>
@@ -1063,7 +1025,7 @@
       const model = models[modelSelect.value];
 
       const targetText = model.roi
-        ? `${model.roi.name}: x = ${model.roi.x.toFixed(1)} mm, z = ${model.roi.z.toFixed(1)} mm, radius = ${model.roi.radius.toFixed(1)} mm`
+        ? `${model.roi.fullName}: x = ${model.roi.x.toFixed(1)} mm, z = ${model.roi.z.toFixed(1)} mm, radius = ${model.roi.radius.toFixed(1)} mm`
         : `${model.targetName}: z = ${model.targetRange[0].toFixed(1)}–${model.targetRange[1].toFixed(1)} mm`;
 
       modelInfo.innerHTML = `
@@ -1076,9 +1038,6 @@
           ${targetText}
         </div>
       `;
-
-      methodDescription.textContent =
-        "The plotted kernel represents W(r) = Φsource(r) × Φdetector,adjoint(r). This form is commonly used to visualize banana-shaped sensitivity in diffuse optical reflection geometry.";
     }
 
     function setBusy(isBusy, text = "") {
@@ -1086,164 +1045,432 @@
       statusText.textContent = text;
     }
 
-    function runDiffusionSimulation() {
-      const model = models[modelSelect.value];
-      const sds = Math.max(2, Math.min(60, Number(sdsInput.value) || 20));
-      const photons = Math.max(1000, Math.min(200000, Number(photonInput.value) || 12000));
-
-      sdsInput.value = sds;
-
-      const nx = 260;
-      const nz = 180;
-      const range = getPlotRange(model, sds);
-
-      const result = computeDiffusionKernel(model, sds, nx, nz, range);
-
-      renderCanvas(
-        model,
-        sds,
-        "Fast diffusion / adjoint sensitivity",
-        result.values,
-        result.maxVal,
-        nx,
-        nz,
-        range,
-        photons
-      );
-
-      setBusy(false, "Fast diffusion result updated.");
-    }
-
     function createMonteCarloWorker() {
       const workerCode = `
-        function getLayer(model, z) {
-          for (const layer of model.layers) {
-            if (z >= layer.top && z < layer.bottom) {
-              return layer;
+        function createSeededRandom(seed) {
+          let state = seed >>> 0;
+
+          return function() {
+            state = (1664525 * state + 1013904223) >>> 0;
+            return (state + 1) / 4294967297;
+          };
+        }
+
+        function findLayer(z, zTop, zBot) {
+          for (let i = 0; i < zTop.length; i++) {
+            if (z >= zTop[i] && z < zBot[i]) {
+              return i;
             }
           }
-          return model.layers[model.layers.length - 1];
+
+          if (z >= zBot[zBot.length - 1]) {
+            return zBot.length - 1;
+          }
+
+          return -1;
         }
 
-        function randnLike() {
-          return Math.random() * 2 - 1;
+        function spinHenyeyGreenstein(ux, uy, uz, g, rand) {
+          const rnd = rand();
+
+          let cosTheta;
+
+          if (Math.abs(g) < 1e-12) {
+            cosTheta = 2.0 * rnd - 1.0;
+          } else {
+            const temp = (1.0 - g * g) / (1.0 - g + 2.0 * g * rnd);
+            cosTheta = (1.0 + g * g - temp * temp) / (2.0 * g);
+          }
+
+          if (cosTheta > 1.0) {
+            cosTheta = 1.0;
+          }
+
+          if (cosTheta < -1.0) {
+            cosTheta = -1.0;
+          }
+
+          const sinTheta = Math.sqrt(Math.max(0.0, 1.0 - cosTheta * cosTheta));
+
+          const psi = 2.0 * Math.PI * rand();
+          const cosPsi = Math.cos(psi);
+          const sinPsi = Math.sin(psi);
+
+          let uxNew;
+          let uyNew;
+          let uzNew;
+
+          if (Math.abs(uz) > 0.99999) {
+            uxNew = sinTheta * cosPsi;
+            uyNew = sinTheta * sinPsi;
+            uzNew = Math.sign(uz || 1) * cosTheta;
+          } else {
+            const denom = Math.sqrt(1.0 - uz * uz);
+
+            uxNew =
+              sinTheta * (ux * uz * cosPsi - uy * sinPsi) / denom
+              + ux * cosTheta;
+
+            uyNew =
+              sinTheta * (uy * uz * cosPsi + ux * sinPsi) / denom
+              + uy * cosTheta;
+
+            uzNew =
+              -sinTheta * cosPsi * denom
+              + uz * cosTheta;
+          }
+
+          const norm = Math.sqrt(uxNew * uxNew + uyNew * uyNew + uzNew * uzNew) + 1e-30;
+
+          return [
+            uxNew / norm,
+            uyNew / norm,
+            uzNew / norm
+          ];
         }
 
-        function simulateFluence(model, range, nx, nz, startX, photons) {
-          const hist = new Float64Array(nx * nz);
-          const dx = (range.xMax - range.xMin) / (nx - 1);
-          const dz = (range.zMax - range.zMin) / (nz - 1);
+        function monteCarloRZFluence(params) {
+          const {
+            nPhotons,
+            nr,
+            nz,
+            dr,
+            dz,
+            rMax,
+            zMax,
+            sourceRadius,
+            zTop,
+            zBot,
+            muA,
+            muS,
+            muT,
+            g,
+            wThreshold,
+            rouletteChance,
+            maxSteps,
+            seed
+          } = params;
 
-          const maxSteps = 700;
-          const weightCutoff = 1e-4;
+          const rand = createSeededRandom(seed);
+          const fluence = new Float64Array(nz * nr);
 
-          for (let p = 0; p < photons; p++) {
-            let x = startX;
-            let z = 0.05;
-            let ux = 0.18 * randnLike();
-            let uz = Math.sqrt(Math.max(0.02, 1 - ux * ux));
+          for (let p = 0; p < nPhotons; p++) {
+            const rr = sourceRadius * Math.sqrt(rand());
+            const phi0 = 2.0 * Math.PI * rand();
+
+            let x = rr * Math.cos(phi0);
+            let y = rr * Math.sin(phi0);
+            let z = 1e-6;
+
+            let ux = 0.0;
+            let uy = 0.0;
+            let uz = 1.0;
+
             let weight = 1.0;
 
-            for (let step = 0; step < maxSteps; step++) {
-              if (z < 0 || z > range.zMax || x < range.xMin || x > range.xMax) {
+            for (let stepIdx = 0; stepIdx < maxSteps; stepIdx++) {
+              const layer = findLayer(z, zTop, zBot);
+
+              if (layer < 0) {
                 break;
               }
 
-              const layer = getLayer(model, Math.max(0, z));
-              const mut = Math.max(1e-6, layer.mua + layer.musp);
-              const s = -Math.log(Math.max(1e-12, Math.random())) / mut;
+              const mua = muA[layer];
+              const mut = muT[layer];
+              const gg = g[layer];
 
-              const xNew = x + ux * s;
-              const zNew = z + uz * s;
+              const s = -Math.log(Math.max(rand(), 1e-12)) / mut;
 
-              const xm = 0.5 * (x + xNew);
-              const zm = 0.5 * (z + zNew);
+              const xNew = x + s * ux;
+              const yNew = y + s * uy;
+              const zNew = z + s * uz;
 
-              if (zm >= 0 && zm <= range.zMax && xm >= range.xMin && xm <= range.xMax) {
-                const i = Math.max(0, Math.min(nx - 1, Math.round((xm - range.xMin) / dx)));
-                const j = Math.max(0, Math.min(nz - 1, Math.round((zm - range.zMin) / dz)));
-                hist[j * nx + i] += weight * s;
+              if (zNew < 0.0) {
+                if (uz < 0.0) {
+                  const sToBoundary = -z / uz;
+                  const xMid = x + 0.5 * sToBoundary * ux;
+                  const yMid = y + 0.5 * sToBoundary * uy;
+                  const zMid = z + 0.5 * sToBoundary * uz;
+
+                  if (zMid >= 0.0 && zMid < zMax) {
+                    const rMid = Math.sqrt(xMid * xMid + yMid * yMid);
+                    const ir = Math.floor(rMid / dr);
+                    const iz = Math.floor(zMid / dz);
+
+                    if (ir >= 0 && ir < nr && iz >= 0 && iz < nz) {
+                      fluence[iz * nr + ir] += weight * sToBoundary;
+                    }
+                  }
+                }
+
+                break;
               }
 
-              const absorbFraction = layer.mua / mut;
-              weight *= Math.max(0, 1 - absorbFraction);
+              if (zNew >= zMax) {
+                break;
+              }
 
-              if (weight < weightCutoff) {
-                if (Math.random() < 0.1) {
-                  weight /= 0.1;
+              const xMid = 0.5 * (x + xNew);
+              const yMid = 0.5 * (y + yNew);
+              const zMid = 0.5 * (z + zNew);
+              const rMid = Math.sqrt(xMid * xMid + yMid * yMid);
+
+              const ir = Math.floor(rMid / dr);
+              const iz = Math.floor(zMid / dz);
+
+              if (ir >= 0 && ir < nr && iz >= 0 && iz < nz) {
+                fluence[iz * nr + ir] += weight * s;
+              }
+
+              const absorb = weight * mua / mut;
+              weight -= absorb;
+
+              x = xNew;
+              y = yNew;
+              z = zNew;
+
+              const spin = spinHenyeyGreenstein(ux, uy, uz, gg, rand);
+              ux = spin[0];
+              uy = spin[1];
+              uz = spin[2];
+
+              if (weight < wThreshold) {
+                if (rand() <= rouletteChance) {
+                  weight /= rouletteChance;
                 } else {
                   break;
                 }
-              }
-
-              const anisotropyMemory = Math.max(0, Math.min(0.95, layer.g));
-              const randomAngle = (Math.random() * 2 - 1) * Math.PI;
-              const currentAngle = Math.atan2(uz, ux);
-              const newAngle = anisotropyMemory * currentAngle + (1 - anisotropyMemory) * randomAngle + 0.20 * randnLike();
-
-              ux = Math.cos(newAngle);
-              uz = Math.sin(newAngle);
-
-              if (uz < -0.98) {
-                uz = -0.98;
-              }
-
-              x = xNew;
-              z = zNew;
-
-              if (z < 0) {
-                break;
               }
             }
 
             if (p % 1000 === 0) {
               postMessage({
                 type: "progress",
-                progress: p / photons
+                done: p,
+                total: nPhotons
               });
             }
           }
 
-          return hist;
+          return fluence;
         }
 
-        self.onmessage = function(event) {
-          const { model, range, nx, nz, sds, photons } = event.data;
-
-          const xs = -sds / 2;
-          const xd = sds / 2;
-
-          postMessage({
-            type: "status",
-            text: "Estimating source fluence..."
-          });
-
-          const sourceHist = simulateFluence(model, range, nx, nz, xs, photons);
-
-          postMessage({
-            type: "status",
-            text: "Estimating detector adjoint fluence..."
-          });
-
-          const detectorHist = simulateFluence(model, range, nx, nz, xd, photons);
-
-          const values = new Float64Array(nx * nz);
+        function normalizeFluenceDensity(fluence, nPhotons, nr, nz, dr, dz) {
+          const density = new Float64Array(nz * nr);
           let maxVal = 0;
 
-          for (let k = 0; k < values.length; k++) {
-            const w = sourceHist[k] * detectorHist[k];
-            values[k] = w;
+          for (let iz = 0; iz < nz; iz++) {
+            for (let ir = 0; ir < nr; ir++) {
+              const rCenter = (ir + 0.5) * dr;
+              let shellArea = 2.0 * Math.PI * rCenter * dr;
 
-            if (w > maxVal) {
-              maxVal = w;
+              if (ir === 0) {
+                shellArea = Math.PI * dr * dr;
+              }
+
+              const voxelVolume = shellArea * dz;
+              const idx = iz * nr + ir;
+
+              density[idx] = fluence[idx] / (nPhotons * voxelVolume + 1e-30);
+
+              if (density[idx] > maxVal) {
+                maxVal = density[idx];
+              }
             }
           }
 
+          for (let k = 0; k < density.length; k++) {
+            density[k] /= maxVal + 1e-30;
+          }
+
+          return density;
+        }
+
+        function interpolateRZ(F, nr, nz, dr, iz, rQuery) {
+          if (rQuery <= 0) {
+            return F[iz * nr];
+          }
+
+          const fIndex = rQuery / dr - 0.5;
+
+          if (fIndex <= 0) {
+            return F[iz * nr];
+          }
+
+          const i0 = Math.floor(fIndex);
+          const i1 = i0 + 1;
+
+          if (i0 < 0) {
+            return F[iz * nr];
+          }
+
+          if (i1 >= nr) {
+            return 0.0;
+          }
+
+          const t = fIndex - i0;
+          const v0 = F[iz * nr + i0];
+          const v1 = F[iz * nr + i1];
+
+          return v0 * (1.0 - t) + v1 * t;
+        }
+
+        function makeSensitivityMap(params) {
+          const {
+            F,
+            nr,
+            nzRZ,
+            dr,
+            dz,
+            nx,
+            nz,
+            range,
+            sourceX,
+            detectorX,
+            suppressRadius
+          } = params;
+
+          const W = new Float64Array(nx * nz);
+          let maxVal = 0;
+
+          for (let j = 0; j < nz; j++) {
+            const z = range.zMin + (j / (nz - 1)) * (range.zMax - range.zMin);
+
+            for (let i = 0; i < nx; i++) {
+              const x = range.xMin + (i / (nx - 1)) * (range.xMax - range.xMin);
+              const idx = j * nx + i;
+
+              if (z < 0) {
+                W[idx] = 0;
+                continue;
+              }
+
+              let iz = Math.floor(z / dz);
+
+              if (iz < 0 || iz >= nzRZ) {
+                W[idx] = 0;
+                continue;
+              }
+
+              const rS = Math.abs(x - sourceX);
+              const rD = Math.abs(x - detectorX);
+
+              const phiS = interpolateRZ(F, nr, nzRZ, dr, iz, rS);
+              const phiD = interpolateRZ(F, nr, nzRZ, dr, iz, rD);
+
+              let w = phiS * phiD;
+
+              const RS = Math.sqrt((x - sourceX) * (x - sourceX) + z * z);
+              const RD = Math.sqrt((x - detectorX) * (x - detectorX) + z * z);
+
+              const gateS = 1.0 - Math.exp(-Math.pow(RS / suppressRadius, 2.0));
+              const gateD = 1.0 - Math.exp(-Math.pow(RD / suppressRadius, 2.0));
+
+              w *= gateS * gateD;
+
+              W[idx] = w;
+
+              if (w > maxVal) {
+                maxVal = w;
+              }
+            }
+          }
+
+          for (let k = 0; k < W.length; k++) {
+            W[k] /= maxVal + 1e-30;
+          }
+
+          return W;
+        }
+
+        self.onmessage = function(event) {
+          const model = event.data.model;
+          const sds = event.data.sds;
+          const photons = event.data.photons;
+          const range = event.data.range;
+          const nx = event.data.nx;
+          const nz = event.data.nz;
+
+          const zTop = model.layers.map(layer => layer.top);
+          const zBot = model.layers.map(layer => layer.bottom);
+          const muA = model.layers.map(layer => layer.mua);
+          const muSp = model.layers.map(layer => layer.musp);
+          const g = model.layers.map(layer => layer.g);
+          const muS = muSp.map((musp, i) => musp / (1.0 - g[i]));
+          const muT = muS.map((mus, i) => mus + muA[i]);
+
+          const nr = Math.floor(model.rMax / model.dr);
+          const nzRZ = Math.floor(model.zMax / model.dz);
+
+          postMessage({
+            type: "status",
+            text: "Running axisymmetric R-Z Monte Carlo..."
+          });
+
+          const fluence = monteCarloRZFluence({
+            nPhotons: photons,
+            nr: nr,
+            nz: nzRZ,
+            dr: model.dr,
+            dz: model.dz,
+            rMax: model.rMax,
+            zMax: model.zMax,
+            sourceRadius: model.sourceRadius,
+            zTop: zTop,
+            zBot: zBot,
+            muA: muA,
+            muS: muS,
+            muT: muT,
+            g: g,
+            wThreshold: 1e-4,
+            rouletteChance: 0.1,
+            maxSteps: 20000,
+            seed: 7
+          });
+
+          postMessage({
+            type: "status",
+            text: "Normalizing R-Z fluence density..."
+          });
+
+          const F = normalizeFluenceDensity(
+            fluence,
+            photons,
+            nr,
+            nzRZ,
+            model.dr,
+            model.dz
+          );
+
+          postMessage({
+            type: "status",
+            text: "Generating shifted source-detector sensitivity map..."
+          });
+
+          const sourceX = -sds / 2.0;
+          const detectorX = sds / 2.0;
+
+          const W = makeSensitivityMap({
+            F: F,
+            nr: nr,
+            nzRZ: nzRZ,
+            dr: model.dr,
+            dz: model.dz,
+            nx: nx,
+            nz: nz,
+            range: range,
+            sourceX: sourceX,
+            detectorX: detectorX,
+            suppressRadius: 1.2
+          });
+
           postMessage({
             type: "done",
-            values,
-            maxVal
-          }, [values.buffer]);
+            values: W,
+            maxVal: 1.0,
+            nx: nx,
+            nz: nz
+          }, [W.buffer]);
         };
       `;
 
@@ -1254,26 +1481,30 @@
       return new Worker(URL.createObjectURL(blob));
     }
 
-    function runBrowserMonteCarloSimulation() {
+    function runSimulation() {
+      updateModelInfo();
+      updateLayerPanel();
+
       const model = models[modelSelect.value];
-      const serializableModel = cloneSerializableModel(model);
+      const modelForWorker = prepareModelForWorker(model);
 
       const sds = Math.max(2, Math.min(60, Number(sdsInput.value) || 20));
-      const photons = Math.max(1000, Math.min(200000, Number(photonInput.value) || 12000));
+      const photons = Math.max(1000, Math.min(300000, Number(photonInput.value) || 30000));
 
       sdsInput.value = sds;
       photonInput.value = photons;
 
-      const nx = 190;
-      const nz = 135;
       const range = getPlotRange(model, sds);
+
+      const nx = 260;
+      const nz = 180;
 
       if (currentWorker) {
         currentWorker.terminate();
         currentWorker = null;
       }
 
-      setBusy(true, "Browser Monte Carlo running...");
+      setBusy(true, "Preparing Monte Carlo simulation...");
 
       currentWorker = createMonteCarloWorker();
 
@@ -1281,8 +1512,8 @@
         const data = event.data;
 
         if (data.type === "progress") {
-          const pct = Math.round(data.progress * 100);
-          statusText.textContent = `Browser Monte Carlo running... ${pct}%`;
+          const pct = Math.round((data.done / data.total) * 100);
+          statusText.textContent = `Running Monte Carlo... ${pct}%`;
           return;
         }
 
@@ -1297,16 +1528,15 @@
           renderCanvas(
             model,
             sds,
-            "Browser Monte Carlo random walk",
+            photons,
             values,
             data.maxVal,
-            nx,
-            nz,
-            range,
-            photons
+            data.nx,
+            data.nz,
+            range
           );
 
-          setBusy(false, "Browser Monte Carlo result updated.");
+          setBusy(false, "Simulation updated.");
 
           currentWorker.terminate();
           currentWorker = null;
@@ -1314,8 +1544,8 @@
       };
 
       currentWorker.onerror = function(error) {
-        setBusy(false, "Browser Monte Carlo failed. Try lower photon number.");
         console.error(error);
+        setBusy(false, "Simulation failed. Photon number를 낮춰서 다시 실행해보세요.");
 
         if (currentWorker) {
           currentWorker.terminate();
@@ -1324,48 +1554,23 @@
       };
 
       currentWorker.postMessage({
-        model: serializableModel,
-        range,
-        nx,
-        nz,
-        sds,
-        photons
+        model: modelForWorker,
+        sds: sds,
+        photons: photons,
+        range: range,
+        nx: nx,
+        nz: nz
       });
     }
 
-    function drawSimulation() {
-      updateLayerPanel();
-      updateModelInfo();
-
-      const method = methodSelect.value;
-
-      if (method === "browserMC") {
-        runBrowserMonteCarloSimulation();
-      } else {
-        runDiffusionSimulation();
-      }
-    }
-
-    modelSelect.addEventListener("change", function() {
-      updateLayerPanel();
-      updateModelInfo();
-      drawSimulation();
-    });
-
-    methodSelect.addEventListener("change", function() {
-      const isMC = methodSelect.value === "browserMC";
-      photonInput.disabled = !isMC;
-      drawSimulation();
-    });
-
-    sdsInput.addEventListener("change", drawSimulation);
-    runButton.addEventListener("click", drawSimulation);
+    modelSelect.addEventListener("change", runSimulation);
+    sdsInput.addEventListener("change", runSimulation);
+    runButton.addEventListener("click", runSimulation);
 
     window.addEventListener("load", function() {
-      photonInput.disabled = methodSelect.value !== "browserMC";
-      updateLayerPanel();
       updateModelInfo();
-      drawSimulation();
+      updateLayerPanel();
+      runSimulation();
     });
   </script>
 </body>
