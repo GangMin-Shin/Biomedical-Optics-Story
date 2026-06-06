@@ -23,14 +23,13 @@
 
     body {
       position: relative;
-      isolation: isolate;
     }
 
     /* 배경 이미지만 50% 투명도로 표시 */
-    body::before {
-      content: "";
+    .background-layer {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       background-image: url("images/background.jpg");
@@ -42,26 +41,11 @@
       pointer-events: none;
     }
 
-    /* 글씨 가독성을 위한 어두운 오버레이 */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.10),
-        rgba(0, 0, 0, 0.20)
-      );
-      z-index: 1;
-      pointer-events: none;
-    }
-
     .page-container {
       min-height: 100vh;
       position: relative;
       padding: 40px;
-      z-index: 2;
+      z-index: 1;
     }
 
     /* 홈페이지 제목 및 설명: 오른쪽 상단 */
@@ -250,6 +234,8 @@
 </head>
 
 <body>
+  <div class="background-layer"></div>
+
   <div class="page-container">
 
     <div class="intro-box">
