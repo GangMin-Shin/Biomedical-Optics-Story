@@ -87,9 +87,10 @@
       position: absolute;
       left: 45px;
       bottom: 55px;
-      width: min(520px, calc(100% - 90px));
+      width: min(760px, calc(100% - 90px));
     }
 
+    .menu-link,
     .main-menu-button {
       display: inline-block;
       padding: 12px 18px;
@@ -100,6 +101,8 @@
       font-size: 26px;
       cursor: pointer;
       text-align: left;
+      text-decoration: none;
+      white-space: nowrap;
       text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
       transition:
         color 0.25s ease,
@@ -108,6 +111,7 @@
         transform 0.25s ease;
     }
 
+    .menu-link:hover,
     .main-menu-button:hover {
       color: #9eeaff;
       font-weight: 700;
@@ -116,6 +120,14 @@
         0 0 6px #9eeaff,
         0 0 14px #9eeaff,
         0 0 26px #9eeaff;
+    }
+
+    .main-menu-button {
+      width: auto;
+    }
+
+    .menu-group {
+      margin-top: 8px;
     }
 
     .submenu {
@@ -185,7 +197,7 @@
     @media screen and (max-width: 850px) {
       .page-container {
         padding: 24px;
-        padding-bottom: 230px;
+        padding-bottom: 260px;
       }
 
       .content-card {
@@ -206,8 +218,10 @@
         width: calc(100% - 48px);
       }
 
+      .menu-link,
       .main-menu-button {
         font-size: 22px;
+        white-space: normal;
       }
 
       .submenu a {
@@ -241,13 +255,21 @@
     </div>
 
     <nav class="simulation-menu">
-      <button class="main-menu-button" id="bananaMenuButton" type="button">
-        Banana-shaped Sensitivity kernel Image
-      </button>
+      <div class="menu-group">
+        <a class="menu-link" href="dsca.html">
+          Diffuse Speckle Contrast Analysis
+        </a>
+      </div>
 
-      <div class="submenu" id="bananaSubmenu">
-        <a href="banana-reflection.html">Reflection Geometry</a>
-        <a href="banana-transmission.html">Transmission Geometry</a>
+      <div class="menu-group">
+        <button class="main-menu-button" id="bananaMenuButton" type="button">
+          Banana-shaped Sensitivity kernel Image
+        </button>
+
+        <div class="submenu" id="bananaSubmenu">
+          <a href="banana-reflection.html">Reflection Geometry</a>
+          <a href="banana-transmission.html">Transmission Geometry</a>
+        </div>
       </div>
     </nav>
   </div>
