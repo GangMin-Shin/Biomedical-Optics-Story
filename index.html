@@ -2,26 +2,47 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Optics House</title>
+  <title>Biomedical-Optics-Story (BOS)</title>
 
   <style>
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: cursive;
       color: white;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
 
-      /* 배경 사진 설정 */
-      background-image:
-        linear-gradient(
-          rgba(0, 0, 0, 0.55),
-          rgba(0, 0, 0, 0.65)
-        ),
-        url("images/background.jpg");
-
+    /* 배경 이미지만 50% 투명도로 표시 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("images/background.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      opacity: 0.5;
+      z-index: -2;
+    }
+
+    /* 글씨 가독성을 위한 어두운 오버레이 */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.25),
+        rgba(0, 0, 0, 0.45)
+      );
+      z-index: -1;
     }
 
     .page-container {
@@ -31,39 +52,65 @@
       box-sizing: border-box;
     }
 
+    /* 홈페이지 제목 및 설명: 오른쪽 상단 */
     .intro-box {
       position: absolute;
       top: 35px;
-      left: 45px;
-      max-width: 520px;
+      right: 45px;
+      max-width: 620px;
       line-height: 1.6;
+      text-align: right;
     }
 
     .intro-box h1 {
       margin: 0 0 18px 0;
-      font-size: 48px;
+      font-size: 46px;
       letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.96);
+      text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.45),
+        0 0 18px rgba(120, 190, 255, 0.35);
     }
 
     .intro-box p {
       margin: 0;
       font-size: 17px;
       color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
     }
 
     .degree-info {
       margin-top: 18px;
       font-size: 15px;
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
     }
 
     .author {
       margin-top: 14px;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: bold;
-      color: rgba(255, 255, 255, 0.95);
+      color: rgba(255, 255, 255, 0.96);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
     }
 
+    .author-photo {
+      margin-top: 14px;
+      width: 120px;
+      height: 155px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+      box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.45),
+        0 0 24px rgba(100, 180, 255, 0.35),
+        inset 0 0 8px rgba(255, 255, 255, 0.3);
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(3px);
+    }
+
+    /* 컨텐츠: 왼쪽 하단 */
     .contents-box {
       position: absolute;
       left: 45px;
@@ -72,8 +119,12 @@
 
     .contents-box h2 {
       margin-bottom: 18px;
-      font-size: 28px;
+      font-size: 30px;
       letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.94);
+      text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.35),
+        0 0 14px rgba(255, 255, 255, 0.25);
     }
 
     .content-list {
@@ -83,12 +134,12 @@
     }
 
     .content-list li {
-      margin: 15px 0;
+      margin: 18px 0;
     }
 
     .content-list a {
       text-decoration: none;
-      font-size: 25px;
+      font-size: 27px;
       font-weight: 400;
       color: white;
       transition:
@@ -104,43 +155,32 @@
       transform: translateX(8px);
     }
 
-    /* 각 항목별 hover 색상과 빛 효과 */
-    .emwave:hover {
+    /* 각 컨텐츠별 hover 색상과 빛 효과 */
+    .dot:hover {
       color: #66ccff;
       text-shadow:
         0 0 6px #66ccff,
-        0 0 14px #66ccff;
+        0 0 14px #66ccff,
+        0 0 24px #66ccff;
     }
 
-    .snell:hover {
+    .pat:hover {
+      color: #ff9966;
+      text-shadow:
+        0 0 6px #ff9966,
+        0 0 14px #ff9966,
+        0 0 24px #ff9966;
+    }
+
+    .oct:hover {
       color: #7dff7a;
       text-shadow:
         0 0 6px #7dff7a,
-        0 0 14px #7dff7a;
+        0 0 14px #7dff7a,
+        0 0 24px #7dff7a;
     }
 
-    .lens:hover {
-      color: #ffd966;
-      text-shadow:
-        0 0 6px #ffd966,
-        0 0 14px #ffd966;
-    }
-
-    .diffusion:hover {
-      color: #ff99cc;
-      text-shadow:
-        0 0 6px #ff99cc,
-        0 0 14px #ff99cc;
-    }
-
-    .speckle:hover {
-      color: #c299ff;
-      text-shadow:
-        0 0 6px #c299ff,
-        0 0 14px #c299ff;
-    }
-
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 800px) {
       .page-container {
         padding: 24px;
       }
@@ -148,10 +188,11 @@
       .intro-box {
         position: static;
         max-width: 100%;
+        text-align: left;
       }
 
       .intro-box h1 {
-        font-size: 36px;
+        font-size: 34px;
       }
 
       .contents-box {
@@ -162,6 +203,11 @@
       .content-list a {
         font-size: 22px;
       }
+
+      .author-photo {
+        width: 105px;
+        height: 135px;
+      }
     }
   </style>
 </head>
@@ -170,11 +216,11 @@
   <div class="page-container">
 
     <div class="intro-box">
-      <h1>Optics House</h1>
+      <h1>Biomedical-Optics-Story (BOS)</h1>
 
       <p>
-        A learning simulation page created by a student with a background in
-        electronic engineering and biomedical optics.
+        A learning simulation page created by a student with a B.S. in Electronic Engineering
+        and an M.S. in Biomedical Optics.
       </p>
 
       <div class="degree-info">
@@ -185,17 +231,17 @@
       <div class="author">
         - Gang Min Shin -
       </div>
+
+      <img class="author-photo" src="images/Author.jpg" alt="Author photo">
     </div>
 
     <div class="contents-box">
       <h2>Contents</h2>
 
       <ul class="content-list">
-        <li><a class="emwave" href="emwave.html">EM Wave</a></li>
-        <li><a class="snell" href="snell.html">Snell's Law</a></li>
-        <li><a class="lens" href="lens.html">Lens</a></li>
-        <li><a class="diffusion" href="diffusion.html">Photon Diffusion</a></li>
-        <li><a class="speckle" href="speckle.html">Speckle Contrast</a></li>
+        <li><a class="dot" href="dot.html">Diffuse Optical Tomography (DOT)</a></li>
+        <li><a class="pat" href="pat.html">Photoacoustic Tomography (PAT)</a></li>
+        <li><a class="oct" href="oct.html">Optical Coherence Tomography (OCT)</a></li>
       </ul>
     </div>
 
