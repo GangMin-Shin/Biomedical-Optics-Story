@@ -9,7 +9,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -18,40 +19,32 @@
       color: white;
       overflow-x: hidden;
       background-color: #000000;
-      background-image: url("images/OCT%20background.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+    }
+
+    body {
+      position: relative;
     }
 
     body::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-image: url("images/OCT%20background.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 0.3;
-      z-index: -2;
+      inset: 0;
+      background: url("images/OCT%20background.jpg") center / cover no-repeat;
+      opacity: 0.7;
+      z-index: 0;
+      pointer-events: none;
     }
 
     body::after {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       background: linear-gradient(
         rgba(0, 0, 0, 0.35),
         rgba(0, 0, 0, 0.72)
       );
-      z-index: -1;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .page-container {
@@ -69,7 +62,7 @@
       border: 1px solid rgba(255, 255, 255, 0.28);
       box-shadow:
         0 0 18px rgba(255, 255, 255, 0.18),
-        0 0 40px rgba(125, 255, 122, 0.22);
+        0 0 40px rgba(102, 204, 255, 0.22);
       backdrop-filter: blur(4px);
     }
 
@@ -78,8 +71,8 @@
       font-size: 46px;
       color: rgba(255, 255, 255, 0.98);
       text-shadow:
-        0 0 8px rgba(125, 255, 122, 0.55),
-        0 0 18px rgba(125, 255, 122, 0.35);
+        0 0 8px rgba(102, 204, 255, 0.55),
+        0 0 18px rgba(102, 204, 255, 0.35);
     }
 
     p {
@@ -88,6 +81,93 @@
       line-height: 1.8;
       color: rgba(255, 255, 255, 0.93);
       text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .simulation-menu {
+      position: absolute;
+      left: 45px;
+      bottom: 55px;
+      width: min(760px, calc(100% - 90px));
+    }
+
+    .menu-link,
+    .main-menu-button {
+      display: inline-block;
+      padding: 12px 18px;
+      border: none;
+      background: transparent;
+      color: white;
+      font-family: cursive;
+      font-size: 26px;
+      cursor: pointer;
+      text-align: left;
+      text-decoration: none;
+      white-space: nowrap;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
+      transition:
+        color 0.25s ease,
+        text-shadow 0.25s ease,
+        font-weight 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .menu-link:hover,
+    .main-menu-button:hover {
+      color: #9eeaff;
+      font-weight: 700;
+      transform: translateX(8px);
+      text-shadow:
+        0 0 6px #9eeaff,
+        0 0 14px #9eeaff,
+        0 0 26px #9eeaff;
+    }
+
+    .main-menu-button {
+      width: auto;
+    }
+
+    .menu-group {
+      margin-top: 8px;
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      margin-left: 18px;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    .submenu.open {
+      max-height: 220px;
+      opacity: 1;
+    }
+
+    .submenu a {
+      display: block;
+      width: fit-content;
+      margin: 12px 0;
+      padding: 8px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: white;
+      font-size: 20px;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(158, 234, 255, 0.42);
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .submenu a:hover {
+      color: #9eeaff;
+      background: rgba(158, 234, 255, 0.14);
+      transform: translateX(8px);
+      box-shadow:
+        0 0 8px rgba(158, 234, 255, 0.62),
+        0 0 22px rgba(158, 234, 255, 0.36);
     }
 
     .back-link {
@@ -111,12 +191,13 @@
       transform: translateX(-4px);
       box-shadow:
         0 0 10px rgba(255, 255, 255, 0.40),
-        0 0 22px rgba(125, 255, 122, 0.40);
+        0 0 22px rgba(102, 204, 255, 0.40);
     }
 
     @media screen and (max-width: 850px) {
       .page-container {
         padding: 24px;
+        padding-bottom: 260px;
       }
 
       .content-card {
@@ -129,6 +210,22 @@
 
       p {
         font-size: 16px;
+      }
+
+      .simulation-menu {
+        left: 24px;
+        bottom: 32px;
+        width: calc(100% - 48px);
+      }
+
+      .menu-link,
+      .main-menu-button {
+        font-size: 22px;
+        white-space: normal;
+      }
+
+      .submenu a {
+        font-size: 18px;
       }
     }
   </style>
@@ -151,6 +248,29 @@
 
       <a class="back-link" href="index.html">← Back to Homepage</a>
     </div>
+
+    <nav class="simulation-menu">
+      <div class="menu-group">
+        <button class="main-menu-button" id="interferometerMenuButton" type="button">
+          Interferometer
+        </button>
+
+        <div class="submenu" id="interferometerSubmenu">
+          <a href="mach-zehnder.html">Mach-Zehnder</a>
+          <a href="michelson.html">Michelson</a>
+          <a href="sagnac.html">Sagnac</a>
+        </div>
+      </div>
+    </nav>
   </div>
+
+  <script>
+    const interferometerMenuButton = document.getElementById("interferometerMenuButton");
+    const interferometerSubmenu = document.getElementById("interferometerSubmenu");
+
+    interferometerMenuButton.addEventListener("click", function () {
+      interferometerSubmenu.classList.toggle("open");
+    });
+  </script>
 </body>
 </html>
