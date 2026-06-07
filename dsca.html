@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Diffuse Speckle Contrast Analysis</title>
 
   <style>
@@ -75,7 +74,7 @@
     }
 
     h2 {
-      margin: 0 0 12px;
+      margin: 0;
       font-size: clamp(24px, 2.2vw, 36px);
       color: #173247;
     }
@@ -118,88 +117,47 @@
       border-radius: 24px;
       background: rgba(247, 252, 254, 0.92);
       overflow: hidden;
-      padding: 26px;
+      padding: 22px;
     }
 
-    .dsca-image-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 1180px;
-      margin: 0 auto;
-    }
-
-    .dsca-image {
+    .dsca-schematic {
       display: block;
       width: 100%;
       height: auto;
-      border-radius: 12px;
-      user-select: none;
     }
 
-    .hotspot {
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(20, 133, 163, 0.86);
-      border: 3px solid rgba(210, 246, 255, 0.95);
-      box-shadow: 0 6px 16px rgba(10, 60, 80, 0.24);
+    .component .hit {
+      fill: transparent;
       cursor: pointer;
-      transform: translate(-50%, -50%);
-      z-index: 5;
+      pointer-events: all;
     }
 
-    .hotspot::after {
-      content: "";
-      position: absolute;
-      inset: 4px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.75);
-    }
-
-    .tooltip {
-      position: absolute;
-      left: 50%;
-      bottom: calc(100% + 12px);
-      transform: translateX(-50%);
-      width: 260px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.96);
-      border: 1px solid rgba(100, 145, 160, 0.35);
-      box-shadow: 0 12px 28px rgba(20, 55, 70, 0.18);
-      color: #173247;
-      font-size: 13px;
-      line-height: 1.45;
+    .component .tooltip-box {
       opacity: 0;
       visibility: hidden;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      transform: translate(6px, 4px);
       pointer-events: none;
-      transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
-      z-index: 20;
     }
 
-    .tooltip strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: #0b6f8a;
-    }
-
-    .tooltip::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 100%;
-      transform: translateX(-50%);
-      border-width: 8px;
-      border-style: solid;
-      border-color: rgba(255, 255, 255, 0.96) transparent transparent transparent;
-    }
-
-    .hotspot:hover .tooltip {
+    .component:hover .tooltip-box {
       opacity: 1;
       visibility: visible;
-      transform: translateX(-50%) translateY(-4px);
+      transform: translate(0, 0);
+    }
+
+    .component:hover .highlight-stroke {
+      filter: url(#svgGlow);
+      stroke: #0b6f8a !important;
+    }
+
+    .component:hover .highlight-fill {
+      filter: url(#svgGlow);
+    }
+
+    .component:hover .highlight-dash {
+      filter: url(#svgGlow);
+      stroke: #0b6f8a !important;
     }
 
     .simulation-header {
@@ -207,7 +165,7 @@
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 18px;
-      align-items: flex-end;
+      align-items: center;
       margin-bottom: 18px;
     }
 
@@ -215,7 +173,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
-      width: min(620px, 100%);
+      width: min(720px, 100%);
       padding: 18px;
       border: 1px solid rgba(140, 170, 180, 0.45);
       border-radius: 20px;
@@ -240,7 +198,7 @@
     .simulation-frame {
       position: relative;
       width: 100%;
-      height: 620px;
+      height: 640px;
       border: 1px solid rgba(140, 170, 180, 0.35);
       border-radius: 24px;
       background: rgba(250, 253, 254, 0.94);
@@ -300,16 +258,11 @@
       }
 
       .simulation-frame {
-        height: 500px;
+        height: 520px;
       }
 
       .info-grid {
         grid-template-columns: 1fr;
-      }
-
-      .tooltip {
-        width: 220px;
-        font-size: 12px;
       }
     }
   </style>
@@ -323,80 +276,435 @@
       <h1>MMF–DSCA Optical Design</h1>
 
       <div class="optical-frame">
-        <div class="dsca-image-wrap">
-          <img class="dsca-image" src="images/DSCA.png" alt="MMF-DSCA optical design schematic">
+        <svg class="dsca-schematic" viewBox="0 0 1400 900" role="img" aria-label="MMF-DSCA optical design schematic">
+          <defs>
+            <filter id="svgGlow" x="-40%" y="-40%" width="180%" height="180%">
+              <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#2aa8c8" flood-opacity="0.55"></feDropShadow>
+            </filter>
 
-          <div class="hotspot" style="left: 16%; top: 38%;">
-            <div class="tooltip">
-              <strong>Laser source</strong>
-              808 nm near-infrared light source for diffuse optical flow measurement.
-            </div>
-          </div>
+            <marker id="arrowBlack" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#111"></path>
+            </marker>
 
-          <div class="hotspot" style="left: 31%; top: 40%;">
-            <div class="tooltip">
-              <strong>50:50 fiber beam splitter</strong>
-              Splits the source light into multiple illumination paths.
-            </div>
-          </div>
+            <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#238bd2"></path>
+            </marker>
 
-          <div class="hotspot" style="left: 47%; top: 46%;">
-            <div class="tooltip">
-              <strong>Source fiber</strong>
-              Delivers coherent near-infrared light to the tissue surface.
-            </div>
-          </div>
+            <linearGradient id="deviceTopGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d76562"></stop>
+              <stop offset="1" stop-color="#b84c4b"></stop>
+            </linearGradient>
 
-          <div class="hotspot" style="left: 56%; top: 52%;">
-            <div class="tooltip">
-              <strong>Sensitivity volume</strong>
-              Banana-shaped photon sampling region between the source and detector.
-            </div>
-          </div>
+            <linearGradient id="deviceFrontGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#aeb7bc"></stop>
+              <stop offset="1" stop-color="#76838c"></stop>
+            </linearGradient>
 
-          <div class="hotspot" style="left: 65%; top: 44%;">
-            <div class="tooltip">
-              <strong>Detector fiber</strong>
-              Collects dynamically scattered light from the tissue.
-            </div>
-          </div>
+            <linearGradient id="bananaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="rgba(255,236,90,0.78)"></stop>
+              <stop offset="1" stop-color="rgba(255,214,48,0.30)"></stop>
+            </linearGradient>
 
-          <div class="hotspot" style="left: 72%; top: 31%;">
-            <div class="tooltip">
-              <strong>Fan-out fiber bundle</strong>
-              Transfers detected speckle patterns to separated camera regions.
-            </div>
-          </div>
+            <linearGradient id="tissueLayer1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffcad1"></stop>
+              <stop offset="1" stop-color="#efb3bc"></stop>
+            </linearGradient>
 
-          <div class="hotspot" style="left: 82%; top: 30%;">
-            <div class="tooltip">
-              <strong>Lens system and camera</strong>
-              Images the fiber outputs onto the camera sensor for speckle analysis.
-            </div>
-          </div>
+            <linearGradient id="tissueLayer2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f7d9c2"></stop>
+              <stop offset="1" stop-color="#f0c49f"></stop>
+            </linearGradient>
 
-          <div class="hotspot" style="left: 48%; top: 82%;">
-            <div class="tooltip">
-              <strong>ROI selection</strong>
-              Selects the region of interest for each detected speckle image.
-            </div>
-          </div>
+            <pattern id="specklePattern" width="80" height="80" patternUnits="userSpaceOnUse">
+              <rect width="80" height="80" fill="#1a1a1a"></rect>
+              <circle cx="16" cy="20" r="10" fill="#e8e8e8" opacity="0.38"></circle>
+              <circle cx="33" cy="36" r="12" fill="#f7f7f7" opacity="0.42"></circle>
+              <circle cx="54" cy="20" r="11" fill="#e7e7e7" opacity="0.36"></circle>
+              <circle cx="58" cy="50" r="13" fill="#ffffff" opacity="0.24"></circle>
+              <circle cx="24" cy="60" r="10" fill="#ededed" opacity="0.30"></circle>
+            </pattern>
 
-          <div class="hotspot" style="left: 67%; top: 82%;">
-            <div class="tooltip">
-              <strong>BFI / BVI calculation</strong>
-              BFI is derived from speckle contrast fluctuation, while BVI is derived from intensity-based optical density.
-            </div>
-          </div>
-        </div>
+            <pattern id="gridPattern" width="18" height="18" patternUnits="userSpaceOnUse">
+              <path d="M18 0H0V18" fill="none" stroke="#d92121" stroke-width="1.2"></path>
+            </pattern>
+          </defs>
+
+          <!-- top device -->
+          <g class="component">
+            <g>
+              <polygon class="highlight-stroke" points="460,40 670,40 725,102 512,102" fill="url(#deviceTopGrad)" stroke="#1e88e5" stroke-width="4"></polygon>
+              <polygon class="highlight-stroke" points="460,40 512,102 512,220 460,160" fill="#d45855" stroke="#1e88e5" stroke-width="4"></polygon>
+              <polygon class="highlight-stroke" points="512,102 725,102 725,220 512,220" fill="url(#deviceFrontGrad)" stroke="#1e88e5" stroke-width="4"></polygon>
+
+              <rect x="548" y="72" width="128" height="48" fill="#d8d3ca" stroke="#333" stroke-width="2"></rect>
+              <circle cx="565" cy="96" r="4.5" fill="#ffda57"></circle>
+              <circle cx="585" cy="96" r="3.8" fill="#555"></circle>
+              <circle cx="615" cy="96" r="8.5" fill="#bbb" stroke="#333"></circle>
+              <text x="642" y="99" font-size="12" fill="#222" font-weight="700">CrystaLaser</text>
+
+              <text x="560" y="144" font-size="11" fill="#202020" font-weight="700">Source</text>
+              <text x="640" y="144" font-size="11" fill="#202020" font-weight="700">MC-DSCA system #2</text>
+
+              <g fill="#1a1a1a" stroke="#7e7e7e" stroke-width="1">
+                <circle cx="550" cy="177" r="8"></circle>
+                <circle cx="582" cy="177" r="8"></circle>
+                <circle cx="614" cy="177" r="8"></circle>
+                <circle cx="646" cy="177" r="8"></circle>
+                <circle cx="600" cy="198" r="5"></circle>
+                <circle cx="620" cy="198" r="5"></circle>
+                <circle cx="640" cy="198" r="5"></circle>
+                <circle cx="660" cy="198" r="5"></circle>
+              </g>
+
+              <line x1="660" y1="220" x2="770" y2="275" stroke="#238bd2" stroke-width="4" marker-end="url(#arrowBlue)"></line>
+            </g>
+
+            <rect class="hit" x="440" y="28" width="310" height="210" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(748,70)">
+              <rect width="230" height="72" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">MMF–DSCA system</text>
+              <text x="14" y="46" font-size="12.5" fill="#173247">Laser source, source outputs, and</text>
+              <text x="14" y="63" font-size="12.5" fill="#173247">detector-side connections are integrated here.</text>
+            </g>
+          </g>
+
+          <!-- dashed system box -->
+          <rect x="418" y="240" width="582" height="360" fill="none" stroke="#1e88e5" stroke-width="4" stroke-dasharray="12 10"></rect>
+
+          <!-- 808 nm -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="165" y="320" width="70" height="28" fill="#f5f5f5" stroke="#111" stroke-width="2"></rect>
+              <text x="200" y="339" text-anchor="middle" font-size="20" fill="#111" font-weight="700">808nm</text>
+            </g>
+
+            <rect class="hit" x="155" y="308" width="95" height="48" rx="6"></rect>
+
+            <g class="tooltip-box" transform="translate(80,302)">
+              <rect width="210" height="64" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Laser wavelength</text>
+              <text x="14" y="46" font-size="12.5" fill="#173247">Near-infrared light at 808 nm is used</text>
+              <text x="14" y="62" font-size="12.5" fill="#173247">as the illumination source.</text>
+            </g>
+          </g>
+
+          <!-- splitter -->
+          <g class="component">
+            <g>
+              <line class="highlight-stroke" x1="235" y1="334" x2="315" y2="334" stroke="#111" stroke-width="3"></line>
+              <rect class="highlight-stroke" x="318" y="325" width="32" height="18" fill="#111" stroke="#111" stroke-width="2"></rect>
+              <line class="highlight-stroke" x1="350" y1="334" x2="395" y2="314" stroke="#111" stroke-width="3"></line>
+              <line class="highlight-stroke" x1="350" y1="334" x2="395" y2="356" stroke="#111" stroke-width="3"></line>
+              <rect class="highlight-stroke" x="395" y="303" width="34" height="18" fill="#111" stroke="#111" stroke-width="2"></rect>
+              <rect class="highlight-stroke" x="395" y="347" width="34" height="18" fill="#111" stroke="#111" stroke-width="2"></rect>
+              <text x="403" y="392" text-anchor="middle" font-size="13" fill="#111" font-weight="700">50:50 Fiber</text>
+              <text x="403" y="410" text-anchor="middle" font-size="13" fill="#111" font-weight="700">Beam Splitter</text>
+            </g>
+
+            <rect class="hit" x="222" y="292" width="235" height="132" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(218,245)">
+              <rect width="240" height="70" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">50:50 fiber beam splitter</text>
+              <text x="14" y="46" font-size="12.5" fill="#173247">The incident light is divided into two</text>
+              <text x="14" y="63" font-size="12.5" fill="#173247">illumination paths for source delivery.</text>
+            </g>
+          </g>
+
+          <!-- source fibers -->
+          <g class="component">
+            <g>
+              <path class="highlight-stroke" d="M429,312 C470,313 505,312 585,388" fill="none" stroke="#ef7c2d" stroke-width="4"></path>
+              <path class="highlight-stroke" d="M429,356 C476,357 515,360 585,388" fill="none" stroke="#ef7c2d" stroke-width="4"></path>
+            </g>
+
+            <rect class="hit" x="420" y="292" width="180" height="110" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(458,270)">
+              <rect width="200" height="56" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Source delivery fibers</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">These fibers guide the split light toward the tissue.</text>
+            </g>
+          </g>
+
+          <!-- source probe -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="585" y="350" width="10" height="110" fill="#ff9a1e" stroke="#e36b00" stroke-width="2"></rect>
+              <text x="593" y="302" text-anchor="middle" font-size="18" fill="#111" font-weight="700">source</text>
+            </g>
+
+            <rect class="hit" x="567" y="292" width="56" height="180" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(520,248)">
+              <rect width="210" height="60" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Source probe</text>
+              <text x="14" y="45" font-size="12.5" fill="#173247">Coherent light is delivered to the tissue surface here.</text>
+            </g>
+          </g>
+
+          <!-- tissue -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="585" y="392" width="215" height="180" fill="#fbe6d8" stroke="#111" stroke-width="2"></rect>
+
+              <rect x="585" y="392" width="215" height="24" fill="#ef70c7" opacity="0.62"></rect>
+              <path d="M585,418 C640,405 695,430 748,417 C770,412 786,411 800,414" fill="none" stroke="#1e1b57" stroke-width="4"></path>
+              <path d="M585,438 C640,452 696,424 752,438 C770,442 788,443 800,440" fill="none" stroke="#b41617" stroke-width="4"></path>
+
+              <g stroke="#db7f93" stroke-width="2" fill="none" opacity="0.9">
+                <path d="M598,452 C604,469 594,486 600,510"></path>
+                <path d="M624,448 C632,466 624,480 632,506"></path>
+                <path d="M648,455 C654,472 646,488 650,516"></path>
+                <path d="M672,450 C678,468 668,484 676,515"></path>
+                <path d="M696,448 C704,466 696,481 704,513"></path>
+                <path d="M724,452 C732,470 724,487 730,517"></path>
+                <path d="M750,450 C756,468 748,486 754,514"></path>
+                <path d="M776,452 C784,472 774,490 782,516"></path>
+              </g>
+
+              <g stroke="#5862cc" stroke-width="2" fill="none" opacity="0.8">
+                <path d="M608,468 C620,484 610,500 616,518"></path>
+                <path d="M650,470 C662,486 650,502 658,520"></path>
+                <path d="M692,466 C704,482 694,500 702,519"></path>
+                <path d="M734,468 C744,484 736,500 744,520"></path>
+              </g>
+
+              <rect x="585" y="532" width="215" height="18" fill="#edd16b" stroke="#111" stroke-width="1.5"></rect>
+              <rect x="585" y="550" width="215" height="22" fill="#f02727" stroke="#111" stroke-width="1.5"></rect>
+            </g>
+
+            <rect class="hit" x="575" y="382" width="235" height="196" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(812,484)">
+              <rect width="230" height="70" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Tissue model</text>
+              <text x="14" y="46" font-size="12.5" fill="#173247">The sampled tissue contains layered structure</text>
+              <text x="14" y="63" font-size="12.5" fill="#173247">and blood vessels contributing to the signal.</text>
+            </g>
+          </g>
+
+          <!-- sensitivity volume -->
+          <g class="component">
+            <g>
+              <path class="highlight-stroke highlight-fill" d="M594,405
+                C616,505 646,528 692,528
+                C736,528 766,505 790,405
+                C750,450 635,450 594,405 Z"
+                fill="url(#bananaGrad)" stroke="#d9b822" stroke-width="3"></path>
+              <text x="690" y="414" text-anchor="middle" font-size="18" fill="#111" font-weight="700">sensitivity</text>
+              <text x="690" y="434" text-anchor="middle" font-size="18" fill="#111" font-weight="700">volume</text>
+            </g>
+
+            <rect class="hit" x="585" y="388" width="220" height="152" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(705,346)">
+              <rect width="225" height="68" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Sensitivity volume</text>
+              <text x="14" y="46" font-size="12.5" fill="#173247">This banana-shaped region represents the dominant</text>
+              <text x="14" y="63" font-size="12.5" fill="#173247">photon sampling volume between source and detector.</text>
+            </g>
+          </g>
+
+          <!-- detector probe -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="764" y="346" width="10" height="114" fill="#555" stroke="#111" stroke-width="2"></rect>
+              <text x="769" y="302" text-anchor="middle" font-size="18" fill="#111" font-weight="700">detector</text>
+            </g>
+
+            <rect class="hit" x="746" y="292" width="52" height="180" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(790,248)">
+              <rect width="214" height="58" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Detector probe</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">The detector collects dynamically scattered light.</text>
+            </g>
+          </g>
+
+          <!-- fan-out bundle -->
+          <g class="component">
+            <g>
+              <path class="highlight-stroke" d="M850,304 C860,302 875,300 892,298" fill="none" stroke="#6e6e6e" stroke-width="3"></path>
+              <path class="highlight-stroke" d="M850,312 C865,307 880,307 892,307" fill="none" stroke="#6e6e6e" stroke-width="3"></path>
+              <path class="highlight-stroke" d="M850,320 C866,315 880,315 892,316" fill="none" stroke="#6e6e6e" stroke-width="3"></path>
+              <path class="highlight-stroke" d="M850,328 C865,323 880,324 892,325" fill="none" stroke="#6e6e6e" stroke-width="3"></path>
+              <path class="highlight-stroke" d="M850,336 C865,331 880,333 892,334" fill="none" stroke="#6e6e6e" stroke-width="3"></path>
+              <path class="highlight-stroke" d="M850,344 C862,341 878,342 892,343" fill="none" stroke="#6e6e6e" stroke-width="3"></path>
+
+              <rect class="highlight-stroke" x="892" y="295" width="42" height="36" fill="#81c7ec" stroke="#2c6b87" stroke-width="2"></rect>
+              <text x="913" y="271" text-anchor="middle" font-size="15" fill="#111" font-weight="700">Fan-out</text>
+              <text x="913" y="289" text-anchor="middle" font-size="15" fill="#111" font-weight="700">Fiber bundle</text>
+            </g>
+
+            <rect class="hit" x="838" y="252" width="112" height="106" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(946,252)">
+              <rect width="220" height="60" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Fan-out fiber bundle</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">The detected speckle outputs are routed to separated</text>
+              <text x="14" y="60" font-size="12.5" fill="#173247">fiber spots for imaging.</text>
+            </g>
+          </g>
+
+          <!-- speckle image -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="850" y="368" width="66" height="66" fill="url(#specklePattern)" stroke="#111" stroke-width="2"></rect>
+            </g>
+
+            <rect class="hit" x="844" y="360" width="82" height="82" rx="6"></rect>
+
+            <g class="tooltip-box" transform="translate(928,378)">
+              <rect width="214" height="58" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Speckle image</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">The detector-side speckle pattern contains the</text>
+              <text x="14" y="60" font-size="12.5" fill="#173247">dynamic fluctuation used for BFI estimation.</text>
+            </g>
+          </g>
+
+          <!-- lens -->
+          <g class="component">
+            <g>
+              <ellipse class="highlight-stroke" cx="980" cy="313" rx="16" ry="25" fill="#88c8e7" stroke="#2c6b87" stroke-width="2"></ellipse>
+              <ellipse class="highlight-stroke" cx="1002" cy="313" rx="16" ry="25" fill="#82c0df" stroke="#2c6b87" stroke-width="2"></ellipse>
+              <rect class="highlight-stroke" x="1002" y="288" width="30" height="50" fill="#7fb6d4" stroke="#2c6b87" stroke-width="2"></rect>
+              <text x="990" y="355" text-anchor="middle" font-size="14" fill="#111" font-weight="700">Lens</text>
+              <text x="990" y="372" text-anchor="middle" font-size="14" fill="#111" font-weight="700">system</text>
+            </g>
+
+            <rect class="hit" x="958" y="274" width="92" height="112" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(1036,280)">
+              <rect width="198" height="58" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Lens system</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">The lens system relays the fiber outputs onto</text>
+              <text x="14" y="60" font-size="12.5" fill="#173247">the imaging sensor.</text>
+            </g>
+          </g>
+
+          <!-- camera -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="1028" y="292" width="58" height="42" fill="#8dc8e7" stroke="#2c6b87" stroke-width="2"></rect>
+              <text x="1057" y="271" text-anchor="middle" font-size="13" fill="#111" font-weight="700">CCD</text>
+              <text x="1057" y="287" text-anchor="middle" font-size="13" fill="#111" font-weight="700">Camera</text>
+            </g>
+
+            <rect class="hit" x="1016" y="258" width="82" height="86" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(1096,252)">
+              <rect width="190" height="58" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">CCD camera</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">Speckle patterns are recorded on the camera sensor.</text>
+            </g>
+          </g>
+
+          <!-- bottom images -->
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="160" y="640" width="190" height="170" fill="url(#specklePattern)" stroke="#111" stroke-width="2"></rect>
+              <text x="255" y="630" text-anchor="middle" font-size="15" fill="#111" font-weight="700">Get image</text>
+            </g>
+
+            <rect class="hit" x="152" y="620" width="208" height="196" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(80,580)">
+              <rect width="215" height="58" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">Raw speckle image</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">The camera first acquires a raw speckle image.</text>
+            </g>
+          </g>
+
+          <line x1="360" y1="725" x2="410" y2="725" stroke="#111" stroke-width="4" marker-end="url(#arrowBlack)"></line>
+
+          <g class="component">
+            <g>
+              <rect class="highlight-stroke" x="420" y="640" width="190" height="170" fill="url(#specklePattern)" stroke="#111" stroke-width="2"></rect>
+              <rect class="highlight-stroke" x="442" y="722" width="34" height="34" fill="none" stroke="#4ddb70" stroke-width="3"></rect>
+              <rect class="highlight-stroke" x="560" y="696" width="40" height="40" fill="none" stroke="#e22d2d" stroke-width="3"></rect>
+              <text x="515" y="630" text-anchor="middle" font-size="15" fill="#111" font-weight="700">Check ROI for each channel</text>
+            </g>
+
+            <rect class="hit" x="410" y="620" width="210" height="196" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(375,580)">
+              <rect width="225" height="58" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">ROI selection</text>
+              <text x="14" y="44" font-size="12.5" fill="#173247">Each detector channel is localized using an ROI.</text>
+            </g>
+          </g>
+
+          <line x1="620" y1="725" x2="675" y2="725" stroke="#111" stroke-width="4" marker-end="url(#arrowBlack)"></line>
+
+          <g class="component">
+            <g>
+              <text x="725" y="650" font-size="15" fill="#111" font-weight="700">Divide by 21 x 21 pixels</text>
+              <rect class="highlight-stroke" x="740" y="655" width="90" height="90" fill="url(#gridPattern)" stroke="#d92121" stroke-width="3"></rect>
+              <line x1="770" y1="655" x2="770" y2="745" stroke="#d92121" stroke-width="3"></line>
+              <line x1="800" y1="655" x2="800" y2="745" stroke="#d92121" stroke-width="3"></line>
+              <line x1="740" y1="685" x2="830" y2="685" stroke="#d92121" stroke-width="3"></line>
+              <line x1="740" y1="715" x2="830" y2="715" stroke="#d92121" stroke-width="3"></line>
+
+              <g fill="#111" font-size="16" font-weight="700" text-anchor="middle">
+                <text x="755" y="676">1</text><text x="785" y="676">2</text><text x="815" y="676">3</text>
+                <text x="755" y="706">4</text><text x="785" y="706">5</text><text x="815" y="706">6</text>
+                <text x="755" y="736">7</text><text x="785" y="736">8</text><text x="815" y="736">9</text>
+              </g>
+
+              <line x1="830" y1="680" x2="870" y2="680" stroke="#111" stroke-width="4" marker-end="url(#arrowBlack)"></line>
+              <text x="878" y="675" font-size="15" fill="#111" font-weight="700">BVI = −log</text>
+              <text x="952" y="678" font-size="36" fill="#111">Σ</text>
+              <text x="996" y="666" font-size="12" fill="#111">I</text>
+              <text x="982" y="692" font-size="12" fill="#111">all pixels</text>
+
+              <rect class="highlight-stroke" x="880" y="714" width="30" height="30" fill="#fff" stroke="#111" stroke-width="2"></rect>
+              <rect class="highlight-stroke" x="920" y="714" width="30" height="30" fill="#fff" stroke="#111" stroke-width="2"></rect>
+              <text x="895" y="735" text-anchor="middle" font-size="18" fill="#111" font-weight="700">1</text>
+              <text x="935" y="735" text-anchor="middle" font-size="18" fill="#111" font-weight="700">2</text>
+              <text x="970" y="735" font-size="30" fill="#111">…</text>
+              <rect class="highlight-stroke" x="1010" y="714" width="30" height="30" fill="#fff" stroke="#111" stroke-width="2"></rect>
+              <rect class="highlight-stroke" x="1050" y="714" width="30" height="30" fill="#fff" stroke="#111" stroke-width="2"></rect>
+              <text x="1025" y="735" text-anchor="middle" font-size="18" fill="#111" font-weight="700">8</text>
+              <text x="1065" y="735" text-anchor="middle" font-size="18" fill="#111" font-weight="700">9</text>
+
+              <text x="930" y="760" font-size="13" fill="#111">Each 7 x 7 pixels</text>
+
+              <text x="870" y="786" font-size="16" fill="#111" font-weight="700">BFI₁ = </text>
+              <text x="915" y="786" font-size="18" fill="#111">1</text>
+              <text x="910" y="802" font-size="11" fill="#111">K²</text>
+              <text x="925" y="786" font-size="15" fill="#111">=</text>
+              <text x="946" y="784" font-size="15" fill="#111">⟨I⟩²</text>
+              <text x="944" y="800" font-size="15" fill="#111">σ²</text>
+
+              <text x="1005" y="786" font-size="16" fill="#111" font-weight="700">BFI₉ = </text>
+              <text x="1050" y="786" font-size="18" fill="#111">1</text>
+              <text x="1046" y="802" font-size="11" fill="#111">K²</text>
+              <text x="1062" y="786" font-size="15" fill="#111">=</text>
+              <text x="1083" y="784" font-size="15" fill="#111">⟨I⟩²</text>
+              <text x="1081" y="800" font-size="15" fill="#111">σ²</text>
+
+              <path d="M920,804 C930,832 1002,832 1015,804" fill="none" stroke="#111" stroke-width="2"></path>
+              <text x="965" y="845" text-anchor="middle" font-size="16" fill="#111" font-weight="700">∴ BFI = E[BFIᵢ]</text>
+            </g>
+
+            <rect class="hit" x="724" y="630" width="374" height="225" rx="8"></rect>
+
+            <g class="tooltip-box" transform="translate(1085,640)">
+              <rect width="250" height="72" rx="12" fill="rgba(255,255,255,0.96)" stroke="#7cb7cc"></rect>
+              <text x="14" y="24" font-size="14" fill="#0b6f8a" font-weight="700">BFI / BVI computation</text>
+              <text x="14" y="46" font-size="12.5" fill="#173247">BVI is obtained from intensity-based optical density,</text>
+              <text x="14" y="63" font-size="12.5" fill="#173247">and BFI is averaged across sub-ROI speckle contrasts.</text>
+            </g>
+          </g>
+        </svg>
       </div>
     </section>
 
     <section class="section-card">
       <div class="simulation-header">
-        <div>
-          <h2>Microvascular Simulation</h2>
-        </div>
+        <h2>Microvascular Simulation</h2>
 
         <div class="control-panel">
           <div class="control-block">
@@ -460,7 +768,7 @@
     let dpr = window.devicePixelRatio || 1;
 
     const rbcs = [];
-    const maxRbcCount = 80;
+    const maxRbcCount = 84;
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
@@ -480,9 +788,9 @@
         x: Math.random() * width,
         lane: Math.random(),
         phase: Math.random() * Math.PI * 2,
-        radius: 8 + Math.random() * 5,
-        speedFactor: 0.65 + Math.random() * 0.75,
-        angle: -0.15 + Math.random() * 0.30
+        radius: 8 + Math.random() * 4.5,
+        speedFactor: 0.65 + Math.random() * 0.7,
+        angle: -0.12 + Math.random() * 0.24
       };
     }
 
@@ -493,183 +801,145 @@
       }
     }
 
-    function tissueSurfaceY(x) {
-      const nx = x / Math.max(width, 1);
-      return height * 0.22 + Math.sin(nx * Math.PI * 2.0) * 10;
+    function skinTop() {
+      return 122;
+    }
+
+    function skinBottom() {
+      return 244;
+    }
+
+    function subcutaneousBottom() {
+      return 418;
     }
 
     function radialArteryCenterY(x) {
       const nx = x / Math.max(width, 1);
-      return height * 0.56 + Math.sin(nx * Math.PI * 1.5 + 0.4) * 8;
+      return height * 0.54 + Math.sin(nx * Math.PI * 1.3 + 0.35) * 8;
     }
 
     function radialArteryRadius(x, amount) {
       const nx = x / Math.max(width, 1);
-      const base = height * 0.055;
-      const bviExpansion = amount * height * 0.030;
-      const localVariation = Math.sin(nx * Math.PI * 2.3) * 2.5;
-      return base + bviExpansion + localVariation;
+      return 42 + amount * 14 + Math.sin(nx * Math.PI * 2.1) * 2;
     }
 
-    function drawTissueLayers() {
-      const skinGradient = ctx.createLinearGradient(0, 0, 0, height);
-      skinGradient.addColorStop(0.00, "#fff9f7");
-      skinGradient.addColorStop(0.18, "#f7c9cc");
-      skinGradient.addColorStop(0.42, "#f4aaa8");
-      skinGradient.addColorStop(0.70, "#ffe0b5");
-      skinGradient.addColorStop(1.00, "#fff5ed");
+    function drawBackgroundLayers() {
+      ctx.clearRect(0, 0, width, height);
 
-      ctx.fillStyle = skinGradient;
-      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, skinTop());
 
-      ctx.fillStyle = "rgba(234, 142, 150, 0.38)";
-      ctx.beginPath();
-      ctx.moveTo(0, height * 0.18);
-      for (let x = 0; x <= width; x += 30) {
-        ctx.lineTo(x, tissueSurfaceY(x));
-      }
-      ctx.lineTo(width, height * 0.36);
-      ctx.lineTo(0, height * 0.36);
-      ctx.closePath();
-      ctx.fill();
+      ctx.fillStyle = "#f7d3d8";
+      ctx.fillRect(0, skinTop(), width, skinBottom() - skinTop());
 
-      ctx.fillStyle = "rgba(245, 187, 150, 0.42)";
-      ctx.beginPath();
-      ctx.moveTo(0, height * 0.64);
-      for (let x = 0; x <= width; x += 30) {
-        const y = height * 0.66 + Math.sin((x / width) * Math.PI * 2.2 + 0.5) * 8;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(width, height);
-      ctx.lineTo(0, height);
-      ctx.closePath();
-      ctx.fill();
+      ctx.fillStyle = "#efb6b9";
+      ctx.fillRect(0, skinBottom(), width, subcutaneousBottom() - skinBottom());
 
-      ctx.strokeStyle = "rgba(150, 80, 80, 0.32)";
+      ctx.fillStyle = "#f2d2af";
+      ctx.fillRect(0, subcutaneousBottom(), width, height - subcutaneousBottom());
+
+      ctx.strokeStyle = "rgba(168, 120, 120, 0.45)";
       ctx.lineWidth = 2;
+
       ctx.beginPath();
-      ctx.moveTo(0, height * 0.36);
-      for (let x = 0; x <= width; x += 30) {
-        const y = height * 0.36 + Math.sin((x / width) * Math.PI * 2.0 + 0.8) * 5;
-        ctx.lineTo(x, y);
-      }
+      ctx.moveTo(0, skinBottom());
+      ctx.lineTo(width, skinBottom());
       ctx.stroke();
 
-      ctx.fillStyle = "rgba(23, 50, 71, 0.72)";
-      ctx.font = "700 15px Courier New";
-      ctx.textAlign = "left";
-      ctx.fillText("skin", 34, height * 0.16);
-      ctx.fillText("subcutaneous tissue", 34, height * 0.44);
-      ctx.fillText("deeper soft tissue", 34, height * 0.76);
+      ctx.beginPath();
+      ctx.moveTo(0, subcutaneousBottom());
+      ctx.lineTo(width, subcutaneousBottom());
+      ctx.stroke();
     }
 
-    function drawRadialArtery(amount) {
-      const arteryTop = [];
-      const arteryBottom = [];
+    function drawLayerLabels() {
+      ctx.fillStyle = "rgba(23, 50, 71, 0.78)";
+      ctx.font = "700 21px Courier New";
+      ctx.textAlign = "left";
 
-      for (let x = -20; x <= width + 20; x += 18) {
-        const cy = radialArteryCenterY(x);
-        const r = radialArteryRadius(x, amount);
-        arteryTop.push({ x, y: cy - r });
-        arteryBottom.push({ x, y: cy + r });
-      }
-
-      const arteryGradient = ctx.createLinearGradient(0, height * 0.45, 0, height * 0.67);
-      arteryGradient.addColorStop(0, "#e98082");
-      arteryGradient.addColorStop(0.5, "#cc3f45");
-      arteryGradient.addColorStop(1, "#a92f38");
-
-      ctx.fillStyle = arteryGradient;
-      ctx.strokeStyle = "rgba(125, 35, 42, 0.66)";
-      ctx.lineWidth = 3;
-
-      ctx.beginPath();
-      ctx.moveTo(arteryTop[0].x, arteryTop[0].y);
-
-      for (let i = 1; i < arteryTop.length; i++) {
-        ctx.lineTo(arteryTop[i].x, arteryTop[i].y);
-      }
-
-      for (let i = arteryBottom.length - 1; i >= 0; i--) {
-        ctx.lineTo(arteryBottom[i].x, arteryBottom[i].y);
-      }
-
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.globalAlpha = 0.32;
-      ctx.fillStyle = "#f4b2b3";
-      ctx.beginPath();
-
-      for (let x = -20; x <= width + 20; x += 18) {
-        const cy = radialArteryCenterY(x) - radialArteryRadius(x, amount) * 0.42;
-        const r = radialArteryRadius(x, amount) * 0.34;
-        const y = cy - r;
-        if (x === -20) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      }
-
-      for (let x = width + 20; x >= -20; x -= 18) {
-        const cy = radialArteryCenterY(x) - radialArteryRadius(x, amount) * 0.42;
-        const r = radialArteryRadius(x, amount) * 0.34;
-        ctx.lineTo(x, cy + r);
-      }
-
-      ctx.closePath();
-      ctx.fill();
-      ctx.globalAlpha = 1;
-
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
-      ctx.font = "700 17px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("radial artery", width * 0.50, height * 0.56);
+      ctx.fillText("skin", 40, 90);
+      ctx.fillText("subcutaneous tissue", 40, 300);
+      ctx.fillText("deeper soft tissue", 40, 530);
     }
 
     function drawMinorVessels() {
       ctx.lineWidth = 2.2;
-      ctx.strokeStyle = "rgba(55, 95, 175, 0.38)";
 
-      for (let i = 0; i < 7; i++) {
+      ctx.strokeStyle = "rgba(93, 105, 190, 0.55)";
+      for (let i = 0; i < 6; i++) {
         const x = width * (0.18 + i * 0.10);
-        const startY = height * 0.38;
-        const endY = height * 0.50;
-
         ctx.beginPath();
-        ctx.moveTo(x, startY);
-        ctx.bezierCurveTo(
-          x + 12,
-          startY + 28,
-          x - 16,
-          startY + 62,
-          x + 6,
-          endY
-        );
+        ctx.moveTo(x, 260);
+        ctx.bezierCurveTo(x + 10, 285, x - 8, 315, x + 6, 350);
         ctx.stroke();
       }
 
-      ctx.strokeStyle = "rgba(170, 45, 55, 0.34)";
-
+      ctx.strokeStyle = "rgba(188, 88, 92, 0.48)";
       for (let i = 0; i < 7; i++) {
         const x = width * (0.14 + i * 0.11);
-        const startY = height * 0.66;
-        const endY = height * 0.78;
-
         ctx.beginPath();
-        ctx.moveTo(x, startY);
-        ctx.bezierCurveTo(
-          x - 10,
-          startY + 28,
-          x + 15,
-          startY + 58,
-          x,
-          endY
-        );
+        ctx.moveTo(x, 445);
+        ctx.bezierCurveTo(x - 12, 470, x + 14, 500, x, 530);
         ctx.stroke();
       }
+    }
+
+    function drawRadialArtery(amount) {
+      const topPoints = [];
+      const bottomPoints = [];
+
+      for (let x = -20; x <= width + 20; x += 18) {
+        const cy = radialArteryCenterY(x);
+        const r = radialArteryRadius(x, amount);
+        topPoints.push({ x, y: cy - r });
+        bottomPoints.push({ x, y: cy + r });
+      }
+
+      const wallGradient = ctx.createLinearGradient(0, 300, 0, 470);
+      wallGradient.addColorStop(0, "#e77780");
+      wallGradient.addColorStop(1, "#bc2e3f");
+
+      ctx.beginPath();
+      ctx.moveTo(topPoints[0].x, topPoints[0].y);
+      for (let i = 1; i < topPoints.length; i++) {
+        ctx.lineTo(topPoints[i].x, topPoints[i].y);
+      }
+      for (let i = bottomPoints.length - 1; i >= 0; i--) {
+        ctx.lineTo(bottomPoints[i].x, bottomPoints[i].y);
+      }
+      ctx.closePath();
+
+      ctx.fillStyle = wallGradient;
+      ctx.fill();
+      ctx.strokeStyle = "rgba(116, 32, 42, 0.72)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.27;
+      ctx.beginPath();
+      for (let x = -20; x <= width + 20; x += 18) {
+        const cy = radialArteryCenterY(x) - radialArteryRadius(x, amount) * 0.36;
+        const r = radialArteryRadius(x, amount) * 0.28;
+        if (x === -20) {
+          ctx.moveTo(x, cy - r);
+        } else {
+          ctx.lineTo(x, cy - r);
+        }
+      }
+      for (let x = width + 20; x >= -20; x -= 18) {
+        const cy = radialArteryCenterY(x) - radialArteryRadius(x, amount) * 0.36;
+        const r = radialArteryRadius(x, amount) * 0.28;
+        ctx.lineTo(x, cy + r);
+      }
+      ctx.closePath();
+      ctx.fillStyle = "#ffd6d7";
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = "700 18px Courier New";
+      ctx.textAlign = "center";
+      ctx.fillText("radial artery", width * 0.50, height * 0.56 + 10);
     }
 
     function drawRbcs(speed, amount) {
@@ -678,159 +948,94 @@
       for (let i = 0; i < activeCount; i++) {
         const rbc = rbcs[i];
 
-        rbc.x += (0.4 + speed * 3.2) * rbc.speedFactor;
+        rbc.x += (0.35 + speed * 3.0) * rbc.speedFactor;
 
         if (rbc.x > width + 30) {
           rbc.x = -30;
           rbc.lane = Math.random();
           rbc.phase = Math.random() * Math.PI * 2;
-          rbc.radius = 8 + Math.random() * 5;
-          rbc.speedFactor = 0.65 + Math.random() * 0.75;
-          rbc.angle = -0.15 + Math.random() * 0.30;
+          rbc.radius = 8 + Math.random() * 4.5;
+          rbc.speedFactor = 0.65 + Math.random() * 0.7;
+          rbc.angle = -0.12 + Math.random() * 0.24;
         }
 
         const cy = radialArteryCenterY(rbc.x);
         const radius = radialArteryRadius(rbc.x, amount);
-        const offset = (rbc.lane - 0.5) * radius * 1.30 + Math.sin(rbc.phase + rbc.x * 0.018) * 2.5;
+        const offset = (rbc.lane - 0.5) * radius * 1.18 + Math.sin(rbc.phase + rbc.x * 0.02) * 2.0;
         const y = cy + offset;
 
         ctx.save();
         ctx.translate(rbc.x, y);
         ctx.rotate(rbc.angle);
 
-        ctx.fillStyle = "#d51f31";
+        ctx.fillStyle = "#dc1f34";
         ctx.strokeStyle = "rgba(145, 10, 25, 0.42)";
         ctx.lineWidth = 2;
 
         ctx.beginPath();
-        ctx.ellipse(0, 0, rbc.radius * 1.35, rbc.radius * 0.72, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, rbc.radius * 1.32, rbc.radius * 0.72, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = "rgba(110, 0, 15, 0.25)";
+        ctx.fillStyle = "rgba(110, 0, 15, 0.22)";
         ctx.beginPath();
-        ctx.ellipse(0, 1, rbc.radius * 0.60, rbc.radius * 0.28, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0.8, rbc.radius * 0.58, rbc.radius * 0.28, 0, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.restore();
       }
     }
 
-    function drawBananaSensitivityVolume() {
-      const sourceX = width * 0.39;
-      const detectorX = width * 0.61;
-      const fiberBottomY = height * 0.19;
-      const deepestY = height * 0.61;
+    function drawSensitivityVolume() {
+      const sx = width * 0.39;
+      const dx = width * 0.61;
+      const startY = 112;
+      const deepestY = 385;
 
-      const grad = ctx.createRadialGradient(
-        width * 0.50,
-        height * 0.40,
-        10,
-        width * 0.50,
-        height * 0.40,
-        width * 0.22
-      );
+      const grad = ctx.createLinearGradient(0, startY, 0, deepestY);
+      grad.addColorStop(0, "rgba(255, 228, 88, 0.72)");
+      grad.addColorStop(1, "rgba(255, 210, 70, 0.24)");
 
-      grad.addColorStop(0.00, "rgba(255, 230, 95, 0.70)");
-      grad.addColorStop(0.55, "rgba(255, 215, 65, 0.38)");
-      grad.addColorStop(1.00, "rgba(255, 215, 65, 0.03)");
+      ctx.beginPath();
+      ctx.moveTo(sx, startY);
+      ctx.bezierCurveTo(width * 0.43, 248, width * 0.46, deepestY, width * 0.50, deepestY);
+      ctx.bezierCurveTo(width * 0.54, deepestY, width * 0.57, 248, dx, startY);
+      ctx.bezierCurveTo(width * 0.57, 195, width * 0.43, 195, sx, startY);
+      ctx.closePath();
 
       ctx.fillStyle = grad;
-      ctx.strokeStyle = "rgba(224, 180, 28, 0.72)";
-      ctx.lineWidth = 3;
-
-      ctx.beginPath();
-      ctx.moveTo(sourceX, fiberBottomY);
-      ctx.bezierCurveTo(
-        width * 0.42,
-        height * 0.56,
-        width * 0.47,
-        deepestY,
-        width * 0.50,
-        deepestY
-      );
-      ctx.bezierCurveTo(
-        width * 0.54,
-        deepestY,
-        width * 0.58,
-        height * 0.56,
-        detectorX,
-        fiberBottomY
-      );
-      ctx.bezierCurveTo(
-        width * 0.57,
-        height * 0.36,
-        width * 0.43,
-        height * 0.36,
-        sourceX,
-        fiberBottomY
-      );
-      ctx.closePath();
       ctx.fill();
+
+      ctx.strokeStyle = "rgba(214, 181, 37, 0.92)";
+      ctx.lineWidth = 3;
       ctx.stroke();
 
-      ctx.setLineDash([9, 8]);
-      ctx.strokeStyle = "rgba(210, 165, 25, 0.62)";
-      ctx.lineWidth = 2;
-
-      ctx.beginPath();
-      ctx.moveTo(sourceX + 15, fiberBottomY + 4);
-      ctx.bezierCurveTo(
-        width * 0.43,
-        height * 0.48,
-        width * 0.57,
-        height * 0.48,
-        detectorX - 15,
-        fiberBottomY + 4
-      );
-      ctx.stroke();
-
-      ctx.setLineDash([]);
-
-      ctx.fillStyle = "rgba(23, 50, 71, 0.82)";
+      ctx.fillStyle = "rgba(23, 50, 71, 0.78)";
       ctx.font = "700 18px Courier New";
       ctx.textAlign = "center";
-      ctx.fillText("sensitivity volume", width * 0.50, height * 0.36);
+      ctx.fillText("sensitivity volume", width * 0.50, 240);
     }
 
-    function drawFibersAboveTissue() {
-      const sourceX = width * 0.39;
-      const detectorX = width * 0.61;
-      const fiberTopY = height * 0.015;
-      const fiberBottomY = height * 0.19;
+    function drawFibers() {
+      const sx = width * 0.39;
+      const dx = width * 0.61;
+      const topY = 28;
+      const bottomY = 110;
 
       ctx.fillStyle = "#173247";
-      ctx.font = "700 17px Courier New";
+      ctx.font = "700 19px Courier New";
       ctx.textAlign = "center";
-      ctx.fillText("source fiber", sourceX, fiberTopY + 18);
-      ctx.fillText("detector fiber", detectorX, fiberTopY + 18);
+      ctx.fillText("source fiber", sx, 18);
+      ctx.fillText("detector fiber", dx, 18);
 
+      ctx.fillStyle = "#ff9427";
+      ctx.strokeStyle = "#d86900";
       ctx.lineWidth = 4;
-
-      ctx.fillStyle = "#ff8a2b";
-      ctx.strokeStyle = "#d95f00";
-      roundRect(ctx, sourceX - 7, fiberTopY + 30, 14, fiberBottomY - fiberTopY - 30, 7, true, true);
+      roundRect(ctx, sx - 10, topY, 20, bottomY - topY, 9, true, true);
 
       ctx.fillStyle = "#575757";
       ctx.strokeStyle = "#222";
-      roundRect(ctx, detectorX - 7, fiberTopY + 30, 14, fiberBottomY - fiberTopY - 30, 7, true, true);
-
-      ctx.beginPath();
-      ctx.fillStyle = "rgba(255, 138, 43, 0.20)";
-      ctx.arc(sourceX, fiberBottomY + 2, 14, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.fillStyle = "rgba(90, 90, 90, 0.18)";
-      ctx.arc(detectorX, fiberBottomY + 2, 14, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function drawTitle() {
-      ctx.fillStyle = "#173247";
-      ctx.font = "700 24px Courier New";
-      ctx.textAlign = "left";
-      ctx.fillText("Tissue microvascular sampling region", 34, 52);
+      roundRect(ctx, dx - 10, topY, 20, bottomY - topY, 9, true, true);
     }
 
     function roundRect(context, x, y, w, h, r, fill, stroke) {
@@ -856,15 +1061,13 @@
       speedValue.textContent = speed.toFixed(2);
       amountValue.textContent = amount.toFixed(2);
 
-      ctx.clearRect(0, 0, width, height);
-
-      drawTissueLayers();
+      drawBackgroundLayers();
+      drawLayerLabels();
       drawMinorVessels();
       drawRadialArtery(amount);
       drawRbcs(speed, amount);
-      drawBananaSensitivityVolume();
-      drawFibersAboveTissue();
-      drawTitle();
+      drawSensitivityVolume();
+      drawFibers();
 
       requestAnimationFrame(animate);
     }
