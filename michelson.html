@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Michelson Interferometer</title>
+  <title>Michelson Interferometer Simulation</title>
 
   <style>
     * {
@@ -18,144 +18,379 @@
       font-family: cursive;
       color: white;
       overflow-x: hidden;
-      background-color: #000000;
+      background: #000000 url("images/interferometer background.png") center / cover fixed no-repeat;
     }
 
     body {
       position: relative;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: url("images/OCT%20background.jpg") center / cover no-repeat;
-      opacity: 0.7;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.35),
-        rgba(0, 0, 0, 0.78)
-      );
-      z-index: 0;
-      pointer-events: none;
-    }
-
     .page-container {
       position: relative;
-      z-index: 1;
       min-height: 100vh;
-      padding: 45px;
+      padding: 34px;
     }
 
     .content-card {
-      max-width: 1100px;
+      width: 100%;
+      max-width: 1680px;
+      margin: 0 auto;
       padding: 34px 38px;
-      border-radius: 24px;
-      background: rgba(0, 0, 0, 0.48);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 28px;
+      background: rgba(0, 0, 0, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.32);
       box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.18),
-        0 0 40px rgba(102, 204, 255, 0.22);
-      backdrop-filter: blur(4px);
+        0 0 20px rgba(255, 255, 255, 0.16),
+        0 0 54px rgba(81, 214, 255, 0.28);
+      backdrop-filter: blur(5px);
     }
 
     h1 {
-      margin: 0 0 20px;
-      font-size: 44px;
+      margin: 0 0 18px;
+      font-size: 52px;
       color: rgba(255, 255, 255, 0.98);
       text-shadow:
-        0 0 8px rgba(102, 204, 255, 0.55),
-        0 0 18px rgba(102, 204, 255, 0.35);
+        0 0 10px rgba(91, 220, 255, 0.65),
+        0 0 26px rgba(91, 220, 255, 0.38);
     }
 
-    p {
-      margin: 0 0 16px;
-      font-size: 18px;
+    .intro-text {
+      max-width: 1280px;
+      margin: 0 0 24px;
+      font-size: 19px;
       line-height: 1.8;
-      color: rgba(255, 255, 255, 0.93);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+      color: rgba(255, 255, 255, 0.94);
+      text-shadow: 0 0 7px rgba(0, 0, 0, 0.85);
+    }
+
+    .simulation-layout {
+      display: grid;
+      grid-template-columns: minmax(920px, 1fr) 410px;
+      gap: 24px;
+      align-items: stretch;
     }
 
     .diagram-box {
-      margin-top: 26px;
-      padding: 20px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(158, 234, 255, 0.42);
+      min-height: 760px;
+      padding: 22px;
+      border-radius: 26px;
+      background: rgba(4, 10, 20, 0.72);
+      border: 1px solid rgba(143, 234, 255, 0.44);
       box-shadow:
-        0 0 12px rgba(158, 234, 255, 0.22),
-        inset 0 0 18px rgba(255, 255, 255, 0.06);
+        0 0 18px rgba(143, 234, 255, 0.22),
+        inset 0 0 24px rgba(255, 255, 255, 0.06);
     }
 
     svg {
       width: 100%;
-      height: auto;
+      height: 100%;
+      min-height: 720px;
       display: block;
     }
 
-    .label {
-      fill: white;
-      font-size: 18px;
-      font-family: cursive;
+    .control-panel {
+      padding: 22px 22px 24px;
+      border-radius: 26px;
+      background: rgba(3, 8, 18, 0.76);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 0 16px rgba(255, 255, 255, 0.14),
+        inset 0 0 20px rgba(98, 220, 255, 0.08);
     }
 
-    .small-label {
-      fill: white;
+    .control-panel h2 {
+      margin: 0 0 16px;
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow: 0 0 10px rgba(91, 220, 255, 0.45);
+    }
+
+    .control-group {
+      margin-bottom: 18px;
+      padding: 14px 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.075);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .control-row label {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .control-row span {
+      min-width: 92px;
+      text-align: right;
       font-size: 15px;
+      color: #9eeaff;
+      text-shadow: 0 0 8px rgba(158, 234, 255, 0.45);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #66e0ff;
+      cursor: pointer;
+    }
+
+    .readout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .readout-card {
+      padding: 13px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.085);
+      border: 1px solid rgba(158, 234, 255, 0.22);
+    }
+
+    .readout-title {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .readout-value {
+      display: block;
+      font-size: 18px;
+      color: #ffffff;
+      text-shadow: 0 0 7px rgba(158, 234, 255, 0.46);
+    }
+
+    .canvas-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.36);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .canvas-title {
+      margin: 0 0 10px;
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    canvas {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      background: #05080d;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    #fringeCanvas {
+      height: 116px;
+    }
+
+    #waveCanvas {
+      height: 134px;
+      margin-top: 12px;
+    }
+
+    .simulation-note {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin: 18px 0 0;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .legend-line {
+      width: 34px;
+      height: 5px;
+      border-radius: 999px;
+    }
+
+    .legend-source {
+      background: #fff176;
+      box-shadow: 0 0 8px rgba(255, 241, 118, 0.75);
+    }
+
+    .legend-reference {
+      background: #66e0ff;
+      box-shadow: 0 0 8px rgba(102, 224, 255, 0.75);
+    }
+
+    .legend-sample {
+      background: #ff8a65;
+      box-shadow: 0 0 8px rgba(255, 138, 101, 0.75);
+    }
+
+    .legend-return {
+      background: #d6a4ff;
+      box-shadow: 0 0 8px rgba(214, 164, 255, 0.75);
+    }
+
+    .legend-detector {
+      background: #7cffb2;
+      box-shadow: 0 0 8px rgba(124, 255, 178, 0.75);
+    }
+
+    .svg-label {
+      fill: white;
+      font-size: 28px;
+      font-family: cursive;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .svg-small-label {
+      fill: rgba(255, 255, 255, 0.92);
+      font-size: 21px;
       font-family: cursive;
     }
 
-    .optical-line {
-      stroke: #9eeaff;
-      stroke-width: 5;
-      fill: none;
-      filter: drop-shadow(0 0 6px rgba(158, 234, 255, 0.9));
+    .svg-value-label {
+      fill: #9eeaff;
+      font-size: 20px;
+      font-family: cursive;
     }
 
-    .return-line {
-      stroke: rgba(158, 234, 255, 0.75);
+    .source-body {
+      fill: rgba(255, 241, 118, 0.22);
+      stroke: #fff176;
       stroke-width: 4;
-      fill: none;
-      stroke-dasharray: 10 8;
-      filter: drop-shadow(0 0 5px rgba(158, 234, 255, 0.65));
+      filter: drop-shadow(0 0 9px rgba(255, 241, 118, 0.85));
     }
 
-    .component {
-      stroke: white;
-      stroke-width: 3;
-      fill: rgba(255, 255, 255, 0.10);
+    .source-aperture {
+      fill: #fff176;
+      filter: drop-shadow(0 0 12px rgba(255, 241, 118, 0.95));
     }
 
-    .beam-splitter {
-      stroke: #9eeaff;
-      stroke-width: 5;
-      fill: none;
-    }
-
-    .mirror {
-      stroke: white;
-      stroke-width: 6;
+    .beam-splitter-body {
+      stroke: #00d9ff;
+      stroke-width: 12;
       stroke-linecap: round;
-      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65));
+      filter: drop-shadow(0 0 9px rgba(0, 217, 255, 0.82));
+    }
+
+    .beam-splitter-plate {
+      stroke: rgba(255, 255, 255, 0.86);
+      stroke-width: 3;
+      stroke-dasharray: 9 8;
+    }
+
+    .reference-mirror {
+      stroke: #66e0ff;
+      stroke-width: 12;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 10px rgba(102, 224, 255, 0.86));
+    }
+
+    .sample-mirror {
+      stroke: #ff8a65;
+      stroke-width: 12;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 10px rgba(255, 138, 101, 0.86));
+    }
+
+    .mirror-base {
+      fill: rgba(255, 255, 255, 0.12);
+      stroke: rgba(255, 255, 255, 0.55);
+      stroke-width: 2;
+    }
+
+    .detector-body {
+      fill: rgba(124, 255, 178, 0.17);
+      stroke: #7cffb2;
+      stroke-width: 4;
+      filter: drop-shadow(0 0 11px rgba(124, 255, 178, 0.72));
+    }
+
+    .detector-screen {
+      fill: rgba(0, 0, 0, 0.52);
+      stroke: rgba(255, 255, 255, 0.36);
+      stroke-width: 2;
+    }
+
+    .source-beam {
+      stroke: #fff176;
+      stroke-width: 8;
+      fill: none;
+      filter: drop-shadow(0 0 10px rgba(255, 241, 118, 0.9));
+    }
+
+    .reference-beam {
+      stroke: #66e0ff;
+      stroke-width: 8;
+      fill: none;
+      filter: drop-shadow(0 0 10px rgba(102, 224, 255, 0.85));
+    }
+
+    .sample-beam {
+      stroke: #ff8a65;
+      stroke-width: 8;
+      fill: none;
+      filter: drop-shadow(0 0 10px rgba(255, 138, 101, 0.85));
+    }
+
+    .return-beam {
+      stroke: #d6a4ff;
+      stroke-width: 6;
+      fill: none;
+      stroke-dasharray: 14 10;
+      filter: drop-shadow(0 0 9px rgba(214, 164, 255, 0.8));
+    }
+
+    .detector-beam {
+      stroke: #7cffb2;
+      stroke-width: 8;
+      fill: none;
+      filter: drop-shadow(0 0 10px rgba(124, 255, 178, 0.85));
+    }
+
+    .phase-ring {
+      fill: none;
+      stroke: rgba(124, 255, 178, 0.8);
+      stroke-width: 3;
+      stroke-dasharray: 8 8;
+      filter: drop-shadow(0 0 7px rgba(124, 255, 178, 0.55));
+    }
+
+    .component-shadow {
+      fill: rgba(0, 0, 0, 0.28);
     }
 
     .back-link {
       display: inline-block;
-      margin-top: 24px;
+      margin-top: 26px;
       text-decoration: none;
-      font-size: 18px;
+      font-size: 20px;
       color: white;
-      padding: 10px 18px;
+      padding: 12px 22px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.12);
       transition:
         background 0.25s ease,
         transform 0.25s ease,
@@ -163,36 +398,67 @@
     }
 
     .back-link:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.2);
       transform: translateX(-4px);
       box-shadow:
-        0 0 10px rgba(255, 255, 255, 0.40),
-        0 0 22px rgba(102, 204, 255, 0.40);
+        0 0 12px rgba(255, 255, 255, 0.42),
+        0 0 28px rgba(102, 204, 255, 0.45);
+    }
+
+    @media screen and (max-width: 1380px) {
+      .simulation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-box {
+        min-height: 680px;
+      }
+
+      svg {
+        min-height: 650px;
+      }
+
+      .control-panel {
+        max-width: 100%;
+      }
     }
 
     @media screen and (max-width: 850px) {
       .page-container {
-        padding: 24px;
+        padding: 20px;
       }
 
       .content-card {
-        padding: 26px 24px;
+        padding: 24px 20px;
       }
 
       h1 {
-        font-size: 34px;
+        font-size: 36px;
       }
 
-      p {
+      .intro-text {
         font-size: 16px;
       }
 
-      .label {
-        font-size: 15px;
+      .diagram-box {
+        min-height: 520px;
+        padding: 12px;
       }
 
-      .small-label {
-        font-size: 13px;
+      svg {
+        min-height: 500px;
+      }
+
+      .svg-label {
+        font-size: 22px;
+      }
+
+      .svg-small-label {
+        font-size: 17px;
+      }
+
+      .readout-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -201,50 +467,418 @@
 <body>
   <div class="page-container">
     <div class="content-card">
-      <h1>Michelson Interferometer</h1>
+      <h1>Michelson Interferometer Simulation</h1>
 
-      <p>
-        The Michelson interferometer splits light into reference and sample arms using one beam splitter. Reflected
-        beams return to the same beam splitter and interfere at the detector.
+      <p class="intro-text">
+        This page visualizes a Michelson interferometer as an interactive simulation. Moving the reference or sample
+        mirror changes the optical path difference, which changes the phase difference between the two returning beams.
+        The resulting detector intensity and interference fringe are updated in real time.
       </p>
 
-      <div class="diagram-box">
-        <svg viewBox="0 0 1000 560" role="img" aria-label="Michelson interferometer schematic">
-          <defs>
-            <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-              <path d="M0,0 L0,6 L9,3 z" fill="#9eeaff"></path>
-            </marker>
-          </defs>
+      <div class="simulation-layout">
+        <div>
+          <div class="diagram-box">
+            <svg viewBox="0 0 1500 900" role="img" aria-label="Interactive Michelson interferometer simulation">
+              <defs>
+                <marker id="arrowSource" markerWidth="16" markerHeight="16" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,10 L13,5 z" fill="#fff176"></path>
+                </marker>
 
-          <line class="optical-line" x1="90" y1="280" x2="420" y2="280" marker-end="url(#arrow)"></line>
-          <text class="label" x="75" y="255">Low-coherence source</text>
+                <marker id="arrowReference" markerWidth="16" markerHeight="16" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,10 L13,5 z" fill="#66e0ff"></path>
+                </marker>
 
-          <line class="beam-splitter" x1="425" y1="225" x2="485" y2="335"></line>
-          <text class="small-label" x="440" y="365">Beam Splitter</text>
+                <marker id="arrowSample" markerWidth="16" markerHeight="16" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,10 L13,5 z" fill="#ff8a65"></path>
+                </marker>
 
-          <line class="optical-line" x1="455" y1="280" x2="455" y2="110" marker-end="url(#arrow)"></line>
-          <line class="return-line" x1="470" y1="110" x2="470" y2="280" marker-end="url(#arrow)"></line>
+                <marker id="arrowReturn" markerWidth="16" markerHeight="16" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,10 L13,5 z" fill="#d6a4ff"></path>
+                </marker>
 
-          <line class="mirror" x1="395" y1="90" x2="515" y2="90"></line>
-          <text class="label" x="360" y="65">Reference Mirror</text>
+                <marker id="arrowDetector" markerWidth="16" markerHeight="16" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,10 L13,5 z" fill="#7cffb2"></path>
+                </marker>
 
-          <line class="optical-line" x1="455" y1="280" x2="790" y2="280" marker-end="url(#arrow)"></line>
-          <line class="return-line" x1="790" y1="295" x2="455" y2="295" marker-end="url(#arrow)"></line>
+                <radialGradient id="detectorGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(124, 255, 178, 0.9)"></stop>
+                  <stop offset="48%" stop-color="rgba(124, 255, 178, 0.34)"></stop>
+                  <stop offset="100%" stop-color="rgba(124, 255, 178, 0.04)"></stop>
+                </radialGradient>
 
-          <line class="mirror" x1="805" y1="220" x2="805" y2="340"></line>
-          <text class="label" x="825" y="285">Sample Mirror</text>
+                <linearGradient id="fringeGradientSvg" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop id="svgFringeStop1" offset="0%" stop-color="rgba(124, 255, 178, 0.2)"></stop>
+                  <stop id="svgFringeStop2" offset="50%" stop-color="rgba(124, 255, 178, 0.9)"></stop>
+                  <stop id="svgFringeStop3" offset="100%" stop-color="rgba(124, 255, 178, 0.2)"></stop>
+                </linearGradient>
+              </defs>
 
-          <line class="optical-line" x1="455" y1="295" x2="455" y2="430" marker-end="url(#arrow)"></line>
-          <rect class="component" x="410" y="430" width="90" height="55" rx="10"></rect>
-          <text class="label" x="405" y="520">Detector</text>
+              <rect x="0" y="0" width="1500" height="900" rx="26" fill="rgba(0, 0, 0, 0.08)"></rect>
 
-          <text class="label" x="510" y="160">Reference arm</text>
-          <text class="label" x="610" y="255">Sample arm</text>
-        </svg>
+              <text class="svg-label" x="72" y="78">Large-scale Michelson Interferometer Layout</text>
+              <text class="svg-small-label" x="72" y="112">Different colors separate the incident beam, reference arm, sample arm, return beams, and detector output.</text>
+
+              <!-- Low-coherence source -->
+              <ellipse class="component-shadow" cx="145" cy="456" rx="92" ry="74"></ellipse>
+              <rect class="source-body" x="70" y="385" width="150" height="120" rx="28"></rect>
+              <circle class="source-aperture" cx="220" cy="445" r="15"></circle>
+              <text class="svg-label" x="62" y="350">Low-coherence</text>
+              <text class="svg-label" x="100" y="382">Source</text>
+
+              <!-- Beam splitter -->
+              <line class="beam-splitter-body" x1="660" y1="330" x2="800" y2="470"></line>
+              <line class="beam-splitter-plate" x1="630" y1="300" x2="830" y2="500"></line>
+              <text class="svg-label" x="604" y="540">50:50 Beam Splitter</text>
+              <text id="bsRatioSvgLabel" class="svg-value-label" x="642" y="572">Ratio: 50 / 50</text>
+
+              <!-- Source beam -->
+              <path class="source-beam" d="M235 445 L664 445" marker-end="url(#arrowSource)"></path>
+              <text class="svg-small-label" x="335" y="415">incident beam</text>
+
+              <!-- Reference arm -->
+              <path id="referenceBeam" class="reference-beam" d="M730 400 L730 205" marker-end="url(#arrowReference)"></path>
+              <path id="referenceReturnBeam" class="return-beam" d="M762 205 L762 402" marker-end="url(#arrowReturn)"></path>
+
+              <g id="referenceMirrorGroup">
+                <rect class="mirror-base" x="603" y="138" width="250" height="38" rx="12"></rect>
+                <line class="reference-mirror" x1="600" y1="180" x2="856" y2="180"></line>
+                <text class="svg-label" x="548" y="105">Reference Mirror</text>
+                <text id="referenceMirrorSvgLabel" class="svg-value-label" x="594" y="130">Displacement: 0.00 μm</text>
+              </g>
+
+              <text class="svg-small-label" x="785" y="298">reference arm</text>
+
+              <!-- Sample arm -->
+              <path id="sampleBeam" class="sample-beam" d="M730 445 L1160 445" marker-end="url(#arrowSample)"></path>
+              <path id="sampleReturnBeam" class="return-beam" d="M1160 477 L730 477" marker-end="url(#arrowReturn)"></path>
+
+              <g id="sampleMirrorGroup">
+                <rect class="mirror-base" x="1212" y="320" width="44" height="250" rx="12"></rect>
+                <line class="sample-mirror" x1="1190" y1="318" x2="1190" y2="574"></line>
+                <text class="svg-label" x="1160" y="282">Sample Mirror</text>
+                <text id="sampleMirrorSvgLabel" class="svg-value-label" x="1122" y="308">Displacement: 0.00 μm</text>
+              </g>
+
+              <text class="svg-small-label" x="895" y="415">sample arm</text>
+
+              <!-- Recombined detector path -->
+              <path class="detector-beam" d="M730 477 L730 700" marker-end="url(#arrowDetector)"></path>
+              <text class="svg-small-label" x="758" y="612">recombined beam</text>
+
+              <!-- Detector -->
+              <circle id="detectorGlowCircle" cx="730" cy="750" r="92" fill="url(#detectorGlow)" opacity="0.5"></circle>
+              <rect class="detector-body" x="608" y="700" width="244" height="120" rx="28"></rect>
+              <rect class="detector-screen" x="636" y="724" width="188" height="44" rx="12" fill="url(#fringeGradientSvg)"></rect>
+              <circle class="phase-ring" cx="730" cy="760" r="72"></circle>
+              <text class="svg-label" x="637" y="866">Detector</text>
+              <text id="detectorSvgLabel" class="svg-value-label" x="596" y="840">Normalized intensity: 1.000</text>
+
+              <!-- OPD information -->
+              <rect x="970" y="670" width="420" height="150" rx="24" fill="rgba(255, 255, 255, 0.08)" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2"></rect>
+              <text class="svg-label" x="1000" y="718">Real-time Optical Parameters</text>
+              <text id="opdSvgLabel" class="svg-value-label" x="1000" y="758">OPD: 0.00 μm</text>
+              <text id="phaseSvgLabel" class="svg-value-label" x="1000" y="790">Phase difference: 0.00 rad</text>
+            </svg>
+          </div>
+
+          <div class="legend">
+            <span class="legend-item"><span class="legend-line legend-source"></span> Incident beam</span>
+            <span class="legend-item"><span class="legend-line legend-reference"></span> Reference arm</span>
+            <span class="legend-item"><span class="legend-line legend-sample"></span> Sample arm</span>
+            <span class="legend-item"><span class="legend-line legend-return"></span> Return beam</span>
+            <span class="legend-item"><span class="legend-line legend-detector"></span> Detector output</span>
+          </div>
+        </div>
+
+        <aside class="control-panel">
+          <h2>Simulation Controls</h2>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="referenceMirror">Reference mirror displacement</label>
+              <span id="referenceMirrorValue">0.00 μm</span>
+            </div>
+            <input id="referenceMirror" type="range" min="-5" max="5" step="0.01" value="0">
+          </div>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="sampleMirror">Sample mirror displacement</label>
+              <span id="sampleMirrorValue">0.00 μm</span>
+            </div>
+            <input id="sampleMirror" type="range" min="-5" max="5" step="0.01" value="0">
+          </div>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="wavelength">Wavelength</label>
+              <span id="wavelengthValue">850 nm</span>
+            </div>
+            <input id="wavelength" type="range" min="650" max="950" step="1" value="850">
+          </div>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="splitRatio">Beam splitter transmission</label>
+              <span id="splitRatioValue">50 %</span>
+            </div>
+            <input id="splitRatio" type="range" min="10" max="90" step="1" value="50">
+          </div>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="coherenceLength">Coherence length</label>
+              <span id="coherenceLengthValue">8.0 μm</span>
+            </div>
+            <input id="coherenceLength" type="range" min="1" max="30" step="0.1" value="8">
+          </div>
+
+          <div class="readout-grid">
+            <div class="readout-card">
+              <span class="readout-title">OPD</span>
+              <span id="opdValue" class="readout-value">0.00 μm</span>
+            </div>
+
+            <div class="readout-card">
+              <span class="readout-title">Phase</span>
+              <span id="phaseValue" class="readout-value">0.00 rad</span>
+            </div>
+
+            <div class="readout-card">
+              <span class="readout-title">Visibility</span>
+              <span id="visibilityValue" class="readout-value">1.000</span>
+            </div>
+
+            <div class="readout-card">
+              <span class="readout-title">Detector intensity</span>
+              <span id="intensityValue" class="readout-value">1.000</span>
+            </div>
+          </div>
+
+          <div class="canvas-box">
+            <p class="canvas-title">Detector interference fringe</p>
+            <canvas id="fringeCanvas" width="720" height="160"></canvas>
+
+            <p class="canvas-title" style="margin-top: 14px;">Detector intensity waveform</p>
+            <canvas id="waveCanvas" width="720" height="190"></canvas>
+          </div>
+
+          <p class="simulation-note">
+            The detector intensity is modeled as
+            I = Ir + Is + 2√(IrIs)Vcos(Δφ), where V decreases when the optical path difference exceeds the coherence length.
+            Mirror displacement changes the optical path difference by a round-trip factor of two.
+          </p>
+        </aside>
       </div>
 
       <a class="back-link" href="oct.html">← Back to OCT Page</a>
     </div>
   </div>
+
+  <script>
+    const referenceMirrorSlider = document.getElementById("referenceMirror");
+    const sampleMirrorSlider = document.getElementById("sampleMirror");
+    const wavelengthSlider = document.getElementById("wavelength");
+    const splitRatioSlider = document.getElementById("splitRatio");
+    const coherenceLengthSlider = document.getElementById("coherenceLength");
+
+    const referenceMirrorValue = document.getElementById("referenceMirrorValue");
+    const sampleMirrorValue = document.getElementById("sampleMirrorValue");
+    const wavelengthValue = document.getElementById("wavelengthValue");
+    const splitRatioValue = document.getElementById("splitRatioValue");
+    const coherenceLengthValue = document.getElementById("coherenceLengthValue");
+
+    const opdValue = document.getElementById("opdValue");
+    const phaseValue = document.getElementById("phaseValue");
+    const visibilityValue = document.getElementById("visibilityValue");
+    const intensityValue = document.getElementById("intensityValue");
+
+    const referenceMirrorGroup = document.getElementById("referenceMirrorGroup");
+    const sampleMirrorGroup = document.getElementById("sampleMirrorGroup");
+
+    const referenceMirrorSvgLabel = document.getElementById("referenceMirrorSvgLabel");
+    const sampleMirrorSvgLabel = document.getElementById("sampleMirrorSvgLabel");
+    const bsRatioSvgLabel = document.getElementById("bsRatioSvgLabel");
+    const detectorSvgLabel = document.getElementById("detectorSvgLabel");
+    const opdSvgLabel = document.getElementById("opdSvgLabel");
+    const phaseSvgLabel = document.getElementById("phaseSvgLabel");
+    const detectorGlowCircle = document.getElementById("detectorGlowCircle");
+
+    const svgFringeStop1 = document.getElementById("svgFringeStop1");
+    const svgFringeStop2 = document.getElementById("svgFringeStop2");
+    const svgFringeStop3 = document.getElementById("svgFringeStop3");
+
+    const fringeCanvas = document.getElementById("fringeCanvas");
+    const waveCanvas = document.getElementById("waveCanvas");
+
+    const fringeCtx = fringeCanvas.getContext("2d");
+    const waveCtx = waveCanvas.getContext("2d");
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function drawFringePattern(intensity, phase, visibility) {
+      const width = fringeCanvas.width;
+      const height = fringeCanvas.height;
+
+      fringeCtx.clearRect(0, 0, width, height);
+
+      const imageData = fringeCtx.createImageData(width, height);
+      const data = imageData.data;
+
+      const normalizedIntensity = clamp(intensity, 0, 2);
+      const baseBrightness = 18 + normalizedIntensity * 42;
+      const contrast = 115 * visibility;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const spatialPhase = 2 * Math.PI * x / 96 + phase;
+          const verticalEnvelope = 0.82 + 0.18 * Math.cos((y - height / 2) * Math.PI / height);
+          const fringe = 0.5 + 0.5 * Math.cos(spatialPhase);
+          const brightness = clamp((baseBrightness + contrast * fringe) * verticalEnvelope, 0, 255);
+
+          const index = (y * width + x) * 4;
+          data[index] = brightness * 0.55;
+          data[index + 1] = brightness;
+          data[index + 2] = brightness * 0.78;
+          data[index + 3] = 255;
+        }
+      }
+
+      fringeCtx.putImageData(imageData, 0, 0);
+
+      fringeCtx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+      fringeCtx.lineWidth = 2;
+      fringeCtx.strokeRect(1, 1, width - 2, height - 2);
+    }
+
+    function drawWaveform(currentPhase, visibility, referenceIntensity, sampleIntensity) {
+      const width = waveCanvas.width;
+      const height = waveCanvas.height;
+      const paddingLeft = 44;
+      const paddingRight = 20;
+      const paddingTop = 22;
+      const paddingBottom = 34;
+      const plotWidth = width - paddingLeft - paddingRight;
+      const plotHeight = height - paddingTop - paddingBottom;
+
+      waveCtx.clearRect(0, 0, width, height);
+
+      waveCtx.fillStyle = "#05080d";
+      waveCtx.fillRect(0, 0, width, height);
+
+      waveCtx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+      waveCtx.lineWidth = 1;
+
+      for (let i = 0; i <= 4; i++) {
+        const y = paddingTop + (plotHeight / 4) * i;
+        waveCtx.beginPath();
+        waveCtx.moveTo(paddingLeft, y);
+        waveCtx.lineTo(width - paddingRight, y);
+        waveCtx.stroke();
+      }
+
+      waveCtx.strokeStyle = "rgba(255, 255, 255, 0.52)";
+      waveCtx.lineWidth = 1.5;
+      waveCtx.beginPath();
+      waveCtx.moveTo(paddingLeft, paddingTop);
+      waveCtx.lineTo(paddingLeft, height - paddingBottom);
+      waveCtx.lineTo(width - paddingRight, height - paddingBottom);
+      waveCtx.stroke();
+
+      waveCtx.strokeStyle = "rgba(124, 255, 178, 0.95)";
+      waveCtx.lineWidth = 4;
+      waveCtx.shadowColor = "rgba(124, 255, 178, 0.85)";
+      waveCtx.shadowBlur = 12;
+      waveCtx.beginPath();
+
+      for (let x = 0; x <= plotWidth; x++) {
+        const localPhase = currentPhase + 2 * Math.PI * (x / plotWidth) * 2.6;
+        const intensity = referenceIntensity + sampleIntensity + 2 * Math.sqrt(referenceIntensity * sampleIntensity) * visibility * Math.cos(localPhase);
+        const normalized = clamp(intensity / 2, 0, 1);
+        const px = paddingLeft + x;
+        const py = paddingTop + plotHeight * (1 - normalized);
+
+        if (x === 0) {
+          waveCtx.moveTo(px, py);
+        } else {
+          waveCtx.lineTo(px, py);
+        }
+      }
+
+      waveCtx.stroke();
+      waveCtx.shadowBlur = 0;
+
+      waveCtx.fillStyle = "rgba(255, 255, 255, 0.82)";
+      waveCtx.font = "18px cursive";
+      waveCtx.fillText("Intensity", 12, 26);
+      waveCtx.fillText("Phase", width - 84, height - 8);
+    }
+
+    function updateSimulation() {
+      const referenceDisplacement = parseFloat(referenceMirrorSlider.value);
+      const sampleDisplacement = parseFloat(sampleMirrorSlider.value);
+      const wavelengthNm = parseFloat(wavelengthSlider.value);
+      const wavelengthUm = wavelengthNm / 1000;
+      const splitRatio = parseFloat(splitRatioSlider.value) / 100;
+      const coherenceLength = parseFloat(coherenceLengthSlider.value);
+
+      const opd = 2 * (sampleDisplacement - referenceDisplacement);
+      const phase = 2 * Math.PI * opd / wavelengthUm;
+      const wrappedPhase = ((phase + Math.PI) % (2 * Math.PI)) - Math.PI;
+
+      const visibility = Math.exp(-Math.pow(opd / coherenceLength, 2));
+
+      const referenceIntensity = 1 - splitRatio;
+      const sampleIntensity = splitRatio;
+
+      const rawIntensity = referenceIntensity + sampleIntensity + 2 * Math.sqrt(referenceIntensity * sampleIntensity) * visibility * Math.cos(phase);
+      const normalizedIntensity = clamp(rawIntensity / 2, 0, 1);
+
+      referenceMirrorValue.textContent = referenceDisplacement.toFixed(2) + " μm";
+      sampleMirrorValue.textContent = sampleDisplacement.toFixed(2) + " μm";
+      wavelengthValue.textContent = wavelengthNm.toFixed(0) + " nm";
+      splitRatioValue.textContent = (splitRatio * 100).toFixed(0) + " %";
+      coherenceLengthValue.textContent = coherenceLength.toFixed(1) + " μm";
+
+      opdValue.textContent = opd.toFixed(2) + " μm";
+      phaseValue.textContent = wrappedPhase.toFixed(2) + " rad";
+      visibilityValue.textContent = visibility.toFixed(3);
+      intensityValue.textContent = normalizedIntensity.toFixed(3);
+
+      referenceMirrorSvgLabel.textContent = "Displacement: " + referenceDisplacement.toFixed(2) + " μm";
+      sampleMirrorSvgLabel.textContent = "Displacement: " + sampleDisplacement.toFixed(2) + " μm";
+      bsRatioSvgLabel.textContent = "Ratio: " + (splitRatio * 100).toFixed(0) + " / " + ((1 - splitRatio) * 100).toFixed(0);
+      detectorSvgLabel.textContent = "Normalized intensity: " + normalizedIntensity.toFixed(3);
+      opdSvgLabel.textContent = "OPD: " + opd.toFixed(2) + " μm";
+      phaseSvgLabel.textContent = "Phase difference: " + wrappedPhase.toFixed(2) + " rad";
+
+      referenceMirrorGroup.setAttribute("transform", "translate(0 " + (-referenceDisplacement * 7).toFixed(2) + ")");
+      sampleMirrorGroup.setAttribute("transform", "translate(" + (sampleDisplacement * 7).toFixed(2) + " 0)");
+
+      const glowOpacity = 0.22 + normalizedIntensity * 0.72;
+      detectorGlowCircle.setAttribute("opacity", glowOpacity.toFixed(3));
+
+      const lowGreen = Math.round(60 + normalizedIntensity * 70);
+      const highGreen = Math.round(150 + normalizedIntensity * 105);
+      const highAlpha = 0.35 + normalizedIntensity * 0.6;
+
+      svgFringeStop1.setAttribute("stop-color", "rgba(60, " + lowGreen + ", 110, 0.25)");
+      svgFringeStop2.setAttribute("stop-color", "rgba(124, " + highGreen + ", 178, " + highAlpha.toFixed(2) + ")");
+      svgFringeStop3.setAttribute("stop-color", "rgba(60, " + lowGreen + ", 110, 0.25)");
+
+      drawFringePattern(normalizedIntensity, phase, visibility);
+      drawWaveform(phase, visibility, referenceIntensity, sampleIntensity);
+    }
+
+    referenceMirrorSlider.addEventListener("input", updateSimulation);
+    sampleMirrorSlider.addEventListener("input", updateSimulation);
+    wavelengthSlider.addEventListener("input", updateSimulation);
+    splitRatioSlider.addEventListener("input", updateSimulation);
+    coherenceLengthSlider.addEventListener("input", updateSimulation);
+
+    updateSimulation();
+  </script>
 </body>
 </html>
