@@ -65,16 +65,9 @@
     }
 
     h2 {
-      margin: 0;
+      margin: 0 0 18px;
       font-size: clamp(24px, 2.2vw, 36px);
       color: #173247;
-    }
-
-    p {
-      margin: 0;
-      line-height: 1.65;
-      color: rgba(23, 50, 71, 0.78);
-      font-size: 16px;
     }
 
     .back-link {
@@ -95,41 +88,6 @@
       background: rgba(230, 249, 254, 0.95);
     }
 
-    .simulation-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    .control-panel {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      width: min(720px, 100%);
-      padding: 18px;
-      border: 1px solid rgba(140, 170, 180, 0.45);
-      border-radius: 20px;
-      background: rgba(247, 252, 254, 0.85);
-    }
-
-    .control-block label {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-      color: #173247;
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .control-block input[type="range"] {
-      width: 100%;
-      accent-color: #1485a3;
-    }
-
     .integrated-frame {
       position: relative;
       width: 100%;
@@ -146,33 +104,6 @@
       height: 100%;
     }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 24px;
-    }
-
-    .info-box {
-      padding: 20px;
-      border: 1px solid rgba(140, 170, 180, 0.38);
-      border-radius: 20px;
-      background: rgba(247, 252, 254, 0.9);
-    }
-
-    .info-box strong {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 18px;
-      color: #173247;
-    }
-
-    .info-box span {
-      color: rgba(23, 50, 71, 0.78);
-      line-height: 1.6;
-      font-size: 15px;
-    }
-
     @media (max-width: 900px) {
       body {
         padding: 14px;
@@ -183,16 +114,8 @@
         border-radius: 22px;
       }
 
-      .control-panel {
-        grid-template-columns: 1fr;
-      }
-
       .integrated-frame {
         height: 660px;
-      }
-
-      .info-grid {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -204,54 +127,10 @@
 
     <section class="main-card">
       <h1>MMF–DSCA Optical Design</h1>
-
-      <div class="simulation-header">
-        <h2>Integrated Optical Design and Microvascular Simulation</h2>
-
-        <div class="control-panel">
-          <div class="control-block">
-            <label for="speedSlider">
-              <span>RBCs speed</span>
-              <span id="speedValue">0.50</span>
-            </label>
-            <input id="speedSlider" type="range" min="0" max="1" step="0.01" value="0.50">
-          </div>
-
-          <div class="control-block">
-            <label for="amountSlider">
-              <span>RBCs amount</span>
-              <span id="amountValue">0.50</span>
-            </label>
-            <input id="amountSlider" type="range" min="0" max="1" step="0.01" value="0.50">
-          </div>
-        </div>
-      </div>
+      <h2>Diffuse Speckle Contrast Analysis Schematic</h2>
 
       <div class="integrated-frame">
         <canvas id="integratedCanvas"></canvas>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-box">
-          <strong>BFI</strong>
-          <span>
-            BFI means Blood Flow Index. In this simplified simulation, faster RBC motion represents stronger flow-related speckle fluctuation.
-          </span>
-        </div>
-
-        <div class="info-box">
-          <strong>BVI</strong>
-          <span>
-            BVI means Blood Volume Index. In this visualization, increasing RBC amount slightly increases the vessel diameter.
-          </span>
-        </div>
-
-        <div class="info-box">
-          <strong>Sensitivity volume</strong>
-          <span>
-            The banana-shaped region shows the dominant source-detector sampling volume. RBC motion inside this region contributes to the measured dynamic speckle signal.
-          </span>
-        </div>
       </div>
     </section>
   </main>
@@ -260,17 +139,9 @@
     const canvas = document.getElementById("integratedCanvas");
     const ctx = canvas.getContext("2d");
 
-    const speedSlider = document.getElementById("speedSlider");
-    const amountSlider = document.getElementById("amountSlider");
-    const speedValue = document.getElementById("speedValue");
-    const amountValue = document.getElementById("amountValue");
-
     let width = 0;
     let height = 0;
     let dpr = window.devicePixelRatio || 1;
-
-    const rbcs = [];
-    const maxRbcCount = 84;
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
@@ -283,493 +154,717 @@
       canvas.height = Math.floor(height * dpr);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawSchematic();
     }
 
-    function randomRbc() {
-      return {
-        x: Math.random() * width,
-        lane: Math.random(),
-        phase: Math.random() * Math.PI * 2,
-        radius: 7 + Math.random() * 4.0,
-        speedFactor: 0.65 + Math.random() * 0.72,
-        angle: -0.12 + Math.random() * 0.24
-      };
-    }
+    function drawSchematic() {
+      ctx.clearRect(0, 0, width, height);
 
-    function resetRbcs() {
-      rbcs.length = 0;
-
-      for (let i = 0; i < maxRbcCount; i++) {
-        rbcs.push(randomRbc());
-      }
-    }
-
-    function tissueTop() {
-      return height * 0.34;
-    }
-
-    function skinBottom() {
-      return height * 0.50;
-    }
-
-    function subcutaneousBottom() {
-      return height * 0.77;
-    }
-
-    function radialArteryCenterY(x) {
-      const nx = x / Math.max(width, 1);
-      return height * 0.615 + Math.sin(nx * Math.PI * 1.25 + 0.35) * 6;
-    }
-
-    function radialArteryRadius(x, amount) {
-      const nx = x / Math.max(width, 1);
-      return height * 0.043 + amount * height * 0.018 + Math.sin(nx * Math.PI * 2.1) * 1.6;
+      drawBackground();
+      drawLaserSource();
+      drawBeamSplitterNetwork();
+      drawTissueBlock();
+      drawSensitivityVolume();
+      drawSourceProbe();
+      drawFanOutBundle();
+      drawLensSystem();
+      drawCamera();
+      drawSpeckleInset();
     }
 
     function drawBackground() {
-      ctx.clearRect(0, 0, width, height);
-
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, width, height);
 
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, width, tissueTop());
-
-      ctx.fillStyle = "#f5d5da";
-      ctx.fillRect(0, tissueTop(), width, skinBottom() - tissueTop());
-
-      ctx.fillStyle = "#ecb3b8";
-      ctx.fillRect(0, skinBottom(), width, subcutaneousBottom() - skinBottom());
-
-      ctx.fillStyle = "#efd1ad";
-      ctx.fillRect(0, subcutaneousBottom(), width, height - subcutaneousBottom());
-
-      ctx.strokeStyle = "rgba(168, 120, 120, 0.42)";
-      ctx.lineWidth = 2;
-
-      ctx.beginPath();
-      ctx.moveTo(0, skinBottom());
-      ctx.lineTo(width, skinBottom());
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(0, subcutaneousBottom());
-      ctx.lineTo(width, subcutaneousBottom());
-      ctx.stroke();
+      const grad = ctx.createLinearGradient(0, 0, width, height);
+      grad.addColorStop(0, "rgba(255,255,255,0.96)");
+      grad.addColorStop(1, "rgba(244,248,250,0.96)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
     }
 
-    function drawLayerLabels() {
-      ctx.fillStyle = "rgba(23, 50, 71, 0.82)";
-      ctx.font = "700 22px Courier New";
-      ctx.textAlign = "left";
+    function drawLaserSource() {
+      const x = width * 0.035;
+      const y = height * 0.105;
+      const w = width * 0.115;
+      const h = height * 0.105;
 
-      ctx.fillText("skin", 48, tissueTop() + 42);
-      ctx.fillText("subcutaneous tissue", 48, skinBottom() + 52);
-      ctx.fillText("deeper soft tissue", 48, subcutaneousBottom() + 92);
-    }
-
-    function drawLaserAndSplitter() {
-      const baseY = height * 0.155;
-      const laserX = width * 0.055;
-      const splitterInX = width * 0.165;
-      const splitterOutX = width * 0.245;
+      roundRect(ctx, x, y, w, h, 6, true, true, "#f5f5f5", "#1b1b1b", 2);
 
       ctx.strokeStyle = "#111";
-      ctx.fillStyle = "#f7f7f7";
       ctx.lineWidth = 2;
+      const cx = x + w * 0.24;
+      const cy = y + h * 0.50;
 
-      ctx.beginPath();
-      ctx.rect(laserX, baseY - 18, 78, 32);
-      ctx.fill();
-      ctx.stroke();
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI * 2 * i) / 8;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * 26, cy + Math.sin(angle) * 26);
+        ctx.stroke();
+      }
 
       ctx.fillStyle = "#111";
       ctx.font = "700 20px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("808nm", laserX + 39, baseY + 4);
-
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 3;
-
-      ctx.beginPath();
-      ctx.moveTo(laserX + 78, baseY - 2);
-      ctx.lineTo(splitterInX, baseY - 2);
-      ctx.stroke();
-
-      ctx.fillStyle = "#111";
-      ctx.fillRect(splitterInX, baseY - 14, 34, 24);
-
-      ctx.beginPath();
-      ctx.moveTo(splitterInX + 34, baseY - 2);
-      ctx.lineTo(splitterOutX, baseY - 34);
-      ctx.moveTo(splitterInX + 34, baseY - 2);
-      ctx.lineTo(splitterOutX, baseY + 30);
-      ctx.stroke();
-
-      ctx.fillRect(splitterOutX, baseY - 48, 40, 24);
-      ctx.fillRect(splitterOutX, baseY + 18, 40, 24);
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 13px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("50:50 Fiber", splitterInX + 60, baseY + 70);
-      ctx.fillText("Beam Splitter", splitterInX + 60, baseY + 88);
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText("808 nm", x + w * 0.47, cy - 12);
+      ctx.fillText("CW laser", x + w * 0.47, cy + 14);
     }
 
-    function drawSourceFiberPaths() {
-      const baseY = height * 0.155;
-      const sourceX = width * 0.39;
-      const sourceTopY = tissueTop() - 108;
+    function drawBeamSplitterSymbol(x, y, size) {
+      ctx.fillStyle = "#f7fbff";
+      ctx.strokeStyle = "#173247";
+      ctx.lineWidth = 2;
 
-      ctx.strokeStyle = "#ef7c2d";
-      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.rect(x, y, size, size);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + size * 0.10, y + size * 0.90);
+      ctx.lineTo(x + size * 0.90, y + size * 0.10);
+      ctx.stroke();
+    }
+
+    function drawBeamSplitterLabel(x, y) {
+      ctx.fillStyle = "#111";
+      ctx.font = "700 18px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillText("50:50 Fiber", x, y);
+      ctx.fillText("Beam Splitter", x, y + 24);
+    }
+
+    function drawFiberPath(points, color, lineWidth) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
       ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
       ctx.beginPath();
-      ctx.moveTo(width * 0.245 + 40, baseY - 36);
-      ctx.bezierCurveTo(width * 0.30, baseY - 36, width * 0.34, baseY - 20, sourceX, sourceTopY + 18);
-      ctx.stroke();
+      ctx.moveTo(points[0].x, points[0].y);
 
-      ctx.beginPath();
-      ctx.moveTo(width * 0.245 + 40, baseY + 30);
-      ctx.bezierCurveTo(width * 0.31, baseY + 30, width * 0.35, baseY + 12, sourceX, sourceTopY + 18);
-      ctx.stroke();
+      for (let i = 1; i < points.length; i++) {
+        if (points[i].cp1 && points[i].cp2) {
+          ctx.bezierCurveTo(
+            points[i].cp1.x,
+            points[i].cp1.y,
+            points[i].cp2.x,
+            points[i].cp2.y,
+            points[i].x,
+            points[i].y
+          );
+        } else {
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+      }
 
+      ctx.stroke();
       ctx.lineCap = "butt";
     }
 
-    function drawRadialArtery(amount) {
-      const topPoints = [];
-      const bottomPoints = [];
+    function drawBeamSplitterNetwork() {
+      const orange = "#f27a17";
+      const laserOutX = width * 0.150;
+      const laserOutY = height * 0.157;
 
-      for (let x = -20; x <= width + 20; x += 18) {
-        const cy = radialArteryCenterY(x);
-        const r = radialArteryRadius(x, amount);
+      const bs1 = {
+        x: width * 0.205,
+        y: height * 0.130,
+        size: 48
+      };
 
-        topPoints.push({ x, y: cy - r });
-        bottomPoints.push({ x, y: cy + r });
-      }
+      const bs2 = {
+        x: width * 0.360,
+        y: height * 0.055,
+        size: 55
+      };
 
-      const wallGradient = ctx.createLinearGradient(0, height * 0.51, 0, height * 0.72);
-      wallGradient.addColorStop(0, "#e67b84");
-      wallGradient.addColorStop(1, "#bb3141");
+      const bs3 = {
+        x: width * 0.360,
+        y: height * 0.245,
+        size: 55
+      };
 
-      ctx.beginPath();
-      ctx.moveTo(topPoints[0].x, topPoints[0].y);
+      const tissueTop = getTissueGeometry().top;
+      const sourceX = getTissueGeometry().sourceX;
 
-      for (let i = 1; i < topPoints.length; i++) {
-        ctx.lineTo(topPoints[i].x, topPoints[i].y);
-      }
+      drawFiberPath([
+        { x: laserOutX, y: laserOutY },
+        { x: bs1.x, y: bs1.y + bs1.size / 2 }
+      ], orange, 4);
 
-      for (let i = bottomPoints.length - 1; i >= 0; i--) {
-        ctx.lineTo(bottomPoints[i].x, bottomPoints[i].y);
-      }
+      drawBeamSplitterSymbol(bs1.x, bs1.y, bs1.size);
+      drawBeamSplitterLabel(bs1.x + bs1.size / 2 + 18, bs1.y + bs1.size + 22);
 
-      ctx.closePath();
-
-      ctx.fillStyle = wallGradient;
-      ctx.fill();
-
-      ctx.strokeStyle = "rgba(116, 32, 42, 0.72)";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      ctx.globalAlpha = 0.24;
-
-      ctx.beginPath();
-
-      for (let x = -20; x <= width + 20; x += 18) {
-        const cy = radialArteryCenterY(x) - radialArteryRadius(x, amount) * 0.34;
-        const r = radialArteryRadius(x, amount) * 0.26;
-
-        if (x === -20) {
-          ctx.moveTo(x, cy - r);
-        } else {
-          ctx.lineTo(x, cy - r);
+      drawFiberPath([
+        { x: bs1.x + bs1.size, y: bs1.y + bs1.size / 2 },
+        {
+          x: bs2.x,
+          y: bs2.y + bs2.size / 2,
+          cp1: { x: width * 0.285, y: bs1.y + bs1.size / 2 },
+          cp2: { x: width * 0.285, y: bs2.y + bs2.size / 2 }
         }
-      }
+      ], orange, 4);
 
-      for (let x = width + 20; x >= -20; x -= 18) {
-        const cy = radialArteryCenterY(x) - radialArteryRadius(x, amount) * 0.34;
-        const r = radialArteryRadius(x, amount) * 0.26;
+      drawFiberPath([
+        { x: bs1.x + bs1.size, y: bs1.y + bs1.size / 2 },
+        {
+          x: bs3.x,
+          y: bs3.y + bs3.size / 2,
+          cp1: { x: width * 0.285, y: bs1.y + bs1.size / 2 },
+          cp2: { x: width * 0.285, y: bs3.y + bs3.size / 2 }
+        }
+      ], orange, 4);
 
-        ctx.lineTo(x, cy + r);
-      }
+      drawBeamSplitterSymbol(bs2.x, bs2.y, bs2.size);
+      drawBeamSplitterLabel(bs2.x + bs2.size / 2 + 25, bs2.y + bs2.size + 15);
 
-      ctx.closePath();
+      drawBeamSplitterSymbol(bs3.x, bs3.y, bs3.size);
+      drawBeamSplitterLabel(bs3.x + bs3.size / 2 + 25, bs3.y + bs3.size + 15);
 
-      ctx.fillStyle = "#ffd7d8";
-      ctx.fill();
+      drawFiberPath([
+        { x: bs2.x + bs2.size, y: bs2.y + bs2.size * 0.28 },
+        { x: width * 0.535, y: bs2.y + bs2.size * 0.28 }
+      ], orange, 4);
 
-      ctx.globalAlpha = 1;
+      drawFiberPath([
+        { x: bs2.x + bs2.size, y: bs2.y + bs2.size * 0.72 },
+        { x: width * 0.535, y: bs2.y + bs2.size * 0.72 }
+      ], orange, 4);
 
-      ctx.fillStyle = "rgba(255,255,255,0.88)";
-      ctx.font = "700 17px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("radial artery", width * 0.50, radialArteryCenterY(width * 0.50) + 7);
+      drawFiberPath([
+        { x: bs3.x + bs3.size, y: bs3.y + bs3.size * 0.36 },
+        { x: width * 0.535, y: bs3.y + bs3.size * 0.36 }
+      ], orange, 4);
+
+      drawFiberPath([
+        { x: bs3.x + bs3.size, y: bs3.y + bs3.size * 0.70 },
+        {
+          x: sourceX,
+          y: tissueTop - 112,
+          cp1: { x: width * 0.450, y: bs3.y + bs3.size * 0.70 },
+          cp2: { x: sourceX, y: height * 0.335 }
+        }
+      ], orange, 4);
     }
 
-    function drawRbcs(speed, amount) {
-      const activeCount = Math.floor(10 + amount * 70);
+    function getTissueGeometry() {
+      return {
+        x: width * 0.305,
+        y: height * 0.515,
+        w: width * 0.480,
+        h: height * 0.355,
+        top: height * 0.515,
+        sourceX: width * 0.445,
+        detectorX: width * 0.635
+      };
+    }
 
-      for (let i = 0; i < activeCount; i++) {
-        const rbc = rbcs[i];
+    function drawTissueBlock() {
+      const g = getTissueGeometry();
+      const x = g.x;
+      const y = g.y;
+      const w = g.w;
+      const h = g.h;
 
-        rbc.x += (0.35 + speed * 2.8) * rbc.speedFactor;
+      ctx.save();
 
-        if (rbc.x > width + 30) {
-          rbc.x = -30;
-          rbc.lane = Math.random();
-          rbc.phase = Math.random() * Math.PI * 2;
-          rbc.radius = 7 + Math.random() * 4.0;
-          rbc.speedFactor = 0.65 + Math.random() * 0.72;
-          rbc.angle = -0.12 + Math.random() * 0.24;
+      ctx.fillStyle = "#f3c2a1";
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + w, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.fill();
+
+      drawLayer(x, y, w, h * 0.13, "#f5c29d", "#d79b7e");
+      drawWavyLayer(x, y + h * 0.13, w, h * 0.15, "#e97898", "#ce5d7d");
+      drawLayer(x, y + h * 0.28, w, h * 0.47, "#f6b9a7", "#e79c8b");
+      drawWavyLayer(x, y + h * 0.75, w, h * 0.15, "#efc66d", "#d9a44f");
+      drawLayer(x, y + h * 0.90, w, h * 0.10, "#cf4638", "#a72e2b");
+
+      drawVascularNetwork(x, y, w, h);
+      drawSurfaceOutline(x, y, w, h);
+
+      ctx.restore();
+    }
+
+    function drawLayer(x, y, w, h, fill, stroke) {
+      ctx.fillStyle = fill;
+      ctx.fillRect(x, y, w, h);
+
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1.3;
+      ctx.strokeRect(x, y, w, h);
+    }
+
+    function drawWavyLayer(x, y, w, h, fill, stroke) {
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+
+      for (let i = 0; i <= 60; i++) {
+        const px = x + (w * i) / 60;
+        const py = y + Math.sin(i * 0.65) * 3;
+        ctx.lineTo(px, py);
+      }
+
+      ctx.lineTo(x + w, y + h);
+
+      for (let i = 60; i >= 0; i--) {
+        const px = x + (w * i) / 60;
+        const py = y + h + Math.sin(i * 0.52 + 0.8) * 3;
+        ctx.lineTo(px, py);
+      }
+
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1.3;
+      ctx.stroke();
+    }
+
+    function drawSurfaceOutline(x, y, w, h) {
+      ctx.strokeStyle = "rgba(115, 75, 62, 0.68)";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + w, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    function drawVascularNetwork(x, y, w, h) {
+      const vesselY = y + h * 0.70;
+
+      ctx.strokeStyle = "#c51f28";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+
+      for (let i = 0; i <= 70; i++) {
+        const px = x + (w * i) / 70;
+        const py = vesselY + Math.sin(i * 0.55) * 5;
+        if (i === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
         }
+      }
 
-        const cy = radialArteryCenterY(rbc.x);
-        const radius = radialArteryRadius(rbc.x, amount);
-        const offset = (rbc.lane - 0.5) * radius * 1.10 + Math.sin(rbc.phase + rbc.x * 0.02) * 1.8;
-        const y = cy + offset;
+      ctx.stroke();
 
-        ctx.save();
-        ctx.translate(rbc.x, y);
-        ctx.rotate(rbc.angle);
+      ctx.strokeStyle = "#005ca8";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
 
-        ctx.fillStyle = "#dc1f34";
-        ctx.strokeStyle = "rgba(145, 10, 25, 0.42)";
-        ctx.lineWidth = 2;
+      for (let i = 0; i <= 70; i++) {
+        const px = x + (w * i) / 70;
+        const py = vesselY + 7 + Math.sin(i * 0.55 + 1.5) * 5;
+        if (i === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+
+      ctx.stroke();
+
+      const branchOrigins = [
+        { px: 0.08, color: "#cc2630" },
+        { px: 0.22, color: "#0067b1" },
+        { px: 0.36, color: "#cc2630" },
+        { px: 0.55, color: "#0067b1" },
+        { px: 0.70, color: "#cc2630" },
+        { px: 0.85, color: "#0067b1" }
+      ];
+
+      branchOrigins.forEach((b, index) => {
+        const bx = x + w * b.px;
+        const by = vesselY - 4 + Math.sin(index) * 6;
+        drawBranchingVessel(bx, by, -Math.PI / 2, h * 0.22, b.color, 3);
+      });
+
+      for (let i = 0; i < 28; i++) {
+        const cx = x + w * (0.07 + Math.randomLike(i) * 0.86);
+        const cy = y + h * (0.32 + Math.randomLike(i + 42) * 0.30);
+        const color = i % 2 === 0 ? "rgba(210, 45, 55, 0.55)" : "rgba(0, 90, 170, 0.55)";
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.4;
 
         ctx.beginPath();
-        ctx.ellipse(0, 0, rbc.radius * 1.32, rbc.radius * 0.72, 0, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(cx, cy);
+        ctx.bezierCurveTo(cx + 7, cy - 18, cx - 7, cy - 32, cx + 2, cy - 48);
         ctx.stroke();
+      }
+    }
 
-        ctx.fillStyle = "rgba(110, 0, 15, 0.22)";
-        ctx.beginPath();
-        ctx.ellipse(0, 0.8, rbc.radius * 0.58, rbc.radius * 0.28, 0, 0, Math.PI * 2);
-        ctx.fill();
+    Math.randomLike = function(seed) {
+      const x = Math.sin(seed * 12.9898) * 43758.5453;
+      return x - Math.floor(x);
+    };
 
-        ctx.restore();
+    function drawBranchingVessel(x, y, angle, length, color, lineWidth) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = "round";
+
+      const x2 = x + Math.cos(angle) * length;
+      const y2 = y + Math.sin(angle) * length;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(
+        x + Math.cos(angle - 0.4) * length * 0.35,
+        y + Math.sin(angle - 0.4) * length * 0.35,
+        x + Math.cos(angle + 0.2) * length * 0.65,
+        y + Math.sin(angle + 0.2) * length * 0.65,
+        x2,
+        y2
+      );
+      ctx.stroke();
+
+      if (length > 24) {
+        drawBranchingVessel(x2, y2, angle - 0.55, length * 0.48, color, lineWidth * 0.68);
+        drawBranchingVessel(x2, y2, angle + 0.50, length * 0.45, color, lineWidth * 0.65);
       }
     }
 
     function drawSensitivityVolume() {
-      const sourceX = width * 0.39;
-      const detectorX = width * 0.61;
-      const startY = tissueTop();
-      const upperMidY = tissueTop() + height * 0.085;
-      const bottomY = radialArteryCenterY(width * 0.50) + height * 0.015;
+      const g = getTissueGeometry();
+      const sourceX = g.sourceX;
+      const detectorX = g.detectorX;
+      const topY = g.top;
       const centerX = (sourceX + detectorX) / 2;
+      const bottomY = g.y + g.h * 0.58;
 
-      const grad = ctx.createLinearGradient(0, startY, 0, bottomY);
-      grad.addColorStop(0, "rgba(255, 230, 88, 0.72)");
-      grad.addColorStop(1, "rgba(255, 210, 70, 0.24)");
+      const grad = ctx.createRadialGradient(
+        centerX,
+        topY + 90,
+        20,
+        centerX,
+        topY + 95,
+        210
+      );
+
+      grad.addColorStop(0, "rgba(255, 225, 72, 0.80)");
+      grad.addColorStop(0.55, "rgba(255, 215, 50, 0.55)");
+      grad.addColorStop(1, "rgba(255, 210, 40, 0.08)");
 
       ctx.beginPath();
-      ctx.moveTo(sourceX, startY);
-      ctx.bezierCurveTo(width * 0.435, upperMidY, width * 0.465, upperMidY + 36, centerX, upperMidY + 36);
-      ctx.bezierCurveTo(width * 0.535, upperMidY + 36, width * 0.565, upperMidY, detectorX, startY);
-      ctx.bezierCurveTo(width * 0.57, startY + 130, width * 0.535, bottomY, centerX, bottomY);
-      ctx.bezierCurveTo(width * 0.465, bottomY, width * 0.43, startY + 130, sourceX, startY);
+      ctx.moveTo(sourceX, topY);
+      ctx.bezierCurveTo(
+        sourceX + 35,
+        topY + 75,
+        centerX - 60,
+        bottomY,
+        centerX,
+        bottomY
+      );
+      ctx.bezierCurveTo(
+        centerX + 60,
+        bottomY,
+        detectorX - 35,
+        topY + 75,
+        detectorX,
+        topY
+      );
+      ctx.bezierCurveTo(
+        detectorX - 25,
+        topY + 130,
+        sourceX + 25,
+        topY + 130,
+        sourceX,
+        topY
+      );
       ctx.closePath();
 
       ctx.fillStyle = grad;
       ctx.fill();
 
-      ctx.strokeStyle = "rgba(214, 181, 37, 0.95)";
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(222, 184, 25, 0.90)";
+      ctx.lineWidth = 2;
       ctx.stroke();
-
-      ctx.fillStyle = "rgba(23, 50, 71, 0.82)";
-      ctx.font = "700 16px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("sensitivity", centerX, startY + 78);
-      ctx.fillText("volume", centerX, startY + 96);
     }
 
-    function drawFibers() {
-      const sourceX = width * 0.39;
-      const detectorX = width * 0.61;
-      const topY = tissueTop() - 118;
-      const bottomY = tissueTop();
+    function drawSourceProbe() {
+      const g = getTissueGeometry();
+      const sourceX = g.sourceX;
+      const topY = g.top;
+      const probeTop = topY - 116;
+      const probeBottom = topY + 2;
 
-      ctx.fillStyle = "#111";
-      ctx.font = "700 17px Courier New";
-      ctx.textAlign = "center";
-
-      ctx.fillText("source", sourceX, topY - 18);
-      ctx.fillText("detector", detectorX, topY - 18);
-
-      ctx.fillStyle = "#ff9427";
-      ctx.strokeStyle = "#d86900";
-      ctx.lineWidth = 4;
-      roundRect(ctx, sourceX - 8, topY, 16, bottomY - topY, 7, true, true);
-
-      ctx.fillStyle = "#575757";
-      ctx.strokeStyle = "#222";
-      roundRect(ctx, detectorX - 8, topY, 16, bottomY - topY, 7, true, true);
+      drawCylindricalProbe(sourceX, probeTop, probeBottom, "#ff8b24", "#d76a00");
     }
 
-    function drawDetectorToCameraSystem() {
-      const detectorX = width * 0.61;
-      const fiberStartX = detectorX + 44;
-      const bundleX = width * 0.705;
-      const bundleY = height * 0.14;
-      const speckleX = width * 0.695;
-      const speckleY = height * 0.238;
-      const lensX = width * 0.80;
-      const cameraX = width * 0.865;
+    function drawDetectorProbe(detectorX, topY) {
+      const probeTop = topY - 116;
+      const probeBottom = topY + 2;
 
-      ctx.strokeStyle = "#6d6d6d";
-      ctx.lineWidth = 3;
+      drawCylindricalProbe(detectorX, probeTop, probeBottom, "#1b76bd", "#0b4d8d");
+    }
+
+    function drawCylindricalProbe(cx, y1, y2, fill, stroke) {
+      const w = 18;
+
+      const bodyGrad = ctx.createLinearGradient(cx - w / 2, 0, cx + w / 2, 0);
+      bodyGrad.addColorStop(0, shadeColor(fill, -20));
+      bodyGrad.addColorStop(0.50, fill);
+      bodyGrad.addColorStop(1, shadeColor(fill, -25));
+
+      ctx.fillStyle = bodyGrad;
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 2;
+
+      roundRect(ctx, cx - w / 2, y1, w, y2 - y1 - 20, 7, true, true, bodyGrad, stroke, 2);
+
+      const tipGrad = ctx.createLinearGradient(cx - 14, 0, cx + 14, 0);
+      tipGrad.addColorStop(0, "#101010");
+      tipGrad.addColorStop(0.5, "#5b5b5b");
+      tipGrad.addColorStop(1, "#101010");
+
+      roundRect(ctx, cx - 14, y2 - 22, 28, 28, 6, true, true, tipGrad, "#111", 2);
+    }
+
+    function drawFanOutBundle() {
+      const g = getTissueGeometry();
+      const blue = "#0b61a4";
+
+      const bundleX = width * 0.670;
+      const bundleY = height * 0.080;
+      const bundleW = width * 0.065;
+      const bundleH = height * 0.175;
+
+      const detectorX = g.detectorX;
+      const tissueTop = g.top;
+
+      const leftX = bundleX;
+      const fiberSpacing = bundleH / 7.4;
+      const firstY = bundleY + fiberSpacing;
+
+      ctx.strokeStyle = blue;
+      ctx.lineWidth = 3.5;
       ctx.lineCap = "round";
 
       for (let i = 0; i < 6; i++) {
-        const y0 = tissueTop() - 105 + i * 12;
-        const y1 = bundleY + 5 + i * 7;
+        const y = firstY + i * fiberSpacing;
 
         ctx.beginPath();
-        ctx.moveTo(fiberStartX, y0);
-        ctx.bezierCurveTo(
-          fiberStartX + 32,
-          y0 - 20,
-          bundleX - 48,
-          y1 - 10,
-          bundleX,
-          y1
-        );
+        ctx.moveTo(bundleX - width * 0.075, y);
+        ctx.lineTo(leftX, y);
         ctx.stroke();
       }
 
+      const detectorPortY = firstY + 6 * fiberSpacing;
+
+      ctx.beginPath();
+      ctx.moveTo(detectorX, tissueTop - 116);
+      ctx.bezierCurveTo(
+        detectorX - width * 0.010,
+        tissueTop - 185,
+        bundleX - width * 0.055,
+        detectorPortY + 10,
+        bundleX - width * 0.075,
+        detectorPortY
+      );
+      ctx.lineTo(leftX, detectorPortY);
+      ctx.stroke();
+
       ctx.lineCap = "butt";
 
+      const bundleGrad = ctx.createLinearGradient(bundleX, bundleY, bundleX + bundleW, bundleY + bundleH);
+      bundleGrad.addColorStop(0, "#9bc8ec");
+      bundleGrad.addColorStop(1, "#6ba5d4");
+
+      roundRect(ctx, bundleX, bundleY, bundleW, bundleH, 8, true, true, bundleGrad, "#173247", 2);
+
       ctx.fillStyle = "#111";
-      ctx.font = "700 14px Courier New";
+      ctx.font = "700 22px Courier New";
       ctx.textAlign = "center";
-      ctx.fillText("Fan-out", bundleX + 18, bundleY - 32);
-      ctx.fillText("Fiber bundle", bundleX + 18, bundleY - 15);
+      ctx.textBaseline = "bottom";
+      ctx.fillText("Fan-Out", bundleX + bundleW / 2, bundleY - 22);
+      ctx.fillText("Bundle", bundleX + bundleW / 2, bundleY + 2);
 
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.moveTo(bundleX + 18, bundleY - 8);
-      ctx.lineTo(bundleX + 18, bundleY + 4);
-      ctx.stroke();
+      drawDetectorProbe(detectorX, tissueTop);
 
-      ctx.fillStyle = "#87c9e7";
-      ctx.strokeStyle = "#2c6b87";
-      ctx.lineWidth = 2;
-      ctx.fillRect(bundleX, bundleY + 2, 42, 38);
-      ctx.strokeRect(bundleX, bundleY + 2, 42, 38);
-
-      drawSpeckleImage(speckleX, speckleY, 68, 68);
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 13px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("Lens", lensX + 22, bundleY - 12);
-      ctx.fillText("system", lensX + 22, bundleY + 4);
-
-      ctx.fillStyle = "#88c8e7";
-      ctx.strokeStyle = "#2c6b87";
-      ctx.lineWidth = 2;
-
-      ctx.beginPath();
-      ctx.ellipse(lensX, bundleY + 28, 16, 26, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.ellipse(lensX + 24, bundleY + 28, 16, 26, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#7fb6d4";
-      ctx.fillRect(lensX + 24, bundleY + 2, 34, 52);
-      ctx.strokeRect(lensX + 24, bundleY + 2, 34, 52);
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 13px Courier New";
-      ctx.fillText("CCD", cameraX + 34, bundleY - 30);
-      ctx.fillText("Camera", cameraX + 34, bundleY - 14);
-
-      ctx.fillStyle = "#8dc8e7";
-      ctx.strokeStyle = "#2c6b87";
-      ctx.lineWidth = 2;
-      ctx.fillRect(cameraX, bundleY + 8, 74, 42);
-      ctx.strokeRect(cameraX, bundleY + 8, 74, 42);
+      drawFiberPath([
+        { x: bundleX + bundleW, y: bundleY + bundleH * 0.50 },
+        { x: width * 0.760, y: bundleY + bundleH * 0.50 }
+      ], "#222", 2);
     }
 
-    function drawSpeckleImage(x, y, w, h) {
-      ctx.fillStyle = "#1a1a1a";
+    function drawLensSystem() {
+      const lensX = width * 0.760;
+      const lensY = height * 0.115;
+      const lensW = width * 0.145;
+      const lensH = height * 0.095;
+
+      ctx.strokeStyle = "#222";
+      ctx.lineWidth = 2;
+      ctx.fillStyle = "#ededed";
+
+      ctx.fillRect(lensX, lensY, lensW, lensH);
+      ctx.strokeRect(lensX, lensY, lensW, lensH);
+
+      ctx.strokeStyle = "#222";
+      ctx.lineWidth = 4;
+
+      ctx.beginPath();
+      ctx.moveTo(lensX + lensW * 0.03, lensY - 8);
+      ctx.lineTo(lensX + lensW * 0.03, lensY + lensH + 8);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(lensX + lensW * 0.50, lensY - 8);
+      ctx.lineTo(lensX + lensW * 0.50, lensY + lensH + 8);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(lensX + lensW * 0.97, lensY - 8);
+      ctx.lineTo(lensX + lensW * 0.97, lensY + lensH + 8);
+      ctx.stroke();
+
+      drawLensElement(lensX + lensW * 0.26, lensY + lensH / 2, 16, lensH * 0.42);
+      drawLensElement(lensX + lensW * 0.74, lensY + lensH / 2, 16, lensH * 0.42);
+
+      ctx.fillStyle = "#111";
+      ctx.font = "700 20px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillText("Lens system", lensX + lensW / 2, lensY + lensH + 25);
+
+      drawFiberPath([
+        { x: lensX + lensW, y: lensY + lensH / 2 },
+        { x: width * 0.935, y: lensY + lensH / 2 }
+      ], "#222", 2);
+    }
+
+    function drawLensElement(cx, cy, rx, ry) {
+      const grad = ctx.createLinearGradient(cx - rx, cy, cx + rx, cy);
+      grad.addColorStop(0, "#9ed9ff");
+      grad.addColorStop(0.5, "#d6f1ff");
+      grad.addColorStop(1, "#68b9ee");
+
+      ctx.fillStyle = grad;
+      ctx.strokeStyle = "#005c9f";
+      ctx.lineWidth = 1.8;
+
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawCamera() {
+      const cameraX = width * 0.935;
+      const cameraY = height * 0.095;
+      const cameraW = width * 0.075;
+      const cameraH = height * 0.125;
+
+      ctx.fillStyle = "#b8b8b8";
+      ctx.strokeStyle = "#222";
+      ctx.lineWidth = 2;
+
+      ctx.fillRect(cameraX, cameraY, cameraW, cameraH);
+      ctx.strokeRect(cameraX, cameraY, cameraW, cameraH);
+
+      ctx.fillStyle = "#d2d2d2";
+      ctx.fillRect(cameraX, cameraY, cameraW, cameraH * 0.20);
+      ctx.strokeRect(cameraX, cameraY, cameraW, cameraH * 0.20);
+
+      ctx.fillStyle = "#111";
+      ctx.font = "700 22px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      ctx.fillText("CCD", cameraX + cameraW / 2, cameraY - 26);
+      ctx.fillText("Camera", cameraX + cameraW / 2, cameraY - 2);
+    }
+
+    function drawSpeckleInset() {
+      const x = width * 0.825;
+      const y = height * 0.340;
+      const size = Math.min(width * 0.145, height * 0.245);
+
+      ctx.fillStyle = "#050505";
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 2;
-      ctx.fillRect(x, y, w, h);
-      ctx.strokeRect(x, y, w, h);
+      ctx.fillRect(x, y, size, size);
+      ctx.strokeRect(x, y, size, size);
 
       const spots = [
-        { x: 0.22, y: 0.23, r: 0.13, a: 0.34 },
-        { x: 0.46, y: 0.38, r: 0.16, a: 0.44 },
-        { x: 0.68, y: 0.24, r: 0.12, a: 0.30 },
-        { x: 0.28, y: 0.70, r: 0.15, a: 0.25 },
-        { x: 0.70, y: 0.70, r: 0.17, a: 0.19 },
-        { x: 0.52, y: 0.60, r: 0.10, a: 0.36 }
+        { x: 0.50, y: 0.22 },
+        { x: 0.28, y: 0.38 },
+        { x: 0.72, y: 0.38 },
+        { x: 0.50, y: 0.52 },
+        { x: 0.28, y: 0.68 },
+        { x: 0.72, y: 0.68 },
+        { x: 0.50, y: 0.82 }
       ];
 
-      for (const spot of spots) {
-        ctx.fillStyle = `rgba(255,255,255,${spot.a})`;
+      spots.forEach((spot, i) => {
+        drawSpeckleSpot(
+          x + spot.x * size,
+          y + spot.y * size,
+          size * 0.135,
+          i
+        );
+      });
+    }
+
+    function drawSpeckleSpot(cx, cy, r, seed) {
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 1.3);
+      grad.addColorStop(0, "rgba(255,255,255,0.92)");
+      grad.addColorStop(0.45, "rgba(230,230,230,0.70)");
+      grad.addColorStop(1, "rgba(255,255,255,0.04)");
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 1.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      for (let i = 0; i < 80; i++) {
+        const a = Math.randomLike(seed * 100 + i) * Math.PI * 2;
+        const rr = Math.sqrt(Math.randomLike(seed * 200 + i)) * r;
+        const px = cx + Math.cos(a) * rr;
+        const py = cy + Math.sin(a) * rr;
+        const alpha = 0.22 + Math.randomLike(seed * 300 + i) * 0.45;
+
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
         ctx.beginPath();
-        ctx.arc(x + spot.x * w, y + spot.y * h, spot.r * w, 0, Math.PI * 2);
+        ctx.arc(px, py, 0.7 + Math.randomLike(seed * 400 + i) * 1.2, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    function drawSmallVessels() {
-      const startY = tissueTop() + 42;
-      const endY = skinBottom() - 8;
+    function shadeColor(color, percent) {
+      const num = parseInt(color.replace("#", ""), 16);
+      const amt = Math.round(2.55 * percent);
+      const r = (num >> 16) + amt;
+      const g = ((num >> 8) & 0x00ff) + amt;
+      const b = (num & 0x0000ff) + amt;
 
-      ctx.strokeStyle = "rgba(219, 130, 145, 0.92)";
-      ctx.lineWidth = 2;
-
-      for (let i = 0; i < 28; i++) {
-        const x = width * 0.22 + i * width * 0.023;
-        const top = startY + Math.sin(i * 0.8) * 8;
-        const bottom = endY + Math.cos(i * 0.9) * 8;
-
-        ctx.beginPath();
-        ctx.moveTo(x, bottom);
-        ctx.bezierCurveTo(x - 8, bottom - 26, x + 8, top + 26, x, top);
-        ctx.stroke();
-
-        if (i % 3 === 0) {
-          ctx.beginPath();
-          ctx.moveTo(x, bottom - 22);
-          ctx.lineTo(x - 10, bottom - 38);
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(x, bottom - 28);
-          ctx.lineTo(x + 10, bottom - 44);
-          ctx.stroke();
-        }
-      }
-
-      ctx.strokeStyle = "rgba(89, 92, 190, 0.78)";
-      ctx.lineWidth = 2;
-
-      for (let i = 0; i < 11; i++) {
-        const x = width * 0.27 + i * width * 0.045;
-        const top = startY + 10 + Math.sin(i) * 7;
-        const bottom = endY - 4 + Math.cos(i) * 5;
-
-        ctx.beginPath();
-        ctx.moveTo(x, bottom);
-        ctx.bezierCurveTo(x + 8, bottom - 24, x - 8, top + 24, x, top);
-        ctx.stroke();
-      }
+      return (
+        "#" +
+        (
+          0x1000000 +
+          (r < 255 ? (r < 1 ? 0 : r) : 255) * 0x10000 +
+          (g < 255 ? (g < 1 ? 0 : g) : 255) * 0x100 +
+          (b < 255 ? (b < 1 ? 0 : b) : 255)
+        )
+          .toString(16)
+          .slice(1)
+      );
     }
 
-    function roundRect(context, x, y, w, h, r, fill, stroke) {
+    function roundRect(context, x, y, w, h, r, fill, stroke, fillStyle, strokeStyle, lineWidth) {
       if (w < 2 * r) r = w / 2;
       if (h < 2 * r) r = h / 2;
 
@@ -781,39 +876,21 @@
       context.arcTo(x, y, x + r, y, r);
       context.closePath();
 
-      if (fill) context.fill();
-      if (stroke) context.stroke();
+      if (fill) {
+        context.fillStyle = fillStyle;
+        context.fill();
+      }
+
+      if (stroke) {
+        context.strokeStyle = strokeStyle;
+        context.lineWidth = lineWidth;
+        context.stroke();
+      }
     }
 
-    function animate() {
-      const speed = Number(speedSlider.value);
-      const amount = Number(amountSlider.value);
-
-      speedValue.textContent = speed.toFixed(2);
-      amountValue.textContent = amount.toFixed(2);
-
-      drawBackground();
-      drawLaserAndSplitter();
-      drawSourceFiberPaths();
-      drawLayerLabels();
-      drawSmallVessels();
-      drawRadialArtery(amount);
-      drawRbcs(speed, amount);
-      drawSensitivityVolume();
-      drawFibers();
-      drawDetectorToCameraSystem();
-
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      resetRbcs();
-    });
+    window.addEventListener("resize", resizeCanvas);
 
     resizeCanvas();
-    resetRbcs();
-    animate();
   </script>
 </body>
 </html>
