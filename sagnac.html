@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Sagnac Interferometer</title>
+  <title>Sagnac Interferometer Simulation</title>
 
   <style>
     * {
@@ -23,139 +23,479 @@
 
     body {
       position: relative;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: url("images/OCT%20background.jpg") center / cover no-repeat;
-      opacity: 0.7;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.35),
-        rgba(0, 0, 0, 0.78)
-      );
-      z-index: 0;
-      pointer-events: none;
+      background: url("images/interferometer background.png") center / cover no-repeat fixed;
     }
 
     .page-container {
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      padding: 45px;
+      padding: 36px;
     }
 
     .content-card {
-      max-width: 1100px;
-      padding: 34px 38px;
-      border-radius: 24px;
-      background: rgba(0, 0, 0, 0.48);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      width: 100%;
+      max-width: 1680px;
+      padding: 34px 38px 38px;
+      border-radius: 28px;
+      background: rgba(0, 0, 0, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.30);
       box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.18),
-        0 0 40px rgba(102, 204, 255, 0.22);
-      backdrop-filter: blur(4px);
+        0 0 22px rgba(255, 255, 255, 0.20),
+        0 0 48px rgba(102, 204, 255, 0.30);
+      backdrop-filter: blur(5px);
     }
 
     h1 {
-      margin: 0 0 20px;
-      font-size: 44px;
+      margin: 0 0 14px;
+      font-size: 48px;
       color: rgba(255, 255, 255, 0.98);
       text-shadow:
-        0 0 8px rgba(102, 204, 255, 0.55),
-        0 0 18px rgba(102, 204, 255, 0.35);
+        0 0 8px rgba(102, 204, 255, 0.65),
+        0 0 22px rgba(102, 204, 255, 0.42);
     }
 
-    p {
-      margin: 0 0 16px;
+    .subtitle {
+      margin: 0 0 26px;
+      max-width: 1280px;
       font-size: 18px;
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.93);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.94);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
     }
 
-    .diagram-box {
-      margin-top: 26px;
-      padding: 20px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(158, 234, 255, 0.42);
+    .simulation-layout {
+      display: grid;
+      grid-template-columns: minmax(980px, 1fr) 390px;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .diagram-panel,
+    .control-panel {
+      border-radius: 26px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(158, 234, 255, 0.44);
       box-shadow:
-        0 0 12px rgba(158, 234, 255, 0.22),
-        inset 0 0 18px rgba(255, 255, 255, 0.06);
+        0 0 18px rgba(158, 234, 255, 0.24),
+        inset 0 0 22px rgba(255, 255, 255, 0.06);
+    }
+
+    .diagram-panel {
+      padding: 22px;
+    }
+
+    .diagram-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .diagram-title {
+      margin: 0;
+      font-size: 26px;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(158, 234, 255, 0.65);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px 14px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .legend-line {
+      width: 30px;
+      height: 4px;
+      border-radius: 999px;
+    }
+
+    .legend-cw {
+      background: #ff9d2e;
+      box-shadow: 0 0 8px rgba(255, 157, 46, 0.9);
+    }
+
+    .legend-ccw {
+      background: #b784ff;
+      box-shadow: 0 0 8px rgba(183, 132, 255, 0.9);
+    }
+
+    .legend-input {
+      background: #ff4f5e;
+      box-shadow: 0 0 8px rgba(255, 79, 94, 0.9);
+    }
+
+    .legend-output {
+      background: #61ffb5;
+      box-shadow: 0 0 8px rgba(97, 255, 181, 0.9);
+    }
+
+    .svg-wrap {
+      width: 100%;
+      overflow: visible;
     }
 
     svg {
       width: 100%;
       height: auto;
+      min-height: 680px;
       display: block;
     }
 
     .label {
       fill: white;
-      font-size: 18px;
+      font-size: 22px;
       font-family: cursive;
+      paint-order: stroke;
+      stroke: rgba(0, 0, 0, 0.9);
+      stroke-width: 4px;
+      stroke-linejoin: round;
     }
 
     .small-label {
       fill: white;
-      font-size: 15px;
+      font-size: 17px;
       font-family: cursive;
+      paint-order: stroke;
+      stroke: rgba(0, 0, 0, 0.9);
+      stroke-width: 3px;
+      stroke-linejoin: round;
     }
 
-    .optical-line {
-      stroke: #9eeaff;
-      stroke-width: 5;
+    .tiny-label {
+      fill: rgba(255, 255, 255, 0.92);
+      font-size: 14px;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      paint-order: stroke;
+      stroke: rgba(0, 0, 0, 0.85);
+      stroke-width: 3px;
+      stroke-linejoin: round;
+    }
+
+    .laser-box {
+      fill: rgba(255, 79, 94, 0.22);
+      stroke: #ff4f5e;
+      stroke-width: 4;
+      filter: drop-shadow(0 0 9px rgba(255, 79, 94, 0.85));
+    }
+
+    .beam-splitter-box {
+      fill: rgba(93, 238, 255, 0.16);
+      stroke: #5deeff;
+      stroke-width: 4;
+      filter: drop-shadow(0 0 9px rgba(93, 238, 255, 0.9));
+    }
+
+    .beam-splitter-line {
+      stroke: #5deeff;
+      stroke-width: 7;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px rgba(93, 238, 255, 0.9));
+    }
+
+    .mirror-body {
+      stroke: #f8f7d7;
+      stroke-width: 8;
+      stroke-linecap: round;
+      filter:
+        drop-shadow(0 0 5px rgba(255, 255, 255, 0.85))
+        drop-shadow(0 0 13px rgba(255, 229, 116, 0.55));
+    }
+
+    .mirror-back {
+      stroke: rgba(255, 208, 76, 0.8);
+      stroke-width: 3;
+      stroke-dasharray: 8 6;
+      stroke-linecap: round;
+    }
+
+    .detector-box {
+      fill: rgba(97, 255, 181, 0.16);
+      stroke: #61ffb5;
+      stroke-width: 4;
+      filter: drop-shadow(0 0 10px rgba(97, 255, 181, 0.8));
+    }
+
+    .cw-beam {
+      stroke: #ff9d2e;
+      stroke-width: 8;
       fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 8px rgba(255, 157, 46, 0.95));
+      stroke-dasharray: 20 16;
+      animation: moveCw 1.35s linear infinite;
+    }
+
+    .ccw-beam {
+      stroke: #b784ff;
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 8px rgba(183, 132, 255, 0.95));
+      stroke-dasharray: 18 15;
+      animation: moveCcw 1.35s linear infinite;
+    }
+
+    .input-beam {
+      stroke: #ff4f5e;
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px rgba(255, 79, 94, 0.95));
+      stroke-dasharray: 22 14;
+      animation: moveInput 1.1s linear infinite;
+    }
+
+    .output-beam {
+      stroke: #61ffb5;
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px rgba(97, 255, 181, 0.95));
+      stroke-dasharray: 22 14;
+      animation: moveOutput 1.1s linear infinite;
+    }
+
+    .loop-guide {
+      stroke: rgba(255, 255, 255, 0.22);
+      stroke-width: 2;
+      fill: rgba(255, 255, 255, 0.035);
+      stroke-dasharray: 8 8;
+    }
+
+    .rotation-ring {
+      stroke: rgba(158, 234, 255, 0.72);
+      stroke-width: 4;
+      fill: none;
+      stroke-dasharray: 14 12;
+      filter: drop-shadow(0 0 7px rgba(158, 234, 255, 0.7));
+    }
+
+    .rotation-arrow {
+      fill: #9eeaff;
       filter: drop-shadow(0 0 6px rgba(158, 234, 255, 0.9));
     }
 
-    .counter-line {
-      stroke: rgba(255, 255, 255, 0.78);
-      stroke-width: 4;
-      fill: none;
-      stroke-dasharray: 10 8;
-      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.55));
+    @keyframes moveCw {
+      from {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: -72;
+      }
     }
 
-    .component {
-      stroke: white;
-      stroke-width: 3;
-      fill: rgba(255, 255, 255, 0.10);
+    @keyframes moveCcw {
+      from {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: 66;
+      }
     }
 
-    .beam-splitter {
-      stroke: #9eeaff;
-      stroke-width: 5;
-      fill: none;
+    @keyframes moveInput {
+      from {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: -60;
+      }
     }
 
-    .mirror {
-      stroke: white;
-      stroke-width: 6;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65));
+    @keyframes moveOutput {
+      from {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: -60;
+      }
+    }
+
+    .detector-display {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 18px;
+    }
+
+    .fringe-card,
+    .meter-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.05);
+    }
+
+    .fringe-card h3,
+    .meter-card h3,
+    .control-panel h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      color: white;
+      text-shadow: 0 0 8px rgba(102, 204, 255, 0.55);
+    }
+
+    #fringeCanvas {
+      width: 100%;
+      height: 170px;
+      display: block;
+      border-radius: 16px;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 0 12px rgba(97, 255, 181, 0.18),
+        inset 0 0 18px rgba(0, 0, 0, 0.75);
+    }
+
+    .intensity-bar-wrap {
+      width: 100%;
+      height: 28px;
+      margin: 10px 0 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      overflow: hidden;
+    }
+
+    .intensity-bar {
+      width: 50%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #1ce27a, #a7ffd4);
+      box-shadow: 0 0 16px rgba(97, 255, 181, 0.85);
+      transition: width 0.12s linear;
+    }
+
+    .readout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      margin-top: 12px;
+    }
+
+    .readout {
+      padding: 9px 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    .readout-name {
+      display: block;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.72);
+      margin-bottom: 3px;
+    }
+
+    .readout-value {
+      display: block;
+      font-size: 15px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .control-panel {
+      padding: 24px;
+    }
+
+    .control-description {
+      margin: 0 0 18px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.88);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    .control-group {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.075);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 9px;
+    }
+
+    .control-label {
+      font-size: 16px;
+      color: white;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .control-value {
+      font-size: 14px;
+      color: #9eeaff;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      white-space: nowrap;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #5deeff;
+      cursor: pointer;
+    }
+
+    .control-note {
+      margin: 8px 0 0;
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    .equation-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.36);
+      border: 1px solid rgba(158, 234, 255, 0.28);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.90);
+    }
+
+    .equation {
+      display: block;
+      margin: 8px 0;
+      font-size: 17px;
+      color: #ffffff;
+      text-align: center;
     }
 
     .back-link {
       display: inline-block;
-      margin-top: 24px;
+      margin-top: 26px;
       text-decoration: none;
-      font-size: 18px;
+      font-size: 19px;
       color: white;
-      padding: 10px 18px;
+      padding: 11px 20px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      background: rgba(255, 255, 255, 0.12);
       transition:
         background 0.25s ease,
         transform 0.25s ease,
@@ -163,36 +503,67 @@
     }
 
     .back-link:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.20);
       transform: translateX(-4px);
       box-shadow:
-        0 0 10px rgba(255, 255, 255, 0.40),
-        0 0 22px rgba(102, 204, 255, 0.40);
+        0 0 10px rgba(255, 255, 255, 0.45),
+        0 0 24px rgba(102, 204, 255, 0.46);
+    }
+
+    @media screen and (max-width: 1350px) {
+      .simulation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .legend {
+        justify-content: flex-start;
+      }
+
+      svg {
+        min-height: 560px;
+      }
     }
 
     @media screen and (max-width: 850px) {
       .page-container {
-        padding: 24px;
+        padding: 22px;
       }
 
       .content-card {
-        padding: 26px 24px;
+        padding: 26px 22px;
       }
 
       h1 {
         font-size: 34px;
       }
 
-      p {
+      .subtitle {
         font-size: 16px;
       }
 
+      .detector-display {
+        grid-template-columns: 1fr;
+      }
+
       .label {
-        font-size: 15px;
+        font-size: 17px;
       }
 
       .small-label {
-        font-size: 13px;
+        font-size: 14px;
+      }
+
+      .tiny-label {
+        font-size: 12px;
+      }
+
+      svg {
+        min-height: 460px;
       }
     }
   </style>
@@ -201,56 +572,404 @@
 <body>
   <div class="page-container">
     <div class="content-card">
-      <h1>Sagnac Interferometer</h1>
+      <h1>Sagnac Interferometer Simulation</h1>
 
-      <p>
-        The Sagnac interferometer sends two beams in opposite directions around a closed optical path. The two
-        counter-propagating beams recombine and produce interference that is sensitive to rotation-induced phase shifts.
+      <p class="subtitle">
+        The Sagnac interferometer splits one laser beam into clockwise and counter-clockwise beams that travel around
+        the same closed optical loop. When the loop rotates, the two beams accumulate a relative phase shift. This page
+        visualizes how rotation rate, loop area, wavelength, visibility, and phase offset change the detector intensity
+        and interference fringe pattern.
       </p>
 
-      <div class="diagram-box">
-        <svg viewBox="0 0 1000 560" role="img" aria-label="Sagnac interferometer schematic">
-          <defs>
-            <marker id="arrowCw" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-              <path d="M0,0 L0,6 L9,3 z" fill="#9eeaff"></path>
-            </marker>
+      <div class="simulation-layout">
+        <section class="diagram-panel">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Large Optical Layout</h2>
 
-            <marker id="arrowCcw" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-              <path d="M0,0 L0,6 L9,3 z" fill="white"></path>
-            </marker>
-          </defs>
+            <div class="legend">
+              <span class="legend-item">
+                <span class="legend-line legend-input"></span>
+                Laser input
+              </span>
+              <span class="legend-item">
+                <span class="legend-line legend-cw"></span>
+                CW beam
+              </span>
+              <span class="legend-item">
+                <span class="legend-line legend-ccw"></span>
+                CCW beam
+              </span>
+              <span class="legend-item">
+                <span class="legend-line legend-output"></span>
+                Detector output
+              </span>
+            </div>
+          </div>
 
-          <line class="optical-line" x1="90" y1="280" x2="305" y2="280" marker-end="url(#arrowCw)"></line>
-          <text class="label" x="75" y="255">Laser</text>
+          <div class="svg-wrap">
+            <svg viewBox="0 0 1360 760" role="img" aria-label="Large Sagnac interferometer simulation schematic">
+              <defs>
+                <marker id="arrowInput" markerWidth="14" markerHeight="14" refX="11" refY="4" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,8 L12,4 z" fill="#ff4f5e"></path>
+                </marker>
 
-          <line class="beam-splitter" x1="315" y1="225" x2="375" y2="335"></line>
-          <text class="small-label" x="295" y="365">Beam Splitter</text>
+                <marker id="arrowCw" markerWidth="14" markerHeight="14" refX="11" refY="4" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,8 L12,4 z" fill="#ff9d2e"></path>
+                </marker>
 
-          <path class="optical-line" d="M 350 280 L 350 120 L 740 120 L 740 420 L 350 420 L 350 300" marker-end="url(#arrowCw)"></path>
+                <marker id="arrowCcw" markerWidth="14" markerHeight="14" refX="11" refY="4" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,8 L12,4 z" fill="#b784ff"></path>
+                </marker>
 
-          <path class="counter-line" d="M 350 300 L 350 420 L 740 420 L 740 120 L 350 120 L 350 280" marker-end="url(#arrowCcw)"></path>
+                <marker id="arrowOutput" markerWidth="14" markerHeight="14" refX="11" refY="4" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,8 L12,4 z" fill="#61ffb5"></path>
+                </marker>
 
-          <line class="mirror" x1="320" y1="115" x2="380" y2="115"></line>
-          <line class="mirror" x1="710" y1="115" x2="770" y2="115"></line>
-          <line class="mirror" x1="710" y1="425" x2="770" y2="425"></line>
-          <line class="mirror" x1="320" y1="425" x2="380" y2="425"></line>
+                <linearGradient id="detectorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(97, 255, 181, 0.32)"></stop>
+                  <stop offset="100%" stop-color="rgba(158, 234, 255, 0.10)"></stop>
+                </linearGradient>
+              </defs>
 
-          <text class="label" x="485" y="92">Closed optical loop</text>
-          <text class="small-label" x="760" y="120">M1</text>
-          <text class="small-label" x="760" y="430">M2</text>
-          <text class="small-label" x="300" y="430">M3</text>
+              <rect class="loop-guide" x="362" y="118" width="710" height="430" rx="24"></rect>
 
-          <line class="optical-line" x1="350" y1="300" x2="350" y2="495" marker-end="url(#arrowCw)"></line>
-          <rect class="component" x="305" y="495" width="90" height="45" rx="10"></rect>
-          <text class="label" x="410" y="525">Detector</text>
+              <path
+                class="rotation-ring"
+                d="M 622 332
+                   A 110 110 0 1 1 621 331">
+              </path>
+              <path class="rotation-arrow" d="M728 316 L755 333 L724 345 Z"></path>
+              <text class="small-label" x="575" y="344">Rotation Ω</text>
 
-          <text class="label" x="500" y="250">CW beam</text>
-          <text class="label" x="500" y="335">CCW beam</text>
-        </svg>
+              <rect class="laser-box" x="55" y="330" width="150" height="82" rx="18"></rect>
+              <text class="label" x="88" y="364">Laser</text>
+              <text class="tiny-label" x="80" y="390">coherent source</text>
+
+              <path class="input-beam" d="M 205 371 L 354 371" marker-end="url(#arrowInput)"></path>
+
+              <rect class="beam-splitter-box" x="345" y="306" width="110" height="130" rx="20"></rect>
+              <line class="beam-splitter-line" x1="362" y1="418" x2="438" y2="324"></line>
+              <text class="small-label" x="322" y="286">50:50 Beam Splitter</text>
+              <text class="tiny-label" x="360" y="462">splits and recombines</text>
+
+              <path
+                class="cw-beam"
+                id="cwPath"
+                d="M 400 330
+                   L 400 142
+                   L 1038 142
+                   L 1038 524
+                   L 400 524
+                   L 400 412"
+                marker-end="url(#arrowCw)">
+              </path>
+
+              <path
+                class="ccw-beam"
+                id="ccwPath"
+                d="M 400 412
+                   L 400 524
+                   L 1038 524
+                   L 1038 142
+                   L 400 142
+                   L 400 330"
+                marker-end="url(#arrowCcw)">
+              </path>
+
+              <path class="cw-beam" d="M 620 142 L 760 142" marker-end="url(#arrowCw)"></path>
+              <path class="cw-beam" d="M 1038 250 L 1038 372" marker-end="url(#arrowCw)"></path>
+              <path class="cw-beam" d="M 815 524 L 675 524" marker-end="url(#arrowCw)"></path>
+
+              <path class="ccw-beam" d="M 400 480 L 400 374" marker-end="url(#arrowCcw)"></path>
+              <path class="ccw-beam" d="M 650 524 L 790 524" marker-end="url(#arrowCcw)"></path>
+              <path class="ccw-beam" d="M 1038 382 L 1038 260" marker-end="url(#arrowCcw)"></path>
+
+              <g>
+                <line class="mirror-back" x1="372" y1="108" x2="432" y2="168"></line>
+                <line class="mirror-body" x1="385" y1="121" x2="445" y2="181"></line>
+                <text class="small-label" x="332" y="116">M1</text>
+              </g>
+
+              <g>
+                <line class="mirror-back" x1="1008" y1="168" x2="1068" y2="108"></line>
+                <line class="mirror-body" x1="995" y1="181" x2="1055" y2="121"></line>
+                <text class="small-label" x="1080" y="116">M2</text>
+              </g>
+
+              <g>
+                <line class="mirror-back" x1="1068" y1="558" x2="1008" y2="498"></line>
+                <line class="mirror-body" x1="1055" y1="545" x2="995" y2="485"></line>
+                <text class="small-label" x="1080" y="558">M3</text>
+              </g>
+
+              <g>
+                <line class="mirror-back" x1="432" y1="498" x2="372" y2="558"></line>
+                <line class="mirror-body" x1="445" y1="485" x2="385" y2="545"></line>
+                <text class="small-label" x="332" y="558">M4</text>
+              </g>
+
+              <text class="label" x="610" y="102">Closed optical loop</text>
+              <text class="small-label" x="630" y="185">CW beam travels clockwise</text>
+              <text class="small-label" x="612" y="586">CCW beam travels counter-clockwise</text>
+
+              <path class="output-beam" d="M 400 412 L 400 650" marker-end="url(#arrowOutput)"></path>
+
+              <rect class="detector-box" x="310" y="650" width="180" height="72" rx="18"></rect>
+              <text class="label" x="346" y="694">Detector</text>
+              <text class="tiny-label" x="510" y="690">recombined interference signal</text>
+
+              <rect x="1115" y="258" width="190" height="155" rx="24"
+                    fill="rgba(0,0,0,0.36)"
+                    stroke="rgba(255,255,255,0.28)"
+                    stroke-width="2"></rect>
+              <text class="small-label" x="1146" y="294">Optical components</text>
+              <circle cx="1145" cy="326" r="8" fill="#ff4f5e"></circle>
+              <text class="tiny-label" x="1162" y="331">Laser</text>
+              <circle cx="1145" cy="356" r="8" fill="#5deeff"></circle>
+              <text class="tiny-label" x="1162" y="361">Beam splitter</text>
+              <circle cx="1145" cy="386" r="8" fill="#f8f7d7"></circle>
+              <text class="tiny-label" x="1162" y="391">Mirrors</text>
+            </svg>
+          </div>
+
+          <div class="detector-display">
+            <div class="fringe-card">
+              <h3>Detector interference pattern</h3>
+              <canvas id="fringeCanvas" width="720" height="220"></canvas>
+            </div>
+
+            <div class="meter-card">
+              <h3>Detector output</h3>
+
+              <div class="intensity-bar-wrap">
+                <div class="intensity-bar" id="intensityBar"></div>
+              </div>
+
+              <div class="readout-grid">
+                <div class="readout">
+                  <span class="readout-name">Normalized intensity</span>
+                  <span class="readout-value" id="intensityValue">0.500</span>
+                </div>
+
+                <div class="readout">
+                  <span class="readout-name">Display phase</span>
+                  <span class="readout-value" id="phaseValue">0.000 rad</span>
+                </div>
+
+                <div class="readout">
+                  <span class="readout-name">Physical Δφ</span>
+                  <span class="readout-value" id="physicalPhaseValue">0.000e+0 rad</span>
+                </div>
+
+                <div class="readout">
+                  <span class="readout-name">Fringe contrast</span>
+                  <span class="readout-value" id="contrastValue">80%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="control-panel">
+          <h2>Simulation controls</h2>
+
+          <p class="control-description">
+            Move the sliders to observe how the Sagnac phase shift changes the detector intensity and fringe pattern.
+            The true Sagnac phase can be very small for laboratory-scale parameters, so a simulation gain is included
+            to make the phase-dependent detector response visually clear.
+          </p>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label" for="omegaSlider">Rotation rate Ω</label>
+              <span class="control-value" id="omegaText">25 rad/s</span>
+            </div>
+            <input type="range" id="omegaSlider" min="-100" max="100" step="1" value="25">
+            <p class="control-note">Increasing Ω shifts the relative phase between CW and CCW beams.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label" for="areaSlider">Loop area A</label>
+              <span class="control-value" id="areaText">0.80 m²</span>
+            </div>
+            <input type="range" id="areaSlider" min="0.05" max="3.00" step="0.05" value="0.80">
+            <p class="control-note">A larger enclosed loop area increases Sagnac sensitivity.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label" for="lambdaSlider">Wavelength λ</label>
+              <span class="control-value" id="lambdaText">785 nm</span>
+            </div>
+            <input type="range" id="lambdaSlider" min="500" max="950" step="5" value="785">
+            <p class="control-note">Shorter wavelength produces a larger phase shift for the same rotation.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label" for="visibilitySlider">Visibility V</label>
+              <span class="control-value" id="visibilityText">80%</span>
+            </div>
+            <input type="range" id="visibilitySlider" min="0" max="1" step="0.01" value="0.80">
+            <p class="control-note">Visibility controls the contrast of the interference fringe.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label" for="phaseSlider">Phase offset φ₀</label>
+              <span class="control-value" id="phaseText">0.00 rad</span>
+            </div>
+            <input type="range" id="phaseSlider" min="-3.1416" max="3.1416" step="0.01" value="0">
+            <p class="control-note">Phase offset shifts the detector operating point.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label class="control-label" for="gainSlider">Simulation gain</label>
+              <span class="control-value" id="gainText">1.0 × 10⁶</span>
+            </div>
+            <input type="range" id="gainSlider" min="0" max="8" step="0.1" value="6">
+            <p class="control-note">This gain only amplifies the visualized phase response. It does not change the physical equation.</p>
+          </div>
+
+          <div class="equation-box">
+            <strong>Sagnac phase model used in this page</strong>
+            <span class="equation">Δφ = 8πAΩ / λc</span>
+            <span class="equation">I = 0.5 × [1 + V cos(Δφ + φ₀)]</span>
+            <div>
+              A: loop area, Ω: angular velocity, λ: wavelength, c: speed of light,
+              V: interference visibility.
+            </div>
+          </div>
+        </aside>
       </div>
 
       <a class="back-link" href="oct.html">← Back to OCT Page</a>
     </div>
   </div>
+
+  <script>
+    const c = 299792458;
+
+    const omegaSlider = document.getElementById("omegaSlider");
+    const areaSlider = document.getElementById("areaSlider");
+    const lambdaSlider = document.getElementById("lambdaSlider");
+    const visibilitySlider = document.getElementById("visibilitySlider");
+    const phaseSlider = document.getElementById("phaseSlider");
+    const gainSlider = document.getElementById("gainSlider");
+
+    const omegaText = document.getElementById("omegaText");
+    const areaText = document.getElementById("areaText");
+    const lambdaText = document.getElementById("lambdaText");
+    const visibilityText = document.getElementById("visibilityText");
+    const phaseText = document.getElementById("phaseText");
+    const gainText = document.getElementById("gainText");
+
+    const intensityValue = document.getElementById("intensityValue");
+    const phaseValue = document.getElementById("phaseValue");
+    const physicalPhaseValue = document.getElementById("physicalPhaseValue");
+    const contrastValue = document.getElementById("contrastValue");
+    const intensityBar = document.getElementById("intensityBar");
+
+    const canvas = document.getElementById("fringeCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function formatScientific(value) {
+      if (Math.abs(value) < 1e-12) {
+        return "0.000e+0";
+      }
+      return value.toExponential(3);
+    }
+
+    function drawFringe(displayPhase, visibility, intensity) {
+      const width = canvas.width;
+      const height = canvas.height;
+
+      const imageData = ctx.createImageData(width, height);
+      const data = imageData.data;
+
+      const spatialFrequency = 8.0;
+      const centerY = height / 2;
+
+      for (let y = 0; y < height; y++) {
+        const verticalEnvelope = Math.exp(-Math.pow((y - centerY) / (height * 0.36), 2));
+
+        for (let x = 0; x < width; x++) {
+          const phase = 2 * Math.PI * spatialFrequency * (x / width) + displayPhase;
+          const fringe = 0.5 * (1 + visibility * Math.cos(phase));
+          const vignette = 0.72 + 0.28 * verticalEnvelope;
+          const brightness = Math.max(0, Math.min(1, fringe * vignette));
+
+          const index = (y * width + x) * 4;
+
+          data[index] = Math.floor(20 + 120 * brightness + 70 * intensity);
+          data[index + 1] = Math.floor(35 + 185 * brightness + 35 * intensity);
+          data[index + 2] = Math.floor(65 + 175 * brightness);
+          data[index + 3] = 255;
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+
+      ctx.save();
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, 1);
+      ctx.fillRect(0, height - 1, width, 1);
+      ctx.restore();
+
+      ctx.save();
+      ctx.fillStyle = "rgba(255, 255, 255, 0.90)";
+      ctx.font = "18px Arial";
+      ctx.fillText("Detector fringe shifts as Δφ changes", 22, 34);
+      ctx.restore();
+    }
+
+    function updateSimulation() {
+      const omega = Number(omegaSlider.value);
+      const area = Number(areaSlider.value);
+      const lambdaNm = Number(lambdaSlider.value);
+      const lambdaM = lambdaNm * 1e-9;
+      const visibility = Number(visibilitySlider.value);
+      const phaseOffset = Number(phaseSlider.value);
+      const gainPower = Number(gainSlider.value);
+      const gain = Math.pow(10, gainPower);
+
+      const physicalPhase = (8 * Math.PI * area * omega) / (lambdaM * c);
+      const displayPhase = physicalPhase * gain + phaseOffset;
+      const intensity = 0.5 * (1 + visibility * Math.cos(displayPhase));
+
+      omegaText.textContent = `${omega.toFixed(0)} rad/s`;
+      areaText.textContent = `${area.toFixed(2)} m²`;
+      lambdaText.textContent = `${lambdaNm.toFixed(0)} nm`;
+      visibilityText.textContent = `${Math.round(visibility * 100)}%`;
+      phaseText.textContent = `${phaseOffset.toFixed(2)} rad`;
+
+      if (gainPower === 0) {
+        gainText.textContent = "1";
+      } else {
+        gainText.textContent = `1.0 × 10⁶`.replace("6", gainPower.toFixed(1).replace(".0", ""));
+      }
+
+      intensityValue.textContent = intensity.toFixed(3);
+      phaseValue.textContent = `${displayPhase.toFixed(3)} rad`;
+      physicalPhaseValue.textContent = `${formatScientific(physicalPhase)} rad`;
+      contrastValue.textContent = `${Math.round(visibility * 100)}%`;
+
+      intensityBar.style.width = `${Math.max(1, Math.min(100, intensity * 100))}%`;
+
+      drawFringe(displayPhase, visibility, intensity);
+    }
+
+    omegaSlider.addEventListener("input", updateSimulation);
+    areaSlider.addEventListener("input", updateSimulation);
+    lambdaSlider.addEventListener("input", updateSimulation);
+    visibilitySlider.addEventListener("input", updateSimulation);
+    phaseSlider.addEventListener("input", updateSimulation);
+    gainSlider.addEventListener("input", updateSimulation);
+
+    updateSimulation();
+  </script>
 </body>
 </html>
