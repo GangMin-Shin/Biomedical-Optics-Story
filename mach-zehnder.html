@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Mach-Zehnder Interferometer Simulation</title>
 
   <style>
@@ -43,6 +44,53 @@
         0 0 18px rgba(150, 230, 255, 0.18),
         0 0 42px rgba(115, 140, 255, 0.16);
       backdrop-filter: blur(4px);
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 128px;
+      padding: 11px 19px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.20),
+        inset 0 0 8px rgba(255, 255, 255, 0.05);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.19);
+      transform: translateY(-2px);
+      border-color: rgba(158, 234, 255, 0.95);
+      box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.40),
+        0 0 24px rgba(102, 204, 255, 0.42),
+        inset 0 0 10px rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-button.back:hover {
+      transform: translateX(-4px);
     }
 
     h1 {
@@ -121,13 +169,6 @@
       text-shadow:
         0 0 10px rgba(134, 214, 255, 0.45),
         0 0 18px rgba(134, 214, 255, 0.20);
-    }
-
-    .panel-subtitle {
-      margin: 0 0 10px;
-      font-size: 20px;
-      font-weight: 700;
-      color: #d9f4ff;
     }
 
     .control-group {
@@ -283,30 +324,6 @@
       color: #d9f4ff;
     }
 
-    .back-link {
-      display: inline-block;
-      margin-top: 18px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #ffffff;
-      padding: 11px 18px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.62);
-      background: rgba(255, 255, 255, 0.08);
-      transition:
-        background 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-    }
-
-    .back-link:hover {
-      background: rgba(255, 255, 255, 0.16);
-      transform: translateX(-4px);
-      box-shadow:
-        0 0 10px rgba(255, 255, 255, 0.35),
-        0 0 20px rgba(134, 214, 255, 0.25);
-    }
-
     /* SVG styles */
     .svg-label {
       fill: #ffffff;
@@ -314,7 +331,7 @@
       font-weight: 800;
       font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
       paint-order: stroke;
-      stroke: rgba(0, 0, 0, 0.55);
+      stroke: rgba(0, 0, 0, 0.58);
       stroke-width: 3px;
     }
 
@@ -324,7 +341,7 @@
       font-weight: 700;
       font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
       paint-order: stroke;
-      stroke: rgba(0, 0, 0, 0.55);
+      stroke: rgba(0, 0, 0, 0.58);
       stroke-width: 2.5px;
     }
 
@@ -336,15 +353,27 @@
     }
 
     .input-beam {
-      stroke: rgba(255, 40, 40, 0.95);
+      stroke: rgba(255, 35, 35, 0.96);
       stroke-width: 16;
-      filter: drop-shadow(0 0 12px rgba(255, 80, 80, 0.60));
+      filter: drop-shadow(0 0 12px rgba(255, 80, 80, 0.62));
     }
 
-    .arm-beam {
-      stroke: rgba(255, 140, 150, 0.78);
+    .transmitted-beam {
+      stroke: rgba(255, 135, 145, 0.82);
       stroke-width: 16;
-      filter: drop-shadow(0 0 10px rgba(255, 165, 175, 0.35));
+      filter: drop-shadow(0 0 10px rgba(255, 165, 175, 0.34));
+    }
+
+    .reflected-beam {
+      stroke: rgba(255, 95, 120, 0.74);
+      stroke-width: 16;
+      filter: drop-shadow(0 0 10px rgba(255, 130, 150, 0.30));
+    }
+
+    .sample-beam {
+      stroke: rgba(255, 150, 170, 0.82);
+      stroke-width: 16;
+      filter: drop-shadow(0 0 12px rgba(255, 180, 190, 0.38));
     }
 
     .output1-beam {
@@ -362,7 +391,7 @@
     .dir-arrow {
       fill: none;
       stroke: rgba(35, 35, 35, 0.95);
-      stroke-width: 4.5;
+      stroke-width: 4.2;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
@@ -405,6 +434,26 @@
       filter: drop-shadow(0 0 8px rgba(255, 204, 102, 0.55));
     }
 
+    .sample-cell {
+      stroke: #ffc2dd;
+      stroke-width: 4;
+      fill: rgba(255, 130, 190, 0.15);
+      filter: drop-shadow(0 0 12px rgba(255, 130, 190, 0.35));
+    }
+
+    .sample-inner {
+      stroke: rgba(255, 255, 255, 0.60);
+      stroke-width: 2;
+      fill: rgba(255, 255, 255, 0.08);
+    }
+
+    .sample-wave {
+      stroke: rgba(255, 235, 245, 0.72);
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+    }
+
     .detector-body {
       stroke: #97ff7a;
       stroke-width: 4;
@@ -413,9 +462,20 @@
     }
 
     .detector-screen {
-      stroke: rgba(255, 255, 255, 0.35);
+      stroke: rgba(255, 255, 255, 0.38);
       stroke-width: 2;
-      fill: rgba(255, 255, 255, 0.05);
+      fill: rgba(0, 0, 0, 0.34);
+    }
+
+    .ccd-pixel {
+      stroke: rgba(255, 255, 255, 0.11);
+      stroke-width: 0.8;
+    }
+
+    .ccd-frame-line {
+      stroke: rgba(255, 255, 255, 0.28);
+      stroke-width: 2;
+      fill: none;
     }
 
     .preview-stripe {
@@ -475,29 +535,46 @@
       .result-grid {
         grid-template-columns: 1fr;
       }
+
+      .nav-button {
+        min-width: auto;
+        font-size: 16px;
+        padding: 10px 16px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="page-container">
     <div class="content-card">
+      <nav class="top-nav" aria-label="page navigation">
+        <a class="nav-button home" href="index.html">⌂ Home</a>
+        <a class="nav-button back" href="oct.html">← Back to OCT Page</a>
+      </nav>
+
       <h1>Mach-Zehnder Interferometer Simulation</h1>
 
       <p class="top-description">
         아래 시뮬레이션은 <strong>Mach-Zehnder Interferometer</strong>의 transmissive geometry를 바탕으로,
         두 arm에서 생긴 <strong>optical path difference</strong>가 두 개의 complementary output에서
         어떤 간섭 패턴으로 나타나는지를 보여줍니다.
-        오른쪽 슬라이더를 조절하면 Detector 1과 Detector 2의 fringe pattern, intensity, contrast가 함께 변합니다.
+        여기서 ΔL은 M1을 움직이는 방식이 아니라, <strong>sample arm에 sample 또는 phase plate가 삽입되어 optical path가 바뀌는 상황</strong>으로 표현했습니다.
       </p>
 
       <div class="simulation-layout">
-        <!-- LEFT: BIG OPTICAL CIRCUIT -->
         <div class="diagram-box">
           <svg viewBox="0 0 1650 980" role="img" aria-label="Mach-Zehnder Interferometer schematic">
             <defs>
-              <marker id="smallArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
-                <path d="M0,0 L0,10 L8,5 z" fill="rgba(35,35,35,0.95)"></path>
+              <marker id="smallArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M0,0 L0,8 L7,4 z" fill="rgba(35,35,35,0.95)"></path>
               </marker>
+
+              <linearGradient id="ccdBodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="rgba(170,255,150,0.24)" />
+                <stop offset="45%" stop-color="rgba(60,120,80,0.12)" />
+                <stop offset="100%" stop-color="rgba(20,40,30,0.30)" />
+              </linearGradient>
             </defs>
 
             <!-- Laser -->
@@ -507,9 +584,8 @@
               <text class="svg-label" x="87" y="160">Laser</text>
             </g>
 
-            <!-- Main beams (reference image style) -->
-            <!-- Input beam -->
-            <line class="beam-main input-beam" x1="18" y1="216" x2="370" y2="216"></line>
+            <!-- Main input beam -->
+            <line class="beam-main input-beam" x1="18" y1="216" x2="407" y2="216"></line>
 
             <!-- BS1 -->
             <g id="bs1Group">
@@ -518,21 +594,21 @@
               <text class="svg-label" x="328" y="340">BS1</text>
             </g>
 
-            <!-- Upper horizontal arm -->
-            <line class="beam-main arm-beam" x1="406" y1="216" x2="1120" y2="216"></line>
+            <!-- BS1 transmitted beam: straight to M1 -->
+            <line class="beam-main transmitted-beam" x1="407" y1="216" x2="1157" y2="216"></line>
 
-            <!-- Left vertical arm down -->
-            <line class="beam-main arm-beam" x1="406" y1="228" x2="406" y2="615"></line>
+            <!-- BS1 reflected beam: downward to M2 -->
+            <line class="beam-main reflected-beam" x1="407" y1="216" x2="407" y2="585"></line>
 
             <!-- M1 top-right -->
             <g id="m1Group">
-              <line class="mirror-back" id="m1Back" x1="1105" y1="158" x2="1185" y2="240"></line>
-              <line class="mirror-front" id="m1Front" x1="1117" y1="152" x2="1197" y2="234"></line>
+              <line class="mirror-back" x1="1105" y1="158" x2="1185" y2="240"></line>
+              <line class="mirror-front" x1="1117" y1="152" x2="1197" y2="234"></line>
               <text class="svg-label" x="1188" y="150">M1</text>
             </g>
 
-            <!-- Right vertical arm down -->
-            <line class="beam-main arm-beam" id="rightVerticalBeam" x1="1158" y1="216" x2="1158" y2="585"></line>
+            <!-- M1 reflected beam: downward to BS2 -->
+            <line class="beam-main reflected-beam" x1="1157" y1="216" x2="1157" y2="585"></line>
 
             <!-- M2 bottom-left -->
             <g id="m2Group">
@@ -541,8 +617,17 @@
               <text class="svg-label" x="250" y="650">M2</text>
             </g>
 
-            <!-- Lower horizontal arm -->
-            <line class="beam-main arm-beam" x1="406" y1="585" x2="1034" y2="585"></line>
+            <!-- M2 reflected beam: straight to BS2, sample arm -->
+            <line class="beam-main sample-beam" x1="407" y1="585" x2="1075" y2="585"></line>
+
+            <!-- Sample / phase plate inserted in sample arm -->
+            <g id="sampleGroup">
+              <rect class="sample-cell" id="sampleCell" x="670" y="526" width="190" height="118" rx="18"></rect>
+              <rect class="sample-inner" id="sampleInner" x="698" y="548" width="134" height="74" rx="12"></rect>
+              <path class="sample-wave" id="sampleWave1" d="M710 568 C730 548, 750 588, 770 568 C790 548, 810 588, 830 568"></path>
+              <path class="sample-wave" id="sampleWave2" d="M710 602 C730 582, 750 622, 770 602 C790 582, 810 622, 830 602"></path>
+              <text class="svg-label" x="688" y="500">Sample</text>
+            </g>
 
             <!-- BS2 -->
             <g id="bs2Group">
@@ -551,81 +636,71 @@
               <text class="svg-label" x="1082" y="710">BS2</text>
             </g>
 
-            <!-- Output beams -->
-            <line class="beam-main output1-beam" id="out1Beam" x1="1096" y1="585" x2="1465" y2="585"></line>
-            <line class="beam-main output2-beam" id="out2Beam" x1="1078" y1="605" x2="1078" y2="882"></line>
+            <!-- BS2 outputs -->
+            <line class="beam-main output1-beam" id="out1Beam" x1="1078" y1="585" x2="1465" y2="585"></line>
+            <line class="beam-main output2-beam" id="out2Beam" x1="1078" y1="585" x2="1078" y2="882"></line>
 
             <!-- Direction arrows offset from main beam -->
-            <!-- Input / right-going -->
             <line class="dir-arrow" x1="95" y1="195" x2="170" y2="195" marker-end="url(#smallArrow)"></line>
-            <line class="dir-arrow" x1="580" y1="195" x2="655" y2="195" marker-end="url(#smallArrow)"></line>
-
-            <!-- Down-going -->
-            <line class="dir-arrow" x1="426" y1="320" x2="426" y2="410" marker-end="url(#smallArrow)"></line>
-            <line class="dir-arrow" id="rightDirArrow" x1="1178" y1="320" x2="1178" y2="410" marker-end="url(#smallArrow)"></line>
-
-            <!-- lower horizontal / right-going -->
-            <line class="dir-arrow" x1="650" y1="565" x2="735" y2="565" marker-end="url(#smallArrow)"></line>
-
-            <!-- right output / right-going shown above -->
-            <line class="dir-arrow" x1="1235" y1="565" x2="1315" y2="565" marker-end="url(#smallArrow)"></line>
-
-            <!-- bottom output / down-going shown right side -->
-            <line class="dir-arrow" x1="1100" y1="725" x2="1100" y2="805" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="560" y1="195" x2="650" y2="195" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="426" y1="318" x2="426" y2="410" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="1178" y1="318" x2="1178" y2="410" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="535" y1="565" x2="625" y2="565" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="1235" y1="565" x2="1325" y2="565" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="1100" y1="725" x2="1100" y2="812" marker-end="url(#smallArrow)"></line>
 
             <!-- U labels -->
             <text class="svg-small-label" x="28" y="275">U₀</text>
             <text class="svg-small-label" x="1370" y="540">U₁</text>
             <text class="svg-small-label" x="1370" y="630">U₂</text>
-            <text class="svg-small-label" x="965" y="900">U′₁</text>
-            <text class="svg-small-label" x="1105" y="900">U′₂</text>
+            <text class="svg-small-label" x="962" y="900">U′₁</text>
+            <text class="svg-small-label" x="1104" y="900">U′₂</text>
 
-            <!-- Detectors -->
+            <!-- Detector 1 CCD-like screen -->
             <g id="det1Group">
-              <rect class="detector-body" x="1465" y="528" width="115" height="116" rx="18"></rect>
-              <rect class="detector-screen" x="1484" y="545" width="77" height="82" rx="10"></rect>
-              <text class="svg-label" x="1420" y="690">D1</text>
-
+              <rect class="guide-box" x="1428" y="500" width="176" height="236" rx="18"></rect>
+              <rect class="detector-body" x="1465" y="528" width="120" height="126" rx="18" fill="url(#ccdBodyGradient)"></rect>
+              <rect class="detector-screen" x="1483" y="545" width="84" height="90" rx="10"></rect>
+              <g id="ccdGridD1"></g>
               <g id="previewD1"></g>
+              <rect class="ccd-frame-line" x="1483" y="545" width="84" height="90" rx="10"></rect>
+              <text class="svg-label" x="1420" y="695">D1</text>
+              <text class="mini-caption" x="1440" y="750">CCD-like Detector 1</text>
             </g>
 
+            <!-- Detector 2 CCD-like screen -->
             <g id="det2Group">
-              <rect class="detector-body" x="1018" y="882" width="120" height="84" rx="18"></rect>
-              <rect class="detector-screen" x="1036" y="899" width="84" height="48" rx="8"></rect>
-              <text class="svg-label" x="1148" y="944">D2</text>
-
+              <rect class="guide-box" x="970" y="852" width="276" height="114" rx="18"></rect>
+              <rect class="detector-body" x="1018" y="882" width="126" height="84" rx="18" fill="url(#ccdBodyGradient)"></rect>
+              <rect class="detector-screen" x="1036" y="899" width="90" height="48" rx="8"></rect>
+              <g id="ccdGridD2"></g>
               <g id="previewD2"></g>
+              <rect class="ccd-frame-line" x="1036" y="899" width="90" height="48" rx="8"></rect>
+              <text class="svg-label" x="1154" y="944">D2</text>
+              <text class="mini-caption" x="980" y="835">CCD-like Detector 2</text>
             </g>
-
-            <!-- Detector guide boxes -->
-            <rect class="guide-box" x="1428" y="500" width="176" height="220" rx="18"></rect>
-            <text class="mini-caption" x="1450" y="742">Detector 1 output</text>
-
-            <rect class="guide-box" x="972" y="852" width="260" height="106" rx="18"></rect>
-            <text class="mini-caption" x="982" y="835">Detector 2 output</text>
           </svg>
 
           <div class="diagram-note">
-            <strong>회로 해석:</strong> BS1에서 입력광 <strong>U₀</strong>가 두 arm으로 분리되고, M1과 M2에서 반사된 뒤
-            BS2에서 다시 recombination 됩니다. 그 결과 BS2의 오른쪽 출력(<strong>D1</strong>)과 아래쪽 출력(<strong>D2</strong>)에서
-            서로 complementary한 간섭 결과가 나타납니다.
+            <strong>회로 해석:</strong> BS1에서 입력광 <strong>U₀</strong>가 transmitted beam과 reflected beam으로 나뉩니다.
+            위쪽 arm은 M1에서 반사되어 BS2로 내려오고, 아래쪽 sample arm은 M2에서 반사된 뒤 sample을 통과하여 BS2로 들어갑니다.
+            BS2에서 두 beam이 recombination 되며, 오른쪽 출력 <strong>D1</strong>과 아래쪽 출력 <strong>D2</strong>는 complementary output으로 나타납니다.
           </div>
         </div>
 
-        <!-- RIGHT PANEL -->
         <div class="right-panel">
           <div class="panel-box">
             <h2 class="panel-title">시뮬레이션 제어</h2>
 
             <div class="control-group">
               <div class="control-label">
-                <span>Optical path difference, ΔL</span>
+                <span>Sample-induced optical path difference, ΔL</span>
                 <span class="control-value" id="pathValue">0.00 μm</span>
               </div>
               <input id="pathSlider" type="range" min="-5" max="5" value="0" step="0.01" />
               <div class="control-help">
-                M1을 아주 조금 움직이거나, 한 arm의 굴절률/경로 길이가 바뀐 상황을 단순화해서 표현한 값입니다.
-                ΔL이 변하면 fringe 전체가 좌우로 shift 됩니다.
+                M1을 움직이는 것이 아니라, 아래쪽 sample arm에 삽입된 sample 또는 phase plate 때문에 생기는 optical path difference입니다.
+                ΔL이 변하면 sample plate의 두께 표현, fringe 위치, D1/D2 출력 세기가 함께 변합니다.
               </div>
             </div>
 
@@ -647,8 +722,7 @@
               </div>
               <input id="frequencySlider" type="range" min="2" max="18" value="7" step="0.1" />
               <div class="control-help">
-                Detector의 줄무늬가 얼마나 촘촘한지를 의미합니다.
-                값을 올리면 <strong>D1, D2 미리보기 화면과 아래 detector canvas</strong>에서 fringe가 더 촘촘해집니다.
+                Detector 화면의 줄무늬가 얼마나 촘촘한지를 의미합니다. 값을 올리면 D1, D2의 CCD-like screen과 아래 canvas에서 fringe가 더 촘촘해집니다.
               </div>
             </div>
 
@@ -659,8 +733,7 @@
               </div>
               <input id="visibilitySlider" type="range" min="0" max="1" value="0.90" step="0.01" />
               <div class="control-help">
-                fringe contrast를 의미합니다. 값을 낮추면 bright / dark 차이가 줄어들고,
-                출력 beam의 강조 효과와 detector preview contrast도 함께 약해집니다.
+                fringe contrast를 의미합니다. 값을 낮추면 bright/dark 차이가 줄어들고, CCD-like screen과 canvas의 contrast도 함께 약해집니다.
               </div>
             </div>
 
@@ -689,7 +762,7 @@
             <div class="equation-box">
               <div class="equation-title">사용한 식</div>
               <div class="equation-line">I₁(x) = I₀ / 2 · [1 + V cos(2πfx + Δφ)]</div>
-              <div class="equation-line">I₂(x) = I₀ / 2 · [1 - V cos(2πfx + Δφ)]</div>
+              <div class="equation-line">I₂(x) = I₀ / 2 · [1 − V cos(2πfx + Δφ)]</div>
               <div class="equation-line">Δφ = 2πΔL / λ</div>
             </div>
           </div>
@@ -707,20 +780,21 @@
             <h2 class="panel-title">구성요소 설명</h2>
             <div class="component-grid">
               <div class="component-item"><strong>Laser</strong> : coherent light source입니다.</div>
-              <div class="component-item"><strong>BS1</strong> : 입력광을 두 arm으로 분리하는 첫 번째 beam splitter입니다.</div>
-              <div class="component-item"><strong>M1, M2</strong> : 각 arm의 빛을 반사시켜 BS2로 보내는 mirror입니다.</div>
-              <div class="component-item"><strong>BS2</strong> : 두 arm의 빛을 다시 recombination 시키는 두 번째 beam splitter입니다.</div>
-              <div class="component-item"><strong>D1, D2</strong> : recombination 이후 나타나는 두 개의 complementary output을 측정하는 detector입니다.</div>
+              <div class="component-item"><strong>BS1</strong> : 입력광을 transmitted beam과 reflected beam으로 나누는 첫 번째 beam splitter입니다.</div>
+              <div class="component-item"><strong>M1, M2</strong> : 각 arm의 빛을 BS2 방향으로 반사시키는 mirror입니다.</div>
+              <div class="component-item"><strong>Sample</strong> : sample arm의 optical path length를 바꾸는 phase object 또는 phase plate입니다.</div>
+              <div class="component-item"><strong>BS2</strong> : 두 arm의 빛을 recombination 시키는 두 번째 beam splitter입니다.</div>
+              <div class="component-item"><strong>D1, D2</strong> : recombination 이후 나타나는 두 개의 complementary output을 측정하는 CCD-like detector입니다.</div>
             </div>
           </div>
 
           <div class="panel-box">
             <h2 class="panel-title">이 간섭계로 볼 수 있는 것</h2>
             <ul class="info-list">
-              <li><strong>Phase difference</strong> : 두 arm 사이의 위상차를 직접적으로 관찰할 수 있습니다.</li>
-              <li><strong>미세 변위(displacement)</strong> : mirror나 sample 위치가 조금만 바뀌어도 fringe가 이동합니다.</li>
+              <li><strong>Phase difference</strong> : 두 arm 사이의 위상차를 관찰할 수 있습니다.</li>
+              <li><strong>Sample-induced optical path change</strong> : sample의 두께, 굴절률 변화가 fringe shift로 나타납니다.</li>
+              <li><strong>미세 변위(displacement)</strong> : sample이나 optical element 위치 변화가 phase 변화로 나타납니다.</li>
               <li><strong>굴절률 변화(refractive index change)</strong> : sample arm 안의 매질 변화가 optical path length를 바꿉니다.</li>
-              <li><strong>박막 또는 투명 시료의 두께 변화</strong> : 경로차 변화로 간섭 패턴이 바뀝니다.</li>
               <li><strong>coherence / alignment 상태</strong> : visibility가 낮아지면 fringe contrast가 줄어들어 정렬이나 coherence 상태를 가늠할 수 있습니다.</li>
             </ul>
           </div>
@@ -728,16 +802,14 @@
           <div class="panel-box">
             <h2 class="panel-title">슬라이더 변화가 회로에서 어떻게 보이는가</h2>
             <ul class="info-list">
-              <li><strong>ΔL</strong> : phase가 바뀌므로 D1, D2의 밝기 분배와 fringe 위치가 바뀝니다.</li>
-              <li><strong>Fringe spatial frequency</strong> : D1, D2 detector screen과 canvas의 줄무늬 간격이 직접 바뀝니다.</li>
+              <li><strong>ΔL</strong> : sample plate의 두께 표현이 바뀌고, D1/D2 fringe 위치와 출력 세기가 함께 변합니다.</li>
+              <li><strong>Fringe spatial frequency</strong> : D1, D2 CCD-like screen과 canvas의 줄무늬 간격이 직접 바뀝니다.</li>
               <li><strong>Visibility, V</strong> : detector preview와 canvas에서 bright/dark contrast가 약해지거나 강해집니다.</li>
-              <li><strong>λ</strong> : 같은 ΔL에서도 fringe shift 민감도가 달라집니다.</li>
+              <li><strong>λ</strong> : 같은 ΔL에서도 phase shift 민감도가 달라집니다.</li>
             </ul>
           </div>
         </div>
       </div>
-
-      <a class="back-link" href="oct.html">← Back to OCT Page</a>
     </div>
   </div>
 
@@ -762,15 +834,16 @@
 
     const previewD1 = document.getElementById("previewD1");
     const previewD2 = document.getElementById("previewD2");
+    const ccdGridD1 = document.getElementById("ccdGridD1");
+    const ccdGridD2 = document.getElementById("ccdGridD2");
 
     const out1Beam = document.getElementById("out1Beam");
     const out2Beam = document.getElementById("out2Beam");
 
-    const rightVerticalBeam = document.getElementById("rightVerticalBeam");
-    const rightDirArrow = document.getElementById("rightDirArrow");
-
-    const m1Front = document.getElementById("m1Front");
-    const m1Back = document.getElementById("m1Back");
+    const sampleCell = document.getElementById("sampleCell");
+    const sampleInner = document.getElementById("sampleInner");
+    const sampleWave1 = document.getElementById("sampleWave1");
+    const sampleWave2 = document.getElementById("sampleWave2");
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
@@ -808,6 +881,7 @@
       }
 
       let factor = 1;
+
       if (wavelength >= 380 && wavelength < 420) {
         factor = 0.3 + 0.7 * (wavelength - 380) / (420 - 380);
       } else if (wavelength >= 420 && wavelength < 701) {
@@ -823,49 +897,118 @@
       return { r, g, b };
     }
 
-    function createPreviewStripes(group, x, y, width, height, count, horizontal = false) {
+    function createCCDGrid(group, x, y, width, height, cols, rows) {
       group.innerHTML = "";
-      for (let i = 0; i < count; i++) {
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        rect.setAttribute("class", "preview-stripe");
-        rect.dataset.index = i;
 
-        if (!horizontal) {
-          const stripeW = width / count;
-          rect.setAttribute("x", x + i * stripeW);
-          rect.setAttribute("y", y);
-          rect.setAttribute("width", Math.max(1, stripeW - 1.2));
-          rect.setAttribute("height", height);
-        } else {
-          const stripeH = height / count;
-          rect.setAttribute("x", x);
-          rect.setAttribute("y", y + i * stripeH);
-          rect.setAttribute("width", width);
-          rect.setAttribute("height", Math.max(1, stripeH - 1.2));
+      const pixelW = width / cols;
+      const pixelH = height / rows;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("class", "ccd-pixel");
+          rect.setAttribute("x", x + col * pixelW);
+          rect.setAttribute("y", y + row * pixelH);
+          rect.setAttribute("width", pixelW);
+          rect.setAttribute("height", pixelH);
+          rect.setAttribute("fill", "rgba(0,0,0,0.28)");
+          group.appendChild(rect);
         }
-
-        group.appendChild(rect);
       }
     }
 
-    createPreviewStripes(previewD1, 1488, 549, 69, 74, 12, false);
-    createPreviewStripes(previewD2, 1040, 903, 76, 40, 10, false);
+    function createPreviewPixels(group, x, y, width, height, cols, rows) {
+      group.innerHTML = "";
 
-    function updatePreview(group, phase, visibility, baseIntensity, color, count, complementary = false) {
-      const stripes = group.querySelectorAll("rect");
-      stripes.forEach((rect, idx) => {
-        const normalized = idx / Math.max(1, count - 1);
-        const localPhase = 2 * Math.PI * parseFloat(frequencySlider.value) * normalized + phase;
-        let fringe = 0.5 * (1 + visibility * Math.cos(localPhase));
+      const pixelW = width / cols;
+      const pixelH = height / rows;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("class", "preview-stripe");
+          rect.dataset.row = row;
+          rect.dataset.col = col;
+          rect.setAttribute("x", x + col * pixelW + 0.5);
+          rect.setAttribute("y", y + row * pixelH + 0.5);
+          rect.setAttribute("width", Math.max(1, pixelW - 1));
+          rect.setAttribute("height", Math.max(1, pixelH - 1));
+          rect.setAttribute("rx", 1.2);
+          group.appendChild(rect);
+        }
+      }
+    }
+
+    createCCDGrid(ccdGridD1, 1483, 545, 84, 90, 8, 10);
+    createCCDGrid(ccdGridD2, 1036, 899, 90, 48, 10, 5);
+
+    createPreviewPixels(previewD1, 1483, 545, 84, 90, 8, 10);
+    createPreviewPixels(previewD2, 1036, 899, 90, 48, 10, 5);
+
+    function updatePreviewPixels(group, phase, visibility, color, cols, rows, complementary = false) {
+      const pixels = group.querySelectorAll("rect");
+
+      pixels.forEach((rect) => {
+        const col = parseInt(rect.dataset.col, 10);
+        const row = parseInt(rect.dataset.row, 10);
+        const nx = col / Math.max(1, cols - 1);
+        const ny = (row - (rows - 1) / 2) / Math.max(1, rows / 2);
+        const envelope = Math.exp(-Math.pow(ny / 0.92, 2));
+        const spatialFrequency = parseFloat(frequencySlider.value);
+
+        let fringe = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * spatialFrequency * nx + phase));
+
         if (complementary) {
           fringe = 1 - fringe;
         }
-        const intensity = clamp(0.12 + 0.88 * fringe, 0, 1);
+
+        const intensity = clamp(0.10 + 0.90 * fringe * envelope, 0, 1);
+
         rect.setAttribute(
           "fill",
-          `rgba(${color.r}, ${color.g}, ${color.b}, ${intensity.toFixed(3)})`
+          `rgba(${Math.round(color.r * intensity)}, ${Math.round(color.g * intensity)}, ${Math.round(color.b * intensity)}, 0.95)`
         );
       });
+    }
+
+    function updateSampleVisual(deltaL, visibility) {
+      const normalized = Math.abs(deltaL) / 5;
+      const sampleWidth = 150 + normalized * 90;
+      const sampleX = 765 - sampleWidth / 2;
+      const innerX = sampleX + 28;
+      const innerW = sampleWidth - 56;
+      const alpha = 0.11 + normalized * 0.24;
+
+      sampleCell.setAttribute("x", sampleX);
+      sampleCell.setAttribute("width", sampleWidth);
+      sampleCell.setAttribute("fill", `rgba(255, 130, 190, ${alpha.toFixed(3)})`);
+
+      sampleInner.setAttribute("x", innerX);
+      sampleInner.setAttribute("width", innerW);
+
+      const waveStart = innerX + 12;
+      const waveEnd = innerX + innerW - 12;
+      const waveMid1 = waveStart + (waveEnd - waveStart) * 0.25;
+      const waveMid2 = waveStart + (waveEnd - waveStart) * 0.50;
+      const waveMid3 = waveStart + (waveEnd - waveStart) * 0.75;
+
+      const amp = 14 + normalized * 12;
+      const baseY1 = 568;
+      const baseY2 = 602;
+
+      sampleWave1.setAttribute(
+        "d",
+        `M${waveStart} ${baseY1} C${waveMid1 - 28} ${baseY1 - amp}, ${waveMid1 - 8} ${baseY1 + amp}, ${waveMid1 + 12} ${baseY1} C${waveMid2 - 8} ${baseY1 - amp}, ${waveMid2 + 12} ${baseY1 + amp}, ${waveMid2 + 32} ${baseY1} C${waveMid3 + 4} ${baseY1 - amp}, ${waveEnd - 20} ${baseY1 + amp}, ${waveEnd} ${baseY1}`
+      );
+
+      sampleWave2.setAttribute(
+        "d",
+        `M${waveStart} ${baseY2} C${waveMid1 - 28} ${baseY2 - amp}, ${waveMid1 - 8} ${baseY2 + amp}, ${waveMid1 + 12} ${baseY2} C${waveMid2 - 8} ${baseY2 - amp}, ${waveMid2 + 12} ${baseY2 + amp}, ${waveMid2 + 32} ${baseY2} C${waveMid3 + 4} ${baseY2 - amp}, ${waveEnd - 20} ${baseY2 + amp}, ${waveEnd} ${baseY2}`
+      );
+
+      const contrastOpacity = 0.28 + visibility * 0.72;
+      sampleWave1.setAttribute("opacity", contrastOpacity.toFixed(3));
+      sampleWave2.setAttribute("opacity", contrastOpacity.toFixed(3));
     }
 
     function drawDetectorCanvas() {
@@ -893,12 +1036,11 @@
 
       const w = canvas.width;
       const h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
 
+      ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = "#030303";
       ctx.fillRect(0, 0, w, h);
 
-      // Titles inside canvas
       ctx.fillStyle = "rgba(255,255,255,0.92)";
       ctx.font = "bold 26px 'Noto Sans KR', Arial, sans-serif";
       ctx.fillText("D1 output", 20, 34);
@@ -910,70 +1052,83 @@
       const box1Y = 46;
       const box2Y = 210;
 
-      function drawPort(boxY, complementary = false) {
-        for (let y = boxY; y < boxY + boxH; y++) {
-          for (let x = boxX; x < boxX + boxW; x++) {
-            const nx = (x - boxX) / boxW;
-            const ny = (y - boxY - boxH / 2) / (boxH / 2);
-            const envelope = Math.exp(-Math.pow(ny / 0.85, 2));
+      function drawCCDPort(boxY, complementary = false) {
+        const cols = 76;
+        const rows = 18;
+        const pixelW = boxW / cols;
+        const pixelH = boxH / rows;
+
+        ctx.fillStyle = "rgba(255,255,255,0.05)";
+        ctx.fillRect(boxX, boxY, boxW, boxH);
+
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const nx = col / Math.max(1, cols - 1);
+            const ny = (row - (rows - 1) / 2) / Math.max(1, rows / 2);
+            const envelope = Math.exp(-Math.pow(ny / 0.82, 2));
+
             let fringe = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * spatialFrequency * nx + phase));
+
             if (complementary) {
               fringe = 1 - fringe;
             }
+
             const intensity = clamp(fringe * envelope, 0, 1);
 
             ctx.fillStyle = `rgb(${Math.round(color.r * intensity)}, ${Math.round(color.g * intensity)}, ${Math.round(color.b * intensity)})`;
-            ctx.fillRect(x, y, 1, 1);
+            ctx.fillRect(
+              boxX + col * pixelW + 0.35,
+              boxY + row * pixelH + 0.35,
+              Math.max(1, pixelW - 0.7),
+              Math.max(1, pixelH - 0.7)
+            );
           }
         }
 
-        ctx.strokeStyle = "rgba(255,255,255,0.26)";
+        ctx.strokeStyle = "rgba(255,255,255,0.32)";
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+        ctx.strokeStyle = "rgba(255,255,255,0.10)";
+        ctx.lineWidth = 1;
+
+        for (let col = 1; col < cols; col += 4) {
+          const gx = boxX + col * pixelW;
+          ctx.beginPath();
+          ctx.moveTo(gx, boxY);
+          ctx.lineTo(gx, boxY + boxH);
+          ctx.stroke();
+        }
+
+        for (let row = 1; row < rows; row += 3) {
+          const gy = boxY + row * pixelH;
+          ctx.beginPath();
+          ctx.moveTo(boxX, gy);
+          ctx.lineTo(boxX + boxW, gy);
+          ctx.stroke();
+        }
       }
 
-      drawPort(box1Y, false);
-      drawPort(box2Y, true);
+      drawCCDPort(box1Y, false);
+      drawCCDPort(box2Y, true);
 
-      ctx.fillStyle = "rgba(255,255,255,0.80)";
+      ctx.fillStyle = "rgba(255,255,255,0.82)";
       ctx.font = "18px 'Noto Sans KR', Arial, sans-serif";
       ctx.fillText(`Power: ${(centerI1 * 100).toFixed(1)}%`, w - 180, 34);
       ctx.fillText(`Power: ${(centerI2 * 100).toFixed(1)}%`, w - 180, 198);
 
-      updatePreview(previewD1, phase, visibility, centerI1, color, 12, false);
-      updatePreview(previewD2, phase, visibility, centerI2, color, 10, true);
+      updatePreviewPixels(previewD1, phase, visibility, color, 8, 10, false);
+      updatePreviewPixels(previewD2, phase, visibility, color, 10, 5, true);
+      updateSampleVisual(deltaL, visibility);
 
-      // Beam brightness update for intuitive visibility/output effect
-      const outOpacity1 = 0.35 + 0.65 * centerI1;
-      const outOpacity2 = 0.35 + 0.65 * centerI2;
+      const outOpacity1 = 0.30 + 0.70 * centerI1;
+      const outOpacity2 = 0.30 + 0.70 * centerI2;
 
       out1Beam.style.opacity = outOpacity1.toFixed(3);
       out2Beam.style.opacity = outOpacity2.toFixed(3);
 
-      const glowStrength1 = 0.15 + 0.70 * visibility;
-      const glowStrength2 = 0.15 + 0.70 * visibility;
-
-      out1Beam.style.filter = `drop-shadow(0 0 ${8 + 10 * glowStrength1}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI1}))`;
-      out2Beam.style.filter = `drop-shadow(0 0 ${8 + 10 * glowStrength2}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI2}))`;
-
-      // Simple M1 motion to visualize ΔL
-      const shift = deltaL * 2.4; // exaggerated for schematic visibility
-      m1Back.setAttribute("x1", 1105 + shift);
-      m1Back.setAttribute("y1", 158 - shift * 0.35);
-      m1Back.setAttribute("x2", 1185 + shift);
-      m1Back.setAttribute("y2", 240 - shift * 0.35);
-
-      m1Front.setAttribute("x1", 1117 + shift);
-      m1Front.setAttribute("y1", 152 - shift * 0.35);
-      m1Front.setAttribute("x2", 1197 + shift);
-      m1Front.setAttribute("y2", 234 - shift * 0.35);
-
-      const rightX = 1158 + shift * 0.35;
-      rightVerticalBeam.setAttribute("x1", rightX);
-      rightVerticalBeam.setAttribute("x2", rightX);
-
-      rightDirArrow.setAttribute("x1", rightX + 20);
-      rightDirArrow.setAttribute("x2", rightX + 20);
+      out1Beam.style.filter = `drop-shadow(0 0 ${8 + 12 * visibility}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI1}))`;
+      out2Beam.style.filter = `drop-shadow(0 0 ${8 + 12 * visibility}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI2}))`;
     }
 
     pathSlider.addEventListener("input", drawDetectorCanvas);
