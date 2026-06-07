@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Sagnac Interferometer</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: cursive;
+      color: white;
+      overflow-x: hidden;
+      background-color: #000000;
+    }
+
+    body {
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("images/OCT%20background.jpg") center / cover no-repeat;
+      opacity: 0.7;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.35),
+        rgba(0, 0, 0, 0.78)
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 45px;
+    }
+
+    .content-card {
+      max-width: 1100px;
+      padding: 34px 38px;
+      border-radius: 24px;
+      background: rgba(0, 0, 0, 0.48);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 0 18px rgba(255, 255, 255, 0.18),
+        0 0 40px rgba(102, 204, 255, 0.22);
+      backdrop-filter: blur(4px);
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: 44px;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow:
+        0 0 8px rgba(102, 204, 255, 0.55),
+        0 0 18px rgba(102, 204, 255, 0.35);
+    }
+
+    p {
+      margin: 0 0 16px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.93);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .diagram-box {
+      margin-top: 26px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(158, 234, 255, 0.42);
+      box-shadow:
+        0 0 12px rgba(158, 234, 255, 0.22),
+        inset 0 0 18px rgba(255, 255, 255, 0.06);
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .label {
+      fill: white;
+      font-size: 18px;
+      font-family: cursive;
+    }
+
+    .small-label {
+      fill: white;
+      font-size: 15px;
+      font-family: cursive;
+    }
+
+    .optical-line {
+      stroke: #9eeaff;
+      stroke-width: 5;
+      fill: none;
+      filter: drop-shadow(0 0 6px rgba(158, 234, 255, 0.9));
+    }
+
+    .counter-line {
+      stroke: rgba(255, 255, 255, 0.78);
+      stroke-width: 4;
+      fill: none;
+      stroke-dasharray: 10 8;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.55));
+    }
+
+    .component {
+      stroke: white;
+      stroke-width: 3;
+      fill: rgba(255, 255, 255, 0.10);
+    }
+
+    .beam-splitter {
+      stroke: #9eeaff;
+      stroke-width: 5;
+      fill: none;
+    }
+
+    .mirror {
+      stroke: white;
+      stroke-width: 6;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.65));
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.10);
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-4px);
+      box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.40),
+        0 0 22px rgba(102, 204, 255, 0.40);
+    }
+
+    @media screen and (max-width: 850px) {
+      .page-container {
+        padding: 24px;
+      }
+
+      .content-card {
+        padding: 26px 24px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      .label {
+        font-size: 15px;
+      }
+
+      .small-label {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-container">
+    <div class="content-card">
+      <h1>Sagnac Interferometer</h1>
+
+      <p>
+        The Sagnac interferometer sends two beams in opposite directions around a closed optical path. The two
+        counter-propagating beams recombine and produce interference that is sensitive to rotation-induced phase shifts.
+      </p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 1000 560" role="img" aria-label="Sagnac interferometer schematic">
+          <defs>
+            <marker id="arrowCw" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#9eeaff"></path>
+            </marker>
+
+            <marker id="arrowCcw" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="white"></path>
+            </marker>
+          </defs>
+
+          <line class="optical-line" x1="90" y1="280" x2="305" y2="280" marker-end="url(#arrowCw)"></line>
+          <text class="label" x="75" y="255">Laser</text>
+
+          <line class="beam-splitter" x1="315" y1="225" x2="375" y2="335"></line>
+          <text class="small-label" x="295" y="365">Beam Splitter</text>
+
+          <path class="optical-line" d="M 350 280 L 350 120 L 740 120 L 740 420 L 350 420 L 350 300" marker-end="url(#arrowCw)"></path>
+
+          <path class="counter-line" d="M 350 300 L 350 420 L 740 420 L 740 120 L 350 120 L 350 280" marker-end="url(#arrowCcw)"></path>
+
+          <line class="mirror" x1="320" y1="115" x2="380" y2="115"></line>
+          <line class="mirror" x1="710" y1="115" x2="770" y2="115"></line>
+          <line class="mirror" x1="710" y1="425" x2="770" y2="425"></line>
+          <line class="mirror" x1="320" y1="425" x2="380" y2="425"></line>
+
+          <text class="label" x="485" y="92">Closed optical loop</text>
+          <text class="small-label" x="760" y="120">M1</text>
+          <text class="small-label" x="760" y="430">M2</text>
+          <text class="small-label" x="300" y="430">M3</text>
+
+          <line class="optical-line" x1="350" y1="300" x2="350" y2="495" marker-end="url(#arrowCw)"></line>
+          <rect class="component" x="305" y="495" width="90" height="45" rx="10"></rect>
+          <text class="label" x="410" y="525">Detector</text>
+
+          <text class="label" x="500" y="250">CW beam</text>
+          <text class="label" x="500" y="335">CCW beam</text>
+        </svg>
+      </div>
+
+      <a class="back-link" href="oct.html">← Back to OCT Page</a>
+    </div>
+  </div>
+</body>
+</html>
