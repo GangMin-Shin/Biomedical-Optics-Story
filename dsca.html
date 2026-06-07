@@ -42,8 +42,29 @@
     }
 
     .page-shell {
-      width: min(1500px, 96vw);
+      width: min(1840px, 99vw);
       margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding: 15px 22px;
+      border: 1px solid rgba(20, 130, 160, 0.42);
+      border-radius: 999px;
+      color: #0b6f8a;
+      background: rgba(255, 255, 255, 0.86);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 21px;
+      line-height: 1;
+      box-shadow: 0 8px 22px rgba(30, 60, 70, 0.08);
+    }
+
+    .back-link:hover {
+      background: rgba(230, 249, 254, 0.95);
     }
 
     .main-card {
@@ -53,55 +74,49 @@
       border-radius: 28px;
       box-shadow: 0 20px 45px rgba(30, 60, 70, 0.12);
       backdrop-filter: blur(10px);
-      padding: 30px 34px 38px;
+      padding: 32px 36px 40px;
       margin-bottom: 28px;
     }
 
     h1 {
       margin: 0 0 22px;
-      font-size: clamp(30px, 3.2vw, 52px);
+      font-size: clamp(34px, 3.2vw, 58px);
       letter-spacing: 1px;
       color: #173247;
-    }
-
-    h2 {
-      margin: 0 0 18px;
-      font-size: clamp(24px, 2.2vw, 36px);
-      color: #173247;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 18px;
-      padding: 10px 16px;
-      border: 1px solid rgba(20, 130, 160, 0.35);
-      border-radius: 999px;
-      color: #0b6f8a;
-      background: rgba(255, 255, 255, 0.75);
-      text-decoration: none;
       font-weight: 700;
     }
 
-    .back-link:hover {
-      background: rgba(230, 249, 254, 0.95);
+    h2 {
+      margin: 0 0 22px;
+      font-size: clamp(24px, 2.2vw, 42px);
+      color: #173247;
+      font-weight: 700;
     }
 
-    .integrated-frame {
-      position: relative;
+    .schematic-frame {
       width: 100%;
-      height: 760px;
       border: 1px solid rgba(140, 170, 180, 0.35);
       border-radius: 24px;
       background: rgba(250, 253, 254, 0.94);
       overflow: hidden;
     }
 
-    #integratedCanvas {
+    .schematic-svg {
       display: block;
       width: 100%;
-      height: 100%;
+      height: auto;
+      aspect-ratio: 1672 / 941;
+      background: #f8fbfc;
+    }
+
+    text {
+      font-family: "Courier New", monospace;
+      fill: #111;
+      font-weight: 700;
+    }
+
+    .main-title-color {
+      color: #173247;
     }
 
     @media (max-width: 900px) {
@@ -114,8 +129,9 @@
         border-radius: 22px;
       }
 
-      .integrated-frame {
-        height: 660px;
+      .back-link {
+        font-size: 18px;
+        padding: 12px 18px;
       }
     }
   </style>
@@ -129,768 +145,341 @@
       <h1>MMF–DSCA Optical Design</h1>
       <h2>Diffuse Speckle Contrast Analysis Schematic</h2>
 
-      <div class="integrated-frame">
-        <canvas id="integratedCanvas"></canvas>
+      <div class="schematic-frame">
+        <svg
+          class="schematic-svg"
+          viewBox="0 0 1672 941"
+          role="img"
+          aria-label="MMF-DSCA optical design schematic"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="bundleGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#9bc8ec"/>
+              <stop offset="100%" stop-color="#6ba5d4"/>
+            </linearGradient>
+
+            <linearGradient id="orangeProbeGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#cc5b00"/>
+              <stop offset="50%" stop-color="#ff8b24"/>
+              <stop offset="100%" stop-color="#c55400"/>
+            </linearGradient>
+
+            <linearGradient id="blueProbeGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#06467d"/>
+              <stop offset="50%" stop-color="#1b76bd"/>
+              <stop offset="100%" stop-color="#073f70"/>
+            </linearGradient>
+
+            <linearGradient id="blackTipGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#111"/>
+              <stop offset="50%" stop-color="#5b5b5b"/>
+              <stop offset="100%" stop-color="#111"/>
+            </linearGradient>
+
+            <linearGradient id="lensGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#8ccfff"/>
+              <stop offset="50%" stop-color="#d9f2ff"/>
+              <stop offset="100%" stop-color="#69b8ee"/>
+            </linearGradient>
+
+            <radialGradient id="sensitivityGrad" cx="50%" cy="42%" r="72%">
+              <stop offset="0%" stop-color="rgba(255,230,72,0.82)"/>
+              <stop offset="55%" stop-color="rgba(255,215,50,0.54)"/>
+              <stop offset="100%" stop-color="rgba(255,210,40,0.08)"/>
+            </radialGradient>
+
+            <radialGradient id="speckleSpotGrad" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+              <stop offset="48%" stop-color="rgba(220,220,220,0.70)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
+            </radialGradient>
+
+            <filter id="softBlur" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3"/>
+            </filter>
+
+            <filter id="spotGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.2" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <pattern id="fatPattern" x="0" y="0" width="16" height="12" patternUnits="userSpaceOnUse">
+              <circle cx="4" cy="4" r="3" fill="rgba(255,220,120,0.45)"/>
+              <circle cx="12" cy="8" r="3.5" fill="rgba(255,230,140,0.42)"/>
+            </pattern>
+          </defs>
+
+          <!-- Background -->
+          <rect x="0" y="0" width="1672" height="941" fill="#f8fbfc"/>
+
+          <!-- Laser source -->
+          <g id="laser-source">
+            <rect x="58" y="108" width="205" height="94" rx="8" fill="#f5f5f5" stroke="#111" stroke-width="2.5"/>
+            <g stroke="#111" stroke-width="2.4" stroke-linecap="round">
+              <line x1="106" y1="155" x2="106" y2="123"/>
+              <line x1="106" y1="155" x2="106" y2="187"/>
+              <line x1="106" y1="155" x2="74" y2="155"/>
+              <line x1="106" y1="155" x2="138" y2="155"/>
+              <line x1="106" y1="155" x2="83" y2="132"/>
+              <line x1="106" y1="155" x2="129" y2="178"/>
+              <line x1="106" y1="155" x2="129" y2="132"/>
+              <line x1="106" y1="155" x2="83" y2="178"/>
+            </g>
+            <text x="151" y="147" font-size="22">808 nm</text>
+            <text x="151" y="174" font-size="22">CW laser</text>
+          </g>
+
+          <!-- Orange fiber network -->
+          <g id="orange-network" fill="none" stroke="#ef7b16" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M263 155 L352 155"/>
+            <path d="M407 155 C485 155 494 98 609 98"/>
+            <path d="M407 155 C486 155 505 325 609 325"/>
+            <path d="M671 117 L905 117"/>
+            <path d="M671 153 L905 153"/>
+            <path d="M671 348 L905 348"/>
+            <path d="M671 369 C745 369 754 405 754 496"/>
+          </g>
+
+          <!-- Beam splitters -->
+          <g id="beam-splitters">
+            <g>
+              <rect x="352" y="128" width="55" height="55" fill="#f7fbff" stroke="#173247" stroke-width="2.5"/>
+              <line x1="359" y1="176" x2="400" y2="135" stroke="#173247" stroke-width="2.5"/>
+              <text x="383" y="238" text-anchor="middle" font-size="22">50:50 Fiber BS</text>
+            </g>
+
+            <g>
+              <rect x="609" y="70" width="62" height="62" fill="#f7fbff" stroke="#173247" stroke-width="2.5"/>
+              <line x1="617" y1="124" x2="663" y2="78" stroke="#173247" stroke-width="2.5"/>
+              <text x="675" y="185" text-anchor="middle" font-size="22">50:50 Fiber BS</text>
+            </g>
+
+            <g>
+              <rect x="609" y="294" width="62" height="62" fill="#f7fbff" stroke="#173247" stroke-width="2.5"/>
+              <line x1="617" y1="348" x2="663" y2="302" stroke="#173247" stroke-width="2.5"/>
+              <text x="675" y="409" text-anchor="middle" font-size="22">50:50 Fiber BS</text>
+            </g>
+          </g>
+
+          <!-- Fan-Out bundle and detector fibers -->
+          <g id="fanout-bundle">
+            <text x="1190" y="63" text-anchor="middle" font-size="30">Fan-Out</text>
+            <text x="1190" y="93" text-anchor="middle" font-size="30">Bundle</text>
+
+            <g fill="none" stroke="#0b61a4" stroke-width="4" stroke-linecap="round">
+              <line x1="1005" y1="110" x2="1142" y2="110"/>
+              <line x1="1005" y1="132" x2="1142" y2="132"/>
+              <line x1="1005" y1="154" x2="1142" y2="154"/>
+              <line x1="1005" y1="176" x2="1142" y2="176"/>
+              <line x1="1005" y1="198" x2="1142" y2="198"/>
+              <line x1="1005" y1="220" x2="1142" y2="220"/>
+              <path d="M1060 242 C1100 260 1068 348 1068 496"/>
+              <path d="M1060 242 L1142 242"/>
+            </g>
+
+            <rect x="1142" y="88" width="108" height="178" rx="10" fill="url(#bundleGrad)" stroke="#173247" stroke-width="2.5"/>
+
+            <path d="M1250 177 L1292 177" stroke="#222" stroke-width="2.5" fill="none"/>
+          </g>
+
+          <!-- Lens system -->
+          <g id="lens-system">
+            <rect x="1292" y="135" width="240" height="84" fill="#eeeeee" stroke="#222" stroke-width="2.5"/>
+            <line x1="1298" y1="126" x2="1298" y2="229" stroke="#222" stroke-width="4"/>
+            <line x1="1412" y1="126" x2="1412" y2="229" stroke="#222" stroke-width="4"/>
+            <line x1="1526" y1="126" x2="1526" y2="229" stroke="#222" stroke-width="4"/>
+
+            <ellipse cx="1356" cy="177" rx="18" ry="35" fill="url(#lensGrad)" stroke="#005c9f" stroke-width="2"/>
+            <ellipse cx="1470" cy="177" rx="18" ry="35" fill="url(#lensGrad)" stroke="#005c9f" stroke-width="2"/>
+
+            <text x="1412" y="276" text-anchor="middle" font-size="24">Lens system</text>
+
+            <path d="M1532 177 L1583 177" stroke="#222" stroke-width="2.5" fill="none"/>
+          </g>
+
+          <!-- CCD Camera -->
+          <g id="ccd-camera">
+            <text x="1650" y="73" text-anchor="middle" font-size="28">CCD</text>
+            <text x="1650" y="103" text-anchor="middle" font-size="28">Camera</text>
+
+            <rect x="1583" y="115" width="118" height="112" fill="#b8b8b8" stroke="#222" stroke-width="2.5"/>
+            <rect x="1583" y="115" width="118" height="24" fill="#d2d2d2" stroke="#222" stroke-width="2.5"/>
+          </g>
+
+          <!-- Speckle inset -->
+          <g id="speckle-inset">
+            <rect x="1410" y="338" width="220" height="220" fill="#050505" stroke="#111" stroke-width="2.5"/>
+
+            <g filter="url(#spotGlow)">
+              <circle cx="1520" cy="385" r="30" fill="url(#speckleSpotGrad)"/>
+              <circle cx="1470" cy="425" r="32" fill="url(#speckleSpotGrad)"/>
+              <circle cx="1570" cy="425" r="32" fill="url(#speckleSpotGrad)"/>
+              <circle cx="1520" cy="466" r="31" fill="url(#speckleSpotGrad)"/>
+              <circle cx="1470" cy="514" r="33" fill="url(#speckleSpotGrad)"/>
+              <circle cx="1570" cy="514" r="33" fill="url(#speckleSpotGrad)"/>
+              <circle cx="1520" cy="550" r="32" fill="url(#speckleSpotGrad)"/>
+            </g>
+
+            <g fill="rgba(255,255,255,0.70)">
+              <circle cx="1452" cy="407" r="2"/>
+              <circle cx="1462" cy="420" r="2.2"/>
+              <circle cx="1475" cy="430" r="1.8"/>
+              <circle cx="1486" cy="410" r="2"/>
+              <circle cx="1500" cy="470" r="2"/>
+              <circle cx="1513" cy="455" r="1.7"/>
+              <circle cx="1529" cy="475" r="2.1"/>
+              <circle cx="1544" cy="402" r="2"/>
+              <circle cx="1560" cy="425" r="2"/>
+              <circle cx="1585" cy="412" r="1.8"/>
+              <circle cx="1465" cy="520" r="2"/>
+              <circle cx="1485" cy="505" r="1.9"/>
+              <circle cx="1508" cy="540" r="2"/>
+              <circle cx="1520" cy="555" r="1.8"/>
+              <circle cx="1540" cy="530" r="2.3"/>
+              <circle cx="1562" cy="510" r="1.7"/>
+              <circle cx="1584" cy="525" r="2"/>
+            </g>
+          </g>
+
+          <!-- Tissue block -->
+          <g id="tissue">
+            <rect x="520" y="502" width="808" height="318" fill="#efb2a2" stroke="rgba(115,75,62,0.70)" stroke-width="2.3"/>
+
+            <rect x="520" y="502" width="808" height="45" fill="#f3c29e" stroke="#d8a280" stroke-width="1.3"/>
+
+            <path
+              d="
+                M520 548
+                C565 560 610 535 655 548
+                C700 560 745 535 790 548
+                C835 560 880 535 925 548
+                C970 560 1015 535 1060 548
+                C1105 560 1150 535 1195 548
+                C1240 560 1285 535 1328 548
+                L1328 593
+                C1285 580 1240 605 1195 593
+                C1150 580 1105 605 1060 593
+                C1015 580 970 605 925 593
+                C880 580 835 605 790 593
+                C745 580 700 605 655 593
+                C610 580 565 605 520 593
+                Z
+              "
+              fill="#e1779f"
+              stroke="#c75e86"
+              stroke-width="1.3"
+            />
+
+            <rect x="520" y="593" width="808" height="160" fill="#ebb3a3" stroke="#dc9e8d" stroke-width="1.3"/>
+
+            <path
+              d="
+                M520 753
+                C565 765 610 742 655 753
+                C700 765 745 742 790 753
+                C835 765 880 742 925 753
+                C970 765 1015 742 1060 753
+                C1105 765 1150 742 1195 753
+                C1240 765 1285 742 1328 753
+                L1328 790
+                C1285 778 1240 802 1195 790
+                C1150 778 1105 802 1060 790
+                C1015 778 970 802 925 790
+                C880 778 835 802 790 790
+                C745 778 700 802 655 790
+                C610 778 565 802 520 790
+                Z
+              "
+              fill="#e1c06d"
+              stroke="#caab57"
+              stroke-width="1.3"
+            />
+
+            <rect x="520" y="790" width="808" height="30" fill="#d1473c" stroke="#af342f" stroke-width="1.3"/>
+            <rect x="520" y="753" width="808" height="37" fill="url(#fatPattern)" opacity="0.8"/>
+
+            <!-- Main vessels -->
+            <path
+              d="M520 741 C565 725 610 760 655 741 C700 725 745 760 790 741 C835 725 880 760 925 741 C970 725 1015 760 1060 741 C1105 725 1150 760 1195 741 C1240 725 1285 760 1328 741"
+              stroke="#c51f28"
+              stroke-width="5"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <path
+              d="M520 752 C565 765 610 735 655 752 C700 765 745 735 790 752 C835 765 880 735 925 752 C970 765 1015 735 1060 752 C1105 765 1150 735 1195 752 C1240 765 1285 735 1328 752"
+              stroke="#005ca8"
+              stroke-width="5"
+              fill="none"
+              stroke-linecap="round"
+            />
+
+            <!-- Branching vessels -->
+            <g fill="none" stroke-linecap="round">
+              <path d="M585 735 C580 700 572 675 556 646" stroke="#cc2630" stroke-width="3.2"/>
+              <path d="M556 646 C542 628 535 615 529 595" stroke="#cc2630" stroke-width="2.2"/>
+              <path d="M556 646 C574 628 586 615 594 597" stroke="#cc2630" stroke-width="2.2"/>
+              <path d="M585 705 C605 690 615 670 622 650" stroke="#cc2630" stroke-width="2"/>
+
+              <path d="M704 745 C705 700 706 670 696 635" stroke="#0067b1" stroke-width="3.3"/>
+              <path d="M696 635 C680 615 668 600 660 580" stroke="#0067b1" stroke-width="2.2"/>
+              <path d="M696 635 C714 618 727 600 736 582" stroke="#0067b1" stroke-width="2.2"/>
+
+              <path d="M806 742 C805 705 803 675 800 635" stroke="#cc2630" stroke-width="3.2"/>
+              <path d="M800 635 C785 615 775 600 765 580" stroke="#cc2630" stroke-width="2.1"/>
+              <path d="M800 635 C817 615 827 600 838 582" stroke="#cc2630" stroke-width="2.1"/>
+
+              <path d="M954 745 C955 700 960 660 980 622" stroke="#0067b1" stroke-width="3.3"/>
+              <path d="M980 622 C964 603 955 586 950 565" stroke="#0067b1" stroke-width="2.1"/>
+              <path d="M980 622 C995 602 1005 585 1014 563" stroke="#0067b1" stroke-width="2.1"/>
+
+              <path d="M1092 742 C1092 705 1085 675 1088 635" stroke="#cc2630" stroke-width="3.2"/>
+              <path d="M1088 635 C1070 613 1062 596 1055 575" stroke="#cc2630" stroke-width="2.1"/>
+              <path d="M1088 635 C1108 614 1118 598 1128 577" stroke="#cc2630" stroke-width="2.1"/>
+
+              <path d="M1210 742 C1215 700 1210 665 1202 628" stroke="#0067b1" stroke-width="3.3"/>
+              <path d="M1202 628 C1187 608 1177 592 1168 572" stroke="#0067b1" stroke-width="2.1"/>
+              <path d="M1202 628 C1222 610 1235 592 1244 570" stroke="#0067b1" stroke-width="2.1"/>
+
+              <path d="M640 715 C630 690 622 670 615 645" stroke="rgba(210,45,55,0.48)" stroke-width="1.7"/>
+              <path d="M780 710 C780 685 774 662 766 638" stroke="rgba(0,90,170,0.48)" stroke-width="1.7"/>
+              <path d="M865 715 C858 685 850 662 842 638" stroke="rgba(210,45,55,0.48)" stroke-width="1.7"/>
+              <path d="M900 715 C910 685 915 662 918 638" stroke="rgba(0,90,170,0.48)" stroke-width="1.7"/>
+              <path d="M1160 710 C1156 684 1150 662 1144 638" stroke="rgba(210,45,55,0.48)" stroke-width="1.7"/>
+              <path d="M1260 715 C1268 688 1272 664 1275 640" stroke="rgba(0,90,170,0.48)" stroke-width="1.7"/>
+            </g>
+          </g>
+
+          <!-- Sensitivity volume -->
+          <path
+            d="
+              M754 502
+              C790 600 860 675 924 675
+              C988 675 1030 600 1068 502
+              C1048 625 1012 720 924 720
+              C836 720 774 625 754 502
+              Z
+            "
+            fill="url(#sensitivityGrad)"
+            stroke="rgba(222,184,25,0.88)"
+            stroke-width="2.2"
+          />
+
+          <!-- Source and detector probes -->
+          <g id="probes">
+            <rect x="744" y="365" width="20" height="138" rx="7" fill="url(#orangeProbeGrad)" stroke="#d76a00" stroke-width="2"/>
+            <rect x="739" y="482" width="30" height="34" rx="7" fill="url(#blackTipGrad)" stroke="#111" stroke-width="2"/>
+
+            <rect x="1058" y="365" width="20" height="138" rx="7" fill="url(#blueProbeGrad)" stroke="#0b4d8d" stroke-width="2"/>
+            <rect x="1053" y="482" width="30" height="34" rx="7" fill="url(#blackTipGrad)" stroke="#111" stroke-width="2"/>
+          </g>
+        </svg>
       </div>
     </section>
   </main>
-
-  <script>
-    const canvas = document.getElementById("integratedCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let width = 0;
-    let height = 0;
-    let dpr = window.devicePixelRatio || 1;
-
-    function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      dpr = window.devicePixelRatio || 1;
-
-      width = rect.width;
-      height = rect.height;
-
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawSchematic();
-    }
-
-    function drawSchematic() {
-      ctx.clearRect(0, 0, width, height);
-
-      drawBackground();
-      drawLaserSource();
-      drawBeamSplitterNetwork();
-      drawTissueBlock();
-      drawSensitivityVolume();
-      drawSourceProbe();
-      drawFanOutBundle();
-      drawLensSystem();
-      drawCamera();
-      drawSpeckleInset();
-    }
-
-    function drawBackground() {
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, width, height);
-
-      const grad = ctx.createLinearGradient(0, 0, width, height);
-      grad.addColorStop(0, "rgba(255,255,255,0.96)");
-      grad.addColorStop(1, "rgba(244,248,250,0.96)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    function drawLaserSource() {
-      const x = width * 0.035;
-      const y = height * 0.105;
-      const w = width * 0.115;
-      const h = height * 0.105;
-
-      roundRect(ctx, x, y, w, h, 6, true, true, "#f5f5f5", "#1b1b1b", 2);
-
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2;
-      const cx = x + w * 0.24;
-      const cy = y + h * 0.50;
-
-      for (let i = 0; i < 8; i++) {
-        const angle = (Math.PI * 2 * i) / 8;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + Math.cos(angle) * 26, cy + Math.sin(angle) * 26);
-        ctx.stroke();
-      }
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 20px Courier New";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText("808 nm", x + w * 0.47, cy - 12);
-      ctx.fillText("CW laser", x + w * 0.47, cy + 14);
-    }
-
-    function drawBeamSplitterSymbol(x, y, size) {
-      ctx.fillStyle = "#f7fbff";
-      ctx.strokeStyle = "#173247";
-      ctx.lineWidth = 2;
-
-      ctx.beginPath();
-      ctx.rect(x, y, size, size);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(x + size * 0.10, y + size * 0.90);
-      ctx.lineTo(x + size * 0.90, y + size * 0.10);
-      ctx.stroke();
-    }
-
-    function drawBeamSplitterLabel(x, y) {
-      ctx.fillStyle = "#111";
-      ctx.font = "700 18px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.fillText("50:50 Fiber", x, y);
-      ctx.fillText("Beam Splitter", x, y + 24);
-    }
-
-    function drawFiberPath(points, color, lineWidth) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = lineWidth;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-
-      for (let i = 1; i < points.length; i++) {
-        if (points[i].cp1 && points[i].cp2) {
-          ctx.bezierCurveTo(
-            points[i].cp1.x,
-            points[i].cp1.y,
-            points[i].cp2.x,
-            points[i].cp2.y,
-            points[i].x,
-            points[i].y
-          );
-        } else {
-          ctx.lineTo(points[i].x, points[i].y);
-        }
-      }
-
-      ctx.stroke();
-      ctx.lineCap = "butt";
-    }
-
-    function drawBeamSplitterNetwork() {
-      const orange = "#f27a17";
-      const laserOutX = width * 0.150;
-      const laserOutY = height * 0.157;
-
-      const bs1 = {
-        x: width * 0.205,
-        y: height * 0.130,
-        size: 48
-      };
-
-      const bs2 = {
-        x: width * 0.360,
-        y: height * 0.055,
-        size: 55
-      };
-
-      const bs3 = {
-        x: width * 0.360,
-        y: height * 0.245,
-        size: 55
-      };
-
-      const tissueTop = getTissueGeometry().top;
-      const sourceX = getTissueGeometry().sourceX;
-
-      drawFiberPath([
-        { x: laserOutX, y: laserOutY },
-        { x: bs1.x, y: bs1.y + bs1.size / 2 }
-      ], orange, 4);
-
-      drawBeamSplitterSymbol(bs1.x, bs1.y, bs1.size);
-      drawBeamSplitterLabel(bs1.x + bs1.size / 2 + 18, bs1.y + bs1.size + 22);
-
-      drawFiberPath([
-        { x: bs1.x + bs1.size, y: bs1.y + bs1.size / 2 },
-        {
-          x: bs2.x,
-          y: bs2.y + bs2.size / 2,
-          cp1: { x: width * 0.285, y: bs1.y + bs1.size / 2 },
-          cp2: { x: width * 0.285, y: bs2.y + bs2.size / 2 }
-        }
-      ], orange, 4);
-
-      drawFiberPath([
-        { x: bs1.x + bs1.size, y: bs1.y + bs1.size / 2 },
-        {
-          x: bs3.x,
-          y: bs3.y + bs3.size / 2,
-          cp1: { x: width * 0.285, y: bs1.y + bs1.size / 2 },
-          cp2: { x: width * 0.285, y: bs3.y + bs3.size / 2 }
-        }
-      ], orange, 4);
-
-      drawBeamSplitterSymbol(bs2.x, bs2.y, bs2.size);
-      drawBeamSplitterLabel(bs2.x + bs2.size / 2 + 25, bs2.y + bs2.size + 15);
-
-      drawBeamSplitterSymbol(bs3.x, bs3.y, bs3.size);
-      drawBeamSplitterLabel(bs3.x + bs3.size / 2 + 25, bs3.y + bs3.size + 15);
-
-      drawFiberPath([
-        { x: bs2.x + bs2.size, y: bs2.y + bs2.size * 0.28 },
-        { x: width * 0.535, y: bs2.y + bs2.size * 0.28 }
-      ], orange, 4);
-
-      drawFiberPath([
-        { x: bs2.x + bs2.size, y: bs2.y + bs2.size * 0.72 },
-        { x: width * 0.535, y: bs2.y + bs2.size * 0.72 }
-      ], orange, 4);
-
-      drawFiberPath([
-        { x: bs3.x + bs3.size, y: bs3.y + bs3.size * 0.36 },
-        { x: width * 0.535, y: bs3.y + bs3.size * 0.36 }
-      ], orange, 4);
-
-      drawFiberPath([
-        { x: bs3.x + bs3.size, y: bs3.y + bs3.size * 0.70 },
-        {
-          x: sourceX,
-          y: tissueTop - 112,
-          cp1: { x: width * 0.450, y: bs3.y + bs3.size * 0.70 },
-          cp2: { x: sourceX, y: height * 0.335 }
-        }
-      ], orange, 4);
-    }
-
-    function getTissueGeometry() {
-      return {
-        x: width * 0.305,
-        y: height * 0.515,
-        w: width * 0.480,
-        h: height * 0.355,
-        top: height * 0.515,
-        sourceX: width * 0.445,
-        detectorX: width * 0.635
-      };
-    }
-
-    function drawTissueBlock() {
-      const g = getTissueGeometry();
-      const x = g.x;
-      const y = g.y;
-      const w = g.w;
-      const h = g.h;
-
-      ctx.save();
-
-      ctx.fillStyle = "#f3c2a1";
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + w, y);
-      ctx.lineTo(x + w, y + h);
-      ctx.lineTo(x, y + h);
-      ctx.closePath();
-      ctx.fill();
-
-      drawLayer(x, y, w, h * 0.13, "#f5c29d", "#d79b7e");
-      drawWavyLayer(x, y + h * 0.13, w, h * 0.15, "#e97898", "#ce5d7d");
-      drawLayer(x, y + h * 0.28, w, h * 0.47, "#f6b9a7", "#e79c8b");
-      drawWavyLayer(x, y + h * 0.75, w, h * 0.15, "#efc66d", "#d9a44f");
-      drawLayer(x, y + h * 0.90, w, h * 0.10, "#cf4638", "#a72e2b");
-
-      drawVascularNetwork(x, y, w, h);
-      drawSurfaceOutline(x, y, w, h);
-
-      ctx.restore();
-    }
-
-    function drawLayer(x, y, w, h, fill, stroke) {
-      ctx.fillStyle = fill;
-      ctx.fillRect(x, y, w, h);
-
-      ctx.strokeStyle = stroke;
-      ctx.lineWidth = 1.3;
-      ctx.strokeRect(x, y, w, h);
-    }
-
-    function drawWavyLayer(x, y, w, h, fill, stroke) {
-      ctx.fillStyle = fill;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-
-      for (let i = 0; i <= 60; i++) {
-        const px = x + (w * i) / 60;
-        const py = y + Math.sin(i * 0.65) * 3;
-        ctx.lineTo(px, py);
-      }
-
-      ctx.lineTo(x + w, y + h);
-
-      for (let i = 60; i >= 0; i--) {
-        const px = x + (w * i) / 60;
-        const py = y + h + Math.sin(i * 0.52 + 0.8) * 3;
-        ctx.lineTo(px, py);
-      }
-
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.strokeStyle = stroke;
-      ctx.lineWidth = 1.3;
-      ctx.stroke();
-    }
-
-    function drawSurfaceOutline(x, y, w, h) {
-      ctx.strokeStyle = "rgba(115, 75, 62, 0.68)";
-      ctx.lineWidth = 2;
-
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + w, y);
-      ctx.lineTo(x + w, y + h);
-      ctx.lineTo(x, y + h);
-      ctx.closePath();
-      ctx.stroke();
-    }
-
-    function drawVascularNetwork(x, y, w, h) {
-      const vesselY = y + h * 0.70;
-
-      ctx.strokeStyle = "#c51f28";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-
-      for (let i = 0; i <= 70; i++) {
-        const px = x + (w * i) / 70;
-        const py = vesselY + Math.sin(i * 0.55) * 5;
-        if (i === 0) {
-          ctx.moveTo(px, py);
-        } else {
-          ctx.lineTo(px, py);
-        }
-      }
-
-      ctx.stroke();
-
-      ctx.strokeStyle = "#005ca8";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-
-      for (let i = 0; i <= 70; i++) {
-        const px = x + (w * i) / 70;
-        const py = vesselY + 7 + Math.sin(i * 0.55 + 1.5) * 5;
-        if (i === 0) {
-          ctx.moveTo(px, py);
-        } else {
-          ctx.lineTo(px, py);
-        }
-      }
-
-      ctx.stroke();
-
-      const branchOrigins = [
-        { px: 0.08, color: "#cc2630" },
-        { px: 0.22, color: "#0067b1" },
-        { px: 0.36, color: "#cc2630" },
-        { px: 0.55, color: "#0067b1" },
-        { px: 0.70, color: "#cc2630" },
-        { px: 0.85, color: "#0067b1" }
-      ];
-
-      branchOrigins.forEach((b, index) => {
-        const bx = x + w * b.px;
-        const by = vesselY - 4 + Math.sin(index) * 6;
-        drawBranchingVessel(bx, by, -Math.PI / 2, h * 0.22, b.color, 3);
-      });
-
-      for (let i = 0; i < 28; i++) {
-        const cx = x + w * (0.07 + Math.randomLike(i) * 0.86);
-        const cy = y + h * (0.32 + Math.randomLike(i + 42) * 0.30);
-        const color = i % 2 === 0 ? "rgba(210, 45, 55, 0.55)" : "rgba(0, 90, 170, 0.55)";
-
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1.4;
-
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.bezierCurveTo(cx + 7, cy - 18, cx - 7, cy - 32, cx + 2, cy - 48);
-        ctx.stroke();
-      }
-    }
-
-    Math.randomLike = function(seed) {
-      const x = Math.sin(seed * 12.9898) * 43758.5453;
-      return x - Math.floor(x);
-    };
-
-    function drawBranchingVessel(x, y, angle, length, color, lineWidth) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = lineWidth;
-      ctx.lineCap = "round";
-
-      const x2 = x + Math.cos(angle) * length;
-      const y2 = y + Math.sin(angle) * length;
-
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.bezierCurveTo(
-        x + Math.cos(angle - 0.4) * length * 0.35,
-        y + Math.sin(angle - 0.4) * length * 0.35,
-        x + Math.cos(angle + 0.2) * length * 0.65,
-        y + Math.sin(angle + 0.2) * length * 0.65,
-        x2,
-        y2
-      );
-      ctx.stroke();
-
-      if (length > 24) {
-        drawBranchingVessel(x2, y2, angle - 0.55, length * 0.48, color, lineWidth * 0.68);
-        drawBranchingVessel(x2, y2, angle + 0.50, length * 0.45, color, lineWidth * 0.65);
-      }
-    }
-
-    function drawSensitivityVolume() {
-      const g = getTissueGeometry();
-      const sourceX = g.sourceX;
-      const detectorX = g.detectorX;
-      const topY = g.top;
-      const centerX = (sourceX + detectorX) / 2;
-      const bottomY = g.y + g.h * 0.58;
-
-      const grad = ctx.createRadialGradient(
-        centerX,
-        topY + 90,
-        20,
-        centerX,
-        topY + 95,
-        210
-      );
-
-      grad.addColorStop(0, "rgba(255, 225, 72, 0.80)");
-      grad.addColorStop(0.55, "rgba(255, 215, 50, 0.55)");
-      grad.addColorStop(1, "rgba(255, 210, 40, 0.08)");
-
-      ctx.beginPath();
-      ctx.moveTo(sourceX, topY);
-      ctx.bezierCurveTo(
-        sourceX + 35,
-        topY + 75,
-        centerX - 60,
-        bottomY,
-        centerX,
-        bottomY
-      );
-      ctx.bezierCurveTo(
-        centerX + 60,
-        bottomY,
-        detectorX - 35,
-        topY + 75,
-        detectorX,
-        topY
-      );
-      ctx.bezierCurveTo(
-        detectorX - 25,
-        topY + 130,
-        sourceX + 25,
-        topY + 130,
-        sourceX,
-        topY
-      );
-      ctx.closePath();
-
-      ctx.fillStyle = grad;
-      ctx.fill();
-
-      ctx.strokeStyle = "rgba(222, 184, 25, 0.90)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    function drawSourceProbe() {
-      const g = getTissueGeometry();
-      const sourceX = g.sourceX;
-      const topY = g.top;
-      const probeTop = topY - 116;
-      const probeBottom = topY + 2;
-
-      drawCylindricalProbe(sourceX, probeTop, probeBottom, "#ff8b24", "#d76a00");
-    }
-
-    function drawDetectorProbe(detectorX, topY) {
-      const probeTop = topY - 116;
-      const probeBottom = topY + 2;
-
-      drawCylindricalProbe(detectorX, probeTop, probeBottom, "#1b76bd", "#0b4d8d");
-    }
-
-    function drawCylindricalProbe(cx, y1, y2, fill, stroke) {
-      const w = 18;
-
-      const bodyGrad = ctx.createLinearGradient(cx - w / 2, 0, cx + w / 2, 0);
-      bodyGrad.addColorStop(0, shadeColor(fill, -20));
-      bodyGrad.addColorStop(0.50, fill);
-      bodyGrad.addColorStop(1, shadeColor(fill, -25));
-
-      ctx.fillStyle = bodyGrad;
-      ctx.strokeStyle = stroke;
-      ctx.lineWidth = 2;
-
-      roundRect(ctx, cx - w / 2, y1, w, y2 - y1 - 20, 7, true, true, bodyGrad, stroke, 2);
-
-      const tipGrad = ctx.createLinearGradient(cx - 14, 0, cx + 14, 0);
-      tipGrad.addColorStop(0, "#101010");
-      tipGrad.addColorStop(0.5, "#5b5b5b");
-      tipGrad.addColorStop(1, "#101010");
-
-      roundRect(ctx, cx - 14, y2 - 22, 28, 28, 6, true, true, tipGrad, "#111", 2);
-    }
-
-    function drawFanOutBundle() {
-      const g = getTissueGeometry();
-      const blue = "#0b61a4";
-
-      const bundleX = width * 0.670;
-      const bundleY = height * 0.080;
-      const bundleW = width * 0.065;
-      const bundleH = height * 0.175;
-
-      const detectorX = g.detectorX;
-      const tissueTop = g.top;
-
-      const leftX = bundleX;
-      const fiberSpacing = bundleH / 7.4;
-      const firstY = bundleY + fiberSpacing;
-
-      ctx.strokeStyle = blue;
-      ctx.lineWidth = 3.5;
-      ctx.lineCap = "round";
-
-      for (let i = 0; i < 6; i++) {
-        const y = firstY + i * fiberSpacing;
-
-        ctx.beginPath();
-        ctx.moveTo(bundleX - width * 0.075, y);
-        ctx.lineTo(leftX, y);
-        ctx.stroke();
-      }
-
-      const detectorPortY = firstY + 6 * fiberSpacing;
-
-      ctx.beginPath();
-      ctx.moveTo(detectorX, tissueTop - 116);
-      ctx.bezierCurveTo(
-        detectorX - width * 0.010,
-        tissueTop - 185,
-        bundleX - width * 0.055,
-        detectorPortY + 10,
-        bundleX - width * 0.075,
-        detectorPortY
-      );
-      ctx.lineTo(leftX, detectorPortY);
-      ctx.stroke();
-
-      ctx.lineCap = "butt";
-
-      const bundleGrad = ctx.createLinearGradient(bundleX, bundleY, bundleX + bundleW, bundleY + bundleH);
-      bundleGrad.addColorStop(0, "#9bc8ec");
-      bundleGrad.addColorStop(1, "#6ba5d4");
-
-      roundRect(ctx, bundleX, bundleY, bundleW, bundleH, 8, true, true, bundleGrad, "#173247", 2);
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 22px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "bottom";
-      ctx.fillText("Fan-Out", bundleX + bundleW / 2, bundleY - 22);
-      ctx.fillText("Bundle", bundleX + bundleW / 2, bundleY + 2);
-
-      drawDetectorProbe(detectorX, tissueTop);
-
-      drawFiberPath([
-        { x: bundleX + bundleW, y: bundleY + bundleH * 0.50 },
-        { x: width * 0.760, y: bundleY + bundleH * 0.50 }
-      ], "#222", 2);
-    }
-
-    function drawLensSystem() {
-      const lensX = width * 0.760;
-      const lensY = height * 0.115;
-      const lensW = width * 0.145;
-      const lensH = height * 0.095;
-
-      ctx.strokeStyle = "#222";
-      ctx.lineWidth = 2;
-      ctx.fillStyle = "#ededed";
-
-      ctx.fillRect(lensX, lensY, lensW, lensH);
-      ctx.strokeRect(lensX, lensY, lensW, lensH);
-
-      ctx.strokeStyle = "#222";
-      ctx.lineWidth = 4;
-
-      ctx.beginPath();
-      ctx.moveTo(lensX + lensW * 0.03, lensY - 8);
-      ctx.lineTo(lensX + lensW * 0.03, lensY + lensH + 8);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(lensX + lensW * 0.50, lensY - 8);
-      ctx.lineTo(lensX + lensW * 0.50, lensY + lensH + 8);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(lensX + lensW * 0.97, lensY - 8);
-      ctx.lineTo(lensX + lensW * 0.97, lensY + lensH + 8);
-      ctx.stroke();
-
-      drawLensElement(lensX + lensW * 0.26, lensY + lensH / 2, 16, lensH * 0.42);
-      drawLensElement(lensX + lensW * 0.74, lensY + lensH / 2, 16, lensH * 0.42);
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 20px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.fillText("Lens system", lensX + lensW / 2, lensY + lensH + 25);
-
-      drawFiberPath([
-        { x: lensX + lensW, y: lensY + lensH / 2 },
-        { x: width * 0.935, y: lensY + lensH / 2 }
-      ], "#222", 2);
-    }
-
-    function drawLensElement(cx, cy, rx, ry) {
-      const grad = ctx.createLinearGradient(cx - rx, cy, cx + rx, cy);
-      grad.addColorStop(0, "#9ed9ff");
-      grad.addColorStop(0.5, "#d6f1ff");
-      grad.addColorStop(1, "#68b9ee");
-
-      ctx.fillStyle = grad;
-      ctx.strokeStyle = "#005c9f";
-      ctx.lineWidth = 1.8;
-
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-    }
-
-    function drawCamera() {
-      const cameraX = width * 0.935;
-      const cameraY = height * 0.095;
-      const cameraW = width * 0.075;
-      const cameraH = height * 0.125;
-
-      ctx.fillStyle = "#b8b8b8";
-      ctx.strokeStyle = "#222";
-      ctx.lineWidth = 2;
-
-      ctx.fillRect(cameraX, cameraY, cameraW, cameraH);
-      ctx.strokeRect(cameraX, cameraY, cameraW, cameraH);
-
-      ctx.fillStyle = "#d2d2d2";
-      ctx.fillRect(cameraX, cameraY, cameraW, cameraH * 0.20);
-      ctx.strokeRect(cameraX, cameraY, cameraW, cameraH * 0.20);
-
-      ctx.fillStyle = "#111";
-      ctx.font = "700 22px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "bottom";
-      ctx.fillText("CCD", cameraX + cameraW / 2, cameraY - 26);
-      ctx.fillText("Camera", cameraX + cameraW / 2, cameraY - 2);
-    }
-
-    function drawSpeckleInset() {
-      const x = width * 0.825;
-      const y = height * 0.340;
-      const size = Math.min(width * 0.145, height * 0.245);
-
-      ctx.fillStyle = "#050505";
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2;
-      ctx.fillRect(x, y, size, size);
-      ctx.strokeRect(x, y, size, size);
-
-      const spots = [
-        { x: 0.50, y: 0.22 },
-        { x: 0.28, y: 0.38 },
-        { x: 0.72, y: 0.38 },
-        { x: 0.50, y: 0.52 },
-        { x: 0.28, y: 0.68 },
-        { x: 0.72, y: 0.68 },
-        { x: 0.50, y: 0.82 }
-      ];
-
-      spots.forEach((spot, i) => {
-        drawSpeckleSpot(
-          x + spot.x * size,
-          y + spot.y * size,
-          size * 0.135,
-          i
-        );
-      });
-    }
-
-    function drawSpeckleSpot(cx, cy, r, seed) {
-      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 1.3);
-      grad.addColorStop(0, "rgba(255,255,255,0.92)");
-      grad.addColorStop(0.45, "rgba(230,230,230,0.70)");
-      grad.addColorStop(1, "rgba(255,255,255,0.04)");
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r * 1.4, 0, Math.PI * 2);
-      ctx.fill();
-
-      for (let i = 0; i < 80; i++) {
-        const a = Math.randomLike(seed * 100 + i) * Math.PI * 2;
-        const rr = Math.sqrt(Math.randomLike(seed * 200 + i)) * r;
-        const px = cx + Math.cos(a) * rr;
-        const py = cy + Math.sin(a) * rr;
-        const alpha = 0.22 + Math.randomLike(seed * 300 + i) * 0.45;
-
-        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-        ctx.beginPath();
-        ctx.arc(px, py, 0.7 + Math.randomLike(seed * 400 + i) * 1.2, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function shadeColor(color, percent) {
-      const num = parseInt(color.replace("#", ""), 16);
-      const amt = Math.round(2.55 * percent);
-      const r = (num >> 16) + amt;
-      const g = ((num >> 8) & 0x00ff) + amt;
-      const b = (num & 0x0000ff) + amt;
-
-      return (
-        "#" +
-        (
-          0x1000000 +
-          (r < 255 ? (r < 1 ? 0 : r) : 255) * 0x10000 +
-          (g < 255 ? (g < 1 ? 0 : g) : 255) * 0x100 +
-          (b < 255 ? (b < 1 ? 0 : b) : 255)
-        )
-          .toString(16)
-          .slice(1)
-      );
-    }
-
-    function roundRect(context, x, y, w, h, r, fill, stroke, fillStyle, strokeStyle, lineWidth) {
-      if (w < 2 * r) r = w / 2;
-      if (h < 2 * r) r = h / 2;
-
-      context.beginPath();
-      context.moveTo(x + r, y);
-      context.arcTo(x + w, y, x + w, y + h, r);
-      context.arcTo(x + w, y + h, x, y + h, r);
-      context.arcTo(x, y + h, x, y, r);
-      context.arcTo(x, y, x + r, y, r);
-      context.closePath();
-
-      if (fill) {
-        context.fillStyle = fillStyle;
-        context.fill();
-      }
-
-      if (stroke) {
-        context.strokeStyle = strokeStyle;
-        context.lineWidth = lineWidth;
-        context.stroke();
-      }
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-
-    resizeCanvas();
-  </script>
 </body>
 </html>
