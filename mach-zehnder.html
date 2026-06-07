@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mach-Zehnder Interferometer Simulation</title>
 
   <style>
@@ -15,10 +16,10 @@
       padding: 0;
       width: 100%;
       min-height: 100vh;
-      font-family: cursive;
-      color: white;
+      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+      color: #ffffff;
       overflow-x: hidden;
-      background: #000000 url("images/interferometer background.png") center / cover no-repeat fixed;
+      background: #000 url("images/interferometer background.png") center / cover no-repeat fixed;
     }
 
     body {
@@ -27,63 +28,72 @@
 
     .page-container {
       position: relative;
-      z-index: 1;
       min-height: 100vh;
-      padding: 36px;
+      padding: 24px;
     }
 
     .content-card {
-      width: 100%;
-      max-width: 1480px;
-      padding: 34px 38px;
+      width: min(96vw, 1880px);
+      margin: 0;
+      padding: 24px 24px 20px;
       border-radius: 24px;
-      background: rgba(0, 0, 0, 0.58);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(5, 5, 18, 0.72);
+      border: 1px solid rgba(180, 230, 255, 0.28);
       box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.18),
-        0 0 46px rgba(102, 204, 255, 0.24);
+        0 0 18px rgba(150, 230, 255, 0.18),
+        0 0 42px rgba(115, 140, 255, 0.16);
       backdrop-filter: blur(4px);
     }
 
     h1 {
-      margin: 0 0 16px;
-      font-size: 46px;
-      color: rgba(255, 255, 255, 0.98);
+      margin: 0 0 14px;
+      font-size: 54px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      color: #eef8ff;
       text-shadow:
-        0 0 8px rgba(102, 204, 255, 0.65),
-        0 0 20px rgba(102, 204, 255, 0.42);
+        0 0 10px rgba(134, 214, 255, 0.55),
+        0 0 22px rgba(134, 214, 255, 0.28);
     }
 
-    p {
-      margin: 0 0 16px;
-      font-size: 18px;
-      line-height: 1.75;
-      color: rgba(255, 255, 255, 0.94);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
+    .top-description {
+      margin: 0 0 22px;
+      font-size: 19px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.95);
     }
 
     .simulation-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.8fr) minmax(360px, 0.8fr);
-      gap: 24px;
-      align-items: stretch;
-      margin-top: 24px;
+      grid-template-columns: minmax(980px, 2.55fr) minmax(460px, 1fr);
+      gap: 22px;
+      align-items: start;
     }
 
     .diagram-box,
-    .control-box,
-    .detector-box {
+    .panel-box {
       border-radius: 22px;
-      background: rgba(0, 0, 0, 0.48);
-      border: 1px solid rgba(158, 234, 255, 0.42);
+      background: rgba(0, 0, 0, 0.42);
+      border: 1px solid rgba(158, 234, 255, 0.35);
       box-shadow:
-        0 0 14px rgba(158, 234, 255, 0.25),
-        inset 0 0 20px rgba(255, 255, 255, 0.06);
+        0 0 14px rgba(158, 234, 255, 0.18),
+        inset 0 0 18px rgba(255, 255, 255, 0.04);
     }
 
     .diagram-box {
-      padding: 18px;
-      min-height: 680px;
+      padding: 14px;
+      min-height: 880px;
+    }
+
+    .diagram-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      font-size: 17px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.92);
     }
 
     svg {
@@ -92,27 +102,32 @@
       display: block;
     }
 
-    .control-panel {
+    .right-panel {
       display: flex;
       flex-direction: column;
       gap: 18px;
     }
 
-    .control-box {
-      padding: 22px;
-    }
-
-    .detector-box {
-      padding: 22px;
+    .panel-box {
+      padding: 18px 18px 16px;
     }
 
     .panel-title {
-      margin: 0 0 16px;
-      font-size: 26px;
-      color: rgba(255, 255, 255, 0.98);
+      margin: 0 0 14px;
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #eef7ff;
       text-shadow:
-        0 0 8px rgba(102, 204, 255, 0.55),
-        0 0 18px rgba(102, 204, 255, 0.28);
+        0 0 10px rgba(134, 214, 255, 0.45),
+        0 0 18px rgba(134, 214, 255, 0.20);
+    }
+
+    .panel-subtitle {
+      margin: 0 0 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #d9f4ff;
     }
 
     .control-group {
@@ -126,18 +141,27 @@
     .control-label {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: flex-start;
       gap: 12px;
       margin-bottom: 8px;
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
       color: rgba(255, 255, 255, 0.96);
     }
 
     .control-value {
+      font-size: 17px;
       color: #9eeaff;
-      font-size: 15px;
-      white-space: nowrap;
       text-shadow: 0 0 8px rgba(158, 234, 255, 0.85);
+      white-space: nowrap;
+    }
+
+    .control-help {
+      margin-top: 6px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.78);
     }
 
     input[type="range"] {
@@ -154,221 +178,121 @@
     }
 
     .result-card {
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 12px 12px 10px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.11);
     }
 
     .result-name {
       display: block;
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.76);
       margin-bottom: 5px;
+      line-height: 1.35;
     }
 
     .result-value {
       display: block;
-      font-size: 18px;
+      font-size: 24px;
+      font-weight: 800;
       color: #ffffff;
-      text-shadow: 0 0 8px rgba(158, 234, 255, 0.65);
-    }
-
-    #fringeCanvas {
-      width: 100%;
-      height: 190px;
-      display: block;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      background: #000000;
-      box-shadow:
-        0 0 12px rgba(158, 234, 255, 0.24),
-        inset 0 0 20px rgba(255, 255, 255, 0.04);
-    }
-
-    .detector-description {
-      margin-top: 14px;
-      font-size: 15px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.86);
-    }
-
-    .label {
-      fill: white;
-      font-size: 22px;
-      font-family: cursive;
-      text-shadow: 0 0 7px black;
-    }
-
-    .small-label {
-      fill: white;
-      font-size: 17px;
-      font-family: cursive;
-      text-shadow: 0 0 6px black;
-    }
-
-    .beam-label {
-      fill: #9eeaff;
-      font-size: 16px;
-      font-family: cursive;
-      text-shadow: 0 0 6px black;
-    }
-
-    .input-beam {
-      stroke: #ffdf6e;
-      stroke-width: 7;
-      fill: none;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(255, 223, 110, 0.95));
-      stroke-dasharray: 22 14;
-      animation: beamMove 1.4s linear infinite;
-    }
-
-    .arm1-beam {
-      stroke: #58f7ff;
-      stroke-width: 7;
-      fill: none;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(88, 247, 255, 0.95));
-      stroke-dasharray: 22 14;
-      animation: beamMove 1.4s linear infinite;
-    }
-
-    .arm2-beam {
-      stroke: #ff8bd1;
-      stroke-width: 7;
-      fill: none;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(255, 139, 209, 0.95));
-      stroke-dasharray: 22 14;
-      animation: beamMove 1.4s linear infinite;
-    }
-
-    .output-beam {
-      stroke: #a9ff8a;
-      stroke-width: 7;
-      fill: none;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(169, 255, 138, 0.95));
-      stroke-dasharray: 22 14;
-      animation: beamMove 1.4s linear infinite;
-    }
-
-    .secondary-output-beam {
-      stroke: #c59cff;
-      stroke-width: 6;
-      fill: none;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(197, 156, 255, 0.85));
-      stroke-dasharray: 18 14;
-      animation: beamMove 1.4s linear infinite;
-      opacity: 0.88;
-    }
-
-    @keyframes beamMove {
-      from {
-        stroke-dashoffset: 36;
-      }
-      to {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    .laser-body {
-      stroke: #ffdf6e;
-      stroke-width: 4;
-      fill: rgba(255, 223, 110, 0.16);
-      filter: drop-shadow(0 0 10px rgba(255, 223, 110, 0.55));
-    }
-
-    .laser-aperture {
-      fill: #ffdf6e;
-      filter: drop-shadow(0 0 10px rgba(255, 223, 110, 0.95));
-    }
-
-    .beam-splitter {
-      stroke: #7efcff;
-      stroke-width: 8;
-      fill: none;
-      filter: drop-shadow(0 0 8px rgba(126, 252, 255, 0.80));
-    }
-
-    .beam-splitter-plate {
-      stroke: rgba(255, 255, 255, 0.76);
-      stroke-width: 2;
-      stroke-dasharray: 8 7;
-      fill: none;
-    }
-
-    .mirror {
-      stroke: #ffffff;
-      stroke-width: 9;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.75));
-    }
-
-    .mirror-back {
-      stroke: #8fa7ff;
-      stroke-width: 4;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(143, 167, 255, 0.85));
-    }
-
-    .detector-body {
-      stroke: #a9ff8a;
-      stroke-width: 4;
-      fill: rgba(169, 255, 138, 0.13);
-      filter: drop-shadow(0 0 12px rgba(169, 255, 138, 0.55));
-    }
-
-    .detector-screen {
-      stroke: rgba(255, 255, 255, 0.55);
-      stroke-width: 2;
-      fill: rgba(255, 255, 255, 0.08);
-    }
-
-    .phase-cell {
-      stroke: #58f7ff;
-      stroke-width: 3;
-      fill: rgba(88, 247, 255, 0.10);
-      filter: drop-shadow(0 0 8px rgba(88, 247, 255, 0.45));
-    }
-
-    .sample-cell {
-      stroke: #ff8bd1;
-      stroke-width: 3;
-      fill: rgba(255, 139, 209, 0.10);
-      filter: drop-shadow(0 0 8px rgba(255, 139, 209, 0.45));
-    }
-
-    .component-caption {
-      fill: rgba(255, 255, 255, 0.90);
-      font-size: 15px;
-      font-family: cursive;
-      text-shadow: 0 0 6px black;
+      text-shadow: 0 0 10px rgba(158, 234, 255, 0.35);
     }
 
     .equation-box {
       margin-top: 16px;
-      padding: 14px 16px;
+      padding: 16px 16px 14px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+    }
+
+    .equation-title {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #eef8ff;
+    }
+
+    .equation-line {
+      font-family: "Times New Roman", Georgia, serif;
+      font-size: 29px;
+      line-height: 1.5;
+      color: #ffffff;
+      margin-bottom: 6px;
+      word-break: keep-all;
+    }
+
+    .equation-line:last-child {
+      margin-bottom: 0;
+    }
+
+    #detectorCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: #000000;
+      box-shadow:
+        0 0 12px rgba(158, 234, 255, 0.22),
+        inset 0 0 18px rgba(255, 255, 255, 0.03);
+    }
+
+    .canvas-caption {
+      margin-top: 12px;
       font-size: 16px;
-      line-height: 1.7;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .info-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 16px;
+      line-height: 1.85;
       color: rgba(255, 255, 255, 0.92);
+    }
+
+    .info-list li {
+      margin-bottom: 7px;
+    }
+
+    .info-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .component-item {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .component-item strong {
+      color: #d9f4ff;
     }
 
     .back-link {
       display: inline-block;
-      margin-top: 26px;
+      margin-top: 18px;
       text-decoration: none;
       font-size: 18px;
-      color: white;
-      padding: 10px 18px;
+      color: #ffffff;
+      padding: 11px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.08);
       transition:
         background 0.25s ease,
         transform 0.25s ease,
@@ -376,14 +300,143 @@
     }
 
     .back-link:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.16);
       transform: translateX(-4px);
       box-shadow:
-        0 0 10px rgba(255, 255, 255, 0.40),
-        0 0 22px rgba(102, 204, 255, 0.40);
+        0 0 10px rgba(255, 255, 255, 0.35),
+        0 0 20px rgba(134, 214, 255, 0.25);
     }
 
-    @media screen and (max-width: 1100px) {
+    /* SVG styles */
+    .svg-label {
+      fill: #ffffff;
+      font-size: 33px;
+      font-weight: 800;
+      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+      paint-order: stroke;
+      stroke: rgba(0, 0, 0, 0.55);
+      stroke-width: 3px;
+    }
+
+    .svg-small-label {
+      fill: #ffffff;
+      font-size: 26px;
+      font-weight: 700;
+      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+      paint-order: stroke;
+      stroke: rgba(0, 0, 0, 0.55);
+      stroke-width: 2.5px;
+    }
+
+    .beam-main {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.95;
+    }
+
+    .input-beam {
+      stroke: rgba(255, 40, 40, 0.95);
+      stroke-width: 16;
+      filter: drop-shadow(0 0 12px rgba(255, 80, 80, 0.60));
+    }
+
+    .arm-beam {
+      stroke: rgba(255, 140, 150, 0.78);
+      stroke-width: 16;
+      filter: drop-shadow(0 0 10px rgba(255, 165, 175, 0.35));
+    }
+
+    .output1-beam {
+      stroke: rgba(255, 140, 150, 0.88);
+      stroke-width: 16;
+      filter: drop-shadow(0 0 12px rgba(190, 255, 120, 0.28));
+    }
+
+    .output2-beam {
+      stroke: rgba(255, 140, 150, 0.88);
+      stroke-width: 16;
+      filter: drop-shadow(0 0 12px rgba(190, 255, 120, 0.28));
+    }
+
+    .dir-arrow {
+      fill: none;
+      stroke: rgba(35, 35, 35, 0.95);
+      stroke-width: 4.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .beam-splitter-front {
+      stroke: #7abfff;
+      stroke-width: 10;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px rgba(122, 191, 255, 0.48));
+    }
+
+    .beam-splitter-back {
+      stroke: rgba(255, 255, 255, 0.50);
+      stroke-width: 4;
+      stroke-linecap: round;
+    }
+
+    .mirror-front {
+      stroke: #a4a7aa;
+      stroke-width: 11;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.35));
+    }
+
+    .mirror-back {
+      stroke: #c08f52;
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+
+    .laser-body {
+      stroke: #ffcc66;
+      stroke-width: 4;
+      fill: rgba(255, 204, 102, 0.13);
+      filter: drop-shadow(0 0 10px rgba(255, 204, 102, 0.30));
+    }
+
+    .laser-aperture {
+      fill: #ffcc66;
+      filter: drop-shadow(0 0 8px rgba(255, 204, 102, 0.55));
+    }
+
+    .detector-body {
+      stroke: #97ff7a;
+      stroke-width: 4;
+      fill: rgba(151, 255, 122, 0.11);
+      filter: drop-shadow(0 0 8px rgba(151, 255, 122, 0.28));
+    }
+
+    .detector-screen {
+      stroke: rgba(255, 255, 255, 0.35);
+      stroke-width: 2;
+      fill: rgba(255, 255, 255, 0.05);
+    }
+
+    .preview-stripe {
+      stroke: none;
+    }
+
+    .guide-box {
+      stroke: rgba(255, 255, 255, 0.18);
+      stroke-width: 2;
+      fill: rgba(255, 255, 255, 0.02);
+      stroke-dasharray: 8 7;
+    }
+
+    .mini-caption {
+      fill: rgba(255, 255, 255, 0.75);
+      font-size: 18px;
+      font-weight: 600;
+      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+    }
+
+    @media screen and (max-width: 1500px) {
       .simulation-layout {
         grid-template-columns: 1fr;
       }
@@ -393,33 +446,30 @@
       }
     }
 
-    @media screen and (max-width: 850px) {
+    @media screen and (max-width: 900px) {
       .page-container {
-        padding: 22px;
+        padding: 16px;
       }
 
       .content-card {
-        padding: 26px 22px;
+        width: 100%;
+        padding: 18px 16px 16px;
       }
 
       h1 {
-        font-size: 34px;
+        font-size: 36px;
       }
 
-      p {
+      .top-description {
         font-size: 16px;
       }
 
-      .label {
-        font-size: 17px;
+      .panel-title {
+        font-size: 26px;
       }
 
-      .small-label {
-        font-size: 14px;
-      }
-
-      .beam-label {
-        font-size: 13px;
+      .equation-line {
+        font-size: 22px;
       }
 
       .result-grid {
@@ -428,137 +478,155 @@
     }
   </style>
 </head>
-
 <body>
   <div class="page-container">
     <div class="content-card">
       <h1>Mach-Zehnder Interferometer Simulation</h1>
 
-      <p>
-        This interactive Mach-Zehnder interferometer simulation shows how the optical path difference, wavelength,
-        fringe spacing, and visibility affect the interference pattern observed at the detector.
+      <p class="top-description">
+        아래 시뮬레이션은 <strong>Mach-Zehnder Interferometer</strong>의 transmissive geometry를 바탕으로,
+        두 arm에서 생긴 <strong>optical path difference</strong>가 두 개의 complementary output에서
+        어떤 간섭 패턴으로 나타나는지를 보여줍니다.
+        오른쪽 슬라이더를 조절하면 Detector 1과 Detector 2의 fringe pattern, intensity, contrast가 함께 변합니다.
       </p>
 
       <div class="simulation-layout">
+        <!-- LEFT: BIG OPTICAL CIRCUIT -->
         <div class="diagram-box">
-          <svg viewBox="0 0 1320 760" role="img" aria-label="Mach-Zehnder interferometer simulation schematic">
+          <svg viewBox="0 0 1650 980" role="img" aria-label="Mach-Zehnder Interferometer schematic">
             <defs>
-              <marker id="arrowInput" markerWidth="14" markerHeight="14" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,8 L11,4 z" fill="#ffdf6e"></path>
-              </marker>
-
-              <marker id="arrowArm1" markerWidth="14" markerHeight="14" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,8 L11,4 z" fill="#58f7ff"></path>
-              </marker>
-
-              <marker id="arrowArm2" markerWidth="14" markerHeight="14" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,8 L11,4 z" fill="#ff8bd1"></path>
-              </marker>
-
-              <marker id="arrowOutput" markerWidth="14" markerHeight="14" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,8 L11,4 z" fill="#a9ff8a"></path>
-              </marker>
-
-              <marker id="arrowSecondOutput" markerWidth="14" markerHeight="14" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,8 L11,4 z" fill="#c59cff"></path>
+              <marker id="smallArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M0,0 L0,10 L8,5 z" fill="rgba(35,35,35,0.95)"></path>
               </marker>
             </defs>
 
             <!-- Laser -->
-            <rect class="laser-body" x="50" y="346" width="150" height="68" rx="18"></rect>
-            <circle class="laser-aperture" cx="202" cy="380" r="10"></circle>
-            <text class="label" x="72" y="335">Laser</text>
-            <text class="component-caption" x="72" y="438">coherent input beam</text>
-
-            <!-- Input beam -->
-            <line class="input-beam" x1="215" y1="380" x2="370" y2="380" marker-end="url(#arrowInput)"></line>
-            <text class="beam-label" x="245" y="358">input beam</text>
-
-            <!-- BS1 -->
-            <line class="beam-splitter" x1="386" y1="322" x2="456" y2="438"></line>
-            <line class="beam-splitter-plate" x1="375" y1="322" x2="445" y2="438"></line>
-            <text class="small-label" x="374" y="474">BS1</text>
-            <text class="component-caption" x="350" y="498">50:50 beam splitter</text>
-
-            <!-- Arm 1: upper path -->
-            <line class="arm1-beam" x1="421" y1="374" x2="421" y2="155" marker-end="url(#arrowArm1)"></line>
-            <line class="arm1-beam" x1="421" y1="155" x2="1040" y2="155" marker-end="url(#arrowArm1)"></line>
-            <text class="beam-label" x="630" y="125">Arm 1 : reference arm</text>
-
-            <!-- Phase delay cell on Arm 1 -->
-            <rect class="phase-cell" id="phaseCell" x="635" y="112" width="170" height="86" rx="18"></rect>
-            <text class="small-label" x="660" y="145">Phase delay</text>
-            <text class="component-caption" x="657" y="173">changes optical phase</text>
-
-            <!-- Arm 2: lower path -->
-            <line class="arm2-beam" x1="456" y1="380" x2="1040" y2="380" marker-end="url(#arrowArm2)"></line>
-            <text class="beam-label" x="635" y="424">Arm 2 : sample arm</text>
-
-            <!-- Sample cell on Arm 2 -->
-            <rect class="sample-cell" x="650" y="336" width="180" height="88" rx="18"></rect>
-            <text class="small-label" x="690" y="370">Sample</text>
-            <text class="component-caption" x="682" y="398">adds phase shift</text>
-
-            <!-- Mirrors -->
-            <line class="mirror-back" x1="1020" y1="110" x2="1096" y2="186"></line>
-            <line class="mirror" x1="1035" y1="105" x2="1105" y2="175"></line>
-            <text class="small-label" x="1108" y="140">M1</text>
-
-            <line class="mirror-back" x1="1020" y1="335" x2="1096" y2="411"></line>
-            <line class="mirror" x1="1035" y1="330" x2="1105" y2="400"></line>
-            <text class="small-label" x="1108" y="370">M2</text>
-
-            <!-- Beams after mirrors toward BS2 -->
-            <line class="arm1-beam" x1="1070" y1="155" x2="1070" y2="315" marker-end="url(#arrowArm1)"></line>
-            <line class="arm2-beam" x1="1070" y1="380" x2="1070" y2="445" marker-end="url(#arrowArm2)"></line>
-
-            <!-- BS2 -->
-            <line class="beam-splitter" x1="1035" y1="445" x2="1105" y2="315"></line>
-            <line class="beam-splitter-plate" x1="1024" y1="445" x2="1094" y2="315"></line>
-            <text class="small-label" x="1110" y="455">BS2</text>
-            <text class="component-caption" x="1085" y="482">recombination</text>
-
-            <!-- Output to detector -->
-            <line class="output-beam" x1="1090" y1="380" x2="1210" y2="380" marker-end="url(#arrowOutput)"></line>
-            <text class="beam-label" x="1122" y="356">interference output</text>
-
-            <!-- Secondary output -->
-            <line class="secondary-output-beam" x1="1070" y1="380" x2="1070" y2="610" marker-end="url(#arrowSecondOutput)"></line>
-            <text class="beam-label" x="1090" y="570">complementary output</text>
-
-            <!-- Detector -->
-            <rect class="detector-body" x="1210" y="315" width="78" height="130" rx="18"></rect>
-            <rect class="detector-screen" x="1225" y="335" width="48" height="90" rx="10"></rect>
-            <text class="label" x="1170" y="480">Detector</text>
-            <text class="component-caption" x="1155" y="506">fringe intensity pattern</text>
-
-            <!-- Fringe preview on detector body -->
-            <g id="svgFringes">
-              <rect x="1231" y="343" width="36" height="74" rx="8" fill="rgba(0,0,0,0.35)"></rect>
-              <rect id="fringeA" x="1231" y="343" width="36" height="10" fill="rgba(169,255,138,0.35)"></rect>
-              <rect id="fringeB" x="1231" y="358" width="36" height="10" fill="rgba(169,255,138,0.70)"></rect>
-              <rect id="fringeC" x="1231" y="373" width="36" height="10" fill="rgba(169,255,138,0.35)"></rect>
-              <rect id="fringeD" x="1231" y="388" width="36" height="10" fill="rgba(169,255,138,0.70)"></rect>
-              <rect id="fringeE" x="1231" y="403" width="36" height="10" fill="rgba(169,255,138,0.35)"></rect>
+            <g id="laserGroup">
+              <rect class="laser-body" x="70" y="180" width="155" height="72" rx="18"></rect>
+              <circle class="laser-aperture" cx="223" cy="216" r="10"></circle>
+              <text class="svg-label" x="87" y="160">Laser</text>
             </g>
 
-            <!-- Explanation labels -->
-            <text class="component-caption" x="75" y="660">The two arms accumulate different optical phase.</text>
-            <text class="component-caption" x="75" y="688">Changing ΔL or λ shifts the interference phase at the detector.</text>
-            <text class="component-caption" x="75" y="716">Increasing visibility makes bright and dark fringes more distinct.</text>
+            <!-- Main beams (reference image style) -->
+            <!-- Input beam -->
+            <line class="beam-main input-beam" x1="18" y1="216" x2="370" y2="216"></line>
+
+            <!-- BS1 -->
+            <g id="bs1Group">
+              <line class="beam-splitter-back" x1="360" y1="150" x2="430" y2="282"></line>
+              <line class="beam-splitter-front" x1="372" y1="145" x2="442" y2="277"></line>
+              <text class="svg-label" x="328" y="340">BS1</text>
+            </g>
+
+            <!-- Upper horizontal arm -->
+            <line class="beam-main arm-beam" x1="406" y1="216" x2="1120" y2="216"></line>
+
+            <!-- Left vertical arm down -->
+            <line class="beam-main arm-beam" x1="406" y1="228" x2="406" y2="615"></line>
+
+            <!-- M1 top-right -->
+            <g id="m1Group">
+              <line class="mirror-back" id="m1Back" x1="1105" y1="158" x2="1185" y2="240"></line>
+              <line class="mirror-front" id="m1Front" x1="1117" y1="152" x2="1197" y2="234"></line>
+              <text class="svg-label" x="1188" y="150">M1</text>
+            </g>
+
+            <!-- Right vertical arm down -->
+            <line class="beam-main arm-beam" id="rightVerticalBeam" x1="1158" y1="216" x2="1158" y2="585"></line>
+
+            <!-- M2 bottom-left -->
+            <g id="m2Group">
+              <line class="mirror-back" x1="326" y1="546" x2="406" y2="630"></line>
+              <line class="mirror-front" x1="338" y1="540" x2="418" y2="624"></line>
+              <text class="svg-label" x="250" y="650">M2</text>
+            </g>
+
+            <!-- Lower horizontal arm -->
+            <line class="beam-main arm-beam" x1="406" y1="585" x2="1034" y2="585"></line>
+
+            <!-- BS2 -->
+            <g id="bs2Group">
+              <line class="beam-splitter-back" x1="1038" y1="650" x2="1108" y2="520"></line>
+              <line class="beam-splitter-front" x1="1050" y1="655" x2="1120" y2="525"></line>
+              <text class="svg-label" x="1082" y="710">BS2</text>
+            </g>
+
+            <!-- Output beams -->
+            <line class="beam-main output1-beam" id="out1Beam" x1="1096" y1="585" x2="1465" y2="585"></line>
+            <line class="beam-main output2-beam" id="out2Beam" x1="1078" y1="605" x2="1078" y2="882"></line>
+
+            <!-- Direction arrows offset from main beam -->
+            <!-- Input / right-going -->
+            <line class="dir-arrow" x1="95" y1="195" x2="170" y2="195" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" x1="580" y1="195" x2="655" y2="195" marker-end="url(#smallArrow)"></line>
+
+            <!-- Down-going -->
+            <line class="dir-arrow" x1="426" y1="320" x2="426" y2="410" marker-end="url(#smallArrow)"></line>
+            <line class="dir-arrow" id="rightDirArrow" x1="1178" y1="320" x2="1178" y2="410" marker-end="url(#smallArrow)"></line>
+
+            <!-- lower horizontal / right-going -->
+            <line class="dir-arrow" x1="650" y1="565" x2="735" y2="565" marker-end="url(#smallArrow)"></line>
+
+            <!-- right output / right-going shown above -->
+            <line class="dir-arrow" x1="1235" y1="565" x2="1315" y2="565" marker-end="url(#smallArrow)"></line>
+
+            <!-- bottom output / down-going shown right side -->
+            <line class="dir-arrow" x1="1100" y1="725" x2="1100" y2="805" marker-end="url(#smallArrow)"></line>
+
+            <!-- U labels -->
+            <text class="svg-small-label" x="28" y="275">U₀</text>
+            <text class="svg-small-label" x="1370" y="540">U₁</text>
+            <text class="svg-small-label" x="1370" y="630">U₂</text>
+            <text class="svg-small-label" x="965" y="900">U′₁</text>
+            <text class="svg-small-label" x="1105" y="900">U′₂</text>
+
+            <!-- Detectors -->
+            <g id="det1Group">
+              <rect class="detector-body" x="1465" y="528" width="115" height="116" rx="18"></rect>
+              <rect class="detector-screen" x="1484" y="545" width="77" height="82" rx="10"></rect>
+              <text class="svg-label" x="1420" y="690">D1</text>
+
+              <g id="previewD1"></g>
+            </g>
+
+            <g id="det2Group">
+              <rect class="detector-body" x="1018" y="882" width="120" height="84" rx="18"></rect>
+              <rect class="detector-screen" x="1036" y="899" width="84" height="48" rx="8"></rect>
+              <text class="svg-label" x="1148" y="944">D2</text>
+
+              <g id="previewD2"></g>
+            </g>
+
+            <!-- Detector guide boxes -->
+            <rect class="guide-box" x="1428" y="500" width="176" height="220" rx="18"></rect>
+            <text class="mini-caption" x="1450" y="742">Detector 1 output</text>
+
+            <rect class="guide-box" x="972" y="852" width="260" height="106" rx="18"></rect>
+            <text class="mini-caption" x="982" y="835">Detector 2 output</text>
           </svg>
+
+          <div class="diagram-note">
+            <strong>회로 해석:</strong> BS1에서 입력광 <strong>U₀</strong>가 두 arm으로 분리되고, M1과 M2에서 반사된 뒤
+            BS2에서 다시 recombination 됩니다. 그 결과 BS2의 오른쪽 출력(<strong>D1</strong>)과 아래쪽 출력(<strong>D2</strong>)에서
+            서로 complementary한 간섭 결과가 나타납니다.
+          </div>
         </div>
 
-        <div class="control-panel">
-          <div class="control-box">
-            <h2 class="panel-title">Simulation Controls</h2>
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+          <div class="panel-box">
+            <h2 class="panel-title">시뮬레이션 제어</h2>
 
             <div class="control-group">
               <div class="control-label">
                 <span>Optical path difference, ΔL</span>
-                <span class="control-value" id="pathValue">0.00 µm</span>
+                <span class="control-value" id="pathValue">0.00 μm</span>
               </div>
-              <input id="pathSlider" type="range" min="-5" max="5" value="0" step="0.01">
+              <input id="pathSlider" type="range" min="-5" max="5" value="0" step="0.01" />
+              <div class="control-help">
+                M1을 아주 조금 움직이거나, 한 arm의 굴절률/경로 길이가 바뀐 상황을 단순화해서 표현한 값입니다.
+                ΔL이 변하면 fringe 전체가 좌우로 shift 됩니다.
+              </div>
             </div>
 
             <div class="control-group">
@@ -566,15 +634,22 @@
                 <span>Wavelength, λ</span>
                 <span class="control-value" id="wavelengthValue">633 nm</span>
               </div>
-              <input id="wavelengthSlider" type="range" min="450" max="850" value="633" step="1">
+              <input id="wavelengthSlider" type="range" min="450" max="850" value="633" step="1" />
+              <div class="control-help">
+                같은 ΔL이라도 λ가 짧을수록 phase difference가 더 크게 변합니다.
+              </div>
             </div>
 
             <div class="control-group">
               <div class="control-label">
                 <span>Fringe spatial frequency</span>
-                <span class="control-value" id="frequencyValue">8.0 cycles</span>
+                <span class="control-value" id="frequencyValue">7.0 cycles</span>
               </div>
-              <input id="frequencySlider" type="range" min="2" max="18" value="8" step="0.1">
+              <input id="frequencySlider" type="range" min="2" max="18" value="7" step="0.1" />
+              <div class="control-help">
+                Detector의 줄무늬가 얼마나 촘촘한지를 의미합니다.
+                값을 올리면 <strong>D1, D2 미리보기 화면과 아래 detector canvas</strong>에서 fringe가 더 촘촘해집니다.
+              </div>
             </div>
 
             <div class="control-group">
@@ -582,56 +657,82 @@
                 <span>Visibility, V</span>
                 <span class="control-value" id="visibilityValue">0.90</span>
               </div>
-              <input id="visibilitySlider" type="range" min="0" max="1" value="0.9" step="0.01">
-            </div>
-
-            <div class="control-group">
-              <div class="control-label">
-                <span>Animation speed</span>
-                <span class="control-value" id="speedValue">1.00×</span>
+              <input id="visibilitySlider" type="range" min="0" max="1" value="0.90" step="0.01" />
+              <div class="control-help">
+                fringe contrast를 의미합니다. 값을 낮추면 bright / dark 차이가 줄어들고,
+                출력 beam의 강조 효과와 detector preview contrast도 함께 약해집니다.
               </div>
-              <input id="speedSlider" type="range" min="0" max="3" value="1" step="0.05">
             </div>
 
             <div class="result-grid">
               <div class="result-card">
-                <span class="result-name">Phase difference</span>
+                <span class="result-name">Phase difference, Δφ</span>
                 <span class="result-value" id="phaseResult">0.00 rad</span>
               </div>
 
               <div class="result-card">
-                <span class="result-name">Central intensity</span>
-                <span class="result-value" id="intensityResult">0.95</span>
+                <span class="result-name">D1 center intensity</span>
+                <span class="result-value" id="intensity1Result">0.95</span>
               </div>
 
               <div class="result-card">
-                <span class="result-name">Output port 1</span>
+                <span class="result-name">D1 output power</span>
                 <span class="result-value" id="port1Result">95.0%</span>
               </div>
 
               <div class="result-card">
-                <span class="result-name">Output port 2</span>
+                <span class="result-name">D2 output power</span>
                 <span class="result-value" id="port2Result">5.0%</span>
               </div>
             </div>
 
             <div class="equation-box">
-              Detector intensity model:<br>
-              I = I<sub>0</sub>[1 + V cos(Δφ)] / 2<br>
-              Δφ = 2πΔL / λ
+              <div class="equation-title">사용한 식</div>
+              <div class="equation-line">I₁(x) = I₀ / 2 · [1 + V cos(2πfx + Δφ)]</div>
+              <div class="equation-line">I₂(x) = I₀ / 2 · [1 - V cos(2πfx + Δφ)]</div>
+              <div class="equation-line">Δφ = 2πΔL / λ</div>
             </div>
           </div>
 
-          <div class="detector-box">
-            <h2 class="panel-title">Detector Interference Pattern</h2>
-
-            <canvas id="fringeCanvas" width="720" height="260"></canvas>
-
-            <div class="detector-description">
-              The bright and dark bands represent constructive and destructive interference.
-              When ΔL changes, the phase difference changes, so the fringe pattern shifts.
-              When visibility decreases, the contrast between bright and dark fringes becomes weaker.
+          <div class="panel-box">
+            <h2 class="panel-title">Detector 간섭 패턴</h2>
+            <canvas id="detectorCanvas" width="760" height="360"></canvas>
+            <div class="canvas-caption">
+              위쪽은 <strong>D1</strong>, 아래쪽은 <strong>D2</strong>입니다.
+              두 출력은 complementary output이므로 한쪽이 밝아질수록 다른 한쪽은 상대적으로 어두워집니다.
             </div>
+          </div>
+
+          <div class="panel-box">
+            <h2 class="panel-title">구성요소 설명</h2>
+            <div class="component-grid">
+              <div class="component-item"><strong>Laser</strong> : coherent light source입니다.</div>
+              <div class="component-item"><strong>BS1</strong> : 입력광을 두 arm으로 분리하는 첫 번째 beam splitter입니다.</div>
+              <div class="component-item"><strong>M1, M2</strong> : 각 arm의 빛을 반사시켜 BS2로 보내는 mirror입니다.</div>
+              <div class="component-item"><strong>BS2</strong> : 두 arm의 빛을 다시 recombination 시키는 두 번째 beam splitter입니다.</div>
+              <div class="component-item"><strong>D1, D2</strong> : recombination 이후 나타나는 두 개의 complementary output을 측정하는 detector입니다.</div>
+            </div>
+          </div>
+
+          <div class="panel-box">
+            <h2 class="panel-title">이 간섭계로 볼 수 있는 것</h2>
+            <ul class="info-list">
+              <li><strong>Phase difference</strong> : 두 arm 사이의 위상차를 직접적으로 관찰할 수 있습니다.</li>
+              <li><strong>미세 변위(displacement)</strong> : mirror나 sample 위치가 조금만 바뀌어도 fringe가 이동합니다.</li>
+              <li><strong>굴절률 변화(refractive index change)</strong> : sample arm 안의 매질 변화가 optical path length를 바꿉니다.</li>
+              <li><strong>박막 또는 투명 시료의 두께 변화</strong> : 경로차 변화로 간섭 패턴이 바뀝니다.</li>
+              <li><strong>coherence / alignment 상태</strong> : visibility가 낮아지면 fringe contrast가 줄어들어 정렬이나 coherence 상태를 가늠할 수 있습니다.</li>
+            </ul>
+          </div>
+
+          <div class="panel-box">
+            <h2 class="panel-title">슬라이더 변화가 회로에서 어떻게 보이는가</h2>
+            <ul class="info-list">
+              <li><strong>ΔL</strong> : phase가 바뀌므로 D1, D2의 밝기 분배와 fringe 위치가 바뀝니다.</li>
+              <li><strong>Fringe spatial frequency</strong> : D1, D2 detector screen과 canvas의 줄무늬 간격이 직접 바뀝니다.</li>
+              <li><strong>Visibility, V</strong> : detector preview와 canvas에서 bright/dark contrast가 약해지거나 강해집니다.</li>
+              <li><strong>λ</strong> : 같은 ΔL에서도 fringe shift 민감도가 달라집니다.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -645,32 +746,31 @@
     const wavelengthSlider = document.getElementById("wavelengthSlider");
     const frequencySlider = document.getElementById("frequencySlider");
     const visibilitySlider = document.getElementById("visibilitySlider");
-    const speedSlider = document.getElementById("speedSlider");
 
     const pathValue = document.getElementById("pathValue");
     const wavelengthValue = document.getElementById("wavelengthValue");
     const frequencyValue = document.getElementById("frequencyValue");
     const visibilityValue = document.getElementById("visibilityValue");
-    const speedValue = document.getElementById("speedValue");
 
     const phaseResult = document.getElementById("phaseResult");
-    const intensityResult = document.getElementById("intensityResult");
+    const intensity1Result = document.getElementById("intensity1Result");
     const port1Result = document.getElementById("port1Result");
     const port2Result = document.getElementById("port2Result");
 
-    const canvas = document.getElementById("fringeCanvas");
+    const canvas = document.getElementById("detectorCanvas");
     const ctx = canvas.getContext("2d");
 
-    const phaseCell = document.getElementById("phaseCell");
-    const fringeRects = [
-      document.getElementById("fringeA"),
-      document.getElementById("fringeB"),
-      document.getElementById("fringeC"),
-      document.getElementById("fringeD"),
-      document.getElementById("fringeE")
-    ];
+    const previewD1 = document.getElementById("previewD1");
+    const previewD2 = document.getElementById("previewD2");
 
-    let animationPhase = 0;
+    const out1Beam = document.getElementById("out1Beam");
+    const out2Beam = document.getElementById("out2Beam");
+
+    const rightVerticalBeam = document.getElementById("rightVerticalBeam");
+    const rightDirArrow = document.getElementById("rightDirArrow");
+
+    const m1Front = document.getElementById("m1Front");
+    const m1Back = document.getElementById("m1Back");
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
@@ -708,7 +808,6 @@
       }
 
       let factor = 1;
-
       if (wavelength >= 380 && wavelength < 420) {
         factor = 0.3 + 0.7 * (wavelength - 380) / (420 - 380);
       } else if (wavelength >= 420 && wavelength < 701) {
@@ -724,79 +823,165 @@
       return { r, g, b };
     }
 
-    function drawFringes() {
+    function createPreviewStripes(group, x, y, width, height, count, horizontal = false) {
+      group.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("class", "preview-stripe");
+        rect.dataset.index = i;
+
+        if (!horizontal) {
+          const stripeW = width / count;
+          rect.setAttribute("x", x + i * stripeW);
+          rect.setAttribute("y", y);
+          rect.setAttribute("width", Math.max(1, stripeW - 1.2));
+          rect.setAttribute("height", height);
+        } else {
+          const stripeH = height / count;
+          rect.setAttribute("x", x);
+          rect.setAttribute("y", y + i * stripeH);
+          rect.setAttribute("width", width);
+          rect.setAttribute("height", Math.max(1, stripeH - 1.2));
+        }
+
+        group.appendChild(rect);
+      }
+    }
+
+    createPreviewStripes(previewD1, 1488, 549, 69, 74, 12, false);
+    createPreviewStripes(previewD2, 1040, 903, 76, 40, 10, false);
+
+    function updatePreview(group, phase, visibility, baseIntensity, color, count, complementary = false) {
+      const stripes = group.querySelectorAll("rect");
+      stripes.forEach((rect, idx) => {
+        const normalized = idx / Math.max(1, count - 1);
+        const localPhase = 2 * Math.PI * parseFloat(frequencySlider.value) * normalized + phase;
+        let fringe = 0.5 * (1 + visibility * Math.cos(localPhase));
+        if (complementary) {
+          fringe = 1 - fringe;
+        }
+        const intensity = clamp(0.12 + 0.88 * fringe, 0, 1);
+        rect.setAttribute(
+          "fill",
+          `rgba(${color.r}, ${color.g}, ${color.b}, ${intensity.toFixed(3)})`
+        );
+      });
+    }
+
+    function drawDetectorCanvas() {
       const deltaL = parseFloat(pathSlider.value);
       const wavelengthNm = parseFloat(wavelengthSlider.value);
       const wavelengthUm = wavelengthNm / 1000;
       const spatialFrequency = parseFloat(frequencySlider.value);
       const visibility = parseFloat(visibilitySlider.value);
-      const speed = parseFloat(speedSlider.value);
-
-      animationPhase += 0.018 * speed;
 
       const phase = (2 * Math.PI * deltaL) / wavelengthUm;
-      const centralIntensity = 0.5 * (1 + visibility * Math.cos(phase));
-      const complementaryIntensity = 1 - centralIntensity;
+      const centerI1 = 0.5 * (1 + visibility * Math.cos(phase));
+      const centerI2 = 1 - centerI1;
 
-      pathValue.textContent = `${deltaL.toFixed(2)} µm`;
+      pathValue.textContent = `${deltaL.toFixed(2)} μm`;
       wavelengthValue.textContent = `${wavelengthNm.toFixed(0)} nm`;
       frequencyValue.textContent = `${spatialFrequency.toFixed(1)} cycles`;
       visibilityValue.textContent = `${visibility.toFixed(2)}`;
-      speedValue.textContent = `${speed.toFixed(2)}×`;
 
       phaseResult.textContent = `${phase.toFixed(2)} rad`;
-      intensityResult.textContent = `${centralIntensity.toFixed(2)}`;
-      port1Result.textContent = `${(centralIntensity * 100).toFixed(1)}%`;
-      port2Result.textContent = `${(complementaryIntensity * 100).toFixed(1)}%`;
+      intensity1Result.textContent = `${centerI1.toFixed(2)}`;
+      port1Result.textContent = `${(centerI1 * 100).toFixed(1)}%`;
+      port2Result.textContent = `${(centerI2 * 100).toFixed(1)}%`;
 
       const color = wavelengthToRGB(wavelengthNm);
 
-      phaseCell.setAttribute(
-        "transform",
-        `translate(${deltaL * 7}, 0)`
-      );
-
       const w = canvas.width;
       const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
 
-      const imageData = ctx.createImageData(w, h);
-      const data = imageData.data;
+      ctx.fillStyle = "#030303";
+      ctx.fillRect(0, 0, w, h);
 
-      for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-          const normalizedX = x / w;
-          const gaussianEnvelope = Math.exp(-Math.pow((y - h / 2) / (h * 0.42), 2));
-          const localPhase = 2 * Math.PI * spatialFrequency * normalizedX + phase + animationPhase;
-          const fringe = 0.5 * (1 + visibility * Math.cos(localPhase));
-          const intensity = clamp(fringe * gaussianEnvelope, 0, 1);
+      // Titles inside canvas
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.font = "bold 26px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText("D1 output", 20, 34);
+      ctx.fillText("D2 output", 20, 198);
 
-          const index = (y * w + x) * 4;
+      const boxX = 16;
+      const boxW = w - 32;
+      const boxH = 108;
+      const box1Y = 46;
+      const box2Y = 210;
 
-          data[index] = Math.round(color.r * intensity);
-          data[index + 1] = Math.round(color.g * intensity);
-          data[index + 2] = Math.round(color.b * intensity);
-          data[index + 3] = 255;
+      function drawPort(boxY, complementary = false) {
+        for (let y = boxY; y < boxY + boxH; y++) {
+          for (let x = boxX; x < boxX + boxW; x++) {
+            const nx = (x - boxX) / boxW;
+            const ny = (y - boxY - boxH / 2) / (boxH / 2);
+            const envelope = Math.exp(-Math.pow(ny / 0.85, 2));
+            let fringe = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * spatialFrequency * nx + phase));
+            if (complementary) {
+              fringe = 1 - fringe;
+            }
+            const intensity = clamp(fringe * envelope, 0, 1);
+
+            ctx.fillStyle = `rgb(${Math.round(color.r * intensity)}, ${Math.round(color.g * intensity)}, ${Math.round(color.b * intensity)})`;
+            ctx.fillRect(x, y, 1, 1);
+          }
         }
+
+        ctx.strokeStyle = "rgba(255,255,255,0.26)";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxW, boxH);
       }
 
-      ctx.putImageData(imageData, 0, 0);
+      drawPort(box1Y, false);
+      drawPort(box2Y, true);
 
-      ctx.save();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(1, 1, w - 2, h - 2);
-      ctx.restore();
+      ctx.fillStyle = "rgba(255,255,255,0.80)";
+      ctx.font = "18px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText(`Power: ${(centerI1 * 100).toFixed(1)}%`, w - 180, 34);
+      ctx.fillText(`Power: ${(centerI2 * 100).toFixed(1)}%`, w - 180, 198);
 
-      fringeRects.forEach((rect, index) => {
-        const local = 0.5 * (1 + visibility * Math.cos(phase + animationPhase + index * 0.85));
-        const alpha = 0.18 + local * 0.72;
-        rect.setAttribute("fill", `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha.toFixed(2)})`);
-      });
+      updatePreview(previewD1, phase, visibility, centerI1, color, 12, false);
+      updatePreview(previewD2, phase, visibility, centerI2, color, 10, true);
 
-      requestAnimationFrame(drawFringes);
+      // Beam brightness update for intuitive visibility/output effect
+      const outOpacity1 = 0.35 + 0.65 * centerI1;
+      const outOpacity2 = 0.35 + 0.65 * centerI2;
+
+      out1Beam.style.opacity = outOpacity1.toFixed(3);
+      out2Beam.style.opacity = outOpacity2.toFixed(3);
+
+      const glowStrength1 = 0.15 + 0.70 * visibility;
+      const glowStrength2 = 0.15 + 0.70 * visibility;
+
+      out1Beam.style.filter = `drop-shadow(0 0 ${8 + 10 * glowStrength1}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI1}))`;
+      out2Beam.style.filter = `drop-shadow(0 0 ${8 + 10 * glowStrength2}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI2}))`;
+
+      // Simple M1 motion to visualize ΔL
+      const shift = deltaL * 2.4; // exaggerated for schematic visibility
+      m1Back.setAttribute("x1", 1105 + shift);
+      m1Back.setAttribute("y1", 158 - shift * 0.35);
+      m1Back.setAttribute("x2", 1185 + shift);
+      m1Back.setAttribute("y2", 240 - shift * 0.35);
+
+      m1Front.setAttribute("x1", 1117 + shift);
+      m1Front.setAttribute("y1", 152 - shift * 0.35);
+      m1Front.setAttribute("x2", 1197 + shift);
+      m1Front.setAttribute("y2", 234 - shift * 0.35);
+
+      const rightX = 1158 + shift * 0.35;
+      rightVerticalBeam.setAttribute("x1", rightX);
+      rightVerticalBeam.setAttribute("x2", rightX);
+
+      rightDirArrow.setAttribute("x1", rightX + 20);
+      rightDirArrow.setAttribute("x2", rightX + 20);
     }
 
-    drawFringes();
+    pathSlider.addEventListener("input", drawDetectorCanvas);
+    wavelengthSlider.addEventListener("input", drawDetectorCanvas);
+    frequencySlider.addEventListener("input", drawDetectorCanvas);
+    visibilitySlider.addEventListener("input", drawDetectorCanvas);
+
+    drawDetectorCanvas();
   </script>
 </body>
 </html>
