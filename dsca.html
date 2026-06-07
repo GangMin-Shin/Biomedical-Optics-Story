@@ -17,54 +17,82 @@
       padding: 0;
       width: 100%;
       min-height: 100vh;
+      font-family: "Courier New", monospace;
+      color: #173247;
+      overflow-x: hidden;
+      background-color: #000;
     }
 
     body {
       position: relative;
-      padding: 24px;
-      font-family: "Courier New", monospace;
-      color: #173247;
-      background-color: #ffffff;
-      overflow-x: hidden;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background-image: url("images/Diffuse Speckle Contrast Analysis background.jpeg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      background: url("images/Diffuse%20Speckle%20Contrast%20Analysis%20background.jpeg") center / cover no-repeat;
       opacity: 0.7;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.28),
+        rgba(0, 0, 0, 0.72)
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      background: rgba(0, 0, 0, 0.42);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.14);
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.35),
+        0 0 22px rgba(102, 204, 255, 0.35);
     }
 
     .page-shell {
       width: min(1500px, 96vw);
       margin: 0;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 22px;
-      padding: 13px 21px;
-      border: 1px solid rgba(20, 130, 160, 0.45);
-      border-radius: 999px;
-      color: #0b6f8a;
-      background: rgba(255, 255, 255, 0.88);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 19px;
-      line-height: 1;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
-    }
-
-    .back-link:hover {
-      background: rgba(230, 249, 254, 0.96);
     }
 
     .main-card {
@@ -105,9 +133,19 @@
       border-radius: 16px;
     }
 
-    @media (max-width: 900px) {
-      body {
+    @media screen and (max-width: 900px) {
+      .page-container {
         padding: 14px;
+      }
+
+      .nav-buttons {
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .nav-button {
+        padding: 10px 15px;
+        font-size: 16px;
       }
 
       .page-shell {
@@ -117,11 +155,6 @@
       .main-card {
         padding: 20px;
         border-radius: 22px;
-      }
-
-      .back-link {
-        padding: 12px 18px;
-        font-size: 17px;
       }
 
       h1 {
@@ -142,20 +175,25 @@
 </head>
 
 <body>
-  <main class="page-shell">
-    <a class="back-link" href="index.html">← Back to main page</a>
+  <div class="page-container">
+    <nav class="nav-buttons">
+      <a class="nav-button" href="dot.html">← Back to DOT</a>
+      <a class="nav-button" href="index.html">Homepage</a>
+    </nav>
 
-    <section class="main-card">
-      <h1>Diffuse Speckle Contrast Analysis Schematic</h1>
+    <main class="page-shell">
+      <section class="main-card">
+        <h1>Diffuse Speckle Contrast Analysis Schematic</h1>
 
-      <div class="schematic-frame">
-        <img
-          class="schematic-image"
-          src="images/DSCA.png"
-          alt="Diffuse Speckle Contrast Analysis Schematic"
-        >
-      </div>
-    </section>
-  </main>
+        <div class="schematic-frame">
+          <img
+            class="schematic-image"
+            src="images/DSCA.png"
+            alt="Diffuse Speckle Contrast Analysis Schematic"
+          >
+        </div>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
