@@ -16,8 +16,8 @@
       width: 100%;
       min-height: 100vh;
       font-family: cursive;
-      color: white;
-      background-color: #020711;
+      color: #1f2a33;
+      background-color: #f8f7f2;
       overflow-x: hidden;
     }
 
@@ -30,10 +30,10 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 15% 12%, rgba(102, 204, 255, 0.26), transparent 34%),
-        radial-gradient(circle at 82% 20%, rgba(155, 255, 196, 0.20), transparent 30%),
-        radial-gradient(circle at 50% 85%, rgba(255, 216, 120, 0.14), transparent 38%),
-        linear-gradient(135deg, #020711, #07182b 48%, #010409);
+        radial-gradient(circle at 12% 10%, rgba(210, 232, 245, 0.95), transparent 30%),
+        radial-gradient(circle at 86% 16%, rgba(238, 246, 232, 0.95), transparent 34%),
+        radial-gradient(circle at 48% 84%, rgba(255, 242, 217, 0.90), transparent 38%),
+        linear-gradient(135deg, #ffffff 0%, #f7f5ed 42%, #eef6f7 100%);
       z-index: 0;
       pointer-events: none;
     }
@@ -43,13 +43,19 @@
       position: fixed;
       inset: 0;
       background:
-        linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.55)),
         repeating-linear-gradient(
           90deg,
-          rgba(255, 255, 255, 0.025) 0,
-          rgba(255, 255, 255, 0.025) 1px,
+          rgba(66, 96, 120, 0.035) 0,
+          rgba(66, 96, 120, 0.035) 1px,
           transparent 1px,
-          transparent 70px
+          transparent 80px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(66, 96, 120, 0.025) 0,
+          rgba(66, 96, 120, 0.025) 1px,
+          transparent 1px,
+          transparent 80px
         );
       z-index: 0;
       pointer-events: none;
@@ -58,81 +64,64 @@
     .page-container {
       position: relative;
       z-index: 1;
+      width: 100%;
       min-height: 100vh;
-      padding: 42px;
+      padding: 38px;
     }
 
     .hero-card {
-      width: min(1180px, 100%);
+      width: 100%;
       padding: 34px 38px;
       border-radius: 28px;
-      background: rgba(0, 0, 0, 0.50);
-      border: 1px solid rgba(255, 255, 255, 0.26);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(78, 120, 145, 0.22);
       box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.12),
-        0 0 46px rgba(102, 204, 255, 0.20);
-      backdrop-filter: blur(5px);
+        0 16px 36px rgba(40, 78, 100, 0.14),
+        0 0 32px rgba(140, 190, 210, 0.16);
+      backdrop-filter: blur(8px);
     }
 
     h1 {
       margin: 0 0 16px;
       font-size: 46px;
       line-height: 1.15;
-      color: rgba(255, 255, 255, 0.98);
+      color: #173145;
       text-shadow:
-        0 0 8px rgba(102, 204, 255, 0.60),
-        0 0 20px rgba(102, 204, 255, 0.36);
+        0 0 10px rgba(145, 205, 230, 0.55),
+        0 0 22px rgba(145, 205, 230, 0.30);
     }
 
     h2 {
       margin: 0 0 18px;
       font-size: 30px;
-      color: rgba(255, 255, 255, 0.97);
-      text-shadow: 0 0 10px rgba(102, 204, 255, 0.34);
+      color: #173145;
+      text-shadow: 0 0 10px rgba(145, 205, 230, 0.25);
     }
 
     h3 {
       margin: 0 0 10px;
       font-size: 23px;
-      color: #bff3ff;
+      color: #1f6075;
     }
 
     p {
       margin: 0 0 14px;
       font-size: 18px;
       line-height: 1.78;
-      color: rgba(255, 255, 255, 0.92);
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.82);
+      color: rgba(31, 42, 51, 0.92);
     }
 
     .subtitle {
-      max-width: 980px;
+      max-width: 1200px;
       font-size: 19px;
       line-height: 1.85;
     }
 
-    .keyword-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 22px;
-    }
-
-    .keyword {
-      padding: 8px 13px;
-      border-radius: 999px;
-      color: #dff9ff;
-      background: rgba(158, 234, 255, 0.12);
-      border: 1px solid rgba(158, 234, 255, 0.35);
-      box-shadow: 0 0 14px rgba(158, 234, 255, 0.12);
-      font-size: 15px;
-    }
-
     .main-section {
-      width: min(1180px, 100%);
+      width: 100%;
       margin-top: 28px;
       display: grid;
-      grid-template-columns: minmax(0, 1.28fr) minmax(330px, 0.72fr);
+      grid-template-columns: minmax(0, 1.9fr) minmax(360px, 0.75fr);
       gap: 24px;
       align-items: stretch;
     }
@@ -140,43 +129,43 @@
     .panel {
       padding: 28px;
       border-radius: 26px;
-      background: rgba(0, 0, 0, 0.47);
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(78, 120, 145, 0.20);
       box-shadow:
-        0 0 18px rgba(0, 0, 0, 0.35),
-        0 0 30px rgba(102, 204, 255, 0.12);
-      backdrop-filter: blur(5px);
+        0 16px 34px rgba(40, 78, 100, 0.13),
+        0 0 30px rgba(145, 205, 230, 0.13);
+      backdrop-filter: blur(8px);
     }
 
     .diagram-wrap {
       position: relative;
       width: 100%;
-      min-height: 520px;
+      min-height: 700px;
       border-radius: 22px;
       overflow: hidden;
       background:
-        radial-gradient(circle at 45% 55%, rgba(158, 234, 255, 0.13), transparent 38%),
-        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
-      border: 1px solid rgba(255, 255, 255, 0.18);
+        radial-gradient(circle at 48% 50%, rgba(255, 255, 255, 0.95), transparent 36%),
+        linear-gradient(145deg, rgba(250, 253, 255, 0.98), rgba(236, 243, 245, 0.95));
+      border: 1px solid rgba(78, 120, 145, 0.20);
     }
 
     .system-svg {
       width: 100%;
-      height: 520px;
+      height: 700px;
       display: block;
     }
 
     .hotspot {
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 999px;
-      border: 2px solid rgba(158, 234, 255, 0.96);
+      border: 2px solid rgba(20, 118, 150, 0.96);
       color: white;
-      background: rgba(0, 0, 0, 0.62);
+      background: rgba(35, 123, 150, 0.88);
       box-shadow:
-        0 0 0 6px rgba(158, 234, 255, 0.12),
-        0 0 16px rgba(158, 234, 255, 0.68);
+        0 0 0 7px rgba(35, 160, 190, 0.13),
+        0 0 16px rgba(35, 160, 190, 0.55);
       cursor: pointer;
       font-size: 16px;
       font-weight: 700;
@@ -188,55 +177,66 @@
 
     .hotspot:hover,
     .hotspot.active {
-      transform: scale(1.16);
-      background: rgba(28, 142, 179, 0.88);
+      transform: scale(1.18);
+      background: rgba(222, 99, 53, 0.94);
+      border-color: rgba(255, 255, 255, 0.95);
       box-shadow:
-        0 0 0 8px rgba(158, 234, 255, 0.16),
-        0 0 24px rgba(158, 234, 255, 0.94);
+        0 0 0 9px rgba(222, 99, 53, 0.18),
+        0 0 24px rgba(222, 99, 53, 0.65);
+    }
+
+    .hotspot-real {
+      left: 14.4%;
+      top: 7.3%;
     }
 
     .hotspot-laser {
-      left: 6.8%;
-      top: 20.2%;
+      left: 6.2%;
+      top: 43.8%;
     }
 
     .hotspot-splitter {
-      left: 24.6%;
-      top: 20.2%;
+      left: 33.8%;
+      top: 42.2%;
     }
 
     .hotspot-source {
-      left: 40.8%;
-      top: 20.2%;
+      left: 47.6%;
+      top: 54.0%;
     }
 
     .hotspot-tissue {
-      left: 50.5%;
-      top: 48.5%;
+      left: 55.6%;
+      top: 60.5%;
     }
 
     .hotspot-detector {
-      left: 63.2%;
-      top: 21.2%;
+      left: 65.0%;
+      top: 54.0%;
+    }
+
+    .hotspot-bundle {
+      left: 77.8%;
+      top: 41.8%;
     }
 
     .hotspot-lens {
-      left: 76.2%;
-      top: 20.2%;
+      left: 86.6%;
+      top: 42.0%;
     }
 
     .hotspot-camera {
-      left: 88.4%;
-      top: 20.2%;
+      left: 93.0%;
+      top: 42.0%;
     }
 
     .hotspot-roi {
-      left: 83.2%;
-      top: 69.4%;
+      left: 74.8%;
+      top: 80.6%;
     }
 
     .detail-card {
-      min-height: 520px;
+      min-height: 700px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -245,14 +245,14 @@
     .detail-title {
       margin: 0 0 16px;
       font-size: 30px;
-      color: #bff3ff;
-      text-shadow: 0 0 12px rgba(158, 234, 255, 0.34);
+      color: #1d5b72;
+      text-shadow: 0 0 12px rgba(145, 205, 230, 0.24);
     }
 
     .detail-body {
       font-size: 18px;
       line-height: 1.82;
-      color: rgba(255, 255, 255, 0.92);
+      color: rgba(31, 42, 51, 0.92);
     }
 
     .detail-list {
@@ -267,18 +267,55 @@
       padding-left: 24px;
       font-size: 16px;
       line-height: 1.65;
-      color: rgba(255, 255, 255, 0.90);
+      color: rgba(31, 42, 51, 0.90);
     }
 
     .detail-list li::before {
       content: "•";
       position: absolute;
       left: 4px;
-      color: #9eeaff;
+      color: #1687a7;
+      font-weight: 700;
+    }
+
+    .summary-box {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(238, 248, 251, 0.95);
+      border: 1px solid rgba(78, 120, 145, 0.18);
+    }
+
+    .summary-box h3 {
+      margin-bottom: 12px;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(78, 120, 145, 0.16);
+      text-align: left;
+      vertical-align: top;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .summary-table th {
+      width: 34%;
+      color: #1d5b72;
+    }
+
+    .summary-table td {
+      color: rgba(31, 42, 51, 0.90);
     }
 
     .info-grid {
-      width: min(1180px, 100%);
+      width: 100%;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px;
@@ -288,79 +325,107 @@
     .info-card {
       padding: 24px;
       border-radius: 24px;
-      background: rgba(0, 0, 0, 0.44);
-      border: 1px solid rgba(255, 255, 255, 0.20);
-      box-shadow: 0 0 24px rgba(102, 204, 255, 0.10);
-      backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(78, 120, 145, 0.18);
+      box-shadow: 0 14px 28px rgba(40, 78, 100, 0.11);
+      backdrop-filter: blur(8px);
     }
 
     .formula {
       margin-top: 14px;
       padding: 14px 16px;
       border-radius: 16px;
-      color: #eafcff;
-      background: rgba(158, 234, 255, 0.10);
-      border: 1px solid rgba(158, 234, 255, 0.28);
+      color: #173145;
+      background: rgba(238, 248, 251, 0.98);
+      border: 1px solid rgba(78, 120, 145, 0.22);
       font-size: 17px;
       line-height: 1.7;
     }
 
-    .component-table {
-      width: min(1180px, 100%);
-      margin-top: 24px;
-      padding: 28px;
-      border-radius: 26px;
-      background: rgba(0, 0, 0, 0.46);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      backdrop-filter: blur(5px);
-      overflow-x: auto;
-    }
-
-    table {
+    .simulator-section {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 780px;
-    }
-
-    th,
-    td {
-      padding: 13px 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-      text-align: left;
-      vertical-align: top;
-      font-size: 16px;
-      line-height: 1.58;
-    }
-
-    th {
-      color: #bff3ff;
-      background: rgba(158, 234, 255, 0.08);
-    }
-
-    td {
-      color: rgba(255, 255, 255, 0.90);
-    }
-
-    .reference-section {
-      width: min(1180px, 100%);
       margin-top: 24px;
-      padding: 28px;
-      border-radius: 26px;
-      background: rgba(0, 0, 0, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.20);
-      backdrop-filter: blur(5px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+      gap: 24px;
     }
 
-    .reference-section ol {
-      margin: 0;
-      padding-left: 22px;
+    .simulator-canvas-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 430px;
+      border-radius: 22px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 48% 52%, rgba(255, 245, 238, 0.95), transparent 46%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 247, 248, 0.95));
+      border: 1px solid rgba(78, 120, 145, 0.18);
     }
 
-    .reference-section li {
-      margin: 10px 0;
+    #rbcCanvas {
+      width: 100%;
+      height: 430px;
+      display: block;
+    }
+
+    .simulator-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .control-card {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(238, 248, 251, 0.96);
+      border: 1px solid rgba(78, 120, 145, 0.18);
+    }
+
+    .control-card label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 18px;
+      color: #173145;
+      font-weight: 700;
+    }
+
+    .control-card input[type="range"] {
+      width: 100%;
+      accent-color: #1687a7;
+    }
+
+    .control-value {
+      margin-top: 10px;
+      font-size: 16px;
+      color: rgba(31, 42, 51, 0.86);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(78, 120, 145, 0.18);
+      text-align: center;
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 8px;
       font-size: 15px;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(31, 42, 51, 0.72);
+    }
+
+    .metric-value {
+      display: block;
+      font-size: 28px;
+      color: #1d5b72;
+      font-weight: 700;
     }
 
     .back-link {
@@ -368,11 +433,11 @@
       margin-top: 26px;
       text-decoration: none;
       font-size: 18px;
-      color: white;
+      color: #173145;
       padding: 10px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(78, 120, 145, 0.45);
+      background: rgba(255, 255, 255, 0.74);
       transition:
         background 0.25s ease,
         transform 0.25s ease,
@@ -380,11 +445,22 @@
     }
 
     .back-link:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(238, 248, 251, 0.95);
       transform: translateX(-4px);
       box-shadow:
-        0 0 10px rgba(255, 255, 255, 0.40),
-        0 0 22px rgba(102, 204, 255, 0.40);
+        0 0 10px rgba(78, 120, 145, 0.22),
+        0 0 22px rgba(145, 205, 230, 0.32);
+    }
+
+    @media screen and (max-width: 1180px) {
+      .main-section,
+      .simulator-section {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-card {
+        min-height: auto;
+      }
     }
 
     @media screen and (max-width: 980px) {
@@ -407,30 +483,27 @@
       }
 
       .hero-card,
-      .panel,
-      .component-table,
-      .reference-section {
+      .panel {
         padding: 24px;
       }
 
-      .main-section {
-        grid-template-columns: 1fr;
-      }
-
-      .info-grid {
+      .info-grid,
+      .metric-grid {
         grid-template-columns: 1fr;
       }
 
       .diagram-wrap {
-        min-height: 430px;
+        min-height: 520px;
       }
 
       .system-svg {
-        height: 430px;
+        height: 520px;
       }
 
-      .detail-card {
-        min-height: auto;
+      .hotspot {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
       }
     }
   </style>
@@ -447,15 +520,6 @@
         mainly red blood cells, and estimates blood-volume-related information from detected intensity changes.
       </p>
 
-      <div class="keyword-row">
-        <span class="keyword">DSCA: Diffuse Speckle Contrast Analysis</span>
-        <span class="keyword">MMF: Multimode Fiber</span>
-        <span class="keyword">BFI: Blood Flow Index</span>
-        <span class="keyword">BVI: Blood Volume Index</span>
-        <span class="keyword">SDS: Source-Detector Separation</span>
-        <span class="keyword">SCOS: Speckle Contrast Optical Spectroscopy</span>
-      </div>
-
       <a class="back-link" href="dot.html">← Back to DOT Page</a>
     </header>
 
@@ -465,116 +529,248 @@
           <h2>MMF-DSCA Optical Design</h2>
 
           <div class="diagram-wrap" aria-label="Interactive MMF-DSCA optical design diagram">
-            <svg class="system-svg" viewBox="0 0 1000 560" role="img" aria-label="MMF-DSCA system schematic">
+            <svg class="system-svg" viewBox="0 0 1500 820" role="img" aria-label="MMF-DSCA system schematic">
               <defs>
-                <linearGradient id="cyanBeam" x1="0" x2="1" y1="0" y2="0">
-                  <stop offset="0%" stop-color="#eaffff" stop-opacity="0.95"/>
-                  <stop offset="50%" stop-color="#9eeaff" stop-opacity="0.85"/>
-                  <stop offset="100%" stop-color="#ffffff" stop-opacity="0.75"/>
+                <linearGradient id="orangeFiber" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stop-color="#ff9a38" stop-opacity="0.92"/>
+                  <stop offset="100%" stop-color="#ff5f24" stop-opacity="0.98"/>
                 </linearGradient>
 
-                <linearGradient id="tissueGrad" x1="0" x2="1" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#f6c6a9" stop-opacity="0.92"/>
-                  <stop offset="55%" stop-color="#c68174" stop-opacity="0.88"/>
-                  <stop offset="100%" stop-color="#6b353c" stop-opacity="0.92"/>
+                <linearGradient id="blueFiber" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stop-color="#4d9fc0" stop-opacity="0.95"/>
+                  <stop offset="100%" stop-color="#1d5b72" stop-opacity="0.98"/>
                 </linearGradient>
 
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3.2" result="coloredBlur"/>
+                <linearGradient id="tissueLayer" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#f5b6aa"/>
+                  <stop offset="30%" stop-color="#f7d0c5"/>
+                  <stop offset="68%" stop-color="#ffe2ae"/>
+                  <stop offset="100%" stop-color="#d6473c"/>
+                </linearGradient>
+
+                <filter id="softShadow">
+                  <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#1b4d60" flood-opacity="0.20"/>
+                </filter>
+
+                <filter id="beamGlow">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                   <feMerge>
                     <feMergeNode in="coloredBlur"/>
                     <feMergeNode in="SourceGraphic"/>
                   </feMerge>
                 </filter>
+
+                <clipPath id="realDscaClip">
+                  <polygon points="120,20 585,20 680,230 130,230"/>
+                </clipPath>
+
+                <clipPath id="roiClip">
+                  <rect x="860" y="615" width="210" height="160" rx="8"/>
+                </clipPath>
               </defs>
 
-              <rect x="35" y="62" width="145" height="70" rx="16" fill="rgba(0,0,0,0.56)" stroke="#9eeaff" stroke-width="2"/>
-              <text x="107" y="93" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">SLM Laser</text>
-              <text x="107" y="116" text-anchor="middle" fill="#c9f7ff" font-size="13">785 / 808 nm</text>
+              <rect x="0" y="0" width="1500" height="820" fill="rgba(255,255,255,0.0)"/>
 
-              <line x1="180" y1="97" x2="275" y2="97" stroke="url(#cyanBeam)" stroke-width="5" filter="url(#glow)"/>
-              <polygon points="275,97 258,88 258,106" fill="#9eeaff"/>
+              <image
+                href="images/real%20DSCA.jpg"
+                x="115"
+                y="20"
+                width="575"
+                height="260"
+                preserveAspectRatio="xMidYMid slice"
+                clip-path="url(#realDscaClip)"
+              />
 
-              <rect x="280" y="55" width="150" height="84" rx="16" fill="rgba(0,0,0,0.56)" stroke="#9eeaff" stroke-width="2"/>
-              <text x="355" y="87" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">50:50 Splitters</text>
-              <text x="355" y="112" text-anchor="middle" fill="#c9f7ff" font-size="13">4-source delivery</text>
+              <polygon
+                points="120,20 585,20 680,230 130,230"
+                fill="none"
+                stroke="#1687a7"
+                stroke-width="5"
+                filter="url(#softShadow)"
+              />
 
-              <path d="M430 97 C500 60, 555 64, 615 96" fill="none" stroke="#9eeaff" stroke-width="4" filter="url(#glow)"/>
-              <path d="M430 97 C500 88, 550 103, 615 128" fill="none" stroke="#9eeaff" stroke-width="4" filter="url(#glow)"/>
-              <path d="M430 97 C500 122, 550 151, 615 162" fill="none" stroke="#9eeaff" stroke-width="4" filter="url(#glow)"/>
-              <path d="M430 97 C500 158, 552 185, 615 196" fill="none" stroke="#9eeaff" stroke-width="4" filter="url(#glow)"/>
+              <path
+                d="M620 232 L760 345"
+                fill="none"
+                stroke="#1687a7"
+                stroke-width="5"
+              />
 
-              <circle cx="620" cy="96" r="8" fill="#ffffff"/>
-              <circle cx="620" cy="128" r="8" fill="#ffffff"/>
-              <circle cx="620" cy="162" r="8" fill="#ffffff"/>
-              <circle cx="620" cy="196" r="8" fill="#ffffff"/>
-              <text x="636" y="88" fill="#ffffff" font-size="15">S1</text>
-              <text x="636" y="121" fill="#ffffff" font-size="15">S2</text>
-              <text x="636" y="155" fill="#ffffff" font-size="15">S3</text>
-              <text x="636" y="189" fill="#ffffff" font-size="15">S4</text>
+              <rect
+                x="215"
+                y="300"
+                width="1145"
+                height="360"
+                fill="none"
+                stroke="#1687a7"
+                stroke-width="6"
+                stroke-dasharray="20 18"
+                rx="4"
+              />
 
-              <path d="M130 400 C230 265, 390 245, 520 306 C640 364, 775 353, 900 248" fill="none" stroke="rgba(158,234,255,0.26)" stroke-width="48"/>
-              <path d="M145 402 C245 292, 392 287, 510 329 C640 376, 765 348, 885 260" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="18"/>
+              <rect x="35" y="390" width="135" height="56" fill="#ffffff" stroke="#c5c5c5" stroke-width="1"/>
+              <text x="102" y="426" text-anchor="middle" fill="#1f2a33" font-size="31" font-weight="700">808nm</text>
 
-              <path d="M115 348 C250 315, 390 320, 510 355 C635 392, 760 390, 902 342 L902 505 L115 505 Z" fill="url(#tissueGrad)" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
-              <text x="505" y="492" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">Tissue / Microvascular Bed</text>
-              <text x="505" y="520" text-anchor="middle" fill="#ffe9df" font-size="13">dynamic RBC scattering generates temporal speckle fluctuation</text>
+              <path d="M425 390 C500 388, 550 390, 620 412" fill="none" stroke="url(#orangeFiber)" stroke-width="6" filter="url(#beamGlow)"/>
+              <path d="M425 410 C505 406, 558 414, 632 452" fill="none" stroke="url(#orangeFiber)" stroke-width="6" filter="url(#beamGlow)"/>
+              <path d="M425 430 C508 428, 570 444, 635 490" fill="none" stroke="url(#orangeFiber)" stroke-width="6" filter="url(#beamGlow)"/>
+              <path d="M425 450 C508 456, 575 478, 630 530" fill="none" stroke="url(#orangeFiber)" stroke-width="6" filter="url(#beamGlow)"/>
 
-              <path d="M620 128 C590 215, 575 255, 525 338" fill="none" stroke="#ffe082" stroke-width="3" stroke-dasharray="8 7"/>
-              <path d="M620 162 C640 230, 636 275, 695 336" fill="none" stroke="#ffe082" stroke-width="3" stroke-dasharray="8 7"/>
+              <rect x="635" y="462" width="18" height="105" rx="5" fill="#ffb73c" stroke="#e65f23" stroke-width="3"/>
 
-              <rect x="690" y="62" width="130" height="70" rx="16" fill="rgba(0,0,0,0.56)" stroke="#9eeaff" stroke-width="2"/>
-              <text x="755" y="89" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">1×7 MMF</text>
-              <text x="755" y="114" text-anchor="middle" fill="#c9f7ff" font-size="13">fan-out bundle</text>
+              <rect x="565" y="540" width="360" height="195" fill="#ffffff" stroke="#d4d4d4" stroke-width="3" filter="url(#softShadow)"/>
+              <path d="M565 560 C610 540, 660 582, 720 565 C770 548, 808 570, 855 555 C880 546, 905 552, 925 560 L925 585 C870 595, 820 575, 760 590 C705 604, 660 572, 610 590 C590 596, 575 590, 565 585 Z" fill="#f4a1c0" stroke="#3a2424" stroke-width="2"/>
+              <path d="M565 585 C625 605, 690 600, 748 588 C805 576, 875 585, 925 600 L925 645 C855 650, 795 632, 735 640 C680 648, 625 646, 565 628 Z" fill="#eadb72" stroke="#8c6f16" stroke-width="2"/>
+              <path d="M565 645 C630 662, 704 650, 765 660 C825 670, 875 648, 925 662 L925 704 C860 716, 800 697, 740 710 C690 720, 625 705, 565 715 Z" fill="#ffe3a8" stroke="#8c6f16" stroke-width="2"/>
+              <path d="M565 704 C630 685, 695 716, 760 700 C815 686, 875 702, 925 695 L925 735 L565 735 Z" fill="#df3d34" stroke="#8b1d1b" stroke-width="2"/>
 
-              <path d="M690 98 C642 145, 630 228, 660 330" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.78"/>
-              <circle cx="660" cy="330" r="10" fill="#ffffff"/>
-              <text x="675" y="334" fill="#ffffff" font-size="15">D</text>
+              <path d="M585 602 C630 590, 686 592, 735 610 C785 628, 845 628, 905 612" fill="none" stroke="#152c86" stroke-width="5"/>
+              <path d="M586 658 C645 650, 700 674, 760 658 C815 644, 870 660, 913 650" fill="none" stroke="#152c86" stroke-width="5"/>
+              <path d="M590 630 C650 618, 700 640, 760 626 C812 614, 862 630, 910 622" fill="none" stroke="#a91919" stroke-width="5"/>
 
-              <line x1="820" y1="97" x2="875" y2="97" stroke="url(#cyanBeam)" stroke-width="5" filter="url(#glow)"/>
-              <ellipse cx="890" cy="97" rx="14" ry="42" fill="rgba(158,234,255,0.22)" stroke="#9eeaff" stroke-width="2"/>
-              <ellipse cx="930" cy="97" rx="14" ry="42" fill="rgba(158,234,255,0.22)" stroke="#9eeaff" stroke-width="2"/>
-              <line x1="944" y1="97" x2="973" y2="97" stroke="url(#cyanBeam)" stroke-width="5" filter="url(#glow)"/>
+              <path d="M650 515 C676 570, 704 600, 745 610 C785 622, 818 595, 852 540" fill="rgba(255, 232, 50, 0.34)" stroke="#e7c600" stroke-width="3"/>
+              <path d="M645 480 C658 540, 675 590, 696 625" fill="none" stroke="#e7c600" stroke-width="2" marker-end="url(#arrowYellow)"/>
+              <path d="M815 445 C800 520, 795 580, 780 630" fill="none" stroke="#e7c600" stroke-width="2"/>
 
-              <rect x="972" y="52" width="145" height="90" rx="16" transform="translate(-60 0)" fill="rgba(0,0,0,0.56)" stroke="#9eeaff" stroke-width="2"/>
-              <text x="985" y="84" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">CMOS Camera</text>
-              <text x="985" y="111" text-anchor="middle" fill="#c9f7ff" font-size="13">speckle image</text>
+              <path d="M820 450 C820 390, 840 350, 900 330" fill="none" stroke="#555" stroke-width="8" stroke-linecap="round"/>
+              <rect x="900" y="295" width="72" height="62" fill="#86c8e6" stroke="#1d5b72" stroke-width="4"/>
+              <path d="M910 285 C870 280, 828 295, 792 332" fill="none" stroke="#555" stroke-width="4"/>
+              <path d="M910 305 C865 305, 825 323, 790 365" fill="none" stroke="#555" stroke-width="4"/>
+              <path d="M910 325 C872 337, 838 365, 820 410" fill="none" stroke="#555" stroke-width="4"/>
 
-              <rect x="760" y="375" width="185" height="120" rx="18" fill="rgba(0,0,0,0.56)" stroke="#9eeaff" stroke-width="2"/>
-              <circle cx="805" cy="420" r="22" fill="rgba(158,234,255,0.28)" stroke="#ffffff"/>
-              <circle cx="865" cy="420" r="22" fill="rgba(158,234,255,0.28)" stroke="#ffffff"/>
-              <rect x="783" y="456" width="45" height="24" fill="rgba(255,255,255,0.18)" stroke="#ffffff"/>
-              <rect x="828" y="456" width="45" height="24" fill="rgba(255,255,255,0.18)" stroke="#ffffff"/>
-              <rect x="873" y="456" width="45" height="24" fill="rgba(255,255,255,0.18)" stroke="#ffffff"/>
-              <text x="853" y="402" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">ROI analysis</text>
-              <text x="853" y="525" text-anchor="middle" fill="#ffffff" font-size="13">K = σI / &lt;I&gt;, BFIrel ∝ 1 / K²</text>
+              <line x1="972" y1="326" x2="1040" y2="326" stroke="#1687a7" stroke-width="5"/>
+              <ellipse cx="1065" cy="326" rx="24" ry="48" fill="#86c8e6" stroke="#1d5b72" stroke-width="4"/>
+              <ellipse cx="1100" cy="326" rx="22" ry="48" fill="#86c8e6" stroke="#1d5b72" stroke-width="4"/>
+              <rect x="1100" y="278" width="85" height="96" fill="#86c8e6" stroke="#1d5b72" stroke-width="4"/>
+
+              <image
+                href="images/ROI.jpg"
+                x="860"
+                y="380"
+                width="125"
+                height="125"
+                preserveAspectRatio="xMidYMid slice"
+              />
+
+              <path d="M870 688 L785 610" fill="none" stroke="#df2d24" stroke-width="4"/>
+              <rect x="785" y="610" width="62" height="62" fill="none" stroke="#df2d24" stroke-width="4"/>
+
+              <image
+                href="images/ROI.jpg"
+                x="90"
+                y="700"
+                width="300"
+                height="220"
+                preserveAspectRatio="xMidYMid slice"
+                opacity="0.92"
+              />
+
+              <image
+                href="images/ROI.jpg"
+                x="505"
+                y="700"
+                width="300"
+                height="220"
+                preserveAspectRatio="xMidYMid slice"
+                opacity="0.92"
+              />
+
+              <rect x="540" y="790" width="70" height="70" fill="none" stroke="#21b96b" stroke-width="5"/>
+              <rect x="725" y="746" width="70" height="70" fill="none" stroke="#df2d24" stroke-width="5"/>
+              <path d="M795 746 L865 660" fill="none" stroke="#df2d24" stroke-width="4"/>
+
+              <g transform="translate(865,600)">
+                <rect x="0" y="0" width="170" height="170" fill="none" stroke="#df2d24" stroke-width="5"/>
+                <text x="-32" y="96" fill="#df2d24" font-size="28" font-weight="700">R</text>
+
+                <g stroke="#df2d24" stroke-width="1.4">
+                  <line x1="10" y1="0" x2="10" y2="170"/>
+                  <line x1="20" y1="0" x2="20" y2="170"/>
+                  <line x1="30" y1="0" x2="30" y2="170"/>
+                  <line x1="40" y1="0" x2="40" y2="170"/>
+                  <line x1="50" y1="0" x2="50" y2="170"/>
+                  <line x1="60" y1="0" x2="60" y2="170"/>
+                  <line x1="70" y1="0" x2="70" y2="170"/>
+                  <line x1="80" y1="0" x2="80" y2="170"/>
+                  <line x1="90" y1="0" x2="90" y2="170"/>
+                  <line x1="100" y1="0" x2="100" y2="170"/>
+                  <line x1="110" y1="0" x2="110" y2="170"/>
+                  <line x1="120" y1="0" x2="120" y2="170"/>
+                  <line x1="130" y1="0" x2="130" y2="170"/>
+                  <line x1="140" y1="0" x2="140" y2="170"/>
+                  <line x1="150" y1="0" x2="150" y2="170"/>
+                  <line x1="160" y1="0" x2="160" y2="170"/>
+
+                  <line x1="0" y1="10" x2="170" y2="10"/>
+                  <line x1="0" y1="20" x2="170" y2="20"/>
+                  <line x1="0" y1="30" x2="170" y2="30"/>
+                  <line x1="0" y1="40" x2="170" y2="40"/>
+                  <line x1="0" y1="50" x2="170" y2="50"/>
+                  <line x1="0" y1="60" x2="170" y2="60"/>
+                  <line x1="0" y1="70" x2="170" y2="70"/>
+                  <line x1="0" y1="80" x2="170" y2="80"/>
+                  <line x1="0" y1="90" x2="170" y2="90"/>
+                  <line x1="0" y1="100" x2="170" y2="100"/>
+                  <line x1="0" y1="110" x2="170" y2="110"/>
+                  <line x1="0" y1="120" x2="170" y2="120"/>
+                  <line x1="0" y1="130" x2="170" y2="130"/>
+                  <line x1="0" y1="140" x2="170" y2="140"/>
+                  <line x1="0" y1="150" x2="170" y2="150"/>
+                  <line x1="0" y1="160" x2="170" y2="160"/>
+                </g>
+              </g>
+
+              <text x="745" y="768" text-anchor="middle" fill="#173145" font-size="17" font-weight="700">ROI selection</text>
+              <text x="745" y="790" text-anchor="middle" fill="#173145" font-size="15">speckle contrast calculation</text>
             </svg>
 
-            <button class="hotspot hotspot-laser active" type="button" data-key="laser" aria-label="Laser source">1</button>
-            <button class="hotspot hotspot-splitter" type="button" data-key="splitter" aria-label="Fiber beam splitter">2</button>
-            <button class="hotspot hotspot-source" type="button" data-key="source" aria-label="Source fibers">3</button>
-            <button class="hotspot hotspot-tissue" type="button" data-key="tissue" aria-label="Tissue and sensitivity volume">4</button>
-            <button class="hotspot hotspot-detector" type="button" data-key="detector" aria-label="Detector fiber bundle">5</button>
-            <button class="hotspot hotspot-lens" type="button" data-key="lens" aria-label="Relay lens system">6</button>
-            <button class="hotspot hotspot-camera" type="button" data-key="camera" aria-label="CMOS camera">7</button>
-            <button class="hotspot hotspot-roi" type="button" data-key="roi" aria-label="ROI and BFI/BVI extraction">8</button>
+            <button class="hotspot hotspot-real active" type="button" data-key="real" aria-label="Real DSCA system">1</button>
+            <button class="hotspot hotspot-laser" type="button" data-key="laser" aria-label="Laser source">2</button>
+            <button class="hotspot hotspot-splitter" type="button" data-key="splitter" aria-label="Fiber beam splitter">3</button>
+            <button class="hotspot hotspot-source" type="button" data-key="source" aria-label="Source fibers">4</button>
+            <button class="hotspot hotspot-tissue" type="button" data-key="tissue" aria-label="Tissue sensitivity volume">5</button>
+            <button class="hotspot hotspot-detector" type="button" data-key="detector" aria-label="Detector fiber">6</button>
+            <button class="hotspot hotspot-bundle" type="button" data-key="bundle" aria-label="Fan-out fiber bundle">7</button>
+            <button class="hotspot hotspot-lens" type="button" data-key="lens" aria-label="Relay lens">8</button>
+            <button class="hotspot hotspot-camera" type="button" data-key="camera" aria-label="Camera">9</button>
+            <button class="hotspot hotspot-roi" type="button" data-key="roi" aria-label="ROI processing">10</button>
           </div>
         </div>
 
         <aside class="panel detail-card">
           <div>
-            <h2 class="detail-title" id="detailTitle">1. Single-Longitudinal-Mode Laser</h2>
+            <h2 class="detail-title" id="detailTitle">1. Real DSCA System</h2>
 
             <p class="detail-body" id="detailBody">
-              A coherent near-infrared laser provides the illumination needed to form diffuse speckles after multiple scattering in tissue.
-              In the thesis system, a fiber-coupled 808 nm single-longitudinal-mode laser was used as the illumination source.
+              The actual DSCA instrument integrates the laser source, source fiber outputs, detector fiber inputs, and camera-based speckle acquisition path in one optical measurement system.
             </p>
 
             <ul class="detail-list" id="detailList">
-              <li>Purpose: generate coherent light so that tissue-scattered optical fields interfere and form speckles.</li>
-              <li>Design point: near-infrared light is preferred because tissue absorption is relatively low compared with visible wavelengths.</li>
-              <li>Practical role: stable optical power and coherence directly affect speckle contrast stability.</li>
+              <li>The real system provides source channels for tissue illumination and detector channels for collecting diffusely scattered light.</li>
+              <li>The detected speckle images are processed frame-by-frame to extract BFI and BVI.</li>
+              <li>The hardware layout is designed for simultaneous multi-channel diffuse optical flowmetry.</li>
             </ul>
+
+            <div class="summary-box">
+              <h3>Detailed Component Summary</h3>
+
+              <table class="summary-table">
+                <tbody>
+                  <tr>
+                    <th>Component</th>
+                    <td id="summaryComponent">Real DSCA System</td>
+                  </tr>
+                  <tr>
+                    <th>Role</th>
+                    <td id="summaryRole">Integrated optical-flowmetry platform for source delivery, diffuse-light collection, and camera-based speckle acquisition.</td>
+                  </tr>
+                  <tr>
+                    <th>Design Detail</th>
+                    <td id="summaryDetail">Source and detector ports are arranged to support multi-channel DSCA measurements.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </aside>
       </section>
@@ -583,8 +779,8 @@
         <article class="info-card">
           <h3>1. Speckle Contrast</h3>
           <p>
-            DSCA measures the blurring of laser speckles during finite camera exposure.
-            Faster red-blood-cell motion causes faster field decorrelation, stronger speckle blurring,
+            DSCA measures speckle blurring during finite camera exposure.
+            Faster red-blood-cell motion causes stronger decorrelation, stronger speckle blurring,
             and lower speckle contrast.
           </p>
           <div class="formula">
@@ -596,8 +792,8 @@
         <article class="info-card">
           <h3>2. Blood Flow Index</h3>
           <p>
-            BFI is interpreted as a blood-flow-related optical index derived from speckle contrast.
-            In the practical relative-flow regime, lower K² corresponds to higher flow-related dynamics.
+            BFI is derived from speckle contrast. In relative-flow interpretation,
+            increased red-blood-cell motion lowers K² and increases the flow-related index.
           </p>
           <div class="formula">
             BFI<sub>rel</sub> ∝ 1 / K²
@@ -607,9 +803,8 @@
         <article class="info-card">
           <h3>3. Blood Volume Index</h3>
           <p>
-            BVI is derived from the total detected intensity.
-            Because blood absorption changes the detected photon intensity, BVI gives complementary
-            blood-volume-related information.
+            BVI is derived from detected intensity. When blood volume increases, optical absorption increases,
+            detected intensity decreases, and BVI increases.
           </p>
           <div class="formula">
             BVI = −log(Σ I<sub>pixels</sub>)
@@ -617,226 +812,192 @@
         </article>
       </section>
 
-      <section class="component-table">
-        <h2>Detailed Component Summary</h2>
+      <section class="simulator-section">
+        <div class="panel">
+          <h2>Microvascular BFI / BVI Simulation</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Component</th>
-              <th>Optical / Signal Role</th>
-              <th>Implementation Detail</th>
-            </tr>
-          </thead>
+          <div class="simulator-canvas-wrap">
+            <canvas id="rbcCanvas"></canvas>
+          </div>
+        </div>
 
-          <tbody>
-            <tr>
-              <td>SLM Laser</td>
-              <td>
-                Generates coherent near-infrared illumination for diffuse speckle formation.
-                SLM means single-longitudinal-mode, which improves temporal coherence.
-              </td>
-              <td>
-                Thesis system: fiber-coupled 808 nm CrystaLaser, nominal 100 mW.
-                Your parts list screenshot also includes DL785-120-SO for the 785 nm version.
-              </td>
-            </tr>
+        <aside class="panel simulator-controls">
+          <div class="control-card">
+            <label for="flowSlider">RBC Motion Speed</label>
+            <input id="flowSlider" type="range" min="0" max="100" value="55">
+            <div class="control-value">
+              Higher speed → stronger speckle blurring → lower K² → higher BFI
+            </div>
+          </div>
 
-            <tr>
-              <td>Fiber Beam Splitters</td>
-              <td>
-                Divide one laser output into multiple source channels for multi-source diffuse optical sampling.
-              </td>
-              <td>
-                Cascaded 50:50 multimode fiber optic couplers produce four source paths.
-                Each channel can be balanced using attenuation or alignment control.
-              </td>
-            </tr>
+          <div class="control-card">
+            <label for="volumeSlider">RBC Amount</label>
+            <input id="volumeSlider" type="range" min="0" max="100" value="45">
+            <div class="control-value">
+              Higher RBC amount → stronger absorption → lower intensity → higher BVI
+            </div>
+          </div>
 
-            <tr>
-              <td>Source Fibers</td>
-              <td>
-                Deliver light to tissue at defined source positions.
-                The source-detector separation determines the depth-weighted sensitivity profile.
-              </td>
-              <td>
-                Multimode source fibers with 200 μm core and 0.22 NA are consistent with the listed Thorlabs patch cables.
-              </td>
-            </tr>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-label">K²</span>
+              <span class="metric-value" id="kMetric">0.54</span>
+            </div>
 
-            <tr>
-              <td>Tissue Sampling Volume</td>
-              <td>
-                Multiple scattering creates a diffuse photon path distribution.
-                Moving red blood cells modulate the temporal speckle statistics.
-              </td>
-              <td>
-                DSCA does not image vessels directly; it measures flow-sensitive speckle statistics integrated over the photon sampling volume.
-              </td>
-            </tr>
+            <div class="metric-card">
+              <span class="metric-label">BFI</span>
+              <span class="metric-value" id="bfiMetric">1.85</span>
+            </div>
 
-            <tr>
-              <td>1×7 Fan-Out MMF Bundle</td>
-              <td>
-                Collects diffusely reflected speckles from multiple detection channels and transmits them to the camera.
-              </td>
-              <td>
-                Thesis system: BF72HS01, 1-to-7 fan-out bundle, 200 μm-core multimode fibers.
-              </td>
-            </tr>
-
-            <tr>
-              <td>Relay Lens Assembly</td>
-              <td>
-                Images the fiber-output speckle spots onto the camera sensor while preserving separable channel ROIs.
-              </td>
-              <td>
-                A 1:1 relay lens assembly was used. Your parts list includes LA1951-B, a plano-convex lens with AR coating for 650–1050 nm.
-              </td>
-            </tr>
-
-            <tr>
-              <td>CMOS Camera</td>
-              <td>
-                Captures spatial speckle images for contrast calculation.
-                Multi-channel acquisition is possible because several fiber outputs can be imaged simultaneously.
-              </td>
-              <td>
-                Thesis system: Basler acA1300-60gm, 1282 × 1026 pixels, 5.3 μm pixel size, 60 fps specification.
-                Your camera experiments may use higher effective frame settings depending on ROI and camera configuration.
-              </td>
-            </tr>
-
-            <tr>
-              <td>ROI Processing</td>
-              <td>
-                Calculates BFI from speckle contrast and BVI from integrated intensity.
-              </td>
-              <td>
-                A channel ROI is selected over the speckle spot; sub-ROI averaging improves stability by spatial ensemble averaging.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="reference-section">
-        <h2>Reference Basis Used for This Page</h2>
-
-        <ol>
-          <li>
-            Durduran et al., “Diffuse optics for tissue monitoring and tomography,” Reports on Progress in Physics, 2010.
-            Used for DCS, correlation diffusion, and diffuse optical sensitivity background.
-          </li>
-          <li>
-            Bi et al., “Fast pulsatile blood flow measurement in deep tissue through a multimode detection fiber,” Journal of Biomedical Optics, 2020.
-            Used for multimode-fiber-based deep-tissue pulsatile flowmetry.
-          </li>
-          <li>
-            Teng et al., “In Vivo Pulse Wave Measurement Through a Multimode Fiber Diffuse Speckle Contrast Analysis System,” Frontiers in Physics, 2021.
-            Used for MMF-DSCA pulse waveform and PWV measurement concept.
-          </li>
-          <li>
-            Valdes et al., “Speckle contrast optical spectroscopy, a non-invasive, diffuse optical method for measuring microvascular blood flow in tissue,” Biomedical Optics Express, 2014.
-            Used for SCOS and camera-based speckle contrast flowmetry framework.
-          </li>
-          <li>
-            Gang Min Shin, “Pulsatile Waveform Analysis Using Diffuse Optical Flowmetry: A Study of the Prefrontal Cortex and Finger,” Master’s Thesis, DGIST, 2026.
-            Used for the specific MMF-DSCA system configuration, BFI/BVI extraction, and thesis-specific component layout.
-          </li>
-        </ol>
-
-        <a class="back-link" href="dot.html">← Back to DOT Page</a>
+            <div class="metric-card">
+              <span class="metric-label">BVI</span>
+              <span class="metric-value" id="bviMetric">0.62</span>
+            </div>
+          </div>
+        </aside>
       </section>
     </main>
   </div>
 
   <script>
     const componentInfo = {
-      laser: {
-        title: "1. Single-Longitudinal-Mode Laser",
-        body: "A coherent near-infrared laser provides the illumination needed to form diffuse speckles after multiple scattering in tissue. In the thesis system, a fiber-coupled 808 nm single-longitudinal-mode laser was used as the illumination source.",
+      real: {
+        title: "1. Real DSCA System",
+        body: "The actual DSCA instrument integrates the laser source, source fiber outputs, detector fiber inputs, and camera-based speckle acquisition path in one optical measurement system.",
         bullets: [
-          "Purpose: generate coherent light so that tissue-scattered optical fields interfere and form speckles.",
-          "Design point: near-infrared light is preferred because tissue absorption is relatively low compared with visible wavelengths.",
-          "Practical role: stable optical power and coherence directly affect speckle contrast stability."
-        ]
+          "The real system provides source channels for tissue illumination and detector channels for collecting diffusely scattered light.",
+          "The detected speckle images are processed frame-by-frame to extract BFI and BVI.",
+          "The hardware layout is designed for simultaneous multi-channel diffuse optical flowmetry."
+        ],
+        component: "Real DSCA System",
+        role: "Integrated optical-flowmetry platform for source delivery, diffuse-light collection, and camera-based speckle acquisition.",
+        detail: "Source and detector ports are arranged to support multi-channel DSCA measurements."
+      },
+
+      laser: {
+        title: "2. Near-Infrared Laser Source",
+        body: "The laser provides coherent near-infrared illumination. Coherence is required because DSCA uses speckle patterns generated by interference of multiply scattered optical fields.",
+        bullets: [
+          "The laser wavelength shown in this design is 808 nm.",
+          "The source must provide stable optical power because intensity drift directly affects BVI and can also influence contrast stability.",
+          "Near-infrared illumination is used because it can penetrate biological tissue more effectively than strongly absorbed visible light."
+        ],
+        component: "Near-Infrared Laser Source",
+        role: "Generates coherent illumination for diffuse speckle formation.",
+        detail: "The design uses an 808 nm laser path before splitting the light into multiple source channels."
       },
 
       splitter: {
-        title: "2. Cascaded 50:50 Fiber Beam Splitters",
-        body: "The laser output is divided into multiple source channels. This allows one laser module to illuminate several source positions while keeping the optical design compact.",
+        title: "3. Fiber Beam Splitter Path",
+        body: "The splitter path divides one laser output into multiple illumination channels. This makes it possible to deliver light to several source positions without using separate lasers.",
         bullets: [
-          "Purpose: convert one laser path into four source paths.",
-          "Design point: source-channel power balancing is important because unequal illumination affects detected intensity and BVI.",
-          "Practical role: supports multi-source diffuse optical sampling without requiring multiple independent lasers."
-        ]
+          "The orange fiber paths represent multi-source delivery.",
+          "Source-channel balancing is important because unequal source power changes detected intensity.",
+          "The split source structure supports flexible source-detector geometry."
+        ],
+        component: "Fiber Beam Splitter Path",
+        role: "Divides laser power into multiple source channels.",
+        detail: "The schematic shows four source delivery fibers generated from one laser source."
       },
 
       source: {
-        title: "3. Source Fibers and SDS",
-        body: "Source fibers deliver laser light into tissue. SDS means source-detector separation, and it controls the depth-weighted sensitivity profile of the diffuse optical measurement.",
+        title: "4. Source Fiber",
+        body: "The source fiber delivers laser light to the tissue surface. The source position, together with the detector position, defines the optical sampling volume.",
         bullets: [
-          "Purpose: define the illumination positions on the tissue surface.",
-          "SDS: larger separation generally increases relative sensitivity to deeper tissue, but decreases detected photon intensity.",
-          "Practical role: source geometry must be selected according to the target tissue depth and signal-to-noise ratio."
-        ]
+          "Source-detector separation determines the depth-weighted sensitivity of the measurement.",
+          "A larger separation generally samples deeper tissue but reduces detected light intensity.",
+          "The source fiber must be stably fixed to reduce motion artifacts."
+        ],
+        component: "Source Fiber",
+        role: "Delivers coherent light to the tissue surface.",
+        detail: "The source fiber is placed on the tissue surface and launches photons into the diffuse medium."
       },
 
       tissue: {
-        title: "4. Tissue and Dynamic Scattering",
-        body: "Inside tissue, photons undergo multiple scattering. Moving red blood cells change the temporal interference pattern, which appears as speckle fluctuation or speckle blurring during camera exposure.",
+        title: "5. Tissue / Microvascular Sampling Region",
+        body: "Photons propagate through tissue by multiple scattering. Moving red blood cells modulate the optical path phase and produce temporal speckle fluctuation.",
         bullets: [
-          "Purpose: tissue itself is the dynamic scattering medium.",
-          "BFI sensitivity: BFI reflects motion of dynamic scatterers along the photon paths, not direct vessel imaging.",
-          "Design point: the measured signal is weighted by the diffuse photon sensitivity volume."
-        ]
+          "The yellow region represents the diffuse sampling volume between source and detector.",
+          "BFI reflects dynamic scattering from moving red blood cells along photon paths.",
+          "DSCA does not directly image a vessel; it measures flow-sensitive statistics from the sampled tissue volume."
+        ],
+        component: "Tissue / Microvascular Sampling Region",
+        role: "Generates flow-sensitive speckle fluctuation through dynamic scattering.",
+        detail: "Moving red blood cells inside the photon sampling volume are the main source of blood-flow-related speckle decorrelation."
       },
 
       detector: {
-        title: "5. 1×7 Fan-Out Multimode Fiber Bundle",
-        body: "The detector side collects diffusely reflected speckles using a 1×7 multimode-fiber fan-out bundle. Multimode fibers transmit many speckles and improve photon throughput compared with single-mode detection.",
+        title: "6. Detector Fiber",
+        body: "The detector fiber collects diffusely reflected light from tissue. The collected light contains speckle fluctuation information caused by moving scatterers.",
         bullets: [
-          "Purpose: collect speckle patterns from multiple detection channels.",
-          "Thesis detail: 200 μm-core multimode fibers were used for the 1×7 fan-out bundle.",
-          "Practical role: enables multi-channel BFI/BVI monitoring on one camera sensor."
-        ]
+          "The detector position determines the optical sampling region with the source fiber.",
+          "Stable detector coupling is important for reliable speckle statistics.",
+          "The detected signal is transferred to the camera path through the fiber bundle."
+        ],
+        component: "Detector Fiber",
+        role: "Collects diffusely scattered speckle light from tissue.",
+        detail: "The detector fiber receives tissue-emitted diffuse light after multiple scattering."
+      },
+
+      bundle: {
+        title: "7. Multimode Fiber Fan-Out Bundle",
+        body: "The multimode fiber bundle transmits multiple detector-channel speckle patterns toward the camera. This enables camera-based multi-channel DSCA.",
+        bullets: [
+          "Multimode fibers provide high photon throughput.",
+          "Multiple detector channels can be imaged onto one camera sensor.",
+          "The fan-out structure separates channel outputs for ROI-based processing."
+        ],
+        component: "Multimode Fiber Fan-Out Bundle",
+        role: "Transfers collected speckle patterns from multiple detection channels to the imaging optics.",
+        detail: "The bundle output creates separated speckle spots that can be assigned to individual ROIs."
       },
 
       lens: {
-        title: "6. Relay Lens System",
-        body: "The relay lens system images the fiber-output speckle spots onto the camera sensor. The optical magnification and focus determine how many pixels sample each speckle spot.",
+        title: "8. Relay Lens Assembly",
+        body: "The relay lens assembly images the fiber-output speckle spots onto the camera sensor. Focus and magnification determine how each speckle spot is sampled by pixels.",
         bullets: [
-          "Purpose: transfer the fiber-end speckle distribution to the camera.",
-          "Design point: pixel-to-speckle size matching affects the coherence factor β and contrast accuracy.",
-          "Practical role: stable focus and channel separation are necessary for reproducible ROI-based BFI/BVI extraction."
-        ]
+          "The relay lens must preserve separable channel spots.",
+          "Pixel-to-speckle size affects speckle contrast estimation.",
+          "Defocus or misalignment can change K and reduce BFI reliability."
+        ],
+        component: "Relay Lens Assembly",
+        role: "Images fiber-output speckle spots onto the camera sensor.",
+        detail: "The lens path maps the fiber-end pattern to camera pixels for frame-by-frame contrast calculation."
       },
 
       camera: {
-        title: "7. CMOS Camera",
-        body: "The CMOS camera records spatial speckle images. DSCA replaces conventional high-speed photon-counting autocorrelation hardware with camera-based spatial ensemble statistics.",
+        title: "9. CMOS Camera",
+        body: "The camera records speckle images at each frame. DSCA uses these camera frames to calculate speckle contrast and intensity-based metrics.",
         bullets: [
-          "Purpose: capture speckle images at each time frame.",
-          "Thesis detail: Basler acA1300-60gm was used in the described MMF-DSCA system.",
-          "Practical role: frame rate, exposure time, noise, and ROI size directly affect the measured speckle contrast."
-        ]
+          "Frame rate determines temporal sampling of BFI and BVI.",
+          "Exposure time affects speckle blurring and therefore K².",
+          "Camera noise and saturation must be controlled for reliable contrast calculation."
+        ],
+        component: "CMOS Camera",
+        role: "Captures speckle images for DSCA signal extraction.",
+        detail: "The camera records separated speckle spots from the multimode-fiber outputs."
       },
 
       roi: {
-        title: "8. ROI-Based BFI and BVI Extraction",
-        body: "For each fiber-output spot, a region of interest is selected. Speckle contrast is calculated from the standard deviation and mean intensity, and integrated intensity is used for blood-volume-related analysis.",
+        title: "10. ROI-Based BFI / BVI Processing",
+        body: "A region of interest is selected from each speckle spot. The spatial standard deviation and mean intensity inside the ROI are used to calculate speckle contrast.",
         bullets: [
-          "BFI: relative flow information is obtained from speckle contrast, commonly approximated as BFIrel ∝ 1/K².",
-          "BVI: blood-volume-related information is calculated from intensity, for example BVI = −log(ΣIpixels).",
-          "Practical role: sub-ROI averaging can improve robustness by reducing local pixel noise and spatial heterogeneity."
-        ]
+          "BFI is calculated from speckle contrast, commonly using a relative relationship with 1/K².",
+          "BVI is calculated from integrated intensity using −log intensity.",
+          "Sub-ROI averaging can improve robustness against pixel noise and spatial heterogeneity."
+        ],
+        component: "ROI-Based Processing",
+        role: "Extracts BFI and BVI from camera speckle images.",
+        detail: "The selected ROI provides σI, <I>, K², relative BFI, and intensity-based BVI."
       }
     };
 
     const detailTitle = document.getElementById("detailTitle");
     const detailBody = document.getElementById("detailBody");
     const detailList = document.getElementById("detailList");
+    const summaryComponent = document.getElementById("summaryComponent");
+    const summaryRole = document.getElementById("summaryRole");
+    const summaryDetail = document.getElementById("summaryDetail");
     const hotspots = document.querySelectorAll(".hotspot");
 
     function updateDetail(key) {
@@ -852,6 +1013,10 @@
         li.textContent = bullet;
         detailList.appendChild(li);
       });
+
+      summaryComponent.textContent = selectedInfo.component;
+      summaryRole.textContent = selectedInfo.role;
+      summaryDetail.textContent = selectedInfo.detail;
 
       hotspots.forEach(function (hotspot) {
         hotspot.classList.toggle("active", hotspot.dataset.key === key);
@@ -871,6 +1036,190 @@
         updateDetail(hotspot.dataset.key);
       });
     });
+
+    const canvas = document.getElementById("rbcCanvas");
+    const ctx = canvas.getContext("2d");
+    const flowSlider = document.getElementById("flowSlider");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const kMetric = document.getElementById("kMetric");
+    const bfiMetric = document.getElementById("bfiMetric");
+    const bviMetric = document.getElementById("bviMetric");
+
+    let rbcParticles = [];
+    let lastTime = 0;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * window.devicePixelRatio);
+      canvas.height = Math.floor(rect.height * window.devicePixelRatio);
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+      initializeRBCs();
+    }
+
+    function initializeRBCs() {
+      const rect = canvas.getBoundingClientRect();
+      const amount = Number(volumeSlider.value);
+      const count = Math.floor(12 + amount * 0.65);
+
+      rbcParticles = [];
+
+      for (let i = 0; i < count; i++) {
+        rbcParticles.push({
+          x: Math.random() * rect.width,
+          yOffset: (Math.random() - 0.5) * 52,
+          size: 8 + Math.random() * 8,
+          phase: Math.random() * Math.PI * 2,
+          speedScale: 0.65 + Math.random() * 0.9
+        });
+      }
+    }
+
+    function drawVessel(width, height) {
+      ctx.clearRect(0, 0, width, height);
+
+      const centerY = height * 0.53;
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.72)";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.beginPath();
+      ctx.moveTo(0, centerY - 72);
+      ctx.bezierCurveTo(width * 0.26, centerY - 108, width * 0.58, centerY - 34, width, centerY - 78);
+      ctx.lineTo(width, centerY + 78);
+      ctx.bezierCurveTo(width * 0.60, centerY + 122, width * 0.26, centerY + 52, 0, centerY + 82);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(239, 153, 142, 0.58)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(139, 55, 54, 0.48)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, centerY - 42);
+      ctx.bezierCurveTo(width * 0.30, centerY - 74, width * 0.56, centerY - 12, width, centerY - 45);
+      ctx.lineTo(width, centerY + 44);
+      ctx.bezierCurveTo(width * 0.56, centerY + 78, width * 0.30, centerY + 18, 0, centerY + 48);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(180, 30, 38, 0.13)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(width * 0.18, centerY - 108);
+      ctx.lineTo(width * 0.38, centerY - 36);
+      ctx.lineTo(width * 0.58, centerY - 102);
+      ctx.lineTo(width * 0.78, centerY - 32);
+      ctx.strokeStyle = "rgba(255, 214, 74, 0.50)";
+      ctx.lineWidth = 3;
+      ctx.setLineDash([10, 10]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "#173145";
+      ctx.font = "700 20px cursive";
+      ctx.fillText("Microvascular sampling region", 28, 38);
+
+      ctx.font = "15px cursive";
+      ctx.fillStyle = "rgba(31, 42, 51, 0.72)";
+      ctx.fillText("Move the sliders to change RBC motion speed and RBC amount.", 28, 64);
+    }
+
+    function drawRBC(width, height, particle, time, flowSpeed) {
+      const centerY = height * 0.53;
+      const vesselWave = Math.sin((particle.x / width) * Math.PI * 2 + particle.phase) * 20;
+      const y = centerY + particle.yOffset + vesselWave;
+
+      ctx.save();
+      ctx.translate(particle.x, y);
+      ctx.rotate(Math.sin(time * 0.002 + particle.phase) * 0.7);
+
+      const blur = Math.min(8, flowSpeed / 16);
+      ctx.shadowColor = "rgba(180, 20, 28, 0.35)";
+      ctx.shadowBlur = blur;
+
+      ctx.beginPath();
+      ctx.ellipse(0, 0, particle.size * 1.35, particle.size * 0.78, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(210, 48, 54, 0.88)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.ellipse(0, 0, particle.size * 0.62, particle.size * 0.34, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(135, 14, 28, 0.28)";
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawMetricsOverlay(width, height, k2, bfi, bvi) {
+      const x = width - 285;
+      const y = 28;
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.82)";
+      ctx.strokeStyle = "rgba(78, 120, 145, 0.22)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(x, y, 250, 124, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#173145";
+      ctx.font = "700 18px cursive";
+      ctx.fillText("Real-time optical indices", x + 18, y + 30);
+
+      ctx.font = "16px cursive";
+      ctx.fillStyle = "#1d5b72";
+      ctx.fillText("K²  : " + k2.toFixed(2), x + 18, y + 62);
+      ctx.fillText("BFI : " + bfi.toFixed(2), x + 18, y + 88);
+      ctx.fillText("BVI : " + bvi.toFixed(2), x + 18, y + 114);
+    }
+
+    function animateRBCs(timestamp) {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+
+      if (!lastTime) {
+        lastTime = timestamp;
+      }
+
+      const dt = timestamp - lastTime;
+      lastTime = timestamp;
+
+      const flowSpeed = Number(flowSlider.value);
+      const rbcAmount = Number(volumeSlider.value);
+
+      const k2 = Math.max(0.12, 0.95 - flowSpeed * 0.0075);
+      const bfi = 1 / k2;
+      const bvi = -Math.log(Math.max(0.08, 1 - rbcAmount * 0.0072));
+
+      kMetric.textContent = k2.toFixed(2);
+      bfiMetric.textContent = bfi.toFixed(2);
+      bviMetric.textContent = bvi.toFixed(2);
+
+      drawVessel(width, height);
+
+      rbcParticles.forEach(function (particle) {
+        particle.x += (0.035 + flowSpeed * 0.0032) * dt * particle.speedScale;
+
+        if (particle.x > width + 30) {
+          particle.x = -30;
+          particle.yOffset = (Math.random() - 0.5) * 52;
+          particle.size = 8 + Math.random() * 8;
+          particle.phase = Math.random() * Math.PI * 2;
+        }
+
+        drawRBC(width, height, particle, timestamp, flowSpeed);
+      });
+
+      drawMetricsOverlay(width, height, k2, bfi, bvi);
+
+      requestAnimationFrame(animateRBCs);
+    }
+
+    volumeSlider.addEventListener("input", initializeRBCs);
+    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas();
+    requestAnimationFrame(animateRBCs);
   </script>
 </body>
 </html>
