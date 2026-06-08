@@ -318,31 +318,11 @@
     }
 
     .path-arrow {
-      fill: none;
-      stroke-width: 6.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      stroke: none;
       opacity: 0.98;
       transition:
-        stroke 0.2s ease,
-        stroke-width 0.2s ease,
-        opacity 0.2s ease;
-    }
-
-    .arrow-input {
-      stroke: rgba(255, 70, 70, 0.98);
-    }
-
-    .arrow-upper {
-      stroke: rgba(255, 155, 80, 0.98);
-    }
-
-    .arrow-sample {
-      stroke: rgba(255, 210, 95, 0.98);
-    }
-
-    .arrow-output {
-      stroke: rgba(135, 255, 120, 0.98);
+        opacity 0.18s ease,
+        fill 0.18s ease;
     }
 
     .beam-splitter-line {
@@ -361,9 +341,9 @@
 
     .mirror-hatch {
       stroke: #d9dde2;
-      stroke-width: 3.6;
+      stroke-width: 3.2;
       stroke-linecap: round;
-      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.24));
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.26));
     }
 
     .laser-body {
@@ -411,52 +391,8 @@
       stroke-width: 4;
     }
 
-    .delta-track-line {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.16);
-      stroke-width: 6;
-      stroke-linecap: round;
-    }
-
-    .delta-indicator-line {
-      fill: none;
-      stroke: rgba(110, 235, 255, 0.96);
-      stroke-width: 7;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(110, 235, 255, 0.55));
-      transition: opacity 0.2s ease;
-    }
-
-    .delta-indicator-text {
-      fill: #9eeaff;
-      font-size: 24px;
-      font-weight: 800;
-      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
-      paint-order: stroke;
-      stroke: rgba(0, 0, 0, 0.6);
-      stroke-width: 2.2px;
-      text-anchor: middle;
-    }
-
-    .phase-badge {
-      fill: rgba(5, 18, 36, 0.82);
-      stroke: rgba(158, 234, 255, 0.66);
-      stroke-width: 2.2;
-      filter: drop-shadow(0 0 10px rgba(110, 235, 255, 0.18));
-    }
-
-    .phase-badge-text {
-      fill: #ffffff;
-      font-size: 23px;
-      font-weight: 800;
-      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
-      paint-order: stroke;
-      stroke: rgba(0, 0, 0, 0.6);
-      stroke-width: 2px;
-    }
-
     .power-badge {
-      fill: rgba(5, 18, 36, 0.80);
+      fill: rgba(5, 18, 36, 0.82);
       stroke: rgba(255, 255, 255, 0.24);
       stroke-width: 1.8;
     }
@@ -470,6 +406,11 @@
       stroke: rgba(0, 0, 0, 0.55);
       stroke-width: 2px;
       text-anchor: middle;
+    }
+
+    .scan-spot {
+      fill: rgba(255, 245, 180, 0.96);
+      filter: drop-shadow(0 0 10px rgba(255, 220, 100, 0.72));
     }
 
     @media screen and (max-width: 1500px) {
@@ -531,28 +472,6 @@
         <div class="left-panel">
           <div class="diagram-box">
             <svg viewBox="0 0 1650 1120" role="img" aria-label="Mach-Zehnder Interferometer schematic">
-              <defs>
-                <marker id="arrowInput" viewBox="0 0 18 18" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0 0 L18 9 L0 18 z" fill="rgba(255,70,70,0.98)"></path>
-                </marker>
-
-                <marker id="arrowUpper" viewBox="0 0 18 18" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0 0 L18 9 L0 18 z" fill="rgba(255,155,80,0.98)"></path>
-                </marker>
-
-                <marker id="arrowSample" viewBox="0 0 18 18" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0 0 L18 9 L0 18 z" fill="rgba(255,210,95,0.98)"></path>
-                </marker>
-
-                <marker id="arrowOutput" viewBox="0 0 18 18" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0 0 L18 9 L0 18 z" fill="rgba(135,255,120,0.98)"></path>
-                </marker>
-
-                <marker id="arrowCyan" viewBox="0 0 16 16" markerWidth="14" markerHeight="14" refX="8" refY="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
-                  <path d="M0 8 L16 0 L16 16 z" fill="rgba(110,235,255,0.96)"></path>
-                </marker>
-              </defs>
-
               <!-- Laser -->
               <g id="laserGroup">
                 <rect id="laserBody" class="laser-body" x="70" y="180" width="155" height="72" rx="14"></rect>
@@ -568,18 +487,18 @@
               <line class="beam-guide" x1="1180" y1="620" x2="1490" y2="620"></line>
               <line class="beam-guide" x1="1180" y1="620" x2="1180" y2="988"></line>
 
-              <!-- Direction arrows -->
-              <path id="inputArrow" class="path-arrow arrow-input" d="M245 216 H352" marker-end="url(#arrowInput)"></path>
+              <!-- Real arrow shapes -->
+              <path id="inputArrow" class="path-arrow"></path>
+              <path id="upperArrowHorizontal" class="path-arrow"></path>
+              <path id="upperArrowVertical" class="path-arrow"></path>
+              <path id="sampleArrowVertical" class="path-arrow"></path>
+              <path id="sampleArrowLeft" class="path-arrow"></path>
+              <path id="sampleArrowInside" class="path-arrow"></path>
+              <path id="sampleArrowRight" class="path-arrow"></path>
+              <path id="outputArrowD1" class="path-arrow"></path>
+              <path id="outputArrowD2" class="path-arrow"></path>
 
-              <path id="upperArrowHorizontal" class="path-arrow arrow-upper" d="M500 216 H1065" marker-end="url(#arrowUpper)"></path>
-              <path id="upperArrowVertical" class="path-arrow arrow-upper" d="M1180 310 V505" marker-end="url(#arrowUpper)"></path>
-
-              <path id="sampleArrowVertical" class="path-arrow arrow-sample" d="M407 325 V520" marker-end="url(#arrowSample)"></path>
-              <path id="sampleArrowLeft" class="path-arrow arrow-sample" d="M500 620 H620" marker-end="url(#arrowSample)"></path>
-              <path id="sampleArrowRight" class="path-arrow arrow-sample" d="M955 620 H1065" marker-end="url(#arrowSample)"></path>
-
-              <path id="outputArrowD1" class="path-arrow arrow-output" d="M1265 620 H1420" marker-end="url(#arrowOutput)"></path>
-              <path id="outputArrowD2" class="path-arrow arrow-output" d="M1180 705 V865" marker-end="url(#arrowOutput)"></path>
+              <circle id="scanSpot" class="scan-spot" cx="785" cy="620" r="7"></circle>
 
               <!-- BS1 -->
               <g id="bs1Group">
@@ -591,17 +510,19 @@
               <g id="m1Group">
                 <line class="mirror-surface" x1="1120" y1="176" x2="1220" y2="276"></line>
 
-                <line class="mirror-hatch" x1="1124" y1="176" x2="1153" y2="176"></line>
-                <line class="mirror-hatch" x1="1134" y1="186" x2="1163" y2="186"></line>
-                <line class="mirror-hatch" x1="1144" y1="196" x2="1173" y2="196"></line>
-                <line class="mirror-hatch" x1="1154" y1="206" x2="1183" y2="206"></line>
-                <line class="mirror-hatch" x1="1164" y1="216" x2="1193" y2="216"></line>
-                <line class="mirror-hatch" x1="1174" y1="226" x2="1203" y2="226"></line>
-                <line class="mirror-hatch" x1="1184" y1="236" x2="1213" y2="236"></line>
-                <line class="mirror-hatch" x1="1194" y1="246" x2="1223" y2="246"></line>
-                <line class="mirror-hatch" x1="1204" y1="256" x2="1233" y2="256"></line>
-                <line class="mirror-hatch" x1="1214" y1="266" x2="1243" y2="266"></line>
-                <line class="mirror-hatch" x1="1224" y1="276" x2="1253" y2="276"></line>
+                <line class="mirror-hatch" x1="1120" y1="176" x2="1148" y2="176"></line>
+                <line class="mirror-hatch" x1="1128" y1="184" x2="1156" y2="184"></line>
+                <line class="mirror-hatch" x1="1136" y1="192" x2="1164" y2="192"></line>
+                <line class="mirror-hatch" x1="1144" y1="200" x2="1172" y2="200"></line>
+                <line class="mirror-hatch" x1="1152" y1="208" x2="1180" y2="208"></line>
+                <line class="mirror-hatch" x1="1160" y1="216" x2="1188" y2="216"></line>
+                <line class="mirror-hatch" x1="1168" y1="224" x2="1196" y2="224"></line>
+                <line class="mirror-hatch" x1="1176" y1="232" x2="1204" y2="232"></line>
+                <line class="mirror-hatch" x1="1184" y1="240" x2="1212" y2="240"></line>
+                <line class="mirror-hatch" x1="1192" y1="248" x2="1220" y2="248"></line>
+                <line class="mirror-hatch" x1="1200" y1="256" x2="1228" y2="256"></line>
+                <line class="mirror-hatch" x1="1208" y1="264" x2="1236" y2="264"></line>
+                <line class="mirror-hatch" x1="1216" y1="272" x2="1244" y2="272"></line>
 
                 <text class="svg-label" x="1168" y="142" text-anchor="middle">M1</text>
               </g>
@@ -610,17 +531,19 @@
               <g id="m2Group">
                 <line class="mirror-surface" x1="347" y1="580" x2="447" y2="680"></line>
 
-                <line class="mirror-hatch" x1="301" y1="580" x2="330" y2="580"></line>
-                <line class="mirror-hatch" x1="311" y1="590" x2="340" y2="590"></line>
-                <line class="mirror-hatch" x1="321" y1="600" x2="350" y2="600"></line>
-                <line class="mirror-hatch" x1="331" y1="610" x2="360" y2="610"></line>
-                <line class="mirror-hatch" x1="341" y1="620" x2="370" y2="620"></line>
-                <line class="mirror-hatch" x1="351" y1="630" x2="380" y2="630"></line>
-                <line class="mirror-hatch" x1="361" y1="640" x2="390" y2="640"></line>
-                <line class="mirror-hatch" x1="371" y1="650" x2="400" y2="650"></line>
-                <line class="mirror-hatch" x1="381" y1="660" x2="410" y2="660"></line>
-                <line class="mirror-hatch" x1="391" y1="670" x2="420" y2="670"></line>
-                <line class="mirror-hatch" x1="401" y1="680" x2="430" y2="680"></line>
+                <line class="mirror-hatch" x1="299" y1="580" x2="327" y2="580"></line>
+                <line class="mirror-hatch" x1="307" y1="588" x2="335" y2="588"></line>
+                <line class="mirror-hatch" x1="315" y1="596" x2="343" y2="596"></line>
+                <line class="mirror-hatch" x1="323" y1="604" x2="351" y2="604"></line>
+                <line class="mirror-hatch" x1="331" y1="612" x2="359" y2="612"></line>
+                <line class="mirror-hatch" x1="339" y1="620" x2="367" y2="620"></line>
+                <line class="mirror-hatch" x1="347" y1="628" x2="375" y2="628"></line>
+                <line class="mirror-hatch" x1="355" y1="636" x2="383" y2="636"></line>
+                <line class="mirror-hatch" x1="363" y1="644" x2="391" y2="644"></line>
+                <line class="mirror-hatch" x1="371" y1="652" x2="399" y2="652"></line>
+                <line class="mirror-hatch" x1="379" y1="660" x2="407" y2="660"></line>
+                <line class="mirror-hatch" x1="387" y1="668" x2="415" y2="668"></line>
+                <line class="mirror-hatch" x1="395" y1="676" x2="423" y2="676"></line>
 
                 <text class="svg-label" x="397" y="740" text-anchor="middle">M2</text>
               </g>
@@ -629,30 +552,21 @@
               <g id="eyeSampleGroup">
                 <ellipse class="sample-eye-outline" cx="785" cy="620" rx="145" ry="108"></ellipse>
 
-                <!-- Cornea: reduced size and placed inside the sample -->
+                <!-- Cornea: smaller and inside -->
                 <ellipse class="sample-cornea" cx="678" cy="620" rx="12" ry="42"></ellipse>
 
-                <!-- Retina layers: red arcs closer to the reference image -->
-                <path class="retina-layer" d="M912 544 Q988 620 912 696"></path>
-                <path class="retina-layer" d="M930 554 Q998 620 930 686"></path>
-                <path class="retina-layer" d="M948 564 Q1008 620 948 676"></path>
+                <!-- Retina Layers: inside the purple outline -->
+                <path class="retina-layer" d="M872 572 Q925 620 872 668"></path>
+                <path class="retina-layer" d="M888 566 Q940 620 888 674"></path>
+                <path class="retina-layer" d="M904 560 Q955 620 904 680"></path>
 
                 <text class="svg-label" x="735" y="488">Sample</text>
-                <text class="svg-small-label" x="617" y="545">Cornea</text>
-                <text class="svg-small-label" x="905" y="714">Retina Layers</text>
-              </g>
+                <text class="svg-small-label" x="615" y="548">Cornea</text>
 
-              <!-- Dynamic path-difference indicator -->
-              <g id="deltaInfoGroup">
-                <line class="delta-track-line" x1="650" y1="744" x2="810" y2="744"></line>
-                <line id="deltaIndicatorLine" class="delta-indicator-line" x1="650" y1="744" x2="650" y2="744" marker-start="url(#arrowCyan)" marker-end="url(#arrowCyan)"></line>
-                <text id="deltaIndicatorText" class="delta-indicator-text" x="650" y="782">ΔL = 0.00 μm</text>
-              </g>
-
-              <!-- Dynamic phase badge -->
-              <g id="phaseBadgeGroup">
-                <rect class="phase-badge" x="995" y="462" width="225" height="64" rx="14"></rect>
-                <text id="phaseBadgeText" class="phase-badge-text" x="1024" y="502">Δφ = 0.00 rad</text>
+                <text class="svg-small-label" x="842" y="690">
+                  <tspan x="842" dy="0">Retina</tspan>
+                  <tspan x="842" dy="24">Layers</tspan>
+                </text>
               </g>
 
               <!-- BS2 -->
@@ -661,26 +575,27 @@
                 <text class="svg-label" x="1230" y="555">BS2</text>
               </g>
 
-              <!-- Power badges for intuitive output change -->
+              <!-- D1 power above, D1 label below -->
               <g id="d1PowerBadgeGroup">
-                <rect class="power-badge" x="1365" y="565" width="120" height="44" rx="11"></rect>
-                <text id="d1PowerBadgeText" class="power-badge-text" x="1425" y="594">95%</text>
+                <rect class="power-badge" x="1486" y="536" width="124" height="44" rx="11"></rect>
+                <text id="d1PowerBadgeText" class="power-badge-text" x="1548" y="565">95.0%</text>
               </g>
 
+              <!-- D2 power left, D2 label right -->
               <g id="d2PowerBadgeGroup">
-                <rect class="power-badge" x="1210" y="900" width="120" height="44" rx="11"></rect>
-                <text id="d2PowerBadgeText" class="power-badge-text" x="1270" y="929">5%</text>
+                <rect class="power-badge" x="1028" y="966" width="124" height="44" rx="11"></rect>
+                <text id="d2PowerBadgeText" class="power-badge-text" x="1090" y="995">5.0%</text>
               </g>
 
               <!-- Detector symbols -->
               <g id="det1Group">
                 <g id="detectorSymbolD1"></g>
-                <text class="svg-label" x="1454" y="740">D1</text>
+                <text class="svg-label" x="1548" y="730" text-anchor="middle">D1</text>
               </g>
 
               <g id="det2Group">
                 <g id="detectorSymbolD2"></g>
-                <text class="svg-label" x="1260" y="1016">D2</text>
+                <text class="svg-label" x="1268" y="1000">D2</text>
               </g>
             </svg>
           </div>
@@ -699,9 +614,9 @@
                 <span>Path Difference, ΔL</span>
                 <span class="control-value" id="pathValue">0.00 μm</span>
               </div>
-              <input id="pathSlider" type="range" min="0" max="10" value="0" step="0.01" />
+              <input id="pathSlider" type="range" min="-5" max="5" value="0" step="0.01" />
               <div class="control-help">
-                Changes the sample-arm optical path delay from 0 to 10 μm.
+                Changes the sample-arm optical path delay from -5 to +5 μm. The sample center corresponds to 0.
               </div>
             </div>
 
@@ -827,16 +742,17 @@
     const upperArrowVertical = document.getElementById("upperArrowVertical");
     const sampleArrowVertical = document.getElementById("sampleArrowVertical");
     const sampleArrowLeft = document.getElementById("sampleArrowLeft");
+    const sampleArrowInside = document.getElementById("sampleArrowInside");
     const sampleArrowRight = document.getElementById("sampleArrowRight");
     const outputArrowD1 = document.getElementById("outputArrowD1");
     const outputArrowD2 = document.getElementById("outputArrowD2");
 
-    const deltaIndicatorLine = document.getElementById("deltaIndicatorLine");
-    const deltaIndicatorText = document.getElementById("deltaIndicatorText");
-    const phaseBadgeText = document.getElementById("phaseBadgeText");
+    const scanSpot = document.getElementById("scanSpot");
     const d1PowerBadgeText = document.getElementById("d1PowerBadgeText");
     const d2PowerBadgeText = document.getElementById("d2PowerBadgeText");
     const laserBody = document.getElementById("laserBody");
+
+    let animatedDeltaL = 0;
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
@@ -1020,52 +936,116 @@
       group.appendChild(symbolGroup);
     }
 
-    function setArrowAppearance(element, colorString, width, opacity) {
-      element.style.stroke = colorString;
-      element.style.strokeWidth = width;
-      element.style.opacity = opacity;
+    function buildArrowPath(x1, y1, x2, y2, bodyWidth = 12, headLength = 28, headWidth = 28) {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const len = Math.hypot(dx, dy);
+
+      if (len < 1) {
+        return `M${x1} ${y1} Z`;
+      }
+
+      const ux = dx / len;
+      const uy = dy / len;
+      const px = -uy;
+      const py = ux;
+
+      const safeHeadLength = Math.min(headLength, len * 0.6);
+      const bodyLength = len - safeHeadLength;
+
+      const bx = x1 + ux * bodyLength;
+      const by = y1 + uy * bodyLength;
+
+      const bw = bodyWidth / 2;
+      const hw = headWidth / 2;
+
+      const p1x = x1 + px * bw;
+      const p1y = y1 + py * bw;
+
+      const p2x = bx + px * bw;
+      const p2y = by + py * bw;
+
+      const p3x = bx + px * hw;
+      const p3y = by + py * hw;
+
+      const p4x = x2;
+      const p4y = y2;
+
+      const p5x = bx - px * hw;
+      const p5y = by - py * hw;
+
+      const p6x = bx - px * bw;
+      const p6y = by - py * bw;
+
+      const p7x = x1 - px * bw;
+      const p7y = y1 - py * bw;
+
+      return `
+        M ${p1x} ${p1y}
+        L ${p2x} ${p2y}
+        L ${p3x} ${p3y}
+        L ${p4x} ${p4y}
+        L ${p5x} ${p5y}
+        L ${p6x} ${p6y}
+        L ${p7x} ${p7y}
+        Z
+      `;
     }
 
-    function updateOpticalDiagram(deltaL, wavelengthNm, visibility, phase, centerI1, centerI2) {
+    function setArrowShape(element, x1, y1, x2, y2, width, color, opacity, glowAlpha = 0.52) {
+      element.setAttribute("d", buildArrowPath(x1, y1, x2, y2, width, 28, width * 2.15));
+      element.style.fill = color;
+      element.style.opacity = opacity;
+      element.style.filter = `drop-shadow(0 0 8px rgba(255,255,255,0.12)) drop-shadow(0 0 8px ${color.replace(/rgba\(([^)]+),\s*[^,]+\)$/, "rgba($1, " + glowAlpha + ")")})`;
+    }
+
+    function setSimpleGlowFill(element, color) {
+      element.style.fill = color;
+      element.style.filter = `drop-shadow(0 0 8px ${color})`;
+    }
+
+    function updateOpticalDiagram(animatedDelta, wavelengthNm, visibility, centerI1, centerI2, timeMs) {
       const baseColor = wavelengthToRGB(wavelengthNm);
       const brightColor = brightenColor(baseColor, 0.25);
 
+      const baseColorStrong = rgbaString(baseColor, 0.96);
+      const sampleColorStrong = rgbaString(brightColor, 0.98);
+
       const sharedOpacity = 0.55 + 0.40 * visibility;
 
-      setArrowAppearance(inputArrow, rgbaString(baseColor, 0.98), 6.2, 0.95);
-      setArrowAppearance(upperArrowHorizontal, rgbaString(baseColor, 0.92), 6.0, sharedOpacity);
-      setArrowAppearance(upperArrowVertical, rgbaString(baseColor, 0.92), 6.0, sharedOpacity);
+      const scanY = 620 - animatedDelta * 12.0;
+      const insideLeftX = 650;
+      const insideRightX = 915;
 
-      setArrowAppearance(sampleArrowVertical, rgbaString(brightColor, 0.95), 6.4, sharedOpacity);
-      setArrowAppearance(sampleArrowLeft, rgbaString(brightColor, 0.95), 6.4, sharedOpacity);
-      setArrowAppearance(sampleArrowRight, rgbaString(brightColor, 0.95), 6.4, sharedOpacity);
+      setArrowShape(inputArrow, 245, 216, 352, 216, 12, baseColorStrong, 0.96);
+      setArrowShape(upperArrowHorizontal, 500, 216, 1065, 216, 12, baseColorStrong, sharedOpacity);
+      setArrowShape(upperArrowVertical, 1180, 310, 1180, 505, 12, baseColorStrong, sharedOpacity);
+      setArrowShape(sampleArrowVertical, 407, 325, 407, 520, 12.5, sampleColorStrong, sharedOpacity);
 
-      const d1Width = 4.8 + 7.8 * centerI1;
-      const d2Width = 4.8 + 7.8 * centerI2;
-      const d1Opacity = 0.35 + 0.65 * centerI1;
-      const d2Opacity = 0.35 + 0.65 * centerI2;
+      setArrowShape(sampleArrowLeft, 500, scanY, 648, scanY, 13, sampleColorStrong, 0.95);
+      setArrowShape(sampleArrowInside, 652, scanY, insideRightX, scanY, 13.8, sampleColorStrong, 0.98);
+      setArrowShape(sampleArrowRight, 920, scanY, 1065, scanY, 13, sampleColorStrong, 0.95);
 
-      setArrowAppearance(outputArrowD1, rgbaString(brightColor, 1), d1Width, d1Opacity);
-      setArrowAppearance(outputArrowD2, rgbaString(brightColor, 1), d2Width, d2Opacity);
+      const d1Width = 10.5 + 8.5 * centerI1;
+      const d2Width = 10.5 + 8.5 * centerI2;
+      const d1Opacity = 0.34 + 0.66 * centerI1;
+      const d2Opacity = 0.34 + 0.66 * centerI2;
+
+      setArrowShape(outputArrowD1, 1265, 620, 1420, 620, d1Width, sampleColorStrong, d1Opacity);
+      setArrowShape(outputArrowD2, 1180, 705, 1180, 865, d2Width, sampleColorStrong, d2Opacity);
 
       laserBody.style.stroke = rgbaString(baseColor, 1);
       laserBody.style.fill = rgbaString(baseColor, 0.26);
 
-      const minVisualLength = 0;
-      const maxVisualLength = 150;
-      const deltaLength = deltaL <= 0 ? minVisualLength : 10 + (deltaL / 10) * (maxVisualLength - 10);
-      const x1 = 650;
-      const x2 = x1 + deltaLength;
+      const pulseT = ((timeMs * 0.00055) % 1);
+      const pulseX = insideLeftX + pulseT * (insideRightX - insideLeftX);
 
-      deltaIndicatorLine.setAttribute("x1", x1.toFixed(1));
-      deltaIndicatorLine.setAttribute("x2", x2.toFixed(1));
-      deltaIndicatorLine.style.opacity = deltaL <= 0.001 ? "0.0" : "1.0";
+      scanSpot.setAttribute("cx", pulseX.toFixed(2));
+      scanSpot.setAttribute("cy", scanY.toFixed(2));
 
-      const textX = deltaL <= 0.001 ? 650 : x1 + deltaLength / 2;
-      deltaIndicatorText.setAttribute("x", textX.toFixed(1));
-      deltaIndicatorText.textContent = `ΔL = ${deltaL.toFixed(2)} μm`;
-
-      phaseBadgeText.textContent = `Δφ = ${phase.toFixed(2)} rad`;
+      const pulseScale = 6.2 + 2.8 * (0.5 + 0.5 * Math.sin(timeMs * 0.01));
+      scanSpot.setAttribute("r", pulseScale.toFixed(2));
+      setSimpleGlowFill(scanSpot, "rgba(255, 242, 160, 0.95)");
 
       d1PowerBadgeText.textContent = `${(centerI1 * 100).toFixed(1)}%`;
       d2PowerBadgeText.textContent = `${(centerI2 * 100).toFixed(1)}%`;
@@ -1513,7 +1493,29 @@
       }
 
       updateDetectorSymbols(detectorType);
-      updateOpticalDiagram(deltaL, wavelengthNm, visibility, phase, centerI1, centerI2);
+    }
+
+    function animationLoop(timeMs) {
+      const targetDelta = parseFloat(pathSlider.value);
+      animatedDeltaL += (targetDelta - animatedDeltaL) * 0.12;
+
+      const wavelengthNm = parseFloat(wavelengthSlider.value);
+      const wavelengthUm = wavelengthNm / 1000;
+      const visibility = parseFloat(visibilitySlider.value);
+      const phaseForAnimated = (2 * Math.PI * animatedDeltaL) / wavelengthUm;
+      const centerI1Animated = 0.5 * (1 + visibility * Math.cos(phaseForAnimated));
+      const centerI2Animated = 1 - centerI1Animated;
+
+      updateOpticalDiagram(
+        animatedDeltaL,
+        wavelengthNm,
+        visibility,
+        centerI1Animated,
+        centerI2Animated,
+        timeMs
+      );
+
+      requestAnimationFrame(animationLoop);
     }
 
     pathSlider.addEventListener("input", drawDetectorCanvas);
@@ -1526,6 +1528,7 @@
     });
 
     drawDetectorCanvas();
+    requestAnimationFrame(animationLoop);
   </script>
 </body>
 </html>
