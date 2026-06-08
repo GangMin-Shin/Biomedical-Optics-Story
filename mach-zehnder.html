@@ -377,7 +377,7 @@
       fill: rgba(255, 255, 255, 0.015);
       stroke: rgba(210, 70, 255, 0.98);
       stroke-width: 4;
-      stroke-dasharray: 12 9;
+      stroke-dasharray: none;
       filter: drop-shadow(0 0 9px rgba(210, 65, 230, 0.42));
     }
 
@@ -386,13 +386,6 @@
       stroke: rgba(160, 235, 255, 0.98);
       stroke-width: 5;
       filter: drop-shadow(0 0 8px rgba(160, 235, 255, 0.46));
-    }
-
-    .sample-eye-line {
-      stroke: rgba(130, 95, 255, 0.95);
-      stroke-width: 4;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(130, 95, 255, 0.36));
     }
 
     .retina-layer {
@@ -516,8 +509,8 @@
               <line class="path-arrow arrow-upper" x1="1180" y1="310" x2="1180" y2="505" marker-end="url(#arrowUpper)"></line>
 
               <line class="path-arrow arrow-sample" x1="407" y1="325" x2="407" y2="520" marker-end="url(#arrowSample)"></line>
-              <line class="path-arrow arrow-sample" x1="500" y1="620" x2="575" y2="620" marker-end="url(#arrowSample)"></line>
-              <line class="path-arrow arrow-sample" x1="995" y1="620" x2="1065" y2="620" marker-end="url(#arrowSample)"></line>
+              <line class="path-arrow arrow-sample" x1="500" y1="620" x2="620" y2="620" marker-end="url(#arrowSample)"></line>
+              <line class="path-arrow arrow-sample" x1="955" y1="620" x2="1065" y2="620" marker-end="url(#arrowSample)"></line>
 
               <line class="path-arrow arrow-output" x1="1265" y1="620" x2="1420" y2="620" marker-end="url(#arrowOutput)"></line>
               <line class="path-arrow arrow-output" x1="1180" y1="705" x2="1180" y2="865" marker-end="url(#arrowOutput)"></line>
@@ -558,19 +551,17 @@
 
               <!-- Eye sample -->
               <g id="eyeSampleGroup">
-                <ellipse class="sample-eye-outline" cx="785" cy="620" rx="182" ry="142"></ellipse>
+                <ellipse class="sample-eye-outline" cx="785" cy="620" rx="145" ry="108"></ellipse>
 
-                <line class="sample-eye-line" x1="620" y1="620" x2="950" y2="620"></line>
+                <ellipse class="sample-cornea" cx="660" cy="620" rx="18" ry="56"></ellipse>
 
-                <ellipse class="sample-cornea" cx="648" cy="620" rx="22" ry="78"></ellipse>
+                <path class="retina-layer" d="M850 575 C882 595 890 617 885 650"></path>
+                <path class="retina-layer" d="M865 585 C895 604 903 623 899 653"></path>
+                <path class="retina-layer" d="M880 596 C907 613 915 630 912 657"></path>
 
-                <path class="retina-layer" d="M880 570 C915 592 925 612 920 645"></path>
-                <path class="retina-layer" d="M895 582 C928 603 937 622 933 652"></path>
-                <path class="retina-layer" d="M910 594 C941 613 949 631 946 658"></path>
-
-                <text class="svg-label" x="735" y="470">Sample</text>
-                <text class="svg-small-label" x="650" y="548">Cornea</text>
-                <text class="svg-small-label" x="970" y="708">Retina Layers</text>
+                <text class="svg-label" x="735" y="488">Sample</text>
+                <text class="svg-small-label" x="620" y="548">Cornea</text>
+                <text class="svg-small-label" x="905" y="695">Retina Layers</text>
               </g>
 
               <!-- BS2 -->
