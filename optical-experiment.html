@@ -102,14 +102,14 @@
 
     .experiment-layout {
       display: grid;
-      grid-template-columns: minmax(720px, 1fr) 310px;
+      grid-template-columns: minmax(760px, 1fr) 340px;
       gap: 22px;
       align-items: stretch;
     }
 
     .table-panel {
       position: relative;
-      min-height: 690px;
+      min-height: 720px;
       border-radius: 26px;
       overflow: hidden;
       background:
@@ -154,8 +154,42 @@
       color: rgba(230, 250, 255, 0.95);
       background: rgba(0, 0, 0, 0.38);
       border: 1px solid rgba(160, 230, 255, 0.34);
-      z-index: 4;
+      z-index: 6;
       backdrop-filter: blur(4px);
+    }
+
+    .empty-guide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+
+    .empty-guide.hidden {
+      opacity: 0;
+    }
+
+    .empty-guide-box {
+      max-width: 520px;
+      padding: 22px 26px;
+      border-radius: 22px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.34);
+      border: 1px dashed rgba(170, 235, 255, 0.42);
+      color: rgba(230, 250, 255, 0.85);
+      box-shadow: 0 0 26px rgba(120, 210, 255, 0.12);
+      backdrop-filter: blur(3px);
+    }
+
+    .empty-guide-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.96);
     }
 
     .beam-layer {
@@ -165,18 +199,20 @@
       height: 100%;
       z-index: 2;
       pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.25s ease;
     }
 
     .component-layer {
       position: absolute;
       inset: 0;
-      z-index: 3;
+      z-index: 4;
     }
 
     .component {
       position: absolute;
-      width: 105px;
-      height: 72px;
+      width: 110px;
+      height: 82px;
       transform: translate(-50%, -50%);
       cursor: grab;
       user-select: none;
@@ -190,37 +226,81 @@
     .component .label {
       position: absolute;
       left: 50%;
-      bottom: -25px;
+      bottom: -23px;
       transform: translateX(-50%);
       white-space: nowrap;
       font-size: 13px;
       color: rgba(245, 252, 255, 0.95);
       text-shadow: 0 0 8px rgba(0, 0, 0, 0.95);
-      background: rgba(0, 0, 0, 0.30);
+      background: rgba(0, 0, 0, 0.34);
       padding: 2px 8px;
       border-radius: 999px;
     }
 
-    .laser-body {
+    .component:hover .info-card {
+      opacity: 1;
+      transform: translate(-50%, -105%);
+      pointer-events: none;
+    }
+
+    .info-card {
       position: absolute;
-      left: 5px;
-      top: 21px;
-      width: 88px;
-      height: 30px;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #141a24, #4b5b6a);
-      border: 2px solid rgba(190, 235, 255, 0.75);
+      left: 50%;
+      top: -8px;
+      width: 210px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(2, 9, 18, 0.93);
+      border: 1px solid rgba(160, 230, 255, 0.48);
+      box-shadow:
+        0 0 10px rgba(120, 220, 255, 0.35),
+        0 0 26px rgba(120, 220, 255, 0.16);
+      opacity: 0;
+      transform: translate(-50%, -95%);
+      transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+      z-index: 50;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      color: #9eeaff;
+    }
+
+    .info-card span {
+      display: block;
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(235, 248, 255, 0.82);
+    }
+
+    /* Source symbols */
+
+    .laser-symbol {
+      position: absolute;
+      left: 9px;
+      top: 26px;
+      width: 82px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #111822, #4b5b6a);
+      border: 2px solid rgba(190, 235, 255, 0.82);
       box-shadow:
         inset 0 0 10px rgba(255, 255, 255, 0.10),
         0 0 14px rgba(80, 190, 255, 0.35);
     }
 
-    .laser-aperture {
+    .laser-symbol::before {
+      content: "";
       position: absolute;
-      right: 2px;
-      top: 29px;
-      width: 13px;
-      height: 13px;
+      right: -10px;
+      top: 7px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #ff4040;
       box-shadow:
@@ -228,68 +308,141 @@
         0 0 18px rgba(255, 64, 64, 0.7);
     }
 
+    .laser-symbol::after {
+      content: "CW";
+      position: absolute;
+      left: 18px;
+      top: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.88);
+      letter-spacing: 1px;
+    }
+
+    .pulsed-symbol::after {
+      content: "PULSE";
+      left: 11px;
+      font-size: 11px;
+    }
+
+    .pulsed-wave {
+      position: absolute;
+      right: -37px;
+      top: 31px;
+      width: 30px;
+      height: 16px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #ff4d4d 0 5px,
+          transparent 5px 9px
+        );
+      filter: drop-shadow(0 0 6px rgba(255, 70, 70, 0.85));
+    }
+
+    .sld-symbol::after {
+      content: "SLD";
+      left: 19px;
+      font-size: 12px;
+    }
+
+    .sld-spectrum {
+      position: absolute;
+      right: -36px;
+      top: 28px;
+      width: 33px;
+      height: 23px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(255, 230, 140, 0.95), rgba(255, 90, 90, 0.55), transparent 68%);
+      filter: drop-shadow(0 0 8px rgba(255, 160, 80, 0.8));
+    }
+
+    /* Optical symbols */
+
     .mirror-symbol {
       position: absolute;
-      left: 34px;
-      top: 5px;
-      width: 42px;
-      height: 62px;
+      left: 37px;
+      top: 6px;
+      width: 44px;
+      height: 68px;
       transform: rotate(-45deg);
     }
 
     .mirror-line {
       position: absolute;
-      left: 19px;
+      left: 18px;
       top: 0;
       width: 5px;
-      height: 62px;
+      height: 68px;
       border-radius: 999px;
-      background: #cdefff;
+      background: #d9f5ff;
       box-shadow: 0 0 12px rgba(160, 230, 255, 0.80);
     }
 
     .mirror-hatch {
       position: absolute;
       left: 25px;
-      top: 3px;
-      width: 22px;
-      height: 56px;
+      top: 2px;
+      width: 24px;
+      height: 64px;
       background:
         repeating-linear-gradient(
           90deg,
-          rgba(205, 239, 255, 0.80) 0 2px,
+          rgba(217, 245, 255, 0.82) 0 2px,
           transparent 2px 7px
         );
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
     .bs-symbol {
       position: absolute;
-      left: 34px;
-      top: 2px;
-      width: 42px;
+      left: 37px;
+      top: 6px;
+      width: 40px;
       height: 68px;
       transform: rotate(45deg);
-      border-radius: 7px;
+      border-radius: 6px;
       border: 3px solid rgba(145, 235, 255, 0.95);
       background:
         linear-gradient(
           90deg,
-          rgba(145, 235, 255, 0.12),
-          rgba(255, 255, 255, 0.26),
-          rgba(145, 235, 255, 0.12)
+          rgba(145, 235, 255, 0.10),
+          rgba(255, 255, 255, 0.25),
+          rgba(145, 235, 255, 0.10)
         );
       box-shadow:
         inset 0 0 12px rgba(255, 255, 255, 0.18),
         0 0 16px rgba(120, 220, 255, 0.55);
     }
 
-    .lens-symbol {
+    .pbs-symbol {
+      position: absolute;
+      left: 37px;
+      top: 6px;
+      width: 40px;
+      height: 68px;
+      transform: rotate(45deg);
+      border-radius: 6px;
+      border: 3px solid rgba(255, 205, 110, 0.95);
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255, 205, 110, 0.12),
+          rgba(255, 255, 255, 0.24),
+          rgba(120, 220, 255, 0.12)
+        );
+      box-shadow:
+        inset 0 0 12px rgba(255, 255, 255, 0.18),
+        0 0 16px rgba(255, 205, 110, 0.42);
+    }
+
+    .convex-lens-symbol {
       position: absolute;
       left: 35px;
-      top: 5px;
-      width: 36px;
-      height: 62px;
+      top: 8px;
+      width: 40px;
+      height: 66px;
       border-radius: 50%;
       background:
         radial-gradient(circle at 50% 50%, rgba(230, 255, 255, 0.58), rgba(90, 205, 255, 0.25) 52%, rgba(40, 150, 255, 0.18));
@@ -299,10 +452,63 @@
         0 0 18px rgba(120, 220, 255, 0.45);
     }
 
+    .convex-lens-symbol::before,
+    .convex-lens-symbol::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 2px;
+      background: rgba(190, 240, 255, 0.8);
+    }
+
+    .convex-lens-symbol::before {
+      right: 42px;
+    }
+
+    .convex-lens-symbol::after {
+      left: 42px;
+    }
+
+    .concave-lens-symbol {
+      position: absolute;
+      left: 35px;
+      top: 8px;
+      width: 40px;
+      height: 66px;
+      border: 2px solid rgba(190, 240, 255, 0.9);
+      border-radius: 12px;
+      background:
+        radial-gradient(ellipse at 0% 50%, rgba(5, 15, 30, 0.92) 0 36%, transparent 38%),
+        radial-gradient(ellipse at 100% 50%, rgba(5, 15, 30, 0.92) 0 36%, transparent 38%),
+        linear-gradient(90deg, rgba(110, 215, 255, 0.22), rgba(230, 255, 255, 0.35), rgba(110, 215, 255, 0.22));
+      box-shadow:
+        inset 0 0 14px rgba(255, 255, 255, 0.18),
+        0 0 18px rgba(120, 220, 255, 0.35);
+    }
+
+    .concave-lens-symbol::before,
+    .concave-lens-symbol::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 2px;
+      background: rgba(190, 240, 255, 0.8);
+    }
+
+    .concave-lens-symbol::before {
+      right: 42px;
+    }
+
+    .concave-lens-symbol::after {
+      left: 42px;
+    }
+
     .sample-symbol {
       position: absolute;
-      left: 20px;
-      top: 12px;
+      left: 21px;
+      top: 17px;
       width: 68px;
       height: 48px;
       border-radius: 13px;
@@ -322,8 +528,8 @@
 
     .detector-symbol {
       position: absolute;
-      left: 20px;
-      top: 8px;
+      left: 21px;
+      top: 13px;
       width: 68px;
       height: 56px;
       border-radius: 11px;
@@ -352,8 +558,45 @@
       border: 1px solid rgba(200, 245, 255, 0.40);
     }
 
+    .fiber-symbol {
+      position: absolute;
+      left: 13px;
+      top: 36px;
+      width: 86px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid rgba(200, 240, 255, 0.75);
+      background:
+        linear-gradient(90deg, rgba(90, 180, 255, 0.20), rgba(255, 255, 255, 0.40), rgba(90, 180, 255, 0.20));
+      box-shadow: 0 0 14px rgba(120, 220, 255, 0.30);
+    }
+
+    .fiber-symbol::before,
+    .fiber-symbol::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(230, 250, 255, 0.9);
+      box-shadow: 0 0 8px rgba(180, 240, 255, 0.9);
+    }
+
+    .fiber-symbol::before {
+      left: 5px;
+    }
+
+    .fiber-symbol::after {
+      right: 5px;
+    }
+
+    /* Right panel */
+
     .panel {
-      min-height: 690px;
+      min-height: 720px;
+      max-height: 720px;
+      overflow-y: auto;
       border-radius: 26px;
       padding: 22px;
       background: rgba(0, 0, 0, 0.46);
@@ -378,52 +621,92 @@
       color: rgba(230, 245, 255, 0.78);
     }
 
-    .tool-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .tool-button {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(160, 230, 255, 0.32);
-      background: rgba(255, 255, 255, 0.08);
-      color: white;
-      text-align: left;
-      cursor: pointer;
-      transition:
-        background 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-    }
-
-    .tool-button strong {
-      display: block;
-      font-size: 15px;
-      margin-bottom: 4px;
-      color: rgba(255, 255, 255, 0.97);
-    }
-
-    .tool-button span {
-      display: block;
-      font-size: 12px;
-      color: rgba(225, 245, 255, 0.70);
-      line-height: 1.45;
-    }
-
-    .tool-button:hover {
-      background: rgba(120, 220, 255, 0.14);
-      transform: translateX(4px);
-      box-shadow:
-        0 0 10px rgba(120, 220, 255, 0.30),
-        0 0 24px rgba(120, 220, 255, 0.14);
-    }
-
     .control-box {
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(190, 235, 255, 0.20);
+      margin-bottom: 20px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(190, 235, 255, 0.20);
+    }
+
+    .control-title {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .switch-label {
+      font-size: 14px;
+      color: rgba(230, 245, 255, 0.85);
+    }
+
+    .source-state {
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255, 80, 80, 0.12);
+      color: rgba(255, 170, 170, 0.95);
+      border: 1px solid rgba(255, 100, 100, 0.34);
+    }
+
+    .source-state.on {
+      background: rgba(90, 255, 150, 0.12);
+      color: rgba(160, 255, 200, 0.95);
+      border-color: rgba(90, 255, 150, 0.34);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 54px;
+      height: 28px;
+      flex: 0 0 auto;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(255, 90, 90, 0.32);
+      border: 1px solid rgba(255, 130, 130, 0.5);
+      border-radius: 999px;
+      transition: 0.25s;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      top: 2px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.42);
+      transition: 0.25s;
+    }
+
+    .switch input:checked + .slider {
+      background: rgba(80, 255, 150, 0.34);
+      border-color: rgba(100, 255, 160, 0.58);
+      box-shadow: 0 0 16px rgba(90, 255, 150, 0.24);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(26px);
     }
 
     .control-button {
@@ -446,6 +729,60 @@
       box-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
     }
 
+    .tool-section-title {
+      margin: 18px 0 10px 0;
+      font-size: 14px;
+      color: #9eeaff;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .tool-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .tool-card {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(160, 230, 255, 0.32);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      text-align: left;
+      cursor: grab;
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .tool-card:active {
+      cursor: grabbing;
+    }
+
+    .tool-card strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .tool-card span {
+      display: block;
+      font-size: 12px;
+      color: rgba(225, 245, 255, 0.70);
+      line-height: 1.45;
+    }
+
+    .tool-card:hover {
+      background: rgba(120, 220, 255, 0.14);
+      transform: translateX(4px);
+      box-shadow:
+        0 0 10px rgba(120, 220, 255, 0.30),
+        0 0 24px rgba(120, 220, 255, 0.14);
+    }
+
     .notice {
       margin-top: 18px;
       padding: 13px 14px;
@@ -457,14 +794,18 @@
       color: rgba(230, 245, 255, 0.72);
     }
 
-    @media screen and (max-width: 1080px) {
+    @media screen and (max-width: 1120px) {
       .experiment-layout {
         grid-template-columns: 1fr;
       }
 
       .table-panel,
       .panel {
-        min-height: 620px;
+        min-height: 640px;
+      }
+
+      .panel {
+        max-height: none;
       }
 
       .top-bar {
@@ -503,8 +844,8 @@
       <div class="title-box">
         <h1>Optical Experiment Simulator</h1>
         <p>
-          Virtual optical table for arranging laser, mirrors, beam splitter, lens, sample, and detector.
-          Drag the optical components on the table and add new elements from the component panel.
+          Drag optical components from the right panel and drop them onto the optical table.
+          This page is designed for building simplified interferometer and OCT-like optical layouts.
         </p>
       </div>
 
@@ -518,7 +859,15 @@
       <section class="table-panel" id="opticalTable">
         <div class="table-label">Optical Table Grid</div>
 
-        <svg class="beam-layer" id="beamLayer" viewBox="0 0 1000 690" preserveAspectRatio="none">
+        <div class="empty-guide" id="emptyGuide">
+          <div class="empty-guide-box">
+            <strong>Empty Optical Table</strong>
+            Drag components from the right panel and drop them here.
+            The source beam appears only when a source component is placed and Source ON/OFF is turned ON.
+          </div>
+        </div>
+
+        <svg class="beam-layer" id="beamLayer" viewBox="0 0 1000 720" preserveAspectRatio="none">
           <defs>
             <marker
               id="arrowRed"
@@ -544,6 +893,18 @@
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffd166"></path>
             </marker>
 
+            <marker
+              id="arrowBlue"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#9eeaff"></path>
+            </marker>
+
             <filter id="beamGlow">
               <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
               <feMerge>
@@ -555,7 +916,7 @@
 
           <polyline
             id="mainBeam"
-            points="110,345 275,345 455,345 620,345 815,345"
+            points=""
             fill="none"
             stroke="#ff4d4d"
             stroke-width="5"
@@ -566,8 +927,8 @@
           ></polyline>
 
           <polyline
-            id="reflectedBeam"
-            points="455,345 455,185 635,185 635,345"
+            id="splitBeam"
+            points=""
             fill="none"
             stroke="#ffd166"
             stroke-width="4"
@@ -576,98 +937,180 @@
             marker-end="url(#arrowYellow)"
             filter="url(#beamGlow)"
           ></polyline>
+
+          <polyline
+            id="lensBeam"
+            points=""
+            fill="none"
+            stroke="#9eeaff"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            marker-end="url(#arrowBlue)"
+            filter="url(#beamGlow)"
+          ></polyline>
         </svg>
 
-        <div class="component-layer" id="componentLayer">
-          <div class="component" data-type="laser" data-name="Laser" style="left: 11%; top: 50%;">
-            <div class="laser-body"></div>
-            <div class="laser-aperture"></div>
-            <div class="label">Laser</div>
-          </div>
-
-          <div class="component" data-type="lens" data-name="Lens" style="left: 27%; top: 50%;">
-            <div class="lens-symbol"></div>
-            <div class="label">Lens</div>
-          </div>
-
-          <div class="component" data-type="bs" data-name="Beam Splitter" style="left: 45.5%; top: 50%;">
-            <div class="bs-symbol"></div>
-            <div class="label">50:50 BS</div>
-          </div>
-
-          <div class="component" data-type="mirror" data-name="Mirror" style="left: 63.5%; top: 26.8%;">
-            <div class="mirror-symbol">
-              <div class="mirror-line"></div>
-              <div class="mirror-hatch"></div>
-            </div>
-            <div class="label">Mirror</div>
-          </div>
-
-          <div class="component" data-type="sample" data-name="Sample" style="left: 62%; top: 50%;">
-            <div class="sample-symbol"></div>
-            <div class="label">Sample</div>
-          </div>
-
-          <div class="component" data-type="detector" data-name="Detector" style="left: 82%; top: 50%;">
-            <div class="detector-symbol"></div>
-            <div class="label">Detector</div>
-          </div>
-        </div>
+        <div class="component-layer" id="componentLayer"></div>
       </section>
 
       <aside class="panel">
         <h2>Optical Components</h2>
 
         <p>
-          Click a component below to place it on the optical table.
-          Placed components can be moved by dragging.
+          Left-click and drag a component, then drop it at the desired coordinate on the optical table.
+          Hover over a placed component to see its name and basic specification.
         </p>
 
-        <div class="tool-list">
-          <button class="tool-button" type="button" data-add="laser">
-            <strong>Laser Source</strong>
-            <span>Coherent input beam source.</span>
-          </button>
-
-          <button class="tool-button" type="button" data-add="mirror">
-            <strong>Mirror</strong>
-            <span>Reflective optical element for beam steering.</span>
-          </button>
-
-          <button class="tool-button" type="button" data-add="bs">
-            <strong>Beam Splitter</strong>
-            <span>50:50 transmitted and reflected beam path.</span>
-          </button>
-
-          <button class="tool-button" type="button" data-add="lens">
-            <strong>Lens</strong>
-            <span>Focusing or collimating optical component.</span>
-          </button>
-
-          <button class="tool-button" type="button" data-add="sample">
-            <strong>Sample</strong>
-            <span>Virtual specimen inserted into the beam path.</span>
-          </button>
-
-          <button class="tool-button" type="button" data-add="detector">
-            <strong>Detector</strong>
-            <span>CCD-like detection screen.</span>
-          </button>
-        </div>
-
         <div class="control-box">
-          <button class="control-button" type="button" id="resetButton">
-            Reset Default Layout
-          </button>
+          <div class="control-title">Source Control</div>
+
+          <div class="switch-row">
+            <div>
+              <div class="switch-label">Source ON/OFF</div>
+              <div class="source-state" id="sourceState">OFF</div>
+            </div>
+
+            <label class="switch">
+              <input type="checkbox" id="sourceSwitch">
+              <span class="slider"></span>
+            </label>
+          </div>
 
           <button class="control-button" type="button" id="toggleBeamButton">
             Toggle Beam Path
           </button>
+
+          <button class="control-button" type="button" id="clearButton">
+            Clear Optical Table
+          </button>
+        </div>
+
+        <div class="tool-section-title">Sources</div>
+        <div class="tool-list">
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="cw-laser"
+            title="CW laser source, continuous-wave coherent source"
+          >
+            <strong>CW Laser</strong>
+            <span>Continuous-wave coherent source, λ = 785 nm.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="pulsed-laser"
+            title="Pulsed laser source, short pulse illumination"
+          >
+            <strong>Pulsed Laser</strong>
+            <span>Pulsed coherent source, pulse width = 10 ns.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="sld-source"
+            title="SLD broadband source for OCT-like low-coherence illumination"
+          >
+            <strong>SLD / Broadband Source</strong>
+            <span>Low-coherence OCT source, λ₀ = 840 nm, Δλ = 50 nm.</span>
+          </div>
+        </div>
+
+        <div class="tool-section-title">Beam Steering</div>
+        <div class="tool-list">
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="mirror"
+            title="Plane mirror, reflective surface with hatch mark"
+          >
+            <strong>Plane Mirror</strong>
+            <span>High-reflectivity mirror, R ≈ 99%.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="beam-splitter"
+            title="Non-polarizing 50:50 beam splitter"
+          >
+            <strong>50:50 Beam Splitter</strong>
+            <span>Non-polarizing BS, T:R = 50:50.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="pbs"
+            title="Polarizing beam splitter"
+          >
+            <strong>PBS</strong>
+            <span>Polarizing beam splitter, transmits p-pol., reflects s-pol.</span>
+          </div>
+        </div>
+
+        <div class="tool-section-title">Lenses</div>
+        <div class="tool-list">
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="convex-lens"
+            title="Convex lens, positive focal length"
+          >
+            <strong>Convex Lens</strong>
+            <span>Converging lens, f = +50 mm.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="concave-lens"
+            title="Concave lens, negative focal length"
+          >
+            <strong>Concave Lens</strong>
+            <span>Diverging lens, f = −50 mm.</span>
+          </div>
+        </div>
+
+        <div class="tool-section-title">Sample / Detection</div>
+        <div class="tool-list">
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="sample"
+            title="Sample arm object for OCT or interferometer test"
+          >
+            <strong>Sample</strong>
+            <span>Layered sample object for OCT-like layouts.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="detector"
+            title="CCD-like detector screen"
+          >
+            <strong>Detector</strong>
+            <span>CCD-like detector screen.</span>
+          </div>
+
+          <div
+            class="tool-card"
+            draggable="true"
+            data-add="fiber"
+            title="Single-mode or multi-mode fiber connector"
+          >
+            <strong>Fiber Coupler</strong>
+            <span>Fiber input/output coupling element.</span>
+          </div>
         </div>
 
         <div class="notice">
-          This page is a visual simulator for homepage education.
-          It is not a rigorous ray-tracing engine. The beam path is drawn as a simplified optical alignment guide.
+          Beam propagation is a simplified visual guide. It is not a full physical ray-tracing solver.
+          The component symbols are drawn in a conventional optical schematic style for educational layout design.
         </div>
       </aside>
     </main>
@@ -677,81 +1120,253 @@
     const opticalTable = document.getElementById("opticalTable");
     const componentLayer = document.getElementById("componentLayer");
     const beamLayer = document.getElementById("beamLayer");
-    const resetButton = document.getElementById("resetButton");
+    const emptyGuide = document.getElementById("emptyGuide");
+
+    const sourceSwitch = document.getElementById("sourceSwitch");
+    const sourceState = document.getElementById("sourceState");
     const toggleBeamButton = document.getElementById("toggleBeamButton");
+    const clearButton = document.getElementById("clearButton");
+
+    const mainBeam = document.getElementById("mainBeam");
+    const splitBeam = document.getElementById("splitBeam");
+    const lensBeam = document.getElementById("lensBeam");
 
     let activeComponent = null;
     let offsetX = 0;
     let offsetY = 0;
     let componentCounter = 0;
+    let sourceOn = false;
     let beamVisible = true;
 
-    const defaultComponents = [
-      { type: "laser", label: "Laser", left: "11%", top: "50%" },
-      { type: "lens", label: "Lens", left: "27%", top: "50%" },
-      { type: "bs", label: "50:50 BS", left: "45.5%", top: "50%" },
-      { type: "mirror", label: "Mirror", left: "63.5%", top: "26.8%" },
-      { type: "sample", label: "Sample", left: "62%", top: "50%" },
-      { type: "detector", label: "Detector", left: "82%", top: "50%" }
-    ];
+    const componentLibrary = {
+      "cw-laser": {
+        type: "source",
+        className: "laser-symbol",
+        extraClass: "",
+        label: "CW Laser",
+        title: "CW Laser",
+        spec: "Continuous-wave coherent source<br>λ = 785 nm<br>Output mode: Gaussian beam"
+      },
+      "pulsed-laser": {
+        type: "source",
+        className: "laser-symbol pulsed-symbol",
+        extraClass: "pulsed-wave",
+        label: "Pulsed Laser",
+        title: "Pulsed Laser",
+        spec: "Pulsed coherent source<br>λ = 785 nm<br>Pulse width = 10 ns"
+      },
+      "sld-source": {
+        type: "source",
+        className: "laser-symbol sld-symbol",
+        extraClass: "sld-spectrum",
+        label: "SLD Source",
+        title: "SLD / Broadband Source",
+        spec: "Low-coherence OCT source<br>λ₀ = 840 nm<br>Δλ = 50 nm"
+      },
+      "mirror": {
+        type: "mirror",
+        label: "Mirror",
+        title: "Plane Mirror",
+        spec: "Reflective surface with hatch mark<br>R ≈ 99%<br>Used for beam steering"
+      },
+      "beam-splitter": {
+        type: "beam-splitter",
+        label: "50:50 BS",
+        title: "50:50 Beam Splitter",
+        spec: "Non-polarizing beam splitter<br>T:R = 50:50<br>Used in Michelson/Mach-Zehnder"
+      },
+      "pbs": {
+        type: "pbs",
+        label: "PBS",
+        title: "Polarizing Beam Splitter",
+        spec: "Transmits p-polarization<br>Reflects s-polarization<br>Used for polarization control"
+      },
+      "convex-lens": {
+        type: "convex-lens",
+        label: "Convex Lens",
+        title: "Convex Lens",
+        spec: "Converging lens<br>f = +50 mm<br>Positive optical power"
+      },
+      "concave-lens": {
+        type: "concave-lens",
+        label: "Concave Lens",
+        title: "Concave Lens",
+        spec: "Diverging lens<br>f = −50 mm<br>Negative optical power"
+      },
+      "sample": {
+        type: "sample",
+        label: "Sample",
+        title: "Layered Sample",
+        spec: "Virtual layered specimen<br>Useful for OCT sample arm<br>Reflective interfaces included conceptually"
+      },
+      "detector": {
+        type: "detector",
+        label: "Detector",
+        title: "CCD-like Detector",
+        spec: "2D detector screen<br>Intensity/interference observation plane"
+      },
+      "fiber": {
+        type: "fiber",
+        label: "Fiber",
+        title: "Fiber Coupler",
+        spec: "Optical fiber coupler<br>SMF/MMF-compatible schematic<br>Used for source or detector coupling"
+      }
+    };
 
-    function createComponent(type, label, left, top) {
+    document.querySelectorAll(".tool-card").forEach(card => {
+      card.addEventListener("dragstart", event => {
+        event.dataTransfer.setData("component-key", card.dataset.add);
+        event.dataTransfer.effectAllowed = "copy";
+      });
+    });
+
+    opticalTable.addEventListener("dragover", event => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "copy";
+    });
+
+    opticalTable.addEventListener("drop", event => {
+      event.preventDefault();
+
+      const componentKey = event.dataTransfer.getData("component-key");
+      if (!componentKey || !componentLibrary[componentKey]) return;
+
+      const tableRect = opticalTable.getBoundingClientRect();
+      const xPercent = ((event.clientX - tableRect.left) / tableRect.width) * 100;
+      const yPercent = ((event.clientY - tableRect.top) / tableRect.height) * 100;
+
+      createComponent(componentKey, `${xPercent}%`, `${yPercent}%`);
+      updateBeamPath();
+      updateEmptyGuide();
+    });
+
+    function createComponent(componentKey, left, top) {
+      componentCounter += 1;
+
+      const item = componentLibrary[componentKey];
+
       const component = document.createElement("div");
       component.className = "component";
-      component.dataset.type = type;
-      component.dataset.name = label;
+      component.dataset.key = componentKey;
+      component.dataset.type = item.type;
+      component.dataset.label = item.label;
+      component.dataset.index = componentCounter;
       component.style.left = left;
       component.style.top = top;
 
-      if (type === "laser") {
-        component.innerHTML = `
-          <div class="laser-body"></div>
-          <div class="laser-aperture"></div>
-          <div class="label">${label}</div>
+      component.innerHTML = getComponentHTML(item);
+
+      component.addEventListener("pointerdown", startDrag);
+      componentLayer.appendChild(component);
+
+      return component;
+    }
+
+    function getComponentHTML(item) {
+      if (item.type === "source") {
+        return `
+          <div class="${item.className}"></div>
+          ${item.extraClass ? `<div class="${item.extraClass}"></div>` : ""}
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
         `;
       }
 
-      if (type === "mirror") {
-        component.innerHTML = `
+      if (item.type === "mirror") {
+        return `
           <div class="mirror-symbol">
             <div class="mirror-line"></div>
             <div class="mirror-hatch"></div>
           </div>
-          <div class="label">${label}</div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
         `;
       }
 
-      if (type === "bs") {
-        component.innerHTML = `
+      if (item.type === "beam-splitter") {
+        return `
           <div class="bs-symbol"></div>
-          <div class="label">${label}</div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
         `;
       }
 
-      if (type === "lens") {
-        component.innerHTML = `
-          <div class="lens-symbol"></div>
-          <div class="label">${label}</div>
+      if (item.type === "pbs") {
+        return `
+          <div class="pbs-symbol"></div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
         `;
       }
 
-      if (type === "sample") {
-        component.innerHTML = `
+      if (item.type === "convex-lens") {
+        return `
+          <div class="convex-lens-symbol"></div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
+        `;
+      }
+
+      if (item.type === "concave-lens") {
+        return `
+          <div class="concave-lens-symbol"></div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
+        `;
+      }
+
+      if (item.type === "sample") {
+        return `
           <div class="sample-symbol"></div>
-          <div class="label">${label}</div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
         `;
       }
 
-      if (type === "detector") {
-        component.innerHTML = `
+      if (item.type === "detector") {
+        return `
           <div class="detector-symbol"></div>
-          <div class="label">${label}</div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
         `;
       }
 
-      component.addEventListener("pointerdown", startDrag);
-      componentLayer.appendChild(component);
-      return component;
+      if (item.type === "fiber") {
+        return `
+          <div class="fiber-symbol"></div>
+          <div class="label">${item.label}</div>
+          <div class="info-card">
+            <strong>${item.title}</strong>
+            <span>${item.spec}</span>
+          </div>
+        `;
+      }
+
+      return "";
     }
 
     function startDrag(event) {
@@ -798,101 +1413,139 @@
       activeComponent.removeEventListener("pointercancel", stopDrag);
 
       activeComponent = null;
+      updateBeamPath();
     }
 
-    function getComponentCenterByType(type) {
-      const component = componentLayer.querySelector(`.component[data-type="${type}"]`);
-      if (!component) return null;
-
+    function getComponentCenter(component) {
       const tableRect = opticalTable.getBoundingClientRect();
       const componentRect = component.getBoundingClientRect();
 
-      const x = ((componentRect.left + componentRect.width / 2) - tableRect.left) / tableRect.width * 1000;
-      const y = ((componentRect.top + componentRect.height / 2) - tableRect.top) / tableRect.height * 690;
+      return {
+        x: ((componentRect.left + componentRect.width / 2) - tableRect.left) / tableRect.width * 1000,
+        y: ((componentRect.top + componentRect.height / 2) - tableRect.top) / tableRect.height * 720
+      };
+    }
 
-      return { x, y };
+    function getPlacedComponents() {
+      return Array.from(componentLayer.querySelectorAll(".component"));
+    }
+
+    function getPrimarySource() {
+      return getPlacedComponents().find(component => component.dataset.type === "source");
     }
 
     function updateBeamPath() {
-      const laser = getComponentCenterByType("laser");
-      const lens = getComponentCenterByType("lens");
-      const bs = getComponentCenterByType("bs");
-      const sample = getComponentCenterByType("sample");
-      const detector = getComponentCenterByType("detector");
-      const mirror = getComponentCenterByType("mirror");
+      const components = getPlacedComponents();
 
-      const mainBeam = document.getElementById("mainBeam");
-      const reflectedBeam = document.getElementById("reflectedBeam");
+      mainBeam.setAttribute("points", "");
+      splitBeam.setAttribute("points", "");
+      lensBeam.setAttribute("points", "");
 
-      if (laser && lens && bs && sample && detector) {
-        mainBeam.setAttribute(
-          "points",
-          `${laser.x + 40},${laser.y} ${lens.x},${lens.y} ${bs.x},${bs.y} ${sample.x},${sample.y} ${detector.x - 40},${detector.y}`
-        );
+      if (!sourceOn || !beamVisible || components.length === 0) {
+        beamLayer.style.opacity = "0";
+        return;
       }
 
-      if (bs && mirror && sample) {
-        reflectedBeam.setAttribute(
-          "points",
-          `${bs.x},${bs.y} ${bs.x},${mirror.y} ${mirror.x},${mirror.y} ${mirror.x},${sample.y}`
-        );
+      const source = getPrimarySource();
+
+      if (!source) {
+        beamLayer.style.opacity = "0";
+        return;
       }
-    }
 
-    function resetLayout() {
-      componentLayer.innerHTML = "";
-      componentCounter = 0;
+      beamLayer.style.opacity = "1";
 
-      defaultComponents.forEach(item => {
-        createComponent(item.type, item.label, item.left, item.top);
-      });
+      const opticalPathComponents = components
+        .filter(component => component !== source)
+        .map(component => {
+          return {
+            element: component,
+            center: getComponentCenter(component),
+            type: component.dataset.type
+          };
+        })
+        .sort((a, b) => a.center.x - b.center.x);
 
-      updateBeamPath();
-    }
+      const sourceCenter = getComponentCenter(source);
 
-    function addNewComponent(type) {
-      componentCounter += 1;
+      const forwardPath = [
+        `${sourceCenter.x + 42},${sourceCenter.y}`,
+        ...opticalPathComponents.map(item => `${item.center.x},${item.center.y}`)
+      ];
 
-      const labelMap = {
-        laser: "Laser",
-        mirror: "Mirror",
-        bs: "50:50 BS",
-        lens: "Lens",
-        sample: "Sample",
-        detector: "Detector"
-      };
+      if (forwardPath.length >= 2) {
+        mainBeam.setAttribute("points", forwardPath.join(" "));
+      }
 
-      const randomLeft = 48 + Math.random() * 22;
-      const randomTop = 58 + Math.random() * 20;
-
-      createComponent(
-        type,
-        `${labelMap[type]} ${componentCounter}`,
-        `${randomLeft}%`,
-        `${randomTop}%`
+      const splitter = opticalPathComponents.find(item =>
+        item.type === "beam-splitter" || item.type === "pbs"
       );
 
-      updateBeamPath();
+      if (splitter) {
+        const upperTargets = opticalPathComponents
+          .filter(item => item.center.y < splitter.center.y - 35)
+          .filter(item => item.center.x > splitter.center.x - 20)
+          .sort((a, b) => a.center.x - b.center.x);
+
+        if (upperTargets.length > 0) {
+          const splitPath = [
+            `${splitter.center.x},${splitter.center.y}`,
+            `${splitter.center.x},${upperTargets[0].center.y}`,
+            ...upperTargets.map(item => `${item.center.x},${item.center.y}`)
+          ];
+
+          splitBeam.setAttribute("points", splitPath.join(" "));
+        }
+      }
+
+      const firstLens = opticalPathComponents.find(item =>
+        item.type === "convex-lens" || item.type === "concave-lens"
+      );
+
+      if (firstLens) {
+        const direction = firstLens.type === "convex-lens" ? -1 : 1;
+        const lensGuidePath = [
+          `${firstLens.center.x},${firstLens.center.y - 26}`,
+          `${firstLens.center.x + 88},${firstLens.center.y + direction * 16}`,
+          `${firstLens.center.x + 170},${firstLens.center.y + direction * 30}`
+        ];
+
+        lensBeam.setAttribute("points", lensGuidePath.join(" "));
+      }
     }
 
-    document.querySelectorAll(".tool-button").forEach(button => {
-      button.addEventListener("click", function () {
-        addNewComponent(this.dataset.add);
-      });
-    });
+    function updateEmptyGuide() {
+      const hasComponents = componentLayer.children.length > 0;
+      emptyGuide.classList.toggle("hidden", hasComponents);
+    }
 
-    resetButton.addEventListener("click", resetLayout);
+    sourceSwitch.addEventListener("change", function () {
+      sourceOn = sourceSwitch.checked;
+
+      sourceState.textContent = sourceOn ? "ON" : "OFF";
+      sourceState.classList.toggle("on", sourceOn);
+
+      updateBeamPath();
+    });
 
     toggleBeamButton.addEventListener("click", function () {
       beamVisible = !beamVisible;
-      beamLayer.style.opacity = beamVisible ? "1" : "0";
+      updateBeamPath();
     });
 
-    document.querySelectorAll(".component").forEach(component => {
-      component.addEventListener("pointerdown", startDrag);
+    clearButton.addEventListener("click", function () {
+      componentLayer.innerHTML = "";
+      componentCounter = 0;
+      mainBeam.setAttribute("points", "");
+      splitBeam.setAttribute("points", "");
+      lensBeam.setAttribute("points", "");
+      updateEmptyGuide();
+      updateBeamPath();
     });
 
     window.addEventListener("resize", updateBeamPath);
+
+    updateEmptyGuide();
     updateBeamPath();
   </script>
 </body>
