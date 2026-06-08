@@ -130,7 +130,7 @@
 
     .diagram-box {
       padding: 14px;
-      min-height: 880px;
+      min-height: 980px;
     }
 
     .panel-box {
@@ -360,9 +360,10 @@
     }
 
     .mirror-hatch {
-      stroke: rgba(210, 155, 85, 0.95);
+      stroke: #d9dde2;
       stroke-width: 4;
       stroke-linecap: round;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
     }
 
     .laser-body {
@@ -394,10 +395,10 @@
     }
 
     .sample-eye-line {
-      stroke: rgba(130, 95, 255, 0.96);
-      stroke-width: 5;
+      stroke: rgba(130, 95, 255, 0.78);
+      stroke-width: 4;
       stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(130, 95, 255, 0.48));
+      filter: drop-shadow(0 0 8px rgba(130, 95, 255, 0.36));
     }
 
     .retina-layer {
@@ -420,16 +421,6 @@
       fill: rgba(135, 255, 120, 0.08);
       stroke: rgba(230, 255, 220, 0.97);
       stroke-width: 4;
-    }
-
-    .detector-symbol-text {
-      fill: rgba(255, 255, 255, 0.98);
-      font-size: 20px;
-      font-weight: 800;
-      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
-      paint-order: stroke;
-      stroke: rgba(0, 0, 0, 0.68);
-      stroke-width: 2.2px;
     }
 
     @media screen and (max-width: 1500px) {
@@ -490,7 +481,7 @@
       <div class="simulation-layout">
         <div class="left-panel">
           <div class="diagram-box">
-            <svg viewBox="0 0 1650 980" role="img" aria-label="Mach-Zehnder Interferometer schematic">
+            <svg viewBox="0 0 1650 1120" role="img" aria-label="Mach-Zehnder Interferometer schematic">
               <defs>
                 <marker id="arrowInput" markerWidth="42" markerHeight="42" refX="37" refY="21" orient="auto" markerUnits="userSpaceOnUse">
                   <path d="M0,0 L0,42 L39,21 z" fill="rgba(255,70,70,0.98)"></path>
@@ -523,7 +514,7 @@
               <line class="beam-guide" x1="1180" y1="216" x2="1180" y2="620"></line>
               <line class="beam-guide" x1="407" y1="620" x2="1180" y2="620"></line>
               <line class="beam-guide" x1="1180" y1="620" x2="1490" y2="620"></line>
-              <line class="beam-guide" x1="1180" y1="620" x2="1180" y2="880"></line>
+              <line class="beam-guide" x1="1180" y1="620" x2="1180" y2="988"></line>
 
               <!-- Direction arrows -->
               <line class="path-arrow arrow-input" x1="245" y1="216" x2="360" y2="216" marker-end="url(#arrowInput)"></line>
@@ -532,66 +523,66 @@
               <line class="path-arrow arrow-upper" x1="1180" y1="310" x2="1180" y2="520" marker-end="url(#arrowUpper)"></line>
 
               <line class="path-arrow arrow-sample" x1="407" y1="325" x2="407" y2="535" marker-end="url(#arrowSample)"></line>
-              <line class="path-arrow arrow-sample" x1="500" y1="620" x2="650" y2="620" marker-end="url(#arrowSample)"></line>
-              <line class="path-arrow arrow-sample" x1="920" y1="620" x2="1085" y2="620" marker-end="url(#arrowSample)"></line>
+              <line class="path-arrow arrow-sample" x1="500" y1="620" x2="585" y2="620" marker-end="url(#arrowSample)"></line>
+              <line class="path-arrow arrow-sample" x1="985" y1="620" x2="1070" y2="620" marker-end="url(#arrowSample)"></line>
 
               <line class="path-arrow arrow-output" x1="1265" y1="620" x2="1435" y2="620" marker-end="url(#arrowOutput)"></line>
-              <line class="path-arrow arrow-output" x1="1180" y1="705" x2="1180" y2="830" marker-end="url(#arrowOutput)"></line>
+              <line class="path-arrow arrow-output" x1="1180" y1="705" x2="1180" y2="875" marker-end="url(#arrowOutput)"></line>
 
-              <!-- BS1: 45 degree optical symbol -->
+              <!-- BS1 -->
               <g id="bs1Group">
                 <line class="beam-splitter-line" x1="357" y1="166" x2="457" y2="266"></line>
                 <text class="svg-label" x="407" y="122" text-anchor="middle">BS1</text>
               </g>
 
-              <!-- M1: single mirror surface + horizontal backside hatches -->
+              <!-- M1: mirror surface + separated backside hatches -->
               <g id="m1Group">
                 <line class="mirror-surface" x1="1120" y1="176" x2="1220" y2="276"></line>
 
-                <line class="mirror-hatch" x1="1100" y1="188" x2="1136" y2="188"></line>
-                <line class="mirror-hatch" x1="1120" y1="208" x2="1156" y2="208"></line>
-                <line class="mirror-hatch" x1="1140" y1="228" x2="1176" y2="228"></line>
-                <line class="mirror-hatch" x1="1160" y1="248" x2="1196" y2="248"></line>
+                <line class="mirror-hatch" x1="1090" y1="178" x2="1120" y2="178"></line>
+                <line class="mirror-hatch" x1="1102" y1="198" x2="1132" y2="198"></line>
+                <line class="mirror-hatch" x1="1114" y1="218" x2="1144" y2="218"></line>
+                <line class="mirror-hatch" x1="1126" y1="238" x2="1156" y2="238"></line>
 
                 <text class="svg-label" x="1225" y="150">M1</text>
               </g>
 
-              <!-- M2: single mirror surface + horizontal backside hatches -->
+              <!-- M2: mirror surface + separated backside hatches -->
               <g id="m2Group">
                 <line class="mirror-surface" x1="347" y1="580" x2="447" y2="680"></line>
 
-                <line class="mirror-hatch" x1="327" y1="592" x2="363" y2="592"></line>
-                <line class="mirror-hatch" x1="347" y1="612" x2="383" y2="612"></line>
-                <line class="mirror-hatch" x1="367" y1="632" x2="403" y2="632"></line>
-                <line class="mirror-hatch" x1="387" y1="652" x2="423" y2="652"></line>
+                <line class="mirror-hatch" x1="317" y1="582" x2="347" y2="582"></line>
+                <line class="mirror-hatch" x1="329" y1="602" x2="359" y2="602"></line>
+                <line class="mirror-hatch" x1="341" y1="622" x2="371" y2="622"></line>
+                <line class="mirror-hatch" x1="353" y1="642" x2="383" y2="642"></line>
 
                 <text class="svg-label" x="250" y="690">M2</text>
               </g>
 
-              <!-- Simplified eye sample: rotated so cornea faces incoming beam -->
+              <!-- Eye sample: cornea on left, retina on posterior wall -->
               <g id="eyeSampleGroup">
                 <ellipse class="sample-eye-outline" cx="785" cy="620" rx="182" ry="142"></ellipse>
 
-                <line class="sample-eye-line" x1="603" y1="620" x2="967" y2="620"></line>
+                <line class="sample-eye-line" x1="620" y1="620" x2="950" y2="620"></line>
 
-                <path class="sample-cornea" d="M646 570 C620 595 620 645 646 670"></path>
+                <path class="sample-cornea" d="M645 560 C620 585 620 655 645 680"></path>
 
-                <path class="retina-layer" d="M862 720 C905 690 918 665 928 640"></path>
-                <path class="retina-layer" d="M850 705 C895 675 910 650 920 628"></path>
-                <path class="retina-layer" d="M838 690 C885 663 902 638 913 617"></path>
+                <path class="retina-layer" d="M894 560 C931 585 945 617 941 652"></path>
+                <path class="retina-layer" d="M878 572 C913 596 926 624 922 655"></path>
+                <path class="retina-layer" d="M862 584 C895 607 908 632 904 660"></path>
 
                 <text class="svg-label" x="735" y="470">Sample</text>
-                <text class="svg-small-label" x="673" y="557">Cornea</text>
-                <text class="svg-small-label" x="635" y="805">Retina Layers</text>
+                <text class="svg-small-label" x="650" y="548">Cornea</text>
+                <text class="svg-small-label" x="970" y="708">Retina Layers</text>
               </g>
 
-              <!-- BS2: 45 degree optical symbol, directly below M1 -->
+              <!-- BS2 -->
               <g id="bs2Group">
                 <line class="beam-splitter-line" x1="1130" y1="670" x2="1230" y2="570"></line>
-                <text class="svg-label" x="1180" y="540" text-anchor="middle">BS2</text>
+                <text class="svg-label" x="1230" y="555">BS2</text>
               </g>
 
-              <!-- Detector symbols only -->
+              <!-- Detector symbols -->
               <g id="det1Group">
                 <g id="detectorSymbolD1"></g>
                 <text class="svg-label" x="1454" y="740">D1</text>
@@ -599,7 +590,7 @@
 
               <g id="det2Group">
                 <g id="detectorSymbolD2"></g>
-                <text class="svg-label" x="1268" y="945">D2</text>
+                <text class="svg-label" x="1260" y="1016">D2</text>
               </g>
             </svg>
           </div>
@@ -802,7 +793,10 @@
       const element = document.createElementNS("http://www.w3.org/2000/svg", type);
 
       Object.keys(attributes).forEach((key) => {
-        element.setAttribute(key, attributes[key]);
+        const value = attributes[key];
+        if (value !== null && value !== undefined && value !== "") {
+          element.setAttribute(key, value);
+        }
       });
 
       return element;
@@ -812,13 +806,13 @@
       detectorSymbolD1.innerHTML = "";
       detectorSymbolD2.innerHTML = "";
 
-      drawDetectorSymbol(detectorSymbolD1, 1548, 620, detectorType, "D1", 0);
-      drawDetectorSymbol(detectorSymbolD2, 1180, 922, detectorType, "D2", 90);
+      drawDetectorSymbol(detectorSymbolD1, 1548, 620, detectorType, 0);
+      drawDetectorSymbol(detectorSymbolD2, 1180, 988, detectorType, 90);
     }
 
-    function drawDetectorSymbol(group, cx, cy, detectorType, label, rotation = 0) {
+    function drawDetectorSymbol(group, cx, cy, detectorType, rotation = 0) {
       const symbolGroup = createSvgElement("g", {
-        transform: rotation !== 0 ? `rotate(${rotation} ${cx} ${cy})` : ""
+        transform: rotation !== 0 ? `rotate(${rotation} ${cx} ${cy})` : null
       });
 
       if (detectorType === "photodetector") {
@@ -857,12 +851,6 @@
           x2: cx - 24,
           y2: cy + 18
         }));
-
-        symbolGroup.appendChild(createSvgElement("text", {
-          class: "detector-symbol-text",
-          x: cx - 23,
-          y: cy + 68
-        })).textContent = "PD";
       } else if (detectorType === "spectrometer") {
         symbolGroup.appendChild(createSvgElement("line", {
           class: "detector-symbol-line",
@@ -886,12 +874,6 @@
           class: "detector-symbol-line",
           d: `M${cx + 50} ${cy - 30} C${cx + 82} ${cy - 15} ${cx + 82} ${cy + 15} ${cx + 50} ${cy + 30}`
         }));
-
-        symbolGroup.appendChild(createSvgElement("text", {
-          class: "detector-symbol-text",
-          x: cx - 35,
-          y: cy + 72
-        })).textContent = "SPEC";
       } else {
         for (let i = 0; i < 10; i++) {
           symbolGroup.appendChild(createSvgElement("line", {
@@ -915,12 +897,6 @@
           class: "detector-symbol-line",
           d: `M${cx - 60} ${cy - 46} L${cx + 60} ${cy - 46} L${cx + 60} ${cy + 46} L${cx - 60} ${cy + 46} Z`
         }));
-
-        symbolGroup.appendChild(createSvgElement("text", {
-          class: "detector-symbol-text",
-          x: cx - 40,
-          y: cy + 74
-        })).textContent = "LSC";
       }
 
       group.appendChild(symbolGroup);
