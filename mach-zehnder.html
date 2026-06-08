@@ -154,30 +154,6 @@
         0 0 18px rgba(134, 214, 255, 0.20);
     }
 
-    .diagram-note {
-      margin-top: 18px;
-      padding: 18px 20px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.10);
-    }
-
-    .flow-line {
-      font-size: 30px;
-      line-height: 1.7;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.96);
-      letter-spacing: 0.1px;
-    }
-
-    .flow-line + .flow-line {
-      margin-top: 6px;
-    }
-
-    .flow-label {
-      color: #9eeaff;
-    }
-
     .control-group {
       margin-bottom: 20px;
     }
@@ -216,6 +192,59 @@
       width: 100%;
       accent-color: #9eeaff;
       cursor: pointer;
+    }
+
+    .detector-tabs {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .detector-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      cursor: pointer;
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .detector-tab:hover {
+      background: rgba(255, 255, 255, 0.13);
+      border-color: rgba(158, 234, 255, 0.65);
+      box-shadow: 0 0 12px rgba(158, 234, 255, 0.20);
+      transform: translateY(-1px);
+    }
+
+    .detector-tab input {
+      accent-color: #9eeaff;
+      transform: scale(1.15);
+    }
+
+    .detector-tab-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .detector-tab-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .detector-tab-desc {
+      font-size: 14px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.76);
     }
 
     .result-grid {
@@ -314,75 +343,55 @@
       stroke-width: 3px;
     }
 
-    .beam-main {
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0.95;
-    }
-
-    .input-beam {
-      stroke: rgba(255, 35, 35, 0.96);
-      stroke-width: 16;
-      filter: drop-shadow(0 0 12px rgba(255, 80, 80, 0.62));
-    }
-
-    .transmitted-beam {
-      stroke: rgba(255, 135, 145, 0.82);
-      stroke-width: 16;
-      filter: drop-shadow(0 0 10px rgba(255, 165, 175, 0.34));
-    }
-
-    .reflected-beam {
-      stroke: rgba(255, 95, 120, 0.74);
-      stroke-width: 16;
-      filter: drop-shadow(0 0 10px rgba(255, 130, 150, 0.30));
-    }
-
-    .sample-beam {
-      stroke: rgba(255, 150, 170, 0.82);
-      stroke-width: 16;
-      filter: drop-shadow(0 0 12px rgba(255, 180, 190, 0.38));
-    }
-
-    .output1-beam {
-      stroke: rgba(255, 140, 150, 0.88);
-      stroke-width: 16;
-      filter: drop-shadow(0 0 12px rgba(190, 255, 120, 0.28));
-    }
-
-    .output2-beam {
-      stroke: rgba(255, 140, 150, 0.88);
-      stroke-width: 16;
-      filter: drop-shadow(0 0 12px rgba(190, 255, 120, 0.28));
+    .svg-small-label {
+      fill: rgba(255, 255, 255, 0.93);
+      font-size: 24px;
+      font-weight: 800;
+      font-family: "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+      paint-order: stroke;
+      stroke: rgba(0, 0, 0, 0.58);
+      stroke-width: 2.4px;
     }
 
     .path-arrow {
       fill: none;
-      stroke-width: 5;
+      stroke-width: 9;
       stroke-linecap: round;
       stroke-linejoin: round;
       opacity: 0.98;
     }
 
     .arrow-input {
-      stroke: rgba(255, 85, 85, 0.98);
+      stroke: rgba(255, 70, 70, 0.98);
+      filter: drop-shadow(0 0 8px rgba(255, 70, 70, 0.55));
     }
 
-    .arrow-transmitted {
-      stroke: rgba(255, 170, 180, 0.98);
-    }
-
-    .arrow-reflected {
-      stroke: rgba(255, 110, 145, 0.98);
+    .arrow-upper {
+      stroke: rgba(255, 155, 80, 0.98);
+      filter: drop-shadow(0 0 8px rgba(255, 155, 80, 0.48));
     }
 
     .arrow-sample {
-      stroke: rgba(255, 185, 205, 0.98);
+      stroke: rgba(255, 210, 95, 0.98);
+      filter: drop-shadow(0 0 8px rgba(255, 210, 95, 0.48));
     }
 
     .arrow-output {
-      stroke: rgba(255, 175, 190, 0.98);
+      stroke: rgba(135, 255, 120, 0.98);
+      filter: drop-shadow(0 0 8px rgba(135, 255, 120, 0.48));
+    }
+
+    .arrow-scan {
+      stroke: rgba(130, 220, 255, 0.98);
+      filter: drop-shadow(0 0 8px rgba(130, 220, 255, 0.48));
+    }
+
+    .beam-guide {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.13);
+      stroke-width: 2.4;
+      stroke-dasharray: 10 12;
+      stroke-linecap: round;
     }
 
     .beam-splitter-front {
@@ -423,22 +432,58 @@
       filter: drop-shadow(0 0 8px rgba(255, 204, 102, 0.55));
     }
 
-    .sample-frame {
-      stroke: #ffc2dd;
-      stroke-width: 4;
-      fill: rgba(255, 130, 190, 0.08);
-      filter: drop-shadow(0 0 12px rgba(255, 130, 190, 0.35));
+    .eye-outer {
+      fill: rgba(220, 245, 255, 0.10);
+      stroke: rgba(210, 245, 255, 0.92);
+      stroke-width: 5;
+      filter: drop-shadow(0 0 12px rgba(160, 230, 255, 0.30));
     }
 
-    .sample-layer-1 { fill: rgba(255, 235, 245, 0.78); }
-    .sample-layer-2 { fill: rgba(255, 210, 230, 0.72); }
-    .sample-layer-3 { fill: rgba(255, 186, 214, 0.68); }
-    .sample-layer-4 { fill: rgba(255, 164, 200, 0.64); }
-    .sample-layer-5 { fill: rgba(255, 142, 188, 0.60); }
+    .cornea {
+      fill: rgba(160, 225, 255, 0.22);
+      stroke: rgba(190, 245, 255, 0.88);
+      stroke-width: 4;
+    }
 
-    .sample-layer-line {
-      stroke: rgba(255, 255, 255, 0.45);
-      stroke-width: 2;
+    .lens {
+      fill: rgba(255, 245, 190, 0.24);
+      stroke: rgba(255, 245, 190, 0.85);
+      stroke-width: 4;
+    }
+
+    .retina {
+      fill: none;
+      stroke: rgba(255, 135, 160, 0.95);
+      stroke-width: 7;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 9px rgba(255, 135, 160, 0.45));
+    }
+
+    .retina-layer {
+      fill: none;
+      stroke-linecap: round;
+      stroke-width: 3;
+      opacity: 0.86;
+    }
+
+    .retina-layer-1 {
+      stroke: rgba(255, 225, 230, 0.78);
+    }
+
+    .retina-layer-2 {
+      stroke: rgba(255, 185, 200, 0.78);
+    }
+
+    .retina-layer-3 {
+      stroke: rgba(255, 150, 180, 0.78);
+    }
+
+    .scan-line {
+      stroke: rgba(130, 220, 255, 0.90);
+      stroke-width: 4;
+      stroke-dasharray: 8 8;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px rgba(130, 220, 255, 0.60));
     }
 
     .detector-body {
@@ -446,6 +491,12 @@
       stroke-width: 4;
       fill: rgba(151, 255, 122, 0.11);
       filter: drop-shadow(0 0 8px rgba(151, 255, 122, 0.28));
+    }
+
+    .detector-active {
+      fill: rgba(20, 50, 30, 0.75);
+      stroke: rgba(200, 255, 190, 0.70);
+      stroke-width: 2;
     }
 
     .preview-stripe {
@@ -480,10 +531,6 @@
         font-size: 28px;
       }
 
-      .flow-line {
-        font-size: 22px;
-      }
-
       .control-label {
         font-size: 18px;
       }
@@ -516,20 +563,24 @@
           <div class="diagram-box">
             <svg viewBox="0 0 1650 980" role="img" aria-label="Mach-Zehnder Interferometer schematic">
               <defs>
-                <marker id="arrowInput" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0,0 L0,8 L7,4 z" fill="rgba(255,85,85,0.98)"></path>
+                <marker id="arrowInput" markerWidth="15" markerHeight="15" refX="13" refY="7.5" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L0,15 L14,7.5 z" fill="rgba(255,70,70,0.98)"></path>
                 </marker>
-                <marker id="arrowTransmitted" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0,0 L0,8 L7,4 z" fill="rgba(255,170,180,0.98)"></path>
+
+                <marker id="arrowUpper" markerWidth="15" markerHeight="15" refX="13" refY="7.5" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L0,15 L14,7.5 z" fill="rgba(255,155,80,0.98)"></path>
                 </marker>
-                <marker id="arrowReflected" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0,0 L0,8 L7,4 z" fill="rgba(255,110,145,0.98)"></path>
+
+                <marker id="arrowSample" markerWidth="15" markerHeight="15" refX="13" refY="7.5" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L0,15 L14,7.5 z" fill="rgba(255,210,95,0.98)"></path>
                 </marker>
-                <marker id="arrowSample" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0,0 L0,8 L7,4 z" fill="rgba(255,185,205,0.98)"></path>
+
+                <marker id="arrowOutput" markerWidth="15" markerHeight="15" refX="13" refY="7.5" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L0,15 L14,7.5 z" fill="rgba(135,255,120,0.98)"></path>
                 </marker>
-                <marker id="arrowOutput" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-                  <path d="M0,0 L0,8 L7,4 z" fill="rgba(255,175,190,0.98)"></path>
+
+                <marker id="arrowScan" markerWidth="15" markerHeight="15" refX="13" refY="7.5" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L0,15 L14,7.5 z" fill="rgba(130,220,255,0.98)"></path>
                 </marker>
 
                 <linearGradient id="ccdBodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -546,8 +597,27 @@
                 <text class="svg-label" x="87" y="160">Laser</text>
               </g>
 
-              <!-- Main input beam -->
-              <line class="beam-main input-beam" x1="18" y1="216" x2="407" y2="216"></line>
+              <!-- Optical path guide lines -->
+              <line class="beam-guide" x1="228" y1="216" x2="407" y2="216"></line>
+              <line class="beam-guide" x1="407" y1="216" x2="1180" y2="216"></line>
+              <line class="beam-guide" x1="407" y1="216" x2="407" y2="620"></line>
+              <line class="beam-guide" x1="1180" y1="216" x2="1180" y2="620"></line>
+              <line class="beam-guide" x1="407" y1="620" x2="1180" y2="620"></line>
+              <line class="beam-guide" x1="1180" y1="620" x2="1490" y2="620"></line>
+              <line class="beam-guide" x1="1180" y1="620" x2="1180" y2="880"></line>
+
+              <!-- Direction arrows -->
+              <line class="path-arrow arrow-input" x1="250" y1="190" x2="350" y2="190" marker-end="url(#arrowInput)"></line>
+
+              <line class="path-arrow arrow-upper" x1="515" y1="190" x2="650" y2="190" marker-end="url(#arrowUpper)"></line>
+              <line class="path-arrow arrow-upper" x1="1180" y1="310" x2="1180" y2="450" marker-end="url(#arrowUpper)"></line>
+
+              <line class="path-arrow arrow-sample" x1="380" y1="335" x2="380" y2="485" marker-end="url(#arrowSample)"></line>
+              <line class="path-arrow arrow-sample" x1="535" y1="590" x2="670" y2="590" marker-end="url(#arrowSample)"></line>
+              <line class="path-arrow arrow-sample" x1="900" y1="590" x2="1040" y2="590" marker-end="url(#arrowSample)"></line>
+
+              <line class="path-arrow arrow-output" x1="1275" y1="590" x2="1415" y2="590" marker-end="url(#arrowOutput)"></line>
+              <line class="path-arrow arrow-output" x1="1152" y1="710" x2="1152" y2="822" marker-end="url(#arrowOutput)"></line>
 
               <!-- BS1 -->
               <g id="bs1Group">
@@ -556,113 +626,78 @@
                 <text class="svg-label" x="407" y="122" text-anchor="middle">BS1</text>
               </g>
 
-              <!-- BS1 transmitted beam: straight to M1 -->
-              <line class="beam-main transmitted-beam" x1="407" y1="216" x2="1157" y2="216"></line>
-
-              <!-- BS1 reflected beam: downward to M2 -->
-              <line class="beam-main reflected-beam" x1="407" y1="216" x2="407" y2="585"></line>
-
               <!-- M1 top-right -->
               <g id="m1Group">
-                <line class="mirror-back" x1="1105" y1="158" x2="1185" y2="240"></line>
-                <line class="mirror-front" x1="1117" y1="152" x2="1197" y2="234"></line>
-                <text class="svg-label" x="1188" y="150">M1</text>
+                <line class="mirror-back" x1="1128" y1="158" x2="1208" y2="240"></line>
+                <line class="mirror-front" x1="1140" y1="152" x2="1220" y2="234"></line>
+                <text class="svg-label" x="1225" y="150">M1</text>
               </g>
-
-              <!-- M1 reflected beam: downward to BS2 -->
-              <line class="beam-main reflected-beam" x1="1157" y1="216" x2="1157" y2="585"></line>
 
               <!-- M2 bottom-left -->
               <g id="m2Group">
-                <line class="mirror-back" x1="326" y1="546" x2="406" y2="630"></line>
-                <line class="mirror-front" x1="338" y1="540" x2="418" y2="624"></line>
-                <text class="svg-label" x="250" y="650">M2</text>
+                <line class="mirror-back" x1="326" y1="581" x2="406" y2="665"></line>
+                <line class="mirror-front" x1="338" y1="575" x2="418" y2="659"></line>
+                <text class="svg-label" x="250" y="690">M2</text>
               </g>
 
-              <!-- M2 reflected beam: straight to BS2, sample arm -->
-              <line class="beam-main sample-beam" x1="407" y1="585" x2="1075" y2="585"></line>
+              <!-- Eye sample model -->
+              <g id="eyeSampleGroup">
+                <ellipse class="eye-outer" cx="790" cy="620" rx="142" ry="88"></ellipse>
+                <path class="cornea" d="M657 592 C612 617 612 623 657 648"></path>
+                <ellipse class="lens" id="eyeLens" cx="720" cy="620" rx="28" ry="46"></ellipse>
 
-              <!-- Sample: 5-layer sample -->
-              <g id="sampleGroup">
-                <rect class="sample-frame" id="sampleFrame" x="665" y="524" width="200" height="122" rx="18"></rect>
+                <path class="retina" id="retinaMain" d="M895 566 C945 600 945 640 895 674"></path>
+                <path class="retina-layer retina-layer-1" id="retinaLayer1" d="M878 576 C920 604 920 636 878 664"></path>
+                <path class="retina-layer retina-layer-2" id="retinaLayer2" d="M858 586 C890 607 890 633 858 654"></path>
+                <path class="retina-layer retina-layer-3" id="retinaLayer3" d="M838 596 C862 612 862 628 838 644"></path>
 
-                <g id="sampleLayers">
-                  <rect id="sampleLayer1" class="sample-layer-1" x="689" y="548" width="24" height="74" rx="6"></rect>
-                  <rect id="sampleLayer2" class="sample-layer-2" x="717" y="548" width="24" height="74" rx="6"></rect>
-                  <rect id="sampleLayer3" class="sample-layer-3" x="745" y="548" width="24" height="74" rx="6"></rect>
-                  <rect id="sampleLayer4" class="sample-layer-4" x="773" y="548" width="24" height="74" rx="6"></rect>
-                  <rect id="sampleLayer5" class="sample-layer-5" x="801" y="548" width="24" height="74" rx="6"></rect>
+                <line class="scan-line" id="eyeScanLine" x1="632" y1="620" x2="925" y2="620"></line>
+                <line class="path-arrow arrow-scan" id="eyeScanArrow" x1="700" y1="535" x2="850" y2="535" marker-end="url(#arrowScan)"></line>
 
-                  <line id="sampleLine1" class="sample-layer-line" x1="713" y1="550" x2="713" y2="620"></line>
-                  <line id="sampleLine2" class="sample-layer-line" x1="741" y1="550" x2="741" y2="620"></line>
-                  <line id="sampleLine3" class="sample-layer-line" x1="769" y1="550" x2="769" y2="620"></line>
-                  <line id="sampleLine4" class="sample-layer-line" x1="797" y1="550" x2="797" y2="620"></line>
-                </g>
-
-                <text class="svg-label" x="705" y="500">Sample</text>
+                <text class="svg-label" x="710" y="505">Eye Sample</text>
+                <text class="svg-small-label" x="843" y="715">Retina</text>
               </g>
 
-              <!-- BS2 -->
+              <!-- BS2, directly below M1 -->
               <g id="bs2Group">
-                <line class="beam-splitter-back" x1="1038" y1="650" x2="1108" y2="520"></line>
-                <line class="beam-splitter-front" x1="1050" y1="655" x2="1120" y2="525"></line>
-                <text class="svg-label" x="1086" y="744" text-anchor="middle">BS2</text>
+                <line class="beam-splitter-back" x1="1145" y1="685" x2="1215" y2="555"></line>
+                <line class="beam-splitter-front" x1="1157" y1="690" x2="1227" y2="560"></line>
+                <text class="svg-label" x="1180" y="540" text-anchor="middle">BS2</text>
               </g>
-
-              <!-- BS2 outputs -->
-              <line class="beam-main output1-beam" id="out1Beam" x1="1078" y1="585" x2="1465" y2="585"></line>
-              <line class="beam-main output2-beam" id="out2Beam" x1="1078" y1="585" x2="1078" y2="882"></line>
-
-              <!-- Direction arrows -->
-              <!-- rightward beams: arrows above -->
-              <line class="path-arrow arrow-input" x1="95" y1="194" x2="178" y2="194" marker-end="url(#arrowInput)"></line>
-              <line class="path-arrow arrow-transmitted" x1="550" y1="194" x2="655" y2="194" marker-end="url(#arrowTransmitted)"></line>
-              <line class="path-arrow arrow-sample" x1="540" y1="563" x2="645" y2="563" marker-end="url(#arrowSample)"></line>
-              <line class="path-arrow arrow-output" x1="1225" y1="563" x2="1335" y2="563" marker-end="url(#arrowOutput)"></line>
-
-              <!-- downward beams: centered -->
-              <line class="path-arrow arrow-reflected" x1="407" y1="314" x2="407" y2="415" marker-end="url(#arrowReflected)"></line>
-              <line class="path-arrow arrow-reflected" x1="1157" y1="314" x2="1157" y2="415" marker-end="url(#arrowReflected)"></line>
-              <line class="path-arrow arrow-output" x1="1078" y1="725" x2="1078" y2="818" marker-end="url(#arrowOutput)"></line>
 
               <!-- Detector 1 -->
               <g id="det1Group">
-                <rect class="detector-body" x="1462" y="528" width="124" height="128" rx="18" fill="url(#ccdBodyGradient)"></rect>
+                <rect class="detector-body" x="1490" y="558" width="124" height="128" rx="18" fill="url(#ccdBodyGradient)"></rect>
+                <rect class="detector-active" x="1508" y="578" width="88" height="88" rx="8"></rect>
                 <g id="previewD1"></g>
-                <text class="svg-label" x="1422" y="695">D1</text>
+                <text class="svg-label" x="1465" y="720">D1</text>
               </g>
 
               <!-- Detector 2 -->
               <g id="det2Group">
-                <rect class="detector-body" x="1018" y="882" width="128" height="84" rx="18" fill="url(#ccdBodyGradient)"></rect>
+                <rect class="detector-body" x="1118" y="880" width="128" height="84" rx="18" fill="url(#ccdBodyGradient)"></rect>
+                <rect class="detector-active" x="1138" y="898" width="88" height="46" rx="8"></rect>
                 <g id="previewD2"></g>
-                <text class="svg-label" x="1160" y="944">D2</text>
+                <text class="svg-label" x="1260" y="944">D2</text>
               </g>
             </svg>
-
-            <div class="diagram-note">
-              <div class="flow-line"><span class="flow-label">Upper arm</span> : Laser → BS1 → M1 → BS2 → D1 / D2</div>
-              <div class="flow-line"><span class="flow-label">Sample arm</span> : Laser → BS1 → M2 → 5-layer Sample → BS2 → D1 / D2</div>
-              <div class="flow-line"><span class="flow-label">Output</span> : BS2 recombination → complementary interference</div>
-            </div>
           </div>
 
           <div class="panel-box">
-            <h2 class="panel-title">Detector Pattern</h2>
-            <canvas id="detectorCanvas" width="760" height="360"></canvas>
-            <div class="canvas-caption">
-              Top: <strong>D1</strong> &nbsp;|&nbsp; Bottom: <strong>D2</strong>. The two outputs are complementary.
+            <canvas id="detectorCanvas" width="760" height="430"></canvas>
+            <div class="canvas-caption" id="detectorCaption">
+              Photodetector mode: source waveform and D1/D2 complementary temporal signals are displayed.
             </div>
           </div>
 
           <div class="panel-box">
             <h2 class="panel-title">Insights</h2>
             <ul class="info-list">
-              <li><strong>Phase difference</strong> : 두 arm 사이의 위상차를 볼 수 있습니다.</li>
-              <li><strong>Path change</strong> : sample의 두께나 굴절률 변화가 fringe shift로 나타납니다.</li>
-              <li><strong>Displacement</strong> : 미세 위치 변화가 phase 변화로 연결됩니다.</li>
-              <li><strong>Refractive index</strong> : 매질 변화가 optical path length를 바꿉니다.</li>
-              <li><strong>Alignment</strong> : visibility 변화로 정렬 상태를 가늠할 수 있습니다.</li>
+              <li><strong>Phase difference</strong> : 두 arm 사이의 optical path difference가 detector output을 변화시킵니다.</li>
+              <li><strong>Eye sample</strong> : 눈 모델의 cornea, lens, retina 구조를 sample arm에 배치했습니다.</li>
+              <li><strong>Photodetector</strong> : 시간영역 intensity 변화를 oscilloscope 형태로 확인합니다.</li>
+              <li><strong>Spectrometer</strong> : 파장별 spectral interference를 확인합니다.</li>
+              <li><strong>Spectrometer + line scan camera</strong> : OCT 방식처럼 retina depth profile과 B-scan 유사 출력을 보여줍니다.</li>
             </ul>
           </div>
         </div>
@@ -676,9 +711,9 @@
                 <span>Path Difference, ΔL</span>
                 <span class="control-value" id="pathValue">0.00 μm</span>
               </div>
-              <input id="pathSlider" type="range" min="-5" max="5" value="0" step="0.01" />
+              <input id="pathSlider" type="range" min="0" max="10" value="0" step="0.01" />
               <div class="control-help">
-                Changes the sample-arm phase delay.
+                Changes the sample-arm optical path delay from 0 to 10 μm.
               </div>
             </div>
 
@@ -689,7 +724,7 @@
               </div>
               <input id="wavelengthSlider" type="range" min="450" max="850" value="633" step="1" />
               <div class="control-help">
-                Sets the beam color and phase sensitivity.
+                Sets the source wavelength and phase sensitivity.
               </div>
             </div>
 
@@ -700,7 +735,7 @@
               </div>
               <input id="frequencySlider" type="range" min="2" max="18" value="7" step="0.1" />
               <div class="control-help">
-                Adjusts the stripe spacing on D1 and D2.
+                Adjusts the spectral or spatial modulation density.
               </div>
             </div>
 
@@ -711,7 +746,40 @@
               </div>
               <input id="visibilitySlider" type="range" min="0" max="1" value="0.90" step="0.01" />
               <div class="control-help">
-                Adjusts the fringe contrast.
+                Adjusts the interference contrast.
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Detector Type</span>
+                <span class="control-value" id="detectorValue">Photodetector</span>
+              </div>
+
+              <div class="detector-tabs" role="radiogroup" aria-label="Detector type selection">
+                <label class="detector-tab">
+                  <input type="radio" name="detectorType" value="photodetector" checked />
+                  <span class="detector-tab-text">
+                    <span class="detector-tab-title">Photodetector + Oscilloscope</span>
+                    <span class="detector-tab-desc">D1/D2 temporal intensity signals</span>
+                  </span>
+                </label>
+
+                <label class="detector-tab">
+                  <input type="radio" name="detectorType" value="spectrometer" />
+                  <span class="detector-tab-text">
+                    <span class="detector-tab-title">Spectrometer</span>
+                    <span class="detector-tab-desc">Wavelength-domain interference spectrum</span>
+                  </span>
+                </label>
+
+                <label class="detector-tab">
+                  <input type="radio" name="detectorType" value="oct" />
+                  <span class="detector-tab-text">
+                    <span class="detector-tab-title">Spectrometer + Line Scan Camera</span>
+                    <span class="detector-tab-desc">OCT-like retina scan output</span>
+                  </span>
+                </label>
               </div>
             </div>
 
@@ -742,21 +810,21 @@
             <h2 class="panel-title">Components</h2>
             <div class="component-grid">
               <div class="component-item"><strong>Laser</strong> : coherent light source입니다.</div>
-              <div class="component-item"><strong>BS1</strong> : 입력광을 transmitted beam과 reflected beam으로 나누는 첫 번째 beam splitter입니다.</div>
+              <div class="component-item"><strong>BS1</strong> : 입력광을 reference arm과 sample arm으로 나누는 첫 번째 beam splitter입니다.</div>
               <div class="component-item"><strong>M1, M2</strong> : 각 arm의 빛을 BS2 방향으로 반사시키는 mirror입니다.</div>
-              <div class="component-item"><strong>Sample</strong> : sample arm의 optical path length를 바꾸는 5-layer phase object입니다.</div>
-              <div class="component-item"><strong>BS2</strong> : 두 arm의 빛을 recombination 시키는 두 번째 beam splitter입니다.</div>
-              <div class="component-item"><strong>D1, D2</strong> : recombination 이후 나타나는 complementary output을 측정하는 detector입니다.</div>
+              <div class="component-item"><strong>Eye Sample</strong> : cornea, lens, retina를 단순화한 sample-arm model입니다.</div>
+              <div class="component-item"><strong>BS2</strong> : M1 아래에 정렬된 두 번째 beam splitter이며 두 arm을 recombination합니다.</div>
+              <div class="component-item"><strong>D1, D2</strong> : 선택한 detector model에 따라 temporal, spectral, OCT-like output을 표시합니다.</div>
             </div>
           </div>
 
           <div class="panel-box">
             <h2 class="panel-title">Effects</h2>
             <ul class="info-list">
-              <li><strong>ΔL</strong> : sample width와 fringe 위치가 함께 변합니다.</li>
-              <li><strong>Fringe Density</strong> : D1, D2 줄무늬 간격이 직접 바뀝니다.</li>
-              <li><strong>Visibility</strong> : bright/dark contrast가 약해지거나 강해집니다.</li>
-              <li><strong>λ</strong> : 같은 ΔL에서도 phase shift 민감도가 달라집니다.</li>
+              <li><strong>ΔL</strong> : sample arm의 optical path delay가 증가하여 phase shift가 커집니다.</li>
+              <li><strong>λ</strong> : 같은 ΔL에서도 wavelength가 짧을수록 phase sensitivity가 증가합니다.</li>
+              <li><strong>Visibility</strong> : optical alignment, coherence, polarization mismatch에 의한 contrast 변화를 단순화한 변수입니다.</li>
+              <li><strong>Detector Type</strong> : 같은 interferometer라도 검출 방식에 따라 관찰되는 output 형태가 달라집니다.</li>
             </ul>
           </div>
         </div>
@@ -774,6 +842,7 @@
     const wavelengthValue = document.getElementById("wavelengthValue");
     const frequencyValue = document.getElementById("frequencyValue");
     const visibilityValue = document.getElementById("visibilityValue");
+    const detectorValue = document.getElementById("detectorValue");
 
     const phaseResult = document.getElementById("phaseResult");
     const intensity1Result = document.getElementById("intensity1Result");
@@ -782,30 +851,28 @@
 
     const canvas = document.getElementById("detectorCanvas");
     const ctx = canvas.getContext("2d");
+    const detectorCaption = document.getElementById("detectorCaption");
+
+    const detectorTypeInputs = document.querySelectorAll("input[name='detectorType']");
 
     const previewD1 = document.getElementById("previewD1");
     const previewD2 = document.getElementById("previewD2");
 
-    const out1Beam = document.getElementById("out1Beam");
-    const out2Beam = document.getElementById("out2Beam");
-
-    const sampleFrame = document.getElementById("sampleFrame");
-    const sampleLayers = [
-      document.getElementById("sampleLayer1"),
-      document.getElementById("sampleLayer2"),
-      document.getElementById("sampleLayer3"),
-      document.getElementById("sampleLayer4"),
-      document.getElementById("sampleLayer5")
-    ];
-    const sampleLines = [
-      document.getElementById("sampleLine1"),
-      document.getElementById("sampleLine2"),
-      document.getElementById("sampleLine3"),
-      document.getElementById("sampleLine4")
-    ];
+    const eyeLens = document.getElementById("eyeLens");
+    const retinaMain = document.getElementById("retinaMain");
+    const retinaLayer1 = document.getElementById("retinaLayer1");
+    const retinaLayer2 = document.getElementById("retinaLayer2");
+    const retinaLayer3 = document.getElementById("retinaLayer3");
+    const eyeScanLine = document.getElementById("eyeScanLine");
+    const eyeScanArrow = document.getElementById("eyeScanArrow");
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
+    }
+
+    function getSelectedDetectorType() {
+      const selected = document.querySelector("input[name='detectorType']:checked");
+      return selected ? selected.value : "photodetector";
     }
 
     function wavelengthToRGB(wavelength) {
@@ -878,8 +945,8 @@
       }
     }
 
-    createPreviewPixels(previewD1, 1480, 548, 88, 88, 8, 10);
-    createPreviewPixels(previewD2, 1038, 900, 88, 46, 10, 5);
+    createPreviewPixels(previewD1, 1508, 578, 88, 88, 8, 10);
+    createPreviewPixels(previewD2, 1138, 898, 88, 46, 10, 5);
 
     function updatePreviewPixels(group, phase, visibility, color, cols, rows, complementary = false) {
       const pixels = group.querySelectorAll("rect");
@@ -907,41 +974,307 @@
       });
     }
 
-    function updateSampleVisual(deltaL) {
-      const normalized = Math.abs(deltaL) / 5;
-      const sampleWidth = 160 + normalized * 80;
-      const sampleX = 765 - sampleWidth / 2;
-      const innerPadding = 24;
-      const innerX = sampleX + innerPadding;
-      const innerY = 548;
-      const innerH = 74;
-      const innerW = sampleWidth - innerPadding * 2;
-      const layerGap = 6;
-      const layerCount = 5;
-      const layerW = (innerW - layerGap * (layerCount - 1)) / layerCount;
-      const frameAlpha = 0.08 + normalized * 0.14;
+    function updateEyeVisual(deltaL) {
+      const normalized = deltaL / 10;
+      const lensOpacity = 0.24 + normalized * 0.22;
+      const retinaShift = normalized * 12;
+      const scanY = 600 + normalized * 38;
+      const scanArrowX1 = 700 + normalized * 35;
+      const scanArrowX2 = 850 + normalized * 35;
 
-      sampleFrame.setAttribute("x", sampleX);
-      sampleFrame.setAttribute("width", sampleWidth);
-      sampleFrame.setAttribute("fill", `rgba(255, 130, 190, ${frameAlpha.toFixed(3)})`);
+      eyeLens.setAttribute("fill", `rgba(255, 245, 190, ${lensOpacity.toFixed(3)})`);
 
-      sampleLayers.forEach((layer, index) => {
-        const x = innerX + index * (layerW + layerGap);
-        layer.setAttribute("x", x);
-        layer.setAttribute("y", innerY);
-        layer.setAttribute("width", layerW);
-        layer.setAttribute("height", innerH);
-        layer.setAttribute("opacity", (0.75 + normalized * 0.20).toFixed(3));
-      });
+      retinaMain.setAttribute("d", `M${895 + retinaShift} 566 C${945 + retinaShift} 600 ${945 + retinaShift} 640 ${895 + retinaShift} 674`);
+      retinaLayer1.setAttribute("d", `M${878 + retinaShift} 576 C${920 + retinaShift} 604 ${920 + retinaShift} 636 ${878 + retinaShift} 664`);
+      retinaLayer2.setAttribute("d", `M${858 + retinaShift} 586 C${890 + retinaShift} 607 ${890 + retinaShift} 633 ${858 + retinaShift} 654`);
+      retinaLayer3.setAttribute("d", `M${838 + retinaShift} 596 C${862 + retinaShift} 612 ${862 + retinaShift} 628 ${838 + retinaShift} 644`);
 
-      sampleLines.forEach((line, index) => {
-        const x = innerX + (index + 1) * layerW + index * layerGap + layerGap / 2;
-        line.setAttribute("x1", x);
-        line.setAttribute("x2", x);
-        line.setAttribute("y1", innerY + 2);
-        line.setAttribute("y2", innerY + innerH - 2);
-        line.setAttribute("opacity", (0.45 + normalized * 0.20).toFixed(3));
-      });
+      eyeScanLine.setAttribute("y1", scanY);
+      eyeScanLine.setAttribute("y2", scanY);
+
+      eyeScanArrow.setAttribute("x1", scanArrowX1);
+      eyeScanArrow.setAttribute("x2", scanArrowX2);
+    }
+
+    function drawRoundedRect(x, y, width, height, radius, fillStyle, strokeStyle = null, lineWidth = 1) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+
+      if (fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+      }
+
+      if (strokeStyle) {
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      }
+    }
+
+    function drawAxisBox(x, y, width, height, title, xLabel, yLabel) {
+      drawRoundedRect(x, y, width, height, 14, "rgba(255,255,255,0.035)", "rgba(255,255,255,0.22)", 1.5);
+
+      ctx.strokeStyle = "rgba(255,255,255,0.20)";
+      ctx.lineWidth = 1;
+
+      for (let i = 1; i < 5; i++) {
+        const gx = x + (width * i) / 5;
+        ctx.beginPath();
+        ctx.moveTo(gx, y + 8);
+        ctx.lineTo(gx, y + height - 24);
+        ctx.stroke();
+      }
+
+      for (let i = 1; i < 4; i++) {
+        const gy = y + (height * i) / 4;
+        ctx.beginPath();
+        ctx.moveTo(x + 36, gy);
+        ctx.lineTo(x + width - 8, gy);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.font = "bold 22px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText(title, x + 18, y + 32);
+
+      ctx.fillStyle = "rgba(255,255,255,0.68)";
+      ctx.font = "15px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText(xLabel, x + width - 100, y + height - 9);
+
+      ctx.save();
+      ctx.translate(x + 17, y + height / 2 + 44);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(yLabel, 0, 0);
+      ctx.restore();
+    }
+
+    function drawLineSeries(points, color, width = 2.4) {
+      if (points.length < 2) {
+        return;
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.stroke();
+    }
+
+    function drawPhotodetectorMode(phase, visibility, color, centerI1, centerI2) {
+      detectorCaption.textContent = "Photodetector mode: source waveform and D1/D2 complementary temporal signals are displayed.";
+      detectorValue.textContent = "Photodetector";
+
+      const w = canvas.width;
+      const sourceBox = { x: 16, y: 28, width: w - 32, height: 92 };
+      const d1Box = { x: 16, y: 145, width: w - 32, height: 118 };
+      const d2Box = { x: 16, y: 288, width: w - 32, height: 118 };
+
+      drawAxisBox(sourceBox.x, sourceBox.y, sourceBox.width, sourceBox.height, "Source signal before D1 output", "time", "E(t)");
+      drawAxisBox(d1Box.x, d1Box.y, d1Box.width, d1Box.height, "D1 photodetector output", "time", "I(t)");
+      drawAxisBox(d2Box.x, d2Box.y, d2Box.width, d2Box.height, "D2 photodetector output", "time", "I(t)");
+
+      const sourcePoints = [];
+      const d1Points = [];
+      const d2Points = [];
+      const n = 420;
+
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        const xSource = sourceBox.x + 42 + t * (sourceBox.width - 58);
+        const xD1 = d1Box.x + 42 + t * (d1Box.width - 58);
+        const xD2 = d2Box.x + 42 + t * (d2Box.width - 58);
+
+        const source = Math.sin(2 * Math.PI * 8 * t);
+        const modulation = Math.cos(2 * Math.PI * 2.1 * t + phase);
+        const d1 = 0.5 * (1 + visibility * modulation);
+        const d2 = 1 - d1;
+
+        sourcePoints.push({
+          x: xSource,
+          y: sourceBox.y + sourceBox.height / 2 - source * 27
+        });
+
+        d1Points.push({
+          x: xD1,
+          y: d1Box.y + d1Box.height - 24 - d1 * 74
+        });
+
+        d2Points.push({
+          x: xD2,
+          y: d2Box.y + d2Box.height - 24 - d2 * 74
+        });
+      }
+
+      drawLineSeries(sourcePoints, `rgba(${color.r},${color.g},${color.b},0.95)`, 2.1);
+      drawLineSeries(d1Points, "rgba(140,255,120,0.95)", 3);
+      drawLineSeries(d2Points, "rgba(120,220,255,0.95)", 3);
+
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = "18px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText(`D1 center intensity: ${centerI1.toFixed(2)}`, d1Box.x + d1Box.width - 230, d1Box.y + 32);
+      ctx.fillText(`D2 center intensity: ${centerI2.toFixed(2)}`, d2Box.x + d2Box.width - 230, d2Box.y + 32);
+    }
+
+    function drawSpectrometerMode(phase, visibility, color) {
+      detectorCaption.textContent = "Spectrometer mode: wavelength-domain spectral interference is displayed.";
+      detectorValue.textContent = "Spectrometer";
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const specBox = { x: 16, y: 34, width: w - 32, height: 255 };
+      const barBox = { x: 16, y: 320, width: w - 32, height: 70 };
+
+      drawAxisBox(specBox.x, specBox.y, specBox.width, specBox.height, "Spectrometer output", "wavelength", "intensity");
+
+      const points = [];
+      const n = 520;
+      const lambdaStart = 760;
+      const lambdaEnd = 900;
+      const freq = parseFloat(frequencySlider.value);
+
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        const lambda = lambdaStart + t * (lambdaEnd - lambdaStart);
+        const sourceEnvelope = Math.exp(-Math.pow((lambda - 830) / 34, 2));
+        const spectralFringe = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * freq * t + phase));
+        const intensity = clamp(sourceEnvelope * (0.25 + 0.75 * spectralFringe), 0, 1);
+
+        points.push({
+          x: specBox.x + 42 + t * (specBox.width - 58),
+          y: specBox.y + specBox.height - 28 - intensity * 180
+        });
+      }
+
+      drawLineSeries(points, `rgba(${color.r},${color.g},${color.b},0.95)`, 3);
+
+      drawRoundedRect(barBox.x, barBox.y, barBox.width, barBox.height, 14, "rgba(255,255,255,0.035)", "rgba(255,255,255,0.22)", 1.5);
+
+      const cols = 160;
+      for (let i = 0; i < cols; i++) {
+        const t = i / (cols - 1);
+        const spectralFringe = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * freq * t + phase));
+        const intensity = clamp(0.10 + 0.90 * spectralFringe, 0, 1);
+
+        const wl = 760 + t * 140;
+        const c = wavelengthToRGB(clamp(wl, 450, 850));
+
+        ctx.fillStyle = `rgba(${Math.round(c.r * intensity)}, ${Math.round(c.g * intensity)}, ${Math.round(c.b * intensity)}, 0.96)`;
+        ctx.fillRect(
+          barBox.x + 18 + i * ((barBox.width - 36) / cols),
+          barBox.y + 18,
+          Math.ceil((barBox.width - 36) / cols) + 1,
+          barBox.height - 36
+        );
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = "18px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText("Spectral fringe on detector array", barBox.x + 22, barBox.y - 10);
+      ctx.fillText("760 nm", barBox.x + 20, barBox.y + barBox.height + 24);
+      ctx.fillText("900 nm", barBox.x + barBox.width - 90, barBox.y + barBox.height + 24);
+    }
+
+    function drawOCTMode(phase, visibility, color) {
+      detectorCaption.textContent = "Spectrometer + line scan camera mode: OCT-like retina scan output is displayed.";
+      detectorValue.textContent = "OCT Line Scan";
+
+      const w = canvas.width;
+      const spectralBox = { x: 16, y: 28, width: w - 32, height: 110 };
+      const ascanBox = { x: 16, y: 164, width: w - 32, height: 96 };
+      const bscanBox = { x: 16, y: 286, width: w - 32, height: 118 };
+
+      drawAxisBox(spectralBox.x, spectralBox.y, spectralBox.width, spectralBox.height, "Spectrometer + line scan camera raw spectrum", "pixel", "I(k)");
+      drawAxisBox(ascanBox.x, ascanBox.y, ascanBox.width, ascanBox.height, "OCT A-scan depth profile", "depth", "signal");
+      drawRoundedRect(bscanBox.x, bscanBox.y, bscanBox.width, bscanBox.height, 14, "rgba(255,255,255,0.035)", "rgba(255,255,255,0.22)", 1.5);
+
+      const n = 420;
+      const freq = parseFloat(frequencySlider.value);
+
+      const spectrumPoints = [];
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        const sourceEnvelope = Math.exp(-Math.pow((t - 0.5) / 0.34, 2));
+        const interference = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * freq * 2.8 * t + phase));
+        const val = clamp(sourceEnvelope * (0.32 + 0.68 * interference), 0, 1);
+
+        spectrumPoints.push({
+          x: spectralBox.x + 42 + t * (spectralBox.width - 58),
+          y: spectralBox.y + spectralBox.height - 24 - val * 65
+        });
+      }
+
+      drawLineSeries(spectrumPoints, `rgba(${color.r},${color.g},${color.b},0.95)`, 2.4);
+
+      const ascanPoints = [];
+      for (let i = 0; i < n; i++) {
+        const z = i / (n - 1);
+        const corneaPeak = Math.exp(-Math.pow((z - 0.15) / 0.018, 2));
+        const lensPeak = 0.55 * Math.exp(-Math.pow((z - 0.42) / 0.030, 2));
+        const retinaPeak1 = 0.95 * Math.exp(-Math.pow((z - 0.72) / 0.020, 2));
+        const retinaPeak2 = 0.72 * Math.exp(-Math.pow((z - 0.80) / 0.026, 2));
+        const phaseMod = 0.08 * Math.sin(phase + 16 * z);
+        const val = clamp(corneaPeak + lensPeak + retinaPeak1 + retinaPeak2 + phaseMod, 0, 1);
+
+        ascanPoints.push({
+          x: ascanBox.x + 42 + z * (ascanBox.width - 58),
+          y: ascanBox.y + ascanBox.height - 22 - val * 60
+        });
+      }
+
+      drawLineSeries(ascanPoints, "rgba(130,220,255,0.96)", 2.6);
+
+      const cols = 240;
+      const rows = 74;
+      const pxW = (bscanBox.width - 36) / cols;
+      const pxH = (bscanBox.height - 34) / rows;
+      const startX = bscanBox.x + 18;
+      const startY = bscanBox.y + 18;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const xNorm = col / (cols - 1);
+          const z = row / (rows - 1);
+
+          const curvature = 0.025 * Math.sin(2 * Math.PI * xNorm + phase * 0.08);
+          const cornea = Math.exp(-Math.pow((z - 0.16 - curvature * 0.3) / 0.015, 2));
+          const lens = 0.35 * Math.exp(-Math.pow((z - 0.40 + curvature * 0.2) / 0.032, 2));
+          const retina1 = Math.exp(-Math.pow((z - 0.70 - curvature) / 0.018, 2));
+          const retina2 = 0.80 * Math.exp(-Math.pow((z - 0.79 - curvature * 1.2) / 0.022, 2));
+          const speckle = 0.06 * Math.sin(40 * xNorm + 30 * z + phase);
+
+          const signal = clamp(0.04 + visibility * (0.35 * cornea + 0.22 * lens + 0.48 * retina1 + 0.38 * retina2) + speckle, 0, 1);
+
+          ctx.fillStyle = `rgba(${Math.round(50 + 205 * signal)}, ${Math.round(80 + 130 * signal)}, ${Math.round(100 + 155 * signal)}, 0.96)`;
+          ctx.fillRect(startX + col * pxW, startY + row * pxH, Math.ceil(pxW) + 0.5, Math.ceil(pxH) + 0.5);
+        }
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,0.88)";
+      ctx.font = "bold 19px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText("OCT-like B-scan of simplified eye sample", bscanBox.x + 20, bscanBox.y + 24);
+
+      ctx.fillStyle = "rgba(255,255,255,0.70)";
+      ctx.font = "15px 'Noto Sans KR', Arial, sans-serif";
+      ctx.fillText("cornea", bscanBox.x + 610, bscanBox.y + 45);
+      ctx.fillText("lens", bscanBox.x + 610, bscanBox.y + 73);
+      ctx.fillText("retina layers", bscanBox.x + 610, bscanBox.y + 101);
     }
 
     function drawDetectorCanvas() {
@@ -950,6 +1283,7 @@
       const wavelengthUm = wavelengthNm / 1000;
       const spatialFrequency = parseFloat(frequencySlider.value);
       const visibility = parseFloat(visibilitySlider.value);
+      const detectorType = getSelectedDetectorType();
 
       const phase = (2 * Math.PI * deltaL) / wavelengthUm;
       const centerI1 = 0.5 * (1 + visibility * Math.cos(phase));
@@ -974,100 +1308,27 @@
       ctx.fillStyle = "#030303";
       ctx.fillRect(0, 0, w, h);
 
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = "bold 26px 'Noto Sans KR', Arial, sans-serif";
-      ctx.fillText("D1 output", 20, 34);
-      ctx.fillText("D2 output", 20, 198);
-
-      const boxX = 16;
-      const boxW = w - 32;
-      const boxH = 108;
-      const box1Y = 46;
-      const box2Y = 210;
-
-      function drawCCDPort(boxY, complementary = false) {
-        const cols = 76;
-        const rows = 18;
-        const pixelW = boxW / cols;
-        const pixelH = boxH / rows;
-
-        ctx.fillStyle = "rgba(255,255,255,0.05)";
-        ctx.fillRect(boxX, boxY, boxW, boxH);
-
-        for (let row = 0; row < rows; row++) {
-          for (let col = 0; col < cols; col++) {
-            const nx = col / Math.max(1, cols - 1);
-            const ny = (row - (rows - 1) / 2) / Math.max(1, rows / 2);
-            const envelope = Math.exp(-Math.pow(ny / 0.82, 2));
-
-            let fringe = 0.5 * (1 + visibility * Math.cos(2 * Math.PI * spatialFrequency * nx + phase));
-
-            if (complementary) {
-              fringe = 1 - fringe;
-            }
-
-            const intensity = clamp(fringe * envelope, 0, 1);
-
-            ctx.fillStyle = `rgb(${Math.round(color.r * intensity)}, ${Math.round(color.g * intensity)}, ${Math.round(color.b * intensity)})`;
-            ctx.fillRect(
-              boxX + col * pixelW + 0.35,
-              boxY + row * pixelH + 0.35,
-              Math.max(1, pixelW - 0.7),
-              Math.max(1, pixelH - 0.7)
-            );
-          }
-        }
-
-        ctx.strokeStyle = "rgba(255,255,255,0.32)";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(boxX, boxY, boxW, boxH);
-
-        ctx.strokeStyle = "rgba(255,255,255,0.10)";
-        ctx.lineWidth = 1;
-
-        for (let col = 1; col < cols; col += 4) {
-          const gx = boxX + col * pixelW;
-          ctx.beginPath();
-          ctx.moveTo(gx, boxY);
-          ctx.lineTo(gx, boxY + boxH);
-          ctx.stroke();
-        }
-
-        for (let row = 1; row < rows; row += 3) {
-          const gy = boxY + row * pixelH;
-          ctx.beginPath();
-          ctx.moveTo(boxX, gy);
-          ctx.lineTo(boxX + boxW, gy);
-          ctx.stroke();
-        }
+      if (detectorType === "photodetector") {
+        drawPhotodetectorMode(phase, visibility, color, centerI1, centerI2);
+      } else if (detectorType === "spectrometer") {
+        drawSpectrometerMode(phase, visibility, color);
+      } else {
+        drawOCTMode(phase, visibility, color);
       }
-
-      drawCCDPort(box1Y, false);
-      drawCCDPort(box2Y, true);
-
-      ctx.fillStyle = "rgba(255,255,255,0.82)";
-      ctx.font = "18px 'Noto Sans KR', Arial, sans-serif";
-      ctx.fillText(`Power: ${(centerI1 * 100).toFixed(1)}%`, w - 180, 34);
-      ctx.fillText(`Power: ${(centerI2 * 100).toFixed(1)}%`, w - 180, 198);
 
       updatePreviewPixels(previewD1, phase, visibility, color, 8, 10, false);
       updatePreviewPixels(previewD2, phase, visibility, color, 10, 5, true);
-      updateSampleVisual(deltaL);
-
-      const outOpacity1 = 0.30 + 0.70 * centerI1;
-      const outOpacity2 = 0.30 + 0.70 * centerI2;
-
-      out1Beam.style.opacity = outOpacity1.toFixed(3);
-      out2Beam.style.opacity = outOpacity2.toFixed(3);
-
-      out1Beam.style.filter = `drop-shadow(0 0 ${8 + 12 * visibility}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI1}))`;
-      out2Beam.style.filter = `drop-shadow(0 0 ${8 + 12 * visibility}px rgba(${color.r}, ${color.g}, ${color.b}, ${0.16 + 0.34 * centerI2}))`;
+      updateEyeVisual(deltaL);
     }
 
     pathSlider.addEventListener("input", drawDetectorCanvas);
     wavelengthSlider.addEventListener("input", drawDetectorCanvas);
     frequencySlider.addEventListener("input", drawDetectorCanvas);
     visibilitySlider.addEventListener("input", drawDetectorCanvas);
+
+    detectorTypeInputs.forEach((input) => {
+      input.addEventListener("change", drawDetectorCanvas);
+    });
 
     drawDetectorCanvas();
   </script>
