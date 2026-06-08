@@ -379,34 +379,37 @@
     }
 
     .sample-eye-outline {
-      fill: rgba(255, 255, 255, 0.025);
-      stroke: rgba(210, 65, 230, 0.95);
-      stroke-width: 4;
-      stroke-dasharray: 12 9;
-      filter: drop-shadow(0 0 9px rgba(210, 65, 230, 0.42));
+      fill: rgba(255, 255, 255, 0.015);
+      stroke: rgba(128, 0, 145, 0.98);
+      stroke-width: 9;
+      stroke-dasharray: 52 34;
+      stroke-linecap: butt;
+      filter: drop-shadow(0 0 9px rgba(180, 40, 210, 0.42));
     }
 
     .sample-cornea {
-      fill: none;
-      stroke: rgba(160, 235, 255, 0.95);
-      stroke-width: 5;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(160, 235, 255, 0.46));
+      fill: rgba(180, 238, 255, 0.78);
+      stroke: rgba(0, 0, 0, 0.98);
+      stroke-width: 8;
+      filter:
+        drop-shadow(0 0 6px rgba(180, 238, 255, 0.55))
+        drop-shadow(0 0 3px rgba(0, 0, 0, 0.35));
     }
 
     .sample-eye-line {
-      stroke: rgba(130, 95, 255, 0.78);
-      stroke-width: 4;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(130, 95, 255, 0.36));
+      stroke: rgba(20, 40, 255, 0.98);
+      stroke-width: 9;
+      stroke-linecap: square;
+      filter: drop-shadow(0 0 6px rgba(20, 40, 255, 0.38));
     }
 
     .retina-layer {
       fill: none;
-      stroke: rgba(255, 45, 45, 0.98);
-      stroke-width: 5;
+      stroke: rgba(255, 20, 20, 0.98);
+      stroke-width: 9;
       stroke-linecap: round;
-      filter: drop-shadow(0 0 8px rgba(255, 45, 45, 0.48));
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 7px rgba(255, 20, 20, 0.42));
     }
 
     .detector-symbol-line {
@@ -559,21 +562,22 @@
                 <text class="svg-label" x="250" y="690">M2</text>
               </g>
 
-              <!-- Eye sample: cornea on left, retina on posterior wall -->
+              <!-- Eye sample: reference-style cornea and retina layers -->
               <g id="eyeSampleGroup">
-                <ellipse class="sample-eye-outline" cx="785" cy="620" rx="182" ry="142"></ellipse>
+                <ellipse class="sample-eye-outline" cx="785" cy="620" rx="235" ry="170"></ellipse>
 
-                <line class="sample-eye-line" x1="620" y1="620" x2="950" y2="620"></line>
+                <line class="sample-eye-line" x1="545" y1="620" x2="1025" y2="620"></line>
 
-                <path class="sample-cornea" d="M645 560 C620 585 620 655 645 680"></path>
+                <ellipse class="sample-cornea" cx="642" cy="620" rx="28" ry="72"></ellipse>
 
-                <path class="retina-layer" d="M894 560 C931 585 945 617 941 652"></path>
-                <path class="retina-layer" d="M878 572 C913 596 926 624 922 655"></path>
-                <path class="retina-layer" d="M862 584 C895 607 908 632 904 660"></path>
+                <path class="retina-layer" d="M902 518 C956 548 957 692 902 722"></path>
+                <path class="retina-layer" d="M922 524 C976 552 977 688 922 716"></path>
+                <path class="retina-layer" d="M942 532 C992 558 993 682 942 708"></path>
+                <path class="retina-layer" d="M962 542 C1006 565 1007 675 962 698"></path>
 
-                <text class="svg-label" x="735" y="470">Sample</text>
-                <text class="svg-small-label" x="650" y="548">Cornea</text>
-                <text class="svg-small-label" x="970" y="708">Retina Layers</text>
+                <text class="svg-label" x="718" y="430">Sample</text>
+                <text class="svg-small-label" x="600" y="522">Cornea</text>
+                <text class="svg-small-label" x="980" y="565">Retina Layers</text>
               </g>
 
               <!-- BS2 -->
