@@ -544,40 +544,44 @@
                 <text class="svg-label" x="407" y="122" text-anchor="middle">BS1</text>
               </g>
 
-              <!-- M1: single mirror surface + backside hatches -->
+              <!-- M1: single mirror surface + horizontal backside hatches -->
               <g id="m1Group">
                 <line class="mirror-surface" x1="1120" y1="176" x2="1220" y2="276"></line>
-                <line class="mirror-hatch" x1="1147" y1="188" x2="1130" y2="205"></line>
-                <line class="mirror-hatch" x1="1167" y1="208" x2="1150" y2="225"></line>
-                <line class="mirror-hatch" x1="1187" y1="228" x2="1170" y2="245"></line>
-                <line class="mirror-hatch" x1="1207" y1="248" x2="1190" y2="265"></line>
+
+                <line class="mirror-hatch" x1="1100" y1="188" x2="1136" y2="188"></line>
+                <line class="mirror-hatch" x1="1120" y1="208" x2="1156" y2="208"></line>
+                <line class="mirror-hatch" x1="1140" y1="228" x2="1176" y2="228"></line>
+                <line class="mirror-hatch" x1="1160" y1="248" x2="1196" y2="248"></line>
+
                 <text class="svg-label" x="1225" y="150">M1</text>
               </g>
 
-              <!-- M2: single mirror surface + backside hatches -->
+              <!-- M2: single mirror surface + horizontal backside hatches -->
               <g id="m2Group">
                 <line class="mirror-surface" x1="347" y1="580" x2="447" y2="680"></line>
-                <line class="mirror-hatch" x1="374" y1="592" x2="357" y2="609"></line>
-                <line class="mirror-hatch" x1="394" y1="612" x2="377" y2="629"></line>
-                <line class="mirror-hatch" x1="414" y1="632" x2="397" y2="649"></line>
-                <line class="mirror-hatch" x1="434" y1="652" x2="417" y2="669"></line>
+
+                <line class="mirror-hatch" x1="327" y1="592" x2="363" y2="592"></line>
+                <line class="mirror-hatch" x1="347" y1="612" x2="383" y2="612"></line>
+                <line class="mirror-hatch" x1="367" y1="632" x2="403" y2="632"></line>
+                <line class="mirror-hatch" x1="387" y1="652" x2="423" y2="652"></line>
+
                 <text class="svg-label" x="250" y="690">M2</text>
               </g>
 
-              <!-- Simplified eye sample: cornea + retina layers -->
+              <!-- Simplified eye sample: rotated so cornea faces incoming beam -->
               <g id="eyeSampleGroup">
-                <ellipse class="sample-eye-outline" cx="785" cy="620" rx="142" ry="182"></ellipse>
+                <ellipse class="sample-eye-outline" cx="785" cy="620" rx="182" ry="142"></ellipse>
 
-                <line class="sample-eye-line" x1="785" y1="420" x2="785" y2="820"></line>
+                <line class="sample-eye-line" x1="603" y1="620" x2="967" y2="620"></line>
 
-                <path class="sample-cornea" d="M740 466 C775 446 817 446 852 466"></path>
+                <path class="sample-cornea" d="M646 570 C620 595 620 645 646 670"></path>
 
-                <path class="retina-layer" d="M690 725 C735 748 835 748 880 725"></path>
-                <path class="retina-layer" d="M700 742 C742 762 828 762 870 742"></path>
-                <path class="retina-layer" d="M710 758 C750 774 820 774 860 758"></path>
+                <path class="retina-layer" d="M862 720 C905 690 918 665 928 640"></path>
+                <path class="retina-layer" d="M850 705 C895 675 910 650 920 628"></path>
+                <path class="retina-layer" d="M838 690 C885 663 902 638 913 617"></path>
 
-                <text class="svg-label" x="735" y="390">Sample</text>
-                <text class="svg-small-label" x="860" y="472">Cornea</text>
+                <text class="svg-label" x="735" y="470">Sample</text>
+                <text class="svg-small-label" x="673" y="557">Cornea</text>
                 <text class="svg-small-label" x="635" y="805">Retina Layers</text>
               </g>
 
@@ -601,7 +605,7 @@
           </div>
 
           <div class="panel-box">
-            <canvas id="detectorCanvas" width="760" height="720"></canvas>
+            <canvas id="detectorCanvas" width="840" height="720"></canvas>
           </div>
         </div>
 
@@ -808,25 +812,29 @@
       detectorSymbolD1.innerHTML = "";
       detectorSymbolD2.innerHTML = "";
 
-      drawDetectorSymbol(detectorSymbolD1, 1548, 620, detectorType, "D1");
-      drawDetectorSymbol(detectorSymbolD2, 1180, 922, detectorType, "D2");
+      drawDetectorSymbol(detectorSymbolD1, 1548, 620, detectorType, "D1", 0);
+      drawDetectorSymbol(detectorSymbolD2, 1180, 922, detectorType, "D2", 90);
     }
 
-    function drawDetectorSymbol(group, cx, cy, detectorType, label) {
+    function drawDetectorSymbol(group, cx, cy, detectorType, label, rotation = 0) {
+      const symbolGroup = createSvgElement("g", {
+        transform: rotation !== 0 ? `rotate(${rotation} ${cx} ${cy})` : ""
+      });
+
       if (detectorType === "photodetector") {
-        group.appendChild(createSvgElement("circle", {
+        symbolGroup.appendChild(createSvgElement("circle", {
           class: "detector-symbol-fill",
           cx,
           cy,
           r: 42
         }));
 
-        group.appendChild(createSvgElement("path", {
+        symbolGroup.appendChild(createSvgElement("path", {
           class: "detector-symbol-line",
           d: `M${cx - 20} ${cy + 22} L${cx - 20} ${cy - 22} L${cx + 18} ${cy} Z`
         }));
 
-        group.appendChild(createSvgElement("line", {
+        symbolGroup.appendChild(createSvgElement("line", {
           class: "detector-symbol-line",
           x1: cx + 24,
           y1: cy - 27,
@@ -834,7 +842,7 @@
           y2: cy + 27
         }));
 
-        group.appendChild(createSvgElement("line", {
+        symbolGroup.appendChild(createSvgElement("line", {
           class: "detector-symbol-line",
           x1: cx - 46,
           y1: cy - 34,
@@ -842,7 +850,7 @@
           y2: cy - 18
         }));
 
-        group.appendChild(createSvgElement("line", {
+        symbolGroup.appendChild(createSvgElement("line", {
           class: "detector-symbol-line",
           x1: cx - 47,
           y1: cy + 34,
@@ -850,13 +858,13 @@
           y2: cy + 18
         }));
 
-        group.appendChild(createSvgElement("text", {
+        symbolGroup.appendChild(createSvgElement("text", {
           class: "detector-symbol-text",
           x: cx - 23,
           y: cy + 68
         })).textContent = "PD";
       } else if (detectorType === "spectrometer") {
-        group.appendChild(createSvgElement("line", {
+        symbolGroup.appendChild(createSvgElement("line", {
           class: "detector-symbol-line",
           x1: cx - 54,
           y1: cy + 32,
@@ -865,7 +873,7 @@
         }));
 
         for (let i = 0; i < 6; i++) {
-          group.appendChild(createSvgElement("line", {
+          symbolGroup.appendChild(createSvgElement("line", {
             class: "detector-symbol-line",
             x1: cx - 8 + i * 8,
             y1: cy - 34,
@@ -874,19 +882,19 @@
           }));
         }
 
-        group.appendChild(createSvgElement("path", {
+        symbolGroup.appendChild(createSvgElement("path", {
           class: "detector-symbol-line",
           d: `M${cx + 50} ${cy - 30} C${cx + 82} ${cy - 15} ${cx + 82} ${cy + 15} ${cx + 50} ${cy + 30}`
         }));
 
-        group.appendChild(createSvgElement("text", {
+        symbolGroup.appendChild(createSvgElement("text", {
           class: "detector-symbol-text",
           x: cx - 35,
           y: cy + 72
         })).textContent = "SPEC";
       } else {
         for (let i = 0; i < 10; i++) {
-          group.appendChild(createSvgElement("line", {
+          symbolGroup.appendChild(createSvgElement("line", {
             class: "detector-symbol-line",
             x1: cx - 46 + i * 10,
             y1: cy - 34,
@@ -895,7 +903,7 @@
           }));
         }
 
-        group.appendChild(createSvgElement("line", {
+        symbolGroup.appendChild(createSvgElement("line", {
           class: "detector-symbol-line",
           x1: cx - 56,
           y1: cy,
@@ -903,17 +911,19 @@
           y2: cy
         }));
 
-        group.appendChild(createSvgElement("path", {
+        symbolGroup.appendChild(createSvgElement("path", {
           class: "detector-symbol-line",
           d: `M${cx - 60} ${cy - 46} L${cx + 60} ${cy - 46} L${cx + 60} ${cy + 46} L${cx - 60} ${cy + 46} Z`
         }));
 
-        group.appendChild(createSvgElement("text", {
+        symbolGroup.appendChild(createSvgElement("text", {
           class: "detector-symbol-text",
           x: cx - 40,
           y: cy + 74
         })).textContent = "LSC";
       }
+
+      group.appendChild(symbolGroup);
     }
 
     function drawRoundedRect(x, y, width, height, radius, fillStyle, strokeStyle = null, lineWidth = 1) {
@@ -956,7 +966,7 @@
     function drawChartFrame(x, y, width, height, title, xLabel, yLabel) {
       drawRoundedRect(x, y, width, height, 16, "rgba(255,255,255,0.035)", "rgba(255,255,255,0.24)", 1.5);
 
-      const marginLeft = 100;
+      const marginLeft = 108;
       const marginRight = 34;
       const marginTop = 68;
       const marginBottom = 62;
@@ -967,11 +977,6 @@
         width: width - marginLeft - marginRight,
         height: height - marginTop - marginBottom
       };
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(x, y, width, height);
-      ctx.clip();
 
       ctx.fillStyle = "rgba(255,255,255,0.94)";
       drawFitText(title, x + 26, y + 38, width - 60, 24, "bold");
@@ -1009,14 +1014,20 @@
       ctx.fillText(xLabel, plot.x + plot.width - xLabelWidth, y + height - 18);
 
       ctx.save();
-      ctx.translate(x + 38, plot.y + plot.height / 2 + ctx.measureText(yLabel).width / 2);
+      ctx.translate(x + 42, plot.y + plot.height / 2 + ctx.measureText(yLabel).width / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(yLabel, 0, 0);
       ctx.restore();
 
-      ctx.restore();
-
       return plot;
+    }
+
+    function mapToPlotY(plot, value, minValue, maxValue, paddingRatio = 0.10) {
+      const safeMax = maxValue === minValue ? maxValue + 1 : maxValue;
+      const t = clamp((value - minValue) / (safeMax - minValue), 0, 1);
+      const innerTop = plot.y + plot.height * paddingRatio;
+      const innerHeight = plot.height * (1 - 2 * paddingRatio);
+      return innerTop + (1 - t) * innerHeight;
     }
 
     function drawLineSeries(points, color, width = 2.4) {
@@ -1048,7 +1059,7 @@
         24,
         w - 36,
         200,
-        "Source signal",
+        "Source",
         "Time (ms)",
         "E(t) (a.u.)"
       );
@@ -1058,7 +1069,7 @@
         254,
         w - 36,
         200,
-        "D1 photodetector output",
+        "D1 Photodetector",
         "Time (ms)",
         "I(t) (a.u.)"
       );
@@ -1068,7 +1079,7 @@
         484,
         w - 36,
         200,
-        "D2 photodetector output",
+        "D2 Photodetector",
         "Time (ms)",
         "I(t) (a.u.)"
       );
@@ -1087,17 +1098,17 @@
 
         sourcePoints.push({
           x: sourcePlot.x + t * sourcePlot.width,
-          y: sourcePlot.y + sourcePlot.height / 2 - source * sourcePlot.height * 0.34
+          y: mapToPlotY(sourcePlot, source, -1.1, 1.1, 0.13)
         });
 
         d1Points.push({
           x: d1Plot.x + t * d1Plot.width,
-          y: d1Plot.y + d1Plot.height - d1 * d1Plot.height
+          y: mapToPlotY(d1Plot, d1, 0, 1, 0.13)
         });
 
         d2Points.push({
           x: d2Plot.x + t * d2Plot.width,
-          y: d2Plot.y + d2Plot.height - d2 * d2Plot.height
+          y: mapToPlotY(d2Plot, d2, 0, 1, 0.13)
         });
       }
 
@@ -1160,7 +1171,7 @@
 
         points.push({
           x: specPlot.x + t * specPlot.width,
-          y: specPlot.y + specPlot.height - intensity * specPlot.height
+          y: mapToPlotY(specPlot, intensity, 0, 1, 0.12)
         });
       }
 
@@ -1248,7 +1259,7 @@
 
         spectrumPoints.push({
           x: spectralPlot.x + t * spectralPlot.width,
-          y: spectralPlot.y + spectralPlot.height - val * spectralPlot.height
+          y: mapToPlotY(spectralPlot, val, 0, 1, 0.12)
         });
       }
 
@@ -1265,7 +1276,7 @@
 
         ascanPoints.push({
           x: ascanPlot.x + z * ascanPlot.width,
-          y: ascanPlot.y + ascanPlot.height - val * ascanPlot.height
+          y: mapToPlotY(ascanPlot, val, 0, 1, 0.12)
         });
       }
 
