@@ -504,7 +504,7 @@
               <g id="m1Group">
                 <line class="mirror-surface" x1="1120" y1="176" x2="1220" y2="276"></line>
 
-                <!-- M1 hatch lines: right side of mirror, matching the reference image -->
+                <!-- M1 hatch lines: right side, equal 8 px height spacing -->
                 <line class="mirror-hatch" x1="1120" y1="176" x2="1148" y2="176"></line>
                 <line class="mirror-hatch" x1="1128" y1="184" x2="1156" y2="184"></line>
                 <line class="mirror-hatch" x1="1136" y1="192" x2="1164" y2="192"></line>
@@ -518,7 +518,6 @@
                 <line class="mirror-hatch" x1="1200" y1="256" x2="1228" y2="256"></line>
                 <line class="mirror-hatch" x1="1208" y1="264" x2="1236" y2="264"></line>
                 <line class="mirror-hatch" x1="1216" y1="272" x2="1244" y2="272"></line>
-                <line class="mirror-hatch" x1="1220" y1="276" x2="1248" y2="276"></line>
 
                 <text class="svg-label" x="1168" y="142" text-anchor="middle">M1</text>
               </g>
@@ -1072,8 +1071,8 @@
 
       const marginLeft = 108;
       const marginRight = 34;
-      const marginTop = 68;
-      const marginBottom = 62;
+      const marginTop = 58;
+      const marginBottom = 52;
 
       const plot = {
         x: x + marginLeft,
@@ -1083,7 +1082,7 @@
       };
 
       ctx.fillStyle = "rgba(255,255,255,0.94)";
-      drawFitText(title, x + 26, y + 38, width - 60, 24, "bold");
+      drawFitText(title, x + 26, y + 34, width - 60, 22, "bold");
 
       ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 1;
@@ -1113,9 +1112,9 @@
       ctx.stroke();
 
       ctx.fillStyle = "rgba(255,255,255,0.82)";
-      ctx.font = "15px 'Noto Sans KR', Arial, sans-serif";
+      ctx.font = "14px 'Noto Sans KR', Arial, sans-serif";
       const xLabelWidth = ctx.measureText(xLabel).width;
-      ctx.fillText(xLabel, plot.x + plot.width - xLabelWidth, y + height - 18);
+      ctx.fillText(xLabel, plot.x + plot.width - xLabelWidth, y + height - 16);
 
       ctx.save();
       ctx.translate(x + 42, plot.y + plot.height / 2 + ctx.measureText(yLabel).width / 2);
@@ -1158,9 +1157,35 @@
 
       const w = canvas.width;
 
-      const sourcePlot = drawChartFrame(18, 24, w - 36, 200, "Source", "Time (ms)", "E(t) (a.u.)");
-      const d1Plot = drawChartFrame(18, 254, w - 36, 200, "D1 Photodetector", "Time (ms)", "I(t) (a.u.)");
-      const d2Plot = drawChartFrame(18, 484, w - 36, 200, "D2 Photodetector", "Time (ms)", "I(t) (a.u.)");
+      const sourcePlot = drawChartFrame(
+        18,
+        24,
+        w - 36,
+        155,
+        "Source",
+        "Time (ms)",
+        "E(t) (a.u.)"
+      );
+
+      const d1Plot = drawChartFrame(
+        18,
+        210,
+        w - 36,
+        155,
+        "D1 Photodetector",
+        "Time (ms)",
+        "I(t) (a.u.)"
+      );
+
+      const d2Plot = drawChartFrame(
+        18,
+        396,
+        w - 36,
+        155,
+        "D2 Photodetector",
+        "Time (ms)",
+        "I(t) (a.u.)"
+      );
 
       const sourcePoints = [];
       const d1Points = [];
@@ -1190,14 +1215,9 @@
         });
       }
 
-      drawLineSeries(sourcePoints, `rgba(${color.r},${color.g},${color.b},0.95)`, 2.4);
-      drawLineSeries(d1Points, "rgba(140,255,120,0.95)", 3.0);
-      drawLineSeries(d2Points, "rgba(120,220,255,0.95)", 3.0);
-
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
-      ctx.font = "15px 'Noto Sans KR', Arial, sans-serif";
-      ctx.fillText(`D1 = ${centerI1.toFixed(2)} a.u.`, d1Plot.x + d1Plot.width - 135, d1Plot.y + 20);
-      ctx.fillText(`D2 = ${centerI2.toFixed(2)} a.u.`, d2Plot.x + d2Plot.width - 135, d2Plot.y + 20);
+      drawLineSeries(sourcePoints, `rgba(${color.r},${color.g},${color.b},0.95)`, 2.2);
+      drawLineSeries(d1Points, "rgba(140,255,120,0.95)", 2.6);
+      drawLineSeries(d2Points, "rgba(120,220,255,0.95)", 2.6);
     }
 
     function drawSpectrometerMode(phase, visibility, color) {
@@ -1347,10 +1367,13 @@
       for (let i = 0; i < n; i++) {
         const z = i / (n - 1);
         const corneaPeak = Math.exp(-Math.pow((z - 0.16) / 0.020, 2));
-        const retinaPeak1 = 0.95 * Math.exp(-Math.pow((z - 0.72) / 0.020, 2));
-        const retinaPeak2 = 0.76 * Math.exp(-Math.pow((z - 0.80) / 0.026, 2));
-        const phaseMod = 0.06 * Math.sin(phase + 16 * z);
-        const val = clamp(corneaPeak + retinaPeak1 + retinaPeak2 + phaseMod, 0, 1);
+
+        const retinaPeak1 = 0.95 * Math.exp(-Math.pow((z - 0.70) / 0.018, 2));
+        const retinaPeak2 = 0.80 * Math.exp(-Math.pow((z - 0.78) / 0.022, 2));
+        const retinaPeak3 = 0.68 * Math.exp(-Math.pow((z - 0.86) / 0.026, 2));
+
+        const phaseMod = 0.055 * Math.sin(phase + 16 * z);
+        const val = clamp(corneaPeak + retinaPeak1 + retinaPeak2 + retinaPeak3 + phaseMod, 0, 1);
 
         ascanPoints.push({
           x: ascanPlot.x + z * ascanPlot.width,
@@ -1376,11 +1399,25 @@
 
           const curvature = 0.025 * Math.sin(2 * Math.PI * xNorm + phase * 0.08);
           const cornea = Math.exp(-Math.pow((z - 0.16 - curvature * 0.3) / 0.015, 2));
-          const retina1 = Math.exp(-Math.pow((z - 0.70 - curvature) / 0.018, 2));
-          const retina2 = 0.82 * Math.exp(-Math.pow((z - 0.80 - curvature * 1.2) / 0.022, 2));
+
+          const retina1 = Math.exp(-Math.pow((z - 0.69 - curvature) / 0.014, 2));
+          const retina2 = 0.86 * Math.exp(-Math.pow((z - 0.78 - curvature * 1.12) / 0.017, 2));
+          const retina3 = 0.74 * Math.exp(-Math.pow((z - 0.87 - curvature * 1.24) / 0.020, 2));
+
           const speckle = 0.05 * Math.sin(40 * xNorm + 30 * z + phase);
 
-          const signal = clamp(0.04 + visibility * (0.38 * cornea + 0.50 * retina1 + 0.40 * retina2) + speckle, 0, 1);
+          const signal = clamp(
+            0.04 +
+            visibility * (
+              0.34 * cornea +
+              0.48 * retina1 +
+              0.43 * retina2 +
+              0.38 * retina3
+            ) +
+            speckle,
+            0,
+            1
+          );
 
           ctx.fillStyle = `rgba(${Math.round(50 + 205 * signal)}, ${Math.round(80 + 130 * signal)}, ${Math.round(100 + 155 * signal)}, 0.96)`;
           ctx.fillRect(imageX + col * pxW, imageY + row * pxH, Math.ceil(pxW) + 0.5, Math.ceil(pxH) + 0.5);
@@ -1403,7 +1440,9 @@
       ctx.restore();
 
       ctx.fillText("cornea", imageX + imageW - 105, imageY + 27);
-      ctx.fillText("retina layers", imageX + imageW - 105, imageY + 102);
+      ctx.fillText("retina layer 1", imageX + imageW - 128, imageY + 92);
+      ctx.fillText("retina layer 2", imageX + imageW - 128, imageY + 104);
+      ctx.fillText("retina layer 3", imageX + imageW - 128, imageY + 116);
     }
 
     function drawDetectorCanvas() {
