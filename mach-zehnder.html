@@ -504,20 +504,21 @@
               <g id="m1Group">
                 <line class="mirror-surface" x1="1120" y1="176" x2="1220" y2="276"></line>
 
-                <!-- M1 hatch lines: equally spaced in height and attached to the back side of the mirror -->
-                <line class="mirror-hatch" x1="1092" y1="176" x2="1120" y2="176"></line>
-                <line class="mirror-hatch" x1="1100" y1="184" x2="1128" y2="184"></line>
-                <line class="mirror-hatch" x1="1108" y1="192" x2="1136" y2="192"></line>
-                <line class="mirror-hatch" x1="1116" y1="200" x2="1144" y2="200"></line>
-                <line class="mirror-hatch" x1="1124" y1="208" x2="1152" y2="208"></line>
-                <line class="mirror-hatch" x1="1132" y1="216" x2="1160" y2="216"></line>
-                <line class="mirror-hatch" x1="1140" y1="224" x2="1168" y2="224"></line>
-                <line class="mirror-hatch" x1="1148" y1="232" x2="1176" y2="232"></line>
-                <line class="mirror-hatch" x1="1156" y1="240" x2="1184" y2="240"></line>
-                <line class="mirror-hatch" x1="1164" y1="248" x2="1192" y2="248"></line>
-                <line class="mirror-hatch" x1="1172" y1="256" x2="1200" y2="256"></line>
-                <line class="mirror-hatch" x1="1180" y1="264" x2="1208" y2="264"></line>
-                <line class="mirror-hatch" x1="1188" y1="272" x2="1216" y2="272"></line>
+                <!-- M1 hatch lines: right side of mirror, matching the reference image -->
+                <line class="mirror-hatch" x1="1120" y1="176" x2="1148" y2="176"></line>
+                <line class="mirror-hatch" x1="1128" y1="184" x2="1156" y2="184"></line>
+                <line class="mirror-hatch" x1="1136" y1="192" x2="1164" y2="192"></line>
+                <line class="mirror-hatch" x1="1144" y1="200" x2="1172" y2="200"></line>
+                <line class="mirror-hatch" x1="1152" y1="208" x2="1180" y2="208"></line>
+                <line class="mirror-hatch" x1="1160" y1="216" x2="1188" y2="216"></line>
+                <line class="mirror-hatch" x1="1168" y1="224" x2="1196" y2="224"></line>
+                <line class="mirror-hatch" x1="1176" y1="232" x2="1204" y2="232"></line>
+                <line class="mirror-hatch" x1="1184" y1="240" x2="1212" y2="240"></line>
+                <line class="mirror-hatch" x1="1192" y1="248" x2="1220" y2="248"></line>
+                <line class="mirror-hatch" x1="1200" y1="256" x2="1228" y2="256"></line>
+                <line class="mirror-hatch" x1="1208" y1="264" x2="1236" y2="264"></line>
+                <line class="mirror-hatch" x1="1216" y1="272" x2="1244" y2="272"></line>
+                <line class="mirror-hatch" x1="1220" y1="276" x2="1248" y2="276"></line>
 
                 <text class="svg-label" x="1168" y="142" text-anchor="middle">M1</text>
               </g>
@@ -526,7 +527,6 @@
               <g id="m2Group">
                 <line class="mirror-surface" x1="347" y1="580" x2="447" y2="680"></line>
 
-                <!-- M2 hatch lines: same direction as before, but equally spaced in height -->
                 <line class="mirror-hatch" x1="319" y1="580" x2="347" y2="580"></line>
                 <line class="mirror-hatch" x1="327" y1="588" x2="355" y2="588"></line>
                 <line class="mirror-hatch" x1="335" y1="596" x2="363" y2="596"></line>
@@ -547,18 +547,13 @@
               <!-- Eye sample -->
               <g id="eyeSampleGroup">
                 <ellipse class="sample-eye-outline" cx="785" cy="620" rx="145" ry="108"></ellipse>
-
-                <!-- Cornea: smaller and inside -->
                 <ellipse class="sample-cornea" cx="678" cy="620" rx="12" ry="42"></ellipse>
 
-                <!-- Retina Layers: moved slightly inward to the left -->
                 <path class="retina-layer" d="M852 574 Q905 620 852 666"></path>
                 <path class="retina-layer" d="M868 568 Q920 620 868 672"></path>
                 <path class="retina-layer" d="M884 562 Q935 620 884 678"></path>
 
                 <text class="svg-label" x="735" y="488">Sample</text>
-
-                <!-- Label positions adjusted -->
                 <text class="svg-small-label" x="612" y="574">Cornea</text>
 
                 <text class="svg-small-label" x="885" y="552">
@@ -573,12 +568,10 @@
                 <text class="svg-label" x="1230" y="555">BS2</text>
               </g>
 
-              <!-- D1 power percentage text only -->
               <g id="d1PowerBadgeGroup">
                 <text id="d1PowerBadgeText" class="power-badge-text" x="1548" y="570">75.0%</text>
               </g>
 
-              <!-- D2 power percentage text only -->
               <g id="d2PowerBadgeGroup">
                 <text id="d2PowerBadgeText" class="power-badge-text" x="1090" y="995">25.0%</text>
               </g>
@@ -1003,14 +996,11 @@
       const insideLeftX = 652;
       const insideRightX = 915;
 
-      /* Wavelength-dependent color only for the laser and input beam */
       setArrowShape(inputArrow, 245, 216, 352, 216, 12, laserColor, 0.96);
 
-      /* BS1 이후 경로: BS1 색상 */
       setArrowShape(upperArrowHorizontal, 500, 216, 1065, 216, 12, componentColors.bs1, sharedOpacity);
       setArrowShape(sampleArrowVertical, 407, 325, 407, 520, 12.5, componentColors.bs1, sharedOpacity);
 
-      /* Mirror 반사 이후 경로: Mirror 색상 */
       setArrowShape(upperArrowVertical, 1180, 310, 1180, 505, 12, componentColors.mirror, sharedOpacity);
       setArrowShape(sampleArrowLeft, 500, 620, 648, 620, 13, componentColors.mirror, 0.95);
       setArrowShape(sampleArrowInside, insideLeftX, scanY, insideRightX, scanY, 13.8, componentColors.mirror, 0.98);
@@ -1021,7 +1011,6 @@
       const d1Opacity = 0.34 + 0.66 * centerI1;
       const d2Opacity = 0.34 + 0.66 * centerI2;
 
-      /* BS2 이후 출력 경로: BS2 색상 */
       setArrowShape(outputArrowD1, 1265, 620, 1420, 620, d1Width, componentColors.bs2, d1Opacity);
       setArrowShape(outputArrowD2, 1180, 705, 1180, 865, d2Width, componentColors.bs2, d2Opacity);
 
@@ -1169,35 +1158,9 @@
 
       const w = canvas.width;
 
-      const sourcePlot = drawChartFrame(
-        18,
-        24,
-        w - 36,
-        200,
-        "Source",
-        "Time (ms)",
-        "E(t) (a.u.)"
-      );
-
-      const d1Plot = drawChartFrame(
-        18,
-        254,
-        w - 36,
-        200,
-        "D1 Photodetector",
-        "Time (ms)",
-        "I(t) (a.u.)"
-      );
-
-      const d2Plot = drawChartFrame(
-        18,
-        484,
-        w - 36,
-        200,
-        "D2 Photodetector",
-        "Time (ms)",
-        "I(t) (a.u.)"
-      );
+      const sourcePlot = drawChartFrame(18, 24, w - 36, 200, "Source", "Time (ms)", "E(t) (a.u.)");
+      const d1Plot = drawChartFrame(18, 254, w - 36, 200, "D1 Photodetector", "Time (ms)", "I(t) (a.u.)");
+      const d2Plot = drawChartFrame(18, 484, w - 36, 200, "D2 Photodetector", "Time (ms)", "I(t) (a.u.)");
 
       const sourcePoints = [];
       const d1Points = [];
