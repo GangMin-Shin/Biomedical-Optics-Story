@@ -743,11 +743,6 @@
                   \(\overline{D}\): 충분한 수의 dark frame을 평균한
                   pixel-wise dark image
                 </li>
-
-                <li>
-                  \(I_{\mathrm{raw}}\): Python 분석에 입력된
-                  dark-subtracted image
-                </li>
               </ul>
             </article>
 
@@ -761,17 +756,18 @@
                   \mu_I
                   =
                   \frac{1}{N}
-                  \sum_{i=1}^{N} I_i
+                  \sum_{i=1}^{N} I_{\mathrm{raw},i}
                 \]
               </div>
 
               <ul class="description-list">
                 <li>
-                  \(I_i\): ROI 내 \(i\)번째 pixel intensity
+                  \(I_{\mathrm{raw},i}\):
+                  \(I_{\mathrm{raw}}\)에서 ROI 내 \(i\)번째 pixel intensity
                 </li>
 
                 <li>
-                  \(N\): 전체 pixel 수, \(N=441\)
+                  \(N\): 전체 pixel 수
                 </li>
 
                 <li>
@@ -792,7 +788,7 @@
                   \frac{1}{N-1}
                   \sum_{i=1}^{N}
                   \left(
-                    I_i-\mu_I
+                    I_{\mathrm{raw},i}-\mu_I
                   \right)^2
                 \]
               </div>
@@ -801,10 +797,6 @@
                 <li>
                   \(\sigma_I^2\): 한 프레임 내 pixel intensity의
                   spatial variance
-                </li>
-
-                <li>
-                  \(N-1\): sample variance의 자유도 보정
                 </li>
               </ul>
             </article>
@@ -821,21 +813,6 @@
                   \frac{\sigma_I^2}{\mu_I^2}
                 \]
               </div>
-
-              <ul class="description-list">
-                <li>
-                  \(K_{\mathrm{raw}}^2\): noise correction 이전의
-                  squared speckle contrast
-                </li>
-
-                <li>
-                  \(\sigma_I^2\): raw image의 spatial variance
-                </li>
-
-                <li>
-                  \(\mu_I^2\): 평균 intensity의 제곱
-                </li>
-              </ul>
             </article>
 
           </div>
@@ -846,40 +823,6 @@
           <h2 class="section-title">Noise Components</h2>
 
           <div class="equation-list">
-
-            <article class="equation-row noise-row">
-              <div class="equation-name">
-                Raw Speckle Contrast
-              </div>
-
-              <div class="equation">
-                \[
-                  K_{\mathrm{raw}}^2
-                  =
-                  \frac{
-                    \sigma_{\mathrm{raw}}^2
-                  }{
-                    \mu_I^2
-                  }
-                \]
-              </div>
-
-              <ul class="definition-list">
-                <li>
-                  <span class="definition-symbol">
-                    \(\sigma_{\mathrm{raw}}^2\)
-                  </span>
-                  : raw image의 전체 spatial variance
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    \(K_{\mathrm{raw}}^2\)
-                  </span>
-                  : noise correction 이전의 squared contrast
-                </li>
-              </ul>
-            </article>
 
             <article class="equation-row noise-row">
               <div class="equation-name">
@@ -903,6 +846,13 @@
               <ul class="definition-list">
                 <li>
                   <span class="definition-symbol">
+                    Shot noise
+                  </span>
+                  : photon-counting Poisson noise
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
                     \(g\)
                   </span>
                   : inverse system gain,
@@ -915,13 +865,6 @@
                   </span>
                   : shot-noise variance,
                   \(\sigma_{\mathrm{shot}}^2=\mu_I/g\)
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    Shot noise
-                  </span>
-                  : photon-counting Poisson noise
                 </li>
               </ul>
             </article>
@@ -946,6 +889,13 @@
               <ul class="definition-list">
                 <li>
                   <span class="definition-symbol">
+                    Temporal dark noise
+                  </span>
+                  : exposure 중 detector에서 발생하는 temporal noise
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
                     \(\sigma_{\mathrm{dark,e^-}}\)
                   </span>
                   : temporal dark noise,
@@ -954,33 +904,9 @@
 
                 <li>
                   <span class="definition-symbol">
-                    \(\sigma_{\mathrm{dark,DN}}\)
+                    \(\sigma_{\mathrm{dark}}\)
                   </span>
-                  :
-                  \(\sigma_{\mathrm{dark,e^-}}/g\)
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    \(\sigma_{\mathrm{dark}}^2\)
-                  </span>
-                  :
-                  \[
-                    \left(
-                      \frac{
-                        \sigma_{\mathrm{dark,e^-}}
-                      }{
-                        g
-                      }
-                    \right)^2
-                  \]
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    Temporal dark noise
-                  </span>
-                  : exposure 중 detector에서 발생하는 temporal noise
+                  : \(\sigma_{\mathrm{dark,e^-}}/g\)
                 </li>
               </ul>
             </article>
@@ -1011,6 +937,13 @@
               <ul class="definition-list">
                 <li>
                   <span class="definition-symbol">
+                    Quantization noise
+                  </span>
+                  : ADC(Analog-to-Digital Converter)의 discrete DN 변환 오차
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
                     \(\Delta\)
                   </span>
                   : quantization step,
@@ -1023,21 +956,6 @@
                   </span>
                   : quantization-noise RMS,
                   \(\Delta/\sqrt{12}\)
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    \(\sigma_q^2\)
-                  </span>
-                  : quantization variance,
-                  \(\Delta^2/12=1/12\ \mathrm{DN^2}\)
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    Quantization noise
-                  </span>
-                  : ADC의 discrete DN 변환 오차
                 </li>
               </ul>
             </article>
