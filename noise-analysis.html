@@ -91,7 +91,9 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
+      width: 100%;
       margin-bottom: 28px;
     }
 
@@ -336,17 +338,36 @@
         minmax(0, 1fr)
         minmax(0, 1fr)
         minmax(0, 1fr);
-      align-items: start;
+      align-items: stretch;
       gap: 24px;
       margin-bottom: 50px;
     }
 
     .calculation-column {
+      display: flex;
+      flex-direction: column;
       min-width: 0;
     }
 
+    .calculation-column > .section-title {
+      align-self: flex-start;
+    }
+
     .equation-list {
-      display: grid;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .equation-list .equation-row {
+      flex: 1 1 0;
+    }
+
+    .correction-stack {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
       gap: 18px;
     }
 
@@ -496,6 +517,92 @@
     }
 
     /* =========================
+       Calculated noise table
+       ========================= */
+
+    .noise-value-box {
+      flex: 1;
+      min-width: 0;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.58);
+      border-left: 4px solid rgba(211, 140, 255, 0.90);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.28),
+        0 0 24px rgba(175, 100, 255, 0.11);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .noise-value-title {
+      margin: 0 0 16px;
+      font-size: 23px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .noise-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .noise-value-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .noise-value-table th,
+    .noise-value-table td {
+      padding: 10px 9px;
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      vertical-align: middle;
+    }
+
+    .noise-value-table th:last-child,
+    .noise-value-table td:last-child {
+      border-right: 0;
+    }
+
+    .noise-value-table tbody tr:last-child th,
+    .noise-value-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .noise-value-table thead th {
+      background: rgba(138, 79, 190, 0.34);
+      color: rgba(255, 255, 255, 0.98);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .noise-value-table tbody th {
+      width: 35%;
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(229, 190, 255, 0.98);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .noise-value-table td {
+      color: rgba(255, 255, 255, 0.84);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      word-break: break-word;
+    }
+
+    .table-note {
+      margin: 12px 0 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    /* =========================
        Responsive
        ========================= */
 
@@ -570,6 +677,11 @@
         align-items: stretch;
       }
 
+      .top-navigation .nav-button,
+      .top-navigation .submenu-tab {
+        flex: 1 1 100%;
+      }
+
       .nav-button,
       .submenu-tab {
         width: 100%;
@@ -593,7 +705,8 @@
 
       .configuration-item,
       .equation-row,
-      .final-equation-box {
+      .final-equation-box,
+      .noise-value-box {
         padding: 18px;
       }
 
@@ -622,7 +735,7 @@
 <body>
   <div class="page-container">
 
-```
+
 <nav class="top-navigation" aria-label="Page navigation">
   <a class="nav-button" href="index.html">
     ← Back to Homepage
@@ -1111,10 +1224,11 @@
         Speckle Contrast Correction
       </h2>
 
-      <div class="final-equation-box">
-        <h3 class="final-equation-title">
-          Noise-Corrected Speckle Contrast
-        </h3>
+      <div class="correction-stack">
+        <div class="final-equation-box">
+          <h3 class="final-equation-title">
+            Noise-Corrected Speckle Contrast
+          </h3>
 
         <div class="final-equation">
           \[
@@ -1155,15 +1269,77 @@
             \(K_q^2\):
             ADC quantization-noise contribution
           </li>
-        </ul>
+          </ul>
+        </div>
+
+        <div class="noise-value-box">
+          <h3 class="noise-value-title">Calculation Noise Value</h3>
+
+          <div class="noise-table-wrap">
+            <table class="noise-value-table">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">15 mm BFI</th>
+                  <th scope="col">20 mm BFI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Mean intensity [DN]</th>
+                  <td>1704.6 ± 364.238</td>
+                  <td>509.306 ± 123.637</td>
+                </tr>
+                <tr>
+                  <th scope="row">K<sub>raw</sub><sup>2</sup></th>
+                  <td>0.00591392 ± 0.00174922</td>
+                  <td>0.0140848 ± 0.00407063</td>
+                </tr>
+                <tr>
+                  <th scope="row">K<sub>shot</sub><sup>2</sup></th>
+                  <td>0.000255955 ± 5.67821×10<sup>−5</sup></td>
+                  <td>0.000865021 ± 0.000204289</td>
+                </tr>
+                <tr>
+                  <th scope="row">K<sub>dark/read</sub><sup>2</sup></th>
+                  <td>4.18947×10<sup>−5</sup> ± 1.88937×10<sup>−5</sup></td>
+                  <td>0.000481301 ± 0.000221198</td>
+                </tr>
+                <tr>
+                  <th scope="row">K<sub>q</sub><sup>2</sup></th>
+                  <td>3.29615×10<sup>−8</sup> ± 1.4865×10<sup>−8</sup></td>
+                  <td>3.78673×10<sup>−7</sup> ± 1.74032×10<sup>−7</sup></td>
+                </tr>
+                <tr>
+                  <th scope="row">Total noise K<sub>noise</sub><sup>2</sup></th>
+                  <td>0.000297882 ± 7.56074×10<sup>−5</sup></td>
+                  <td>0.0013467 ± 0.000425116</td>
+                </tr>
+                <tr>
+                  <th scope="row">Total noise fraction [%]</th>
+                  <td>5.59629 ± 1.52551</td>
+                  <td>9.63622 ± 0.559278</td>
+                </tr>
+                <tr>
+                  <th scope="row">K<sub>corr</sub><sup>2</sup></th>
+                  <td>0.00561604 ± 0.00173977</td>
+                  <td>0.0127381 ± 0.00365022</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="table-note">
+            Values are group mean ± standard deviation from the
+            <strong>table1_group_mean_sd</strong> worksheet.
+          </p>
+        </div>
       </div>
     </section>
 
   </div>
 
 </main>
-```
-
   </div>
 </body>
 </html>
