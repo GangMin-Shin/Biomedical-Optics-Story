@@ -121,7 +121,7 @@
        ========================= */
 
     .page-shell {
-      width: min(1750px, 97vw);
+      width: min(1800px, 96vw);
       margin: 0;
     }
 
@@ -316,7 +316,7 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding: 8px 2px 13px;
-      font-size: 23px;
+      font-size: 24px;
       line-height: 1.8;
       color: rgba(238, 218, 255, 0.99);
     }
@@ -379,7 +379,7 @@
 
     .final-equation-box {
       width: 100%;
-      padding: 30px 26px;
+      padding: 32px 30px;
       background:
         linear-gradient(
           135deg,
@@ -397,7 +397,6 @@
     .final-equation-title {
       margin: 0 0 18px;
       font-size: 23px;
-      line-height: 1.4;
       font-weight: 700;
       color: rgba(255, 255, 255, 0.97);
     }
@@ -407,7 +406,7 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding: 12px 3px;
-      font-size: 22px;
+      font-size: 27px;
       line-height: 1.8;
       color: rgba(242, 222, 255, 0.99);
     }
@@ -440,16 +439,21 @@
     @media screen and (max-width: 1450px) {
       .calculation-layout {
         grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+      }
+
+      .correction-column {
+        grid-column: 1 / -1;
+      }
+
+      .correction-column .final-equation-box {
+        max-width: 900px;
       }
     }
 
     @media screen and (max-width: 1200px) {
       .configuration-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .calculation-layout {
         grid-template-columns: 1fr;
       }
     }
@@ -476,12 +480,20 @@
         font-size: 42px;
       }
 
+      .calculation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .correction-column {
+        grid-column: auto;
+      }
+
       .equation {
         font-size: 22px;
       }
 
       .final-equation {
-        font-size: 21px;
+        font-size: 24px;
       }
     }
 
@@ -512,8 +524,7 @@
         padding: 18px;
       }
 
-      .equation-name,
-      .final-equation-title {
+      .equation-name {
         font-size: 20px;
       }
 
@@ -528,7 +539,7 @@
       }
 
       .final-equation {
-        font-size: 18px;
+        font-size: 19px;
       }
     }
   </style>
@@ -581,12 +592,12 @@
             <ul class="configuration-list">
               <li>
                 ROI:
-                <span class="highlight-value">21 × 21 pixels</span>
+                <span class="highlight-value">21 × 21 [pixel]</span>
               </li>
 
               <li>
                 Pixels per image:
-                <span class="highlight-value">441 pixels</span>
+                <span class="highlight-value">441 [pixel]</span>
               </li>
 
               <li>
@@ -604,12 +615,12 @@
             <ul class="configuration-list">
               <li>
                 Ch. 1:
-                <span class="highlight-value">15 mm SDS</span>
+                <span class="highlight-value">15 [mm] SDS</span>
               </li>
 
               <li>
                 Ch. 2:
-                <span class="highlight-value">20 mm SDS</span>
+                <span class="highlight-value">20 [mm] SDS</span>
               </li>
 
               <li>
@@ -642,14 +653,14 @@
               <li>
                 Resolution:
                 <span class="highlight-value">
-                  1282 × 1026 pixels
+                  1282 × 1026 [pixel]
                 </span>
               </li>
 
               <li>
                 Pixel size:
                 <span class="highlight-value">
-                  5.3 × 5.3 μm
+                  5.3 × 5.3 [μm]
                 </span>
               </li>
 
@@ -670,42 +681,42 @@
               <li>
                 Exposure time:
                 <span class="highlight-value">
-                  2 ms
+                  2 [ms]
                 </span>
               </li>
 
               <li>
                 Inverse system gain:
                 <span class="highlight-value">
-                  2.4 e⁻/DN
+                  2.4 [e⁻/DN]
                 </span>
               </li>
 
               <li>
                 Temporal dark noise:
                 <span class="highlight-value">
-                  24.7 e⁻
+                  24.7 [e⁻ RMS]
                 </span>
               </li>
 
               <li>
                 ADC bit depth:
                 <span class="highlight-value">
-                  12 bit
+                  12 [bit]
                 </span>
               </li>
 
               <li>
                 ADC range:
                 <span class="highlight-value">
-                  0–4095 DN
+                  0–4095 [DN]
                 </span>
               </li>
 
               <li>
                 Quantization step:
                 <span class="highlight-value">
-                  1 DN/LSB
+                  1 [DN/LSB]
                 </span>
               </li>
             </ul>
@@ -713,7 +724,8 @@
             <span class="parameter-note">
               ADC: Analog-to-Digital Converter,
               DN: Digital Number,
-              LSB: Least Significant Bit.
+              LSB: Least Significant Bit,
+              RMS: Root Mean Square.
             </span>
           </article>
 
@@ -746,16 +758,29 @@
 
               <ul class="description-list">
                 <li>
-                  \(I_{\mathrm{CCD}}\):
+                  \(I_{\mathrm{CCD}}\) [DN]:
                   CCD에서 측정된 pixel intensity
-                  \([\mathrm{DN}]\)
                 </li>
 
                 <li>
-                  \(\overline{D}\):
+                  \(\overline{D}\) [DN]:
                   충분한 수의 dark frame을 평균한
                   pixel-wise dark image
-                  \([\mathrm{DN}]\)
+                </li>
+
+                <li>
+                  \(I_{\mathrm{raw}}\) [DN]:
+                  평균 dark image가 차감된 pixel intensity
+                </li>
+
+                <li>
+                  \(x,y\) [pixel]:
+                  ROI 내부의 공간 좌표
+                </li>
+
+                <li>
+                  \(t\) [s]:
+                  영상이 측정된 시간
                 </li>
               </ul>
             </article>
@@ -776,22 +801,18 @@
 
               <ul class="description-list">
                 <li>
-                  \(I_{\mathrm{raw},i}\):
-                  \(I_{\mathrm{raw}}\)에서 ROI 내 \(i\)번째
-                  pixel intensity
-                  \([\mathrm{DN}]\)
+                  \(I_{\mathrm{raw},i}\) [DN]:
+                  \(I_{\mathrm{raw}}\)에서 ROI 내 \(i\)번째 pixel intensity
                 </li>
 
                 <li>
-                  \(N\):
+                  \(N\) [pixel]:
                   전체 pixel 수
-                  \([\mathrm{dimensionless}]\)
                 </li>
 
                 <li>
-                  \(\mu_I\):
+                  \(\mu_I\) [DN]:
                   프레임별 평균 intensity
-                  \([\mathrm{DN}]\)
                 </li>
               </ul>
             </article>
@@ -815,9 +836,8 @@
 
               <ul class="description-list">
                 <li>
-                  \(\sigma_I^2\):
+                  \(\sigma_I^2\) [DN²]:
                   한 프레임 내 pixel intensity의 spatial variance
-                  \([\mathrm{DN^2}]\)
                 </li>
               </ul>
             </article>
@@ -834,6 +854,13 @@
                   \frac{\sigma_I^2}{\mu_I^2}
                 \]
               </div>
+
+              <ul class="description-list">
+                <li>
+                  \(K_{\mathrm{raw}}^2\):
+                  noise 성분을 포함한 raw squared speckle contrast
+                </li>
+              </ul>
             </article>
 
           </div>
@@ -851,12 +878,6 @@
               </div>
 
               <div class="equation">
-                \[
-                  \sigma_{\mathrm{shot}}^2
-                  =
-                  \frac{\mu_I}{g}
-                \]
-
                 \[
                   K_{\mathrm{shot}}^2
                   =
@@ -880,35 +901,25 @@
 
                 <li>
                   <span class="definition-symbol">
-                    \(g\)
+                    \(g\) [e⁻/DN]
                   </span>
-                  : inverse system gain
-                  \([\,\mathrm{e^-/DN}\,]\),
-                  \(g=2.4\ \mathrm{e^-/DN}\)
+                  : inverse system gain,
+                  \(2.4\ \mathrm{[e^- / DN]}\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(\mu_I\)
+                    \(\mu_I\) [DN]
                   </span>
-                  : 평균 pixel intensity
-                  \([\mathrm{DN}]\)
+                  : 프레임별 평균 pixel intensity
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(\sigma_{\mathrm{shot}}^2\)
+                    \(\sigma_{\mathrm{shot}}^2\) [DN²]
                   </span>
-                  : shot-noise variance
-                  \([\mathrm{DN^2}]\)
-                </li>
-
-                <li>
-                  <span class="definition-symbol">
-                    \(K_{\mathrm{shot}}^2\)
-                  </span>
-                  : shot-noise contrast contribution
-                  \([\mathrm{dimensionless}]\)
+                  : shot-noise variance,
+                  \(\sigma_{\mathrm{shot}}^2=\mu_I/g\)
                 </li>
               </ul>
             </article>
@@ -920,28 +931,10 @@
 
               <div class="equation">
                 \[
-                  \sigma_{\mathrm{dark}}
-                  =
-                  \frac{
-                    \sigma_{\mathrm{dark,e^-}}
-                  }{
-                    g
-                  }
-                \]
-
-                \[
                   K_{\mathrm{dark}}^2
                   =
                   \frac{
                     \sigma_{\mathrm{dark}}^2
-                  }{
-                    \mu_I^2
-                  }
-                  =
-                  \frac{
-                    \left(
-                      \sigma_{\mathrm{dark,e^-}}/g
-                    \right)^2
                   }{
                     \mu_I^2
                   }
@@ -958,27 +951,25 @@
 
                 <li>
                   <span class="definition-symbol">
-                    \(\sigma_{\mathrm{dark,e^-}}\)
+                    \(\sigma_{\mathrm{dark,e^-}}\) [e⁻ RMS]
                   </span>
-                  : 카메라 사양의 temporal dark noise
-                  \([\mathrm{e^-}]\),
-                  \(\sigma_{\mathrm{dark,e^-}}=24.7\ \mathrm{e^-}\)
+                  : electron domain의 temporal dark noise,
+                  \(24.7\ \mathrm{[e^- RMS]}\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(\sigma_{\mathrm{dark}}\)
+                    \(\sigma_{\mathrm{dark}}\) [DN RMS]
                   </span>
-                  : DN 단위로 환산한 temporal dark noise
-                  \([\mathrm{DN}]\)
+                  : DN domain의 temporal dark noise,
+                  \(\sigma_{\mathrm{dark,e^-}}/g\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(K_{\mathrm{dark}}^2\)
+                    \(\sigma_{\mathrm{dark}}^2\) [DN²]
                   </span>
-                  : temporal dark-noise contrast contribution
-                  \([\mathrm{dimensionless}]\)
+                  : temporal dark-noise variance
                 </li>
               </ul>
             </article>
@@ -989,12 +980,6 @@
               </div>
 
               <div class="equation">
-                \[
-                  \sigma_q
-                  =
-                  \frac{\Delta}{\sqrt{12}}
-                \]
-
                 \[
                   K_q^2
                   =
@@ -1017,34 +1002,31 @@
                   <span class="definition-symbol">
                     Quantization noise
                   </span>
-                  :
-                  ADC(Analog-to-Digital Converter)의
-                  discrete DN 변환 오차
+                  : ADC(Analog-to-Digital Converter)의 discrete DN 변환 오차
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(\Delta\)
+                    \(\Delta\) [DN/LSB]
                   </span>
-                  : quantization step
-                  \([\mathrm{DN}]\),
-                  \(\Delta=1\ \mathrm{DN/LSB}\)
+                  : quantization step,
+                  \(1\ \mathrm{[DN/LSB]}\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(\sigma_q\)
+                    \(\sigma_q\) [DN RMS]
                   </span>
-                  : quantization-noise RMS
-                  \([\mathrm{DN}]\)
+                  : quantization-noise RMS,
+                  \(\Delta/\sqrt{12}\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
-                    \(K_q^2\)
+                    \(\sigma_q^2\) [DN²]
                   </span>
-                  : quantization-noise contrast contribution
-                  \([\mathrm{dimensionless}]\)
+                  : quantization-noise variance,
+                  \(\Delta^2/12\)
                 </li>
               </ul>
             </article>
@@ -1053,7 +1035,7 @@
         </section>
 
         <!-- Speckle Contrast Correction -->
-        <section class="calculation-column">
+        <section class="calculation-column correction-column">
           <h2 class="section-title">
             Speckle Contrast Correction
           </h2>
@@ -1067,35 +1049,13 @@
               \[
                 K_f^2
                 =
-                \frac{
-                  \max\left(
-                    \sigma_I^2
-                    -
-                    \sigma_{\mathrm{shot}}^2
-                    -
-                    \sigma_{\mathrm{dark}}^2
-                    -
-                    \sigma_q^2,
-                    0
-                  \right)
-                }{
-                  \mu_I^2
-                }
-              \]
-
-              \[
-                K_f^2
-                =
-                \max\left(
-                  K_{\mathrm{raw}}^2
-                  -
-                  K_{\mathrm{shot}}^2
-                  -
-                  K_{\mathrm{dark}}^2
-                  -
-                  K_q^2,
-                  0
-                \right)
+                K_{\mathrm{raw}}^2
+                -
+                K_{\mathrm{shot}}^2
+                -
+                K_{\mathrm{dark}}^2
+                -
+                K_q^2
               \]
             </div>
 
@@ -1103,38 +1063,26 @@
               <li>
                 \(K_f^2\):
                 혈류에 의해 형성된 실제 동적 speckle contrast
-                \([\mathrm{dimensionless}]\)
               </li>
 
               <li>
                 \(K_{\mathrm{raw}}^2\):
-                noise correction 이전의 squared speckle contrast
-                \([\mathrm{dimensionless}]\)
+                측정된 raw squared speckle contrast
               </li>
 
               <li>
                 \(K_{\mathrm{shot}}^2\):
                 shot-noise contribution
-                \([\mathrm{dimensionless}]\)
               </li>
 
               <li>
                 \(K_{\mathrm{dark}}^2\):
                 temporal dark-noise contribution
-                \([\mathrm{dimensionless}]\)
               </li>
 
               <li>
                 \(K_q^2\):
                 ADC quantization-noise contribution
-                \([\mathrm{dimensionless}]\)
-              </li>
-
-              <li>
-                \(\max(\cdot,0)\):
-                보정된 분산이 음수가 되지 않도록 적용한
-                clipping operation
-                \([\mathrm{dimensionless}]\)
               </li>
             </ul>
           </div>
