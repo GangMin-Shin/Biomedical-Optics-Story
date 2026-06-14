@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Machine Vision</title>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]]
+      },
+      svg: {
+        fontCache: "global"
+      }
+    };
+  </script>
+
+  <script
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: white;
+      overflow-x: hidden;
+      background-color: #000;
+    }
+
+    body {
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        url("images/Noise%20analysis%20background.jpg")
+        center / cover no-repeat;
+      opacity: 0.7;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 14% 16%,
+          rgba(75, 155, 255, 0.18),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 82% 28%,
+          rgba(177, 100, 255, 0.14),
+          transparent 32%
+        ),
+        linear-gradient(
+          rgba(0, 0, 0, 0.42),
+          rgba(0, 0, 0, 0.90)
+        );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      padding: 34px;
+    }
+
+    /* =========================
+       Navigation
+       ========================= */
+
+    .top-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .nav-button,
+    .submenu-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .nav-button {
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-3px);
+      box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
+    }
+
+    .submenu-tab {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(116, 70, 180, 0.60),
+          rgba(38, 94, 158, 0.52)
+        );
+      border: 1px solid rgba(211, 170, 255, 0.72);
+    }
+
+    .submenu-tab:hover {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(135, 78, 205, 0.76),
+          rgba(43, 112, 185, 0.68)
+        );
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(188, 120, 255, 0.38);
+    }
+
+    .submenu-tab.active {
+      border-color: rgba(225, 195, 255, 1);
+      box-shadow:
+        0 0 18px rgba(188, 120, 255, 0.42),
+        inset 0 0 16px rgba(255, 255, 255, 0.07);
+    }
+
+    .tab-icon {
+      margin-right: 8px;
+    }
+
+    /* =========================
+       Main layout
+       ========================= */
+
+    .page-shell {
+      width: min(1680px, 96vw);
+      margin: 0;
+    }
+
+    .page-header {
+      max-width: 1150px;
+      margin-bottom: 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 4.5vw, 64px);
+      line-height: 1.15;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow:
+        0 0 8px rgba(125, 190, 255, 0.70),
+        0 0 18px rgba(125, 190, 255, 0.42),
+        0 0 30px rgba(150, 80, 255, 0.25);
+    }
+
+    .header-line {
+      width: min(360px, 72vw);
+      height: 2px;
+      margin-top: 18px;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(120, 200, 255, 0.98),
+          rgba(190, 125, 255, 0.55),
+          transparent
+        );
+      box-shadow: 0 0 12px rgba(120, 190, 255, 0.55);
+    }
+
+    .header-description {
+      margin: 22px 0 0;
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    /* =========================
+       Local index
+       ========================= */
+
+    .local-index {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 42px;
+    }
+
+    .index-link {
+      padding: 9px 14px;
+      border-radius: 7px;
+      color: rgba(235, 244, 255, 0.94);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(20, 35, 60, 0.64);
+      border: 1px solid rgba(120, 190, 255, 0.38);
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .index-link:hover {
+      transform: translateY(-2px);
+      background: rgba(45, 77, 122, 0.72);
+      box-shadow: 0 0 14px rgba(100, 180, 255, 0.22);
+    }
+
+    /* =========================
+       Common section
+       ========================= */
+
+    .content-section {
+      margin-bottom: 54px;
+      scroll-margin-top: 24px;
+    }
+
+    .section-title {
+      display: inline-block;
+      margin: 0 0 24px;
+      padding-bottom: 8px;
+      font-size: clamp(25px, 2.4vw, 34px);
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.98);
+      border-bottom: 2px solid rgba(120, 190, 255, 0.76);
+      text-shadow:
+        0 0 8px rgba(120, 190, 255, 0.48),
+        0 0 16px rgba(175, 100, 255, 0.22);
+    }
+
+    .subsection-title {
+      margin: 0 0 14px;
+      font-size: 22px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .three-column-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .content-card {
+      min-width: 0;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.54);
+      border-top: 2px solid rgba(120, 190, 255, 0.68);
+      box-shadow:
+        0 9px 26px rgba(0, 0, 0, 0.25),
+        0 0 18px rgba(80, 160, 255, 0.07);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .purple-card {
+      border-top-color: rgba(211, 140, 255, 0.76);
+    }
+
+    .warning-card {
+      border-left: 4px solid rgba(255, 190, 90, 0.92);
+      border-top: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(70, 43, 15, 0.68),
+          rgba(17, 20, 35, 0.72)
+        );
+    }
+
+    .card-text {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.81);
+    }
+
+    .information-list {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .information-list li {
+      margin: 8px 0;
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.81);
+    }
+
+    .information-list li::marker {
+      color: rgba(130, 205, 255, 0.92);
+    }
+
+    .purple-card .information-list li::marker {
+      color: rgba(215, 155, 255, 0.95);
+    }
+
+    .term {
+      color: #d9a7ff;
+      font-weight: 700;
+    }
+
+    .blue-term {
+      color: #8fd3ff;
+      font-weight: 700;
+    }
+
+    /* =========================
+       Camera specification table
+       ========================= */
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      background: rgba(0, 0, 0, 0.52);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.24);
+    }
+
+    .spec-table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+    }
+
+    .spec-table th,
+    .spec-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: left;
+      vertical-align: top;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .spec-table th {
+      color: rgba(238, 246, 255, 0.98);
+      background: rgba(66, 112, 166, 0.34);
+      font-weight: 700;
+    }
+
+    .spec-table td {
+      color: rgba(255, 255, 255, 0.80);
+    }
+
+    .spec-table tbody tr:hover {
+      background: rgba(90, 150, 210, 0.10);
+    }
+
+    /* =========================
+       Measurement workflow
+       ========================= */
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .workflow-step {
+      position: relative;
+      min-width: 0;
+      padding: 21px 18px;
+      background:
+        linear-gradient(
+          150deg,
+          rgba(28, 52, 85, 0.74),
+          rgba(41, 23, 62, 0.68)
+        );
+      border: 1px solid rgba(130, 195, 255, 0.32);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    }
+
+    .workflow-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 13px;
+      border-radius: 50%;
+      background: rgba(125, 190, 255, 0.20);
+      border: 1px solid rgba(135, 205, 255, 0.62);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .workflow-step h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .workflow-step p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* =========================
+       Equations
+       ========================= */
+
+    .equation-box {
+      margin-top: 17px;
+      padding: 18px;
+      overflow-x: auto;
+      background: rgba(18, 24, 40, 0.72);
+      border-left: 3px solid rgba(211, 140, 255, 0.75);
+      color: rgba(241, 224, 255, 0.98);
+      font-size: 22px;
+      line-height: 1.8;
+    }
+
+    .equation-box mjx-container {
+      margin: 0 !important;
+      text-align: left !important;
+    }
+
+    /* =========================
+       Metric cards
+       ========================= */
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .metric-card {
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.54);
+      border-left: 3px solid rgba(211, 140, 255, 0.74);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.22),
+        0 0 16px rgba(175, 100, 255, 0.07);
+    }
+
+    .metric-card h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .metric-card p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .unit-label {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      font-size: 13px;
+      color: rgba(228, 241, 255, 0.90);
+      background: rgba(90, 150, 210, 0.20);
+      border: 1px solid rgba(120, 190, 255, 0.28);
+    }
+
+    /* =========================
+       Source
+       ========================= */
+
+    .source-box {
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.58);
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .source-box p {
+      margin: 6px 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.67);
+    }
+
+    /* =========================
+       Responsive
+       ========================= */
+
+    @media screen and (max-width: 1300px) {
+      .workflow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media screen and (max-width: 1000px) {
+      .content-grid,
+      .three-column-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media screen and (max-width: 760px) {
+      .page-container {
+        padding: 22px;
+      }
+
+      .page-shell {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .metric-grid,
+      .workflow {
+        grid-template-columns: 1fr;
+      }
+
+      .equation-box {
+        font-size: 19px;
+      }
+    }
+
+    @media screen and (max-width: 520px) {
+      .page-container {
+        padding: 16px;
+      }
+
+      .top-navigation {
+        align-items: stretch;
+      }
+
+      .nav-button,
+      .submenu-tab {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .header-description {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 25px;
+      }
+
+      .content-card,
+      .metric-card,
+      .workflow-step {
+        padding: 18px;
+      }
+
+      .card-text,
+      .information-list li {
+        font-size: 15px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="page-container">
+
+```
+<nav class="top-navigation" aria-label="Page navigation">
+  <a class="nav-button" href="index.html">
+    ← Back to Homepage
+  </a>
+
+  <a class="nav-button" href="noise-analysis.html">
+    ← Back to Noise Analysis
+  </a>
+
+  <a class="submenu-tab active" href="machine-vision.html">
+    <span class="tab-icon" aria-hidden="true">▣</span>
+    Machine Vision
+  </a>
+</nav>
+
+<main class="page-shell">
+
+  <header class="page-header">
+    <h1>Machine Vision</h1>
+    <div class="header-line"></div>
+
+    <p class="header-description">
+      Basler acA1300-60gm 카메라의 하드웨어 특성과 머신비전 카메라의
+      객관적 성능 평가에 사용되는 EMVA 1288 표준을 정리합니다.
+    </p>
+  </header>
+
+  <nav class="local-index" aria-label="Machine Vision contents">
+    <a class="index-link" href="#camera-overview">
+      Camera Overview
+    </a>
+
+    <a class="index-link" href="#camera-specifications">
+      Camera Specifications
+    </a>
+
+    <a class="index-link" href="#camera-family">
+      Related Models
+    </a>
+
+    <a class="index-link" href="#emva-introduction">
+      EMVA 1288
+    </a>
+
+    <a class="index-link" href="#measurement-method">
+      Measurement Method
+    </a>
+
+    <a class="index-link" href="#emva-parameters">
+      EMVA Parameters
+    </a>
+
+    <a class="index-link" href="#dsca-interpretation">
+      DSCA Interpretation
+    </a>
+  </nav>
+
+  <section class="content-section" id="camera-overview">
+    <h2 class="section-title">
+      Basler acA1300-60gm
+    </h2>
+
+    <div class="content-grid">
+
+      <article class="content-card">
+        <h3 class="subsection-title">Camera Overview</h3>
+
+        <p class="card-text">
+          Basler acA1300-60gm은 Basler ace Classic 계열에 포함되는
+          monochrome area-scan industrial camera입니다. e2v
+          EV76C560 CMOS image sensor를 사용하며, 기본 전체 해상도에서
+          최대 60 fps의 영상을 GigE 인터페이스로 전송합니다.
+        </p>
+
+        <ul class="information-list">
+          <li>
+            <span class="blue-term">Area-scan camera</span>:
+            한 번의 exposure로 2차원 영상을 획득하는 카메라
+          </li>
+
+          <li>
+            <span class="blue-term">CMOS</span>:
+            Complementary Metal-Oxide-Semiconductor
+          </li>
+
+          <li>
+            <span class="blue-term">GigE</span>:
+            Gigabit Ethernet 기반 영상 전송 인터페이스
+          </li>
+
+          <li>
+            <span class="blue-term">Monochrome</span>:
+            Bayer color filter가 없는 흑백 영상 센서 구성
+          </li>
+        </ul>
+      </article>
+
+      <article class="content-card warning-card">
+        <h3 class="subsection-title">
+          일반형과 NIR 모델의 구분
+        </h3>
+
+        <p class="card-text">
+          acA1300-60gm과 acA1300-60gmNIR은 이름이 유사하지만 센서와
+          spectral response가 서로 다른 모델입니다.
+        </p>
+
+        <ul class="information-list">
+          <li>
+            <span class="term">acA1300-60gm</span>:
+            EV76C560 sensor, visible 모델
+          </li>
+
+          <li>
+            <span class="term">acA1300-60gmNIR</span>:
+            EV76C661 sensor, NIR-enhanced 모델
+          </li>
+
+          <li>
+            785 nm 또는 808 nm 측정 시스템에서 실제 카메라가
+            NIR 모델인지 일반형인지 제품 라벨과 serial 정보를 통해
+            반드시 확인해야 합니다.
+          </li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="content-section" id="camera-specifications">
+    <h2 class="section-title">
+      Camera Specifications
+    </h2>
+
+    <div class="table-wrapper">
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>acA1300-60gm</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Camera family</td>
+            <td>Basler ace Classic</td>
+            <td>산업용 area-scan camera 제품군</td>
+          </tr>
+
+          <tr>
+            <td>Sensor</td>
+            <td>e2v EV76C560 ABT</td>
+            <td>Progressive-scan CMOS image sensor</td>
+          </tr>
+
+          <tr>
+            <td>Resolution</td>
+            <td>1282 × 1026 [pixel]</td>
+            <td>약 1.3 megapixel의 전체 영상 해상도</td>
+          </tr>
+
+          <tr>
+            <td>Pixel size</td>
+            <td>5.3 × 5.3 [μm]</td>
+            <td>단일 pixel의 물리적 pitch</td>
+          </tr>
+
+          <tr>
+            <td>Sensor format</td>
+            <td>1/1.8 inch</td>
+            <td>렌즈 선택에 사용되는 광학 format</td>
+          </tr>
+
+          <tr>
+            <td>Sensor diagonal</td>
+            <td>약 8.7 [mm]</td>
+            <td>유효 영상 센서의 대각선 길이</td>
+          </tr>
+
+          <tr>
+            <td>Sensor size</td>
+            <td>약 6.8 × 5.4 [mm]</td>
+            <td>유효 영상 감지 영역의 크기</td>
+          </tr>
+
+          <tr>
+            <td>Frame rate</td>
+            <td>60 [fps]</td>
+            <td>기본 전체 해상도 설정에서의 최대 frame rate</td>
+          </tr>
+
+          <tr>
+            <td>Shutter</td>
+            <td>Global / Rolling</td>
+            <td>소프트웨어를 이용하여 shutter mode 선택 가능</td>
+          </tr>
+
+          <tr>
+            <td>Spectrum</td>
+            <td>Visible</td>
+            <td>일반형 모델의 공식 spectral category</td>
+          </tr>
+
+          <tr>
+            <td>Image type</td>
+            <td>Monochrome</td>
+            <td>단일 intensity channel 영상 출력</td>
+          </tr>
+
+          <tr>
+            <td>Interface</td>
+            <td>Gigabit Ethernet</td>
+            <td>GigE Vision 기반 영상 및 제어 데이터 전송</td>
+          </tr>
+
+          <tr>
+            <td>Trigger modes</td>
+            <td>Free-run / software / hardware</td>
+            <td>내부 연속 취득 또는 외부 동기 신호 기반 취득</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="content-section" id="camera-family">
+    <h2 class="section-title">
+      Related Camera Models
+    </h2>
+
+    <div class="three-column-grid">
+
+      <article class="content-card">
+        <h3 class="subsection-title">
+          acA1300-60gm
+        </h3>
+
+        <ul class="information-list">
+          <li>Sensor: EV76C560</li>
+          <li>Spectrum: Visible</li>
+          <li>Resolution: 1.3 MP</li>
+          <li>Frame rate: 60 fps</li>
+          <li>Interface: GigE</li>
+        </ul>
+      </article>
+
+      <article class="content-card purple-card">
+        <h3 class="subsection-title">
+          acA1300-60gmNIR
+        </h3>
+
+        <ul class="information-list">
+          <li>Sensor: EV76C661</li>
+          <li>Spectrum: Visible + NIR enhanced</li>
+          <li>Nominal wavelength range: 약 0.4–1.1 [μm]</li>
+          <li>Resolution: 1.3 MP</li>
+          <li>Frame rate: 60 fps</li>
+        </ul>
+      </article>
+
+      <article class="content-card">
+        <h3 class="subsection-title">
+          acA1300-75gm
+        </h3>
+
+        <ul class="information-list">
+          <li>Sensor: onsemi PYTHON 1300</li>
+          <li>같은 1.3 MP급 GigE area-scan 계열</li>
+          <li>최대 frame rate가 더 높은 대안 모델</li>
+          <li>센서와 noise 특성은 60gm과 동일하지 않음</li>
+        </ul>
+      </article>
+
+    </div>
+
+    <article class="content-card warning-card" style="margin-top: 20px;">
+      <h3 class="subsection-title">
+        비슷한 해상도는 동일한 성능을 의미하지 않습니다
+      </h3>
+
+      <p class="card-text">
+        해상도와 frame rate가 유사하더라도 quantum efficiency,
+        temporal dark noise, saturation capacity, sensor gain,
+        fixed-pattern noise 및 spectral response가 다를 수 있습니다.
+        따라서 DSCA 또는 SCOS용 카메라는 모델명뿐 아니라 해당 카메라의
+        EMVA 1288 데이터를 함께 비교해야 합니다.
+      </p>
+    </article>
+  </section>
+
+  <section class="content-section" id="emva-introduction">
+    <h2 class="section-title">
+      What Is EMVA Data?
+    </h2>
+
+    <div class="content-grid">
+
+      <article class="content-card purple-card">
+        <h3 class="subsection-title">
+          EMVA의 의미
+        </h3>
+
+        <p class="card-text">
+          <span class="term">EMVA</span>는
+          <span class="term">
+            European Machine Vision Association
+          </span>의 약자입니다. 유럽을 중심으로 머신비전 산업의
+          기술 표준화와 산업 협력을 추진하는 조직입니다.
+        </p>
+      </article>
+
+      <article class="content-card">
+        <h3 class="subsection-title">
+          EMVA 1288의 의미
+        </h3>
+
+        <p class="card-text">
+          <span class="blue-term">EMVA 1288</span>은 머신비전용
+          image sensor와 camera의 성능을 측정하고 계산하며 결과를
+          표시하는 방법을 정의한 표준입니다. 제조사마다 서로 다른
+          조건과 용어로 제시하던 카메라 성능을 공통 기준으로 비교하기
+          위해 만들어졌습니다.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="content-grid" style="margin-top: 20px;">
+
+      <article class="content-card">
+        <h3 class="subsection-title">
+          EMVA Data가 필요한 이유
+        </h3>
+
+        <ul class="information-list">
+          <li>
+            카메라의 감도와 noise를 객관적으로 비교할 수 있습니다.
+          </li>
+
+          <li>
+            단순 ADC bit depth와 실제 유효 sensitivity를 구분할 수 있습니다.
+          </li>
+
+          <li>
+            camera output DN을 photoelectron 수로 환산할 근거를 제공합니다.
+          </li>
+
+          <li>
+            shot noise, dark noise 및 saturation 특성을 정량화할 수 있습니다.
+          </li>
+
+          <li>
+            특정 실험에 적합한 exposure와 intensity 범위를 설정할 수 있습니다.
+          </li>
+        </ul>
+      </article>
+
+      <article class="content-card purple-card">
+        <h3 class="subsection-title">
+          현재 표준 구조
+        </h3>
+
+        <ul class="information-list">
+          <li>
+            <span class="term">Release 4.0 Linear</span>:
+            선형 반응을 가지며 전처리가 제한된 카메라 평가
+          </li>
+
+          <li>
+            <span class="term">Release 4.0 General</span>:
+            비선형 response, 내부 전처리, 렌즈 포함 시스템 및
+            multimodal sensor를 포함하는 확장 평가
+          </li>
+
+          <li>
+            Release 4.0은 기존 Release 3.1을 대체하는 공식 체계입니다.
+          </li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="content-section" id="measurement-method">
+    <h2 class="section-title">
+      How EMVA 1288 Is Measured
+    </h2>
+
+    <div class="workflow">
+
+      <article class="workflow-step">
+        <div class="workflow-number">1</div>
+        <h3>Stable Illumination</h3>
+        <p>
+          균일하고 안정적인 광원을 사용하여 sensor plane에
+          알려진 photon exposure를 제공합니다.
+        </p>
+      </article>
+
+      <article class="workflow-step">
+        <div class="workflow-number">2</div>
+        <h3>Bright Frames</h3>
+        <p>
+          여러 illumination level에서 복수의 illuminated frame을
+          획득합니다.
+        </p>
+      </article>
+
+      <article class="workflow-step">
+        <div class="workflow-number">3</div>
+        <h3>Dark Frames</h3>
+        <p>
+          광 입력을 차단한 상태에서 dark frame을 획득하여
+          offset과 temporal dark noise를 측정합니다.
+        </p>
+      </article>
+
+      <article class="workflow-step">
+        <div class="workflow-number">4</div>
+        <h3>Mean and Variance</h3>
+        <p>
+          각 광량에서 평균 DN, temporal variance 및 spatial
+          variation을 계산합니다.
+        </p>
+      </article>
+
+      <article class="workflow-step">
+        <div class="workflow-number">5</div>
+        <h3>Model Fitting</h3>
+        <p>
+          photon transfer model을 이용해 gain, quantum efficiency,
+          noise 및 saturation parameter를 추정합니다.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="content-grid" style="margin-top: 20px;">
+
+      <article class="content-card">
+        <h3 class="subsection-title">
+          균일 조명의 중요성
+        </h3>
+
+        <p class="card-text">
+          Pixel response의 spatial variation을 측정하려면 센서 전체에
+          가능한 한 균일한 irradiance가 입사해야 합니다. 조명 자체의
+          불균일성이 크면 카메라의 PRNU와 광원의 nonuniformity를
+          구분하기 어려워집니다.
+        </p>
+      </article>
+
+      <article class="content-card purple-card">
+        <h3 class="subsection-title">
+          복수 프레임이 필요한 이유
+        </h3>
+
+        <p class="card-text">
+          한 장의 영상만으로는 시간에 따라 변하는 temporal noise와
+          pixel마다 고정된 spatial nonuniformity를 분리할 수 없습니다.
+          동일 조건에서 여러 frame을 획득해야 frame-to-frame variance와
+          pixel-to-pixel variation을 각각 계산할 수 있습니다.
+        </p>
+      </article>
+
+    </div>
+
+    <article class="content-card" style="margin-top: 20px;">
+      <h3 class="subsection-title">
+        기본 광전자 변환 모델
+      </h3>
+
+      <p class="card-text">
+        입사 photon은 quantum efficiency에 따라 photoelectron으로
+        변환되고, camera electronics를 통과한 뒤 digital number로
+        출력됩니다.
+      </p>
+
+      <div class="equation-box">
+        \[
+          \mu_e
+          =
+          \eta \mu_p
+        \]
+      </div>
+
+      <div class="equation-box">
+        \[
+          \mu_y
+          =
+          K\mu_e+\mu_{y,\mathrm{dark}}
+        \]
+      </div>
+
+      <ul class="information-list">
+        <li>
+          \(\mu_p\) [photon/pixel]:
+          pixel에 입사한 평균 photon 수
+        </li>
+
+        <li>
+          \(\eta\) [e⁻/photon]:
+          quantum efficiency
+        </li>
+
+        <li>
+          \(\mu_e\) [e⁻]:
+          생성된 평균 photoelectron 수
+        </li>
+
+        <li>
+          \(K\) [DN/e⁻]:
+          system gain 또는 conversion gain
+        </li>
+
+        <li>
+          \(\mu_y\) [DN]:
+          평균 camera output
+        </li>
+
+        <li>
+          \(\mu_{y,\mathrm{dark}}\) [DN]:
+          dark offset
+        </li>
+      </ul>
+    </article>
+
+    <article class="content-card purple-card" style="margin-top: 20px;">
+      <h3 class="subsection-title">
+        Photon Transfer Curve
+      </h3>
+
+      <p class="card-text">
+        PTC(Photon Transfer Curve)는 평균 신호와 temporal variance의
+        관계를 이용하여 camera gain과 noise 특성을 구하는 방법입니다.
+        shot-noise-dominant linear region에서는 variance가 평균 신호에
+        거의 선형적으로 비례합니다.
+      </p>
+
+      <div class="equation-box">
+        \[
+          \sigma_y^2
+          \approx
+          K
+          \left(
+            \mu_y-\mu_{y,\mathrm{dark}}
+          \right)
+          +
+          \sigma_{y,\mathrm{dark}}^2
+        \]
+      </div>
+
+      <ul class="information-list">
+        <li>
+          \(\sigma_y^2\) [DN²]:
+          illuminated frame의 temporal variance
+        </li>
+
+        <li>
+          \(K\) [DN/e⁻]:
+          variance-mean curve의 linear region 기울기
+        </li>
+
+        <li>
+          \(\sigma_{y,\mathrm{dark}}\) [DN RMS]:
+          temporal dark noise
+        </li>
+
+        <li>
+          \(g=1/K\) [e⁻/DN]:
+          inverse system gain
+        </li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="content-section" id="emva-parameters">
+    <h2 class="section-title">
+      Main EMVA 1288 Parameters
+    </h2>
+
+    <div class="metric-grid">
+
+      <article class="metric-card">
+        <h3>Quantum Efficiency</h3>
+        <p>
+          입사 photon 중 검출 가능한 photoelectron으로 변환된 비율입니다.
+          파장에 따라 달라지므로 사용 wavelength에서 확인해야 합니다.
+        </p>
+        <span class="unit-label">\(\eta\) [e⁻/photon] 또는 [%]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>System Gain</h3>
+        <p>
+          sensor electron 수가 camera digital output으로 변환되는
+          비율입니다. DN/e⁻와 그 역수인 e⁻/DN을 구분해야 합니다.
+        </p>
+        <span class="unit-label">\(K\) [DN/e⁻]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Inverse System Gain</h3>
+        <p>
+          1 DN이 평균적으로 몇 개의 electron에 해당하는지를 나타냅니다.
+          shot-noise variance를 DN domain에서 계산할 때 사용됩니다.
+        </p>
+        <span class="unit-label">\(g=1/K\) [e⁻/DN]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Temporal Dark Noise</h3>
+        <p>
+          광 입력이 없는 상태에서 동일 pixel output이 시간에 따라
+          변동하는 RMS noise입니다. Read noise를 포함하는 camera-level
+          dark temporal noise로 해석됩니다.
+        </p>
+        <span class="unit-label">\(\sigma_d\) [e⁻ RMS]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Saturation Capacity</h3>
+        <p>
+          출력이 saturation에 도달하기 전에 pixel이 유효하게 저장하거나
+          표현할 수 있는 최대 signal electron 수입니다.
+        </p>
+        <span class="unit-label">\(\mu_{e,\mathrm{sat}}\) [e⁻]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Absolute Sensitivity Threshold</h3>
+        <p>
+          신호가 noise와 구분될 수 있는 최소 incident photon exposure를
+          나타내는 sensitivity 지표입니다.
+        </p>
+        <span class="unit-label">\(\mu_{p,\min}\) [photon/pixel]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Signal-to-Noise Ratio</h3>
+        <p>
+          평균 signal과 전체 temporal noise의 비율입니다. 광량이 증가하면
+          증가하지만 saturation에 가까워지면 더 이상 정상적인 선형 관계를
+          유지하지 못합니다.
+        </p>
+        <span class="unit-label">SNR: Signal-to-Noise Ratio</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Dynamic Range</h3>
+        <p>
+          saturation signal과 최소 검출 가능 signal 사이의 범위를
+          나타냅니다. ADC bit depth와 같은 개념이 아닙니다.
+        </p>
+        <span class="unit-label">DR [dB]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>DSNU</h3>
+        <p>
+          Dark Signal Non-Uniformity의 약자입니다. 균일한 dark condition에서
+          pixel별 dark offset이 서로 다른 정도를 나타냅니다.
+        </p>
+        <span class="unit-label">DSNU [e⁻]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>PRNU</h3>
+        <p>
+          Photo Response Non-Uniformity의 약자입니다. 균일 조명에서
+          pixel마다 sensitivity가 서로 다른 정도를 나타냅니다.
+        </p>
+        <span class="unit-label">PRNU [%]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Dark Current</h3>
+        <p>
+          광자가 입사하지 않아도 열적 과정 등에 의해 생성되는 electron의
+          증가율입니다. Exposure time과 sensor temperature의 영향을 받습니다.
+        </p>
+        <span class="unit-label">Dark current [e⁻/pixel/s]</span>
+      </article>
+
+      <article class="metric-card">
+        <h3>Linearity</h3>
+        <p>
+          incident exposure와 camera output 사이의 관계가 이상적인 직선에서
+          얼마나 벗어나는지를 나타냅니다.
+        </p>
+        <span class="unit-label">Linearity error [%]</span>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="content-section" id="dsca-interpretation">
+    <h2 class="section-title">
+      Interpretation for DSCA
+    </h2>
+
+    <div class="content-grid">
+
+      <article class="content-card">
+        <h3 class="subsection-title">
+          Shot-noise 계산
+        </h3>
+
+        <p class="card-text">
+          평균 intensity가 DN 단위이고 inverse system gain이
+          \(g\) [e⁻/DN]일 때, Poisson shot-noise variance를 DN domain으로
+          변환하면 다음과 같이 표현할 수 있습니다.
+        </p>
+
+        <div class="equation-box">
+          \[
+            \sigma_{\mathrm{shot}}^2
+            =
+            \frac{\mu_I}{g}
+            \quad [\mathrm{DN^2}]
+          \]
+        </div>
+
+        <div class="equation-box">
+          \[
+            K_{\mathrm{shot}}^2
+            =
+            \frac{1}{g\mu_I}
+          \]
+        </div>
+      </article>
+
+      <article class="content-card purple-card">
+        <h3 class="subsection-title">
+          Dark-noise 변환
+        </h3>
+
+        <p class="card-text">
+          EMVA temporal dark noise가 electron RMS로 주어졌다면
+          DN domain으로 변환한 뒤 intensity variance에서 사용해야 합니다.
+        </p>
+
+        <div class="equation-box">
+          \[
+            \sigma_{\mathrm{dark,DN}}
+            =
+            \frac{
+              \sigma_{\mathrm{dark,e^-}}
+            }{
+              g
+            }
+            \quad [\mathrm{DN\ RMS}]
+          \]
+        </div>
+
+        <div class="equation-box">
+          \[
+            \sigma_{\mathrm{dark,DN}}^2
+            =
+            \left(
+              \frac{
+                \sigma_{\mathrm{dark,e^-}}
+              }{
+                g
+              }
+            \right)^2
+            \quad [\mathrm{DN^2}]
+          \]
+        </div>
+      </article>
+
+    </div>
+
+    <article class="content-card warning-card" style="margin-top: 20px;">
+      <h3 class="subsection-title">
+        EMVA 값 적용 시 주의사항
+      </h3>
+
+      <ul class="information-list">
+        <li>
+          EMVA data는 특정 camera model, gain setting, pixel format,
+          sensor temperature 및 측정 조건에 종속될 수 있습니다.
+        </li>
+
+        <li>
+          카메라 내부 analog gain 또는 digital gain을 변경하면
+          e⁻/DN 변환값을 그대로 사용할 수 없습니다.
+        </li>
+
+        <li>
+          ROI를 줄여 frame rate를 높이더라도 sensor의 기본 pixel noise가
+          자동으로 감소하는 것은 아닙니다.
+        </li>
+
+        <li>
+          평균 dark image를 차감하면 fixed dark offset과 반복 가능한
+          spatial pattern은 감소하지만, 각 exposure에서 새롭게 발생하는
+          temporal dark noise까지 제거되지는 않습니다.
+        </li>
+
+        <li>
+          12-bit ADC는 4096개의 digital code를 제공한다는 의미이며,
+          실제 dynamic range나 유효 분해능이 정확히 12 bit라는 의미는
+          아닙니다.
+        </li>
+
+        <li>
+          785 nm 또는 808 nm에서 사용하는 경우에는 반드시 해당 파장에서의
+          quantum efficiency와 spectral response를 확인해야 합니다.
+        </li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-title">
+      Terminology
+    </h2>
+
+    <div class="content-grid">
+
+      <article class="content-card">
+        <ul class="information-list">
+          <li>
+            <span class="blue-term">ADC</span>:
+            Analog-to-Digital Converter
+          </li>
+
+          <li>
+            <span class="blue-term">DN</span>:
+            Digital Number
+          </li>
+
+          <li>
+            <span class="blue-term">LSB</span>:
+            Least Significant Bit
+          </li>
+
+          <li>
+            <span class="blue-term">RMS</span>:
+            Root Mean Square
+          </li>
+
+          <li>
+            <span class="blue-term">QE</span>:
+            Quantum Efficiency
+          </li>
+        </ul>
+      </article>
+
+      <article class="content-card purple-card">
+        <ul class="information-list">
+          <li>
+            <span class="term">PTC</span>:
+            Photon Transfer Curve
+          </li>
+
+          <li>
+            <span class="term">DSNU</span>:
+            Dark Signal Non-Uniformity
+          </li>
+
+          <li>
+            <span class="term">PRNU</span>:
+            Photo Response Non-Uniformity
+          </li>
+
+          <li>
+            <span class="term">SNR</span>:
+            Signal-to-Noise Ratio
+          </li>
+
+          <li>
+            <span class="term">DR</span>:
+            Dynamic Range
+          </li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-title">
+      References
+    </h2>
+
+    <div class="source-box">
+      <p>
+        Basler AG, Basler ace acA1300-60gm Product Specifications.
+      </p>
+
+      <p>
+        Basler AG, acA1300-60gm Product Documentation.
+      </p>
+
+      <p>
+        Basler AG, acA1300-60gm EMVA Standard 1288 Data.
+      </p>
+
+      <p>
+        European Machine Vision Association,
+        EMVA Standard 1288, Release 4.0 Linear.
+      </p>
+
+      <p>
+        European Machine Vision Association,
+        EMVA Standard 1288, Release 4.0 General.
+      </p>
+    </div>
+  </section>
+
+</main>
+```
+
+  </div>
+</body>
+</html>
