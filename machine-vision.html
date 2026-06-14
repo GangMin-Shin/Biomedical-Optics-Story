@@ -54,7 +54,7 @@
       position: fixed;
       inset: 0;
       background:
-        url("images/Noise%20analysis%20background.jpg")
+        url("images/machine%20vision%20background.jpeg")
         center / cover no-repeat;
       opacity: 0.7;
       z-index: 0;
@@ -104,8 +104,7 @@
       margin-bottom: 28px;
     }
 
-    .nav-button,
-    .submenu-tab {
+    .nav-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -114,6 +113,8 @@
       border-radius: 999px;
       text-decoration: none;
       color: white;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
       font-size: 15px;
       font-weight: 600;
       line-height: 1.2;
@@ -124,47 +125,11 @@
         box-shadow 0.25s ease;
     }
 
-    .nav-button {
-      background: rgba(255, 255, 255, 0.10);
-      border: 1px solid rgba(255, 255, 255, 0.55);
-    }
-
     .nav-button:hover {
       background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.80);
       transform: translateX(-3px);
       box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
-    }
-
-    .submenu-tab {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(116, 70, 180, 0.60),
-          rgba(38, 94, 158, 0.52)
-        );
-      border: 1px solid rgba(211, 170, 255, 0.72);
-    }
-
-    .submenu-tab:hover {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(135, 78, 205, 0.76),
-          rgba(43, 112, 185, 0.68)
-        );
-      transform: translateY(-2px);
-      box-shadow: 0 0 18px rgba(188, 120, 255, 0.38);
-    }
-
-    .submenu-tab.active {
-      border-color: rgba(225, 195, 255, 1);
-      box-shadow:
-        0 0 18px rgba(188, 120, 255, 0.42),
-        inset 0 0 16px rgba(255, 255, 255, 0.07);
-    }
-
-    .tab-icon {
-      margin-right: 8px;
     }
 
     /* =========================
@@ -454,7 +419,7 @@
       background: rgba(18, 24, 40, 0.72);
       border-left: 3px solid rgba(211, 140, 255, 0.75);
       color: rgba(241, 224, 255, 0.98);
-      font-size: 22px;
+      font-size: 24px;
       line-height: 1.8;
     }
 
@@ -474,37 +439,71 @@
     }
 
     .metric-card {
-      padding: 22px;
-      background: rgba(0, 0, 0, 0.54);
+      min-width: 0;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.56);
       border-left: 3px solid rgba(211, 140, 255, 0.74);
       box-shadow:
         0 8px 24px rgba(0, 0, 0, 0.22),
         0 0 16px rgba(175, 100, 255, 0.07);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .metric-card h3 {
       margin: 0 0 12px;
-      font-size: 19px;
+      font-size: 21px;
       line-height: 1.4;
-      color: rgba(255, 255, 255, 0.96);
+      color: rgba(255, 255, 255, 0.97);
     }
 
     .metric-card p {
       margin: 0;
-      font-size: 15px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.78);
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.80);
     }
 
-    .unit-label {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 5px 9px;
-      border-radius: 5px;
-      font-size: 13px;
-      color: rgba(228, 241, 255, 0.90);
-      background: rgba(90, 150, 210, 0.20);
+    .metric-equation {
+      width: 100%;
+      margin-top: 18px;
+      padding: 18px 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(30, 47, 75, 0.78),
+          rgba(42, 24, 64, 0.72)
+        );
+      border: 1px solid rgba(150, 195, 255, 0.22);
+      border-left: 3px solid rgba(135, 205, 255, 0.78);
+      color: rgba(244, 231, 255, 0.99);
+      font-size: 25px;
+      line-height: 1.9;
+    }
+
+    .metric-equation mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      max-width: 100%;
+    }
+
+    .metric-unit {
+      display: block;
+      margin-top: 13px;
+      padding: 9px 11px;
+      border-radius: 6px;
+      font-size: 16px;
+      line-height: 1.55;
+      color: rgba(232, 243, 255, 0.94);
+      background: rgba(90, 150, 210, 0.18);
       border: 1px solid rgba(120, 190, 255, 0.28);
+    }
+
+    .metric-unit mjx-container {
+      margin: 0 !important;
+      font-size: 110% !important;
     }
 
     /* =========================
@@ -567,8 +566,9 @@
         grid-template-columns: 1fr;
       }
 
-      .equation-box {
-        font-size: 19px;
+      .equation-box,
+      .metric-equation {
+        font-size: 21px;
       }
     }
 
@@ -581,8 +581,7 @@
         align-items: stretch;
       }
 
-      .nav-button,
-      .submenu-tab {
+      .nav-button {
         width: 100%;
       }
 
@@ -605,7 +604,17 @@
       }
 
       .card-text,
-      .information-list li {
+      .information-list li,
+      .metric-card p {
+        font-size: 15px;
+      }
+
+      .metric-equation {
+        padding: 16px 10px;
+        font-size: 18px;
+      }
+
+      .metric-unit {
         font-size: 15px;
       }
     }
@@ -619,16 +628,11 @@
 ```
 <nav class="top-navigation" aria-label="Page navigation">
   <a class="nav-button" href="index.html">
-    ← Back to Homepage
+    Home
   </a>
 
   <a class="nav-button" href="noise-analysis.html">
     ← Back to Noise Analysis
-  </a>
-
-  <a class="submenu-tab active" href="machine-vision.html">
-    <span class="tab-icon" aria-hidden="true">▣</span>
-    Machine Vision
   </a>
 </nav>
 
@@ -667,10 +671,6 @@
 
     <a class="index-link" href="#emva-parameters">
       EMVA Parameters
-    </a>
-
-    <a class="index-link" href="#dsca-interpretation">
-      DSCA Interpretation
     </a>
   </nav>
 
@@ -893,20 +893,6 @@
       </article>
 
     </div>
-
-    <article class="content-card warning-card" style="margin-top: 20px;">
-      <h3 class="subsection-title">
-        비슷한 해상도는 동일한 성능을 의미하지 않습니다
-      </h3>
-
-      <p class="card-text">
-        해상도와 frame rate가 유사하더라도 quantum efficiency,
-        temporal dark noise, saturation capacity, sensor gain,
-        fixed-pattern noise 및 spectral response가 다를 수 있습니다.
-        따라서 DSCA 또는 SCOS용 카메라는 모델명뿐 아니라 해당 카메라의
-        EMVA 1288 데이터를 함께 비교해야 합니다.
-      </p>
-    </article>
   </section>
 
   <section class="content-section" id="emva-introduction">
@@ -1115,22 +1101,22 @@
 
       <ul class="information-list">
         <li>
-          \(\mu_p\) [photon/pixel]:
+          \(\mu_p\) [photon pixel\(^{-1}\)]:
           pixel에 입사한 평균 photon 수
         </li>
 
         <li>
-          \(\eta\) [e⁻/photon]:
+          \(\eta\) [e\(^{-}\) photon\(^{-1}\)]:
           quantum efficiency
         </li>
 
         <li>
-          \(\mu_e\) [e⁻]:
+          \(\mu_e\) [e\(^{-}\)]:
           생성된 평균 photoelectron 수
         </li>
 
         <li>
-          \(K\) [DN/e⁻]:
+          \(K\) [DN e\(^{-1}\)]:
           system gain 또는 conversion gain
         </li>
 
@@ -1178,7 +1164,7 @@
         </li>
 
         <li>
-          \(K\) [DN/e⁻]:
+          \(K\) [DN e\(^{-1}\)]:
           variance-mean curve의 linear region 기울기
         </li>
 
@@ -1188,7 +1174,7 @@
         </li>
 
         <li>
-          \(g=1/K\) [e⁻/DN]:
+          \(g=K^{-1}\) [e\(^{-}\) DN\(^{-1}\)]:
           inverse system gain
         </li>
       </ul>
@@ -1204,233 +1190,333 @@
 
       <article class="metric-card">
         <h3>Quantum Efficiency</h3>
+
         <p>
           입사 photon 중 검출 가능한 photoelectron으로 변환된 비율입니다.
-          파장에 따라 달라지므로 사용 wavelength에서 확인해야 합니다.
+          파장에 따라 달라지므로 실제 사용 wavelength에서 확인해야 합니다.
         </p>
-        <span class="unit-label">\(\eta\) [e⁻/photon] 또는 [%]</span>
+
+        <div class="metric-equation">
+          \[
+            \eta
+            =
+            \frac{\mu_e}{\mu_p}
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{e^-\,photon^{-1}}\right]\)
+          또는 \([\%]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>System Gain</h3>
+
         <p>
-          sensor electron 수가 camera digital output으로 변환되는
-          비율입니다. DN/e⁻와 그 역수인 e⁻/DN을 구분해야 합니다.
+          sensor에서 생성된 electron 수가 camera의 digital output으로
+          변환되는 비율입니다.
         </p>
-        <span class="unit-label">\(K\) [DN/e⁻]</span>
+
+        <div class="metric-equation">
+          \[
+            K
+            =
+            \frac{
+              \mu_y-\mu_{y,\mathrm{dark}}
+            }{
+              \mu_e
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{DN\,e^{-1}}\right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Inverse System Gain</h3>
+
         <p>
           1 DN이 평균적으로 몇 개의 electron에 해당하는지를 나타냅니다.
-          shot-noise variance를 DN domain에서 계산할 때 사용됩니다.
+          DN domain과 electron domain 사이의 변환에 사용됩니다.
         </p>
-        <span class="unit-label">\(g=1/K\) [e⁻/DN]</span>
+
+        <div class="metric-equation">
+          \[
+            g
+            =
+            \frac{1}{K}
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{e^-\,DN^{-1}}\right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Temporal Dark Noise</h3>
+
         <p>
-          광 입력이 없는 상태에서 동일 pixel output이 시간에 따라
-          변동하는 RMS noise입니다. Read noise를 포함하는 camera-level
-          dark temporal noise로 해석됩니다.
+          광 입력이 없는 상태에서 동일 pixel의 출력이 시간에 따라
+          변동하는 RMS noise입니다.
         </p>
-        <span class="unit-label">\(\sigma_d\) [e⁻ RMS]</span>
+
+        <div class="metric-equation">
+          \[
+            \sigma_d
+            =
+            \frac{
+              \sigma_{y,\mathrm{dark}}
+            }{
+              K
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{e^-\,RMS}\right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Saturation Capacity</h3>
+
         <p>
-          출력이 saturation에 도달하기 전에 pixel이 유효하게 저장하거나
-          표현할 수 있는 최대 signal electron 수입니다.
+          출력이 saturation에 도달하기 전에 pixel이 저장하거나 표현할 수
+          있는 최대 signal electron 수입니다.
         </p>
-        <span class="unit-label">\(\mu_{e,\mathrm{sat}}\) [e⁻]</span>
+
+        <div class="metric-equation">
+          \[
+            \mu_{e,\mathrm{sat}}
+            =
+            \frac{
+              \mu_{y,\mathrm{sat}}
+              -
+              \mu_{y,\mathrm{dark}}
+            }{
+              K
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{e^-}\right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Absolute Sensitivity Threshold</h3>
+
         <p>
-          신호가 noise와 구분될 수 있는 최소 incident photon exposure를
-          나타내는 sensitivity 지표입니다.
+          출력 신호의 SNR이 1에 도달하기 위해 필요한 최소 평균 입사
+          photon 수를 나타냅니다.
         </p>
-        <span class="unit-label">\(\mu_{p,\min}\) [photon/pixel]</span>
+
+        <div class="metric-equation">
+          \[
+            \mu_{p,\min}
+            =
+            \frac{
+              1+
+              \sqrt{
+                1+
+                4\sigma_d^2
+              }
+            }{
+              2\eta
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{photon\,pixel^{-1}}\right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Signal-to-Noise Ratio</h3>
+
         <p>
           평균 signal과 전체 temporal noise의 비율입니다. 광량이 증가하면
-          증가하지만 saturation에 가까워지면 더 이상 정상적인 선형 관계를
-          유지하지 못합니다.
+          일반적으로 증가하지만 saturation 부근에서는 정상적인 선형 관계가
+          유지되지 않습니다.
         </p>
-        <span class="unit-label">SNR: Signal-to-Noise Ratio</span>
+
+        <div class="metric-equation">
+          \[
+            \mathrm{SNR}
+            =
+            \frac{
+              \mu_e
+            }{
+              \sqrt{
+                \sigma_d^2+\mu_e
+              }
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위 없음
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Dynamic Range</h3>
+
         <p>
           saturation signal과 최소 검출 가능 signal 사이의 범위를
-          나타냅니다. ADC bit depth와 같은 개념이 아닙니다.
+          나타냅니다. ADC bit depth와 동일한 개념은 아닙니다.
         </p>
-        <span class="unit-label">DR [dB]</span>
+
+        <div class="metric-equation">
+          \[
+            \mathrm{DR}
+            =
+            20
+            \log_{10}
+            \left(
+              \frac{
+                \mu_{p,\mathrm{sat}}
+              }{
+                \mu_{p,\min}
+              }
+            \right)
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \([\mathrm{dB}]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>DSNU</h3>
+
         <p>
-          Dark Signal Non-Uniformity의 약자입니다. 균일한 dark condition에서
-          pixel별 dark offset이 서로 다른 정도를 나타냅니다.
+          DSNU는 Dark Signal Non-Uniformity의 약자이며, 균일한 dark
+          condition에서 pixel별 평균 dark offset이 서로 다른 정도입니다.
         </p>
-        <span class="unit-label">DSNU [e⁻]</span>
+
+        <div class="metric-equation">
+          \[
+            \mathrm{DSNU}
+            =
+            \frac{
+              \sigma_{\mu_{y,\mathrm{dark}}}
+            }{
+              K
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[\mathrm{e^-}\right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>PRNU</h3>
+
         <p>
-          Photo Response Non-Uniformity의 약자입니다. 균일 조명에서
-          pixel마다 sensitivity가 서로 다른 정도를 나타냅니다.
+          PRNU는 Photo Response Non-Uniformity의 약자이며, 균일 조명에서
+          pixel별 광응답 sensitivity가 서로 다른 정도입니다.
         </p>
-        <span class="unit-label">PRNU [%]</span>
+
+        <div class="metric-equation">
+          \[
+            \mathrm{PRNU}
+            =
+            \frac{
+              \sigma_{\mu_y}
+            }{
+              \mu_y-\mu_{y,\mathrm{dark}}
+            }
+            \times 100
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \([\%]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Dark Current</h3>
+
         <p>
           광자가 입사하지 않아도 열적 과정 등에 의해 생성되는 electron의
-          증가율입니다. Exposure time과 sensor temperature의 영향을 받습니다.
+          시간당 증가율입니다. Exposure time과 sensor temperature의 영향을
+          받습니다.
         </p>
-        <span class="unit-label">Dark current [e⁻/pixel/s]</span>
+
+        <div class="metric-equation">
+          \[
+            \mu_{I,\mathrm{dark}}
+            =
+            \frac{
+              \Delta\mu_{e,\mathrm{dark}}
+            }{
+              \Delta t_{\mathrm{exp}}
+            }
+          \]
+        </div>
+
+        <span class="metric-unit">
+          단위:
+          \(\left[
+            \mathrm{
+              e^-\,
+              pixel^{-1}\,
+              s^{-1}
+            }
+          \right]\)
+        </span>
       </article>
 
       <article class="metric-card">
         <h3>Linearity</h3>
+
         <p>
-          incident exposure와 camera output 사이의 관계가 이상적인 직선에서
-          얼마나 벗어나는지를 나타냅니다.
-        </p>
-        <span class="unit-label">Linearity error [%]</span>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="content-section" id="dsca-interpretation">
-    <h2 class="section-title">
-      Interpretation for DSCA
-    </h2>
-
-    <div class="content-grid">
-
-      <article class="content-card">
-        <h3 class="subsection-title">
-          Shot-noise 계산
-        </h3>
-
-        <p class="card-text">
-          평균 intensity가 DN 단위이고 inverse system gain이
-          \(g\) [e⁻/DN]일 때, Poisson shot-noise variance를 DN domain으로
-          변환하면 다음과 같이 표현할 수 있습니다.
+          incident exposure와 camera output 사이의 측정 관계가 이상적인
+          선형 회귀선에서 얼마나 벗어나는지를 나타냅니다.
         </p>
 
-        <div class="equation-box">
+        <div class="metric-equation">
           \[
-            \sigma_{\mathrm{shot}}^2
-            =
-            \frac{\mu_I}{g}
-            \quad [\mathrm{DN^2}]
-          \]
-        </div>
-
-        <div class="equation-box">
-          \[
-            K_{\mathrm{shot}}^2
-            =
-            \frac{1}{g\mu_I}
-          \]
-        </div>
-      </article>
-
-      <article class="content-card purple-card">
-        <h3 class="subsection-title">
-          Dark-noise 변환
-        </h3>
-
-        <p class="card-text">
-          EMVA temporal dark noise가 electron RMS로 주어졌다면
-          DN domain으로 변환한 뒤 intensity variance에서 사용해야 합니다.
-        </p>
-
-        <div class="equation-box">
-          \[
-            \sigma_{\mathrm{dark,DN}}
+            \delta_{\mathrm{lin}}
             =
             \frac{
-              \sigma_{\mathrm{dark,e^-}}
+              \mu_y-\mu_{y,\mathrm{fit}}
             }{
-              g
+              \mu_{y,\mathrm{fit}}
+              -
+              \mu_{y,\mathrm{dark}}
             }
-            \quad [\mathrm{DN\ RMS}]
+            \times 100
           \]
         </div>
 
-        <div class="equation-box">
-          \[
-            \sigma_{\mathrm{dark,DN}}^2
-            =
-            \left(
-              \frac{
-                \sigma_{\mathrm{dark,e^-}}
-              }{
-                g
-              }
-            \right)^2
-            \quad [\mathrm{DN^2}]
-          \]
-        </div>
+        <span class="metric-unit">
+          단위:
+          \([\%]\)
+        </span>
       </article>
 
     </div>
-
-    <article class="content-card warning-card" style="margin-top: 20px;">
-      <h3 class="subsection-title">
-        EMVA 값 적용 시 주의사항
-      </h3>
-
-      <ul class="information-list">
-        <li>
-          EMVA data는 특정 camera model, gain setting, pixel format,
-          sensor temperature 및 측정 조건에 종속될 수 있습니다.
-        </li>
-
-        <li>
-          카메라 내부 analog gain 또는 digital gain을 변경하면
-          e⁻/DN 변환값을 그대로 사용할 수 없습니다.
-        </li>
-
-        <li>
-          ROI를 줄여 frame rate를 높이더라도 sensor의 기본 pixel noise가
-          자동으로 감소하는 것은 아닙니다.
-        </li>
-
-        <li>
-          평균 dark image를 차감하면 fixed dark offset과 반복 가능한
-          spatial pattern은 감소하지만, 각 exposure에서 새롭게 발생하는
-          temporal dark noise까지 제거되지는 않습니다.
-        </li>
-
-        <li>
-          12-bit ADC는 4096개의 digital code를 제공한다는 의미이며,
-          실제 dynamic range나 유효 분해능이 정확히 12 bit라는 의미는
-          아닙니다.
-        </li>
-
-        <li>
-          785 nm 또는 808 nm에서 사용하는 경우에는 반드시 해당 파장에서의
-          quantum efficiency와 spectral response를 확인해야 합니다.
-        </li>
-      </ul>
-    </article>
   </section>
 
   <section class="content-section">
