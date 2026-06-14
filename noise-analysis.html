@@ -121,7 +121,7 @@
        ========================= */
 
     .page-shell {
-      width: min(1550px, 96vw);
+      width: min(1750px, 97vw);
       margin: 0;
     }
 
@@ -264,12 +264,13 @@
     }
 
     /* =========================
-       Signal + Noise layout
+       Signal + Noise + Correction
        ========================= */
 
     .calculation-layout {
       display: grid;
       grid-template-columns:
+        minmax(0, 1fr)
         minmax(0, 1fr)
         minmax(0, 1fr);
       align-items: start;
@@ -315,7 +316,7 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding: 8px 2px 13px;
-      font-size: 24px;
+      font-size: 23px;
       line-height: 1.8;
       color: rgba(238, 218, 255, 0.99);
     }
@@ -377,8 +378,8 @@
        ========================= */
 
     .final-equation-box {
-      max-width: 1180px;
-      padding: 32px 30px;
+      width: 100%;
+      padding: 30px 26px;
       background:
         linear-gradient(
           135deg,
@@ -396,6 +397,7 @@
     .final-equation-title {
       margin: 0 0 18px;
       font-size: 23px;
+      line-height: 1.4;
       font-weight: 700;
       color: rgba(255, 255, 255, 0.97);
     }
@@ -405,7 +407,7 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding: 12px 3px;
-      font-size: 29px;
+      font-size: 22px;
       line-height: 1.8;
       color: rgba(242, 222, 255, 0.99);
     }
@@ -434,6 +436,13 @@
     /* =========================
        Responsive
        ========================= */
+
+    @media screen and (max-width: 1450px) {
+      .calculation-layout {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
 
     @media screen and (max-width: 1200px) {
       .configuration-grid {
@@ -472,7 +481,7 @@
       }
 
       .final-equation {
-        font-size: 24px;
+        font-size: 21px;
       }
     }
 
@@ -503,7 +512,8 @@
         padding: 18px;
       }
 
-      .equation-name {
+      .equation-name,
+      .final-equation-title {
         font-size: 20px;
       }
 
@@ -518,7 +528,7 @@
       }
 
       .final-equation {
-        font-size: 19px;
+        font-size: 18px;
       }
     }
   </style>
@@ -710,7 +720,7 @@
         </div>
       </section>
 
-      <!-- Signal Calculation + Noise Components -->
+      <!-- Signal Calculation + Noise Components + Correction -->
       <div class="calculation-layout">
 
         <!-- Signal Calculation -->
@@ -736,12 +746,16 @@
 
               <ul class="description-list">
                 <li>
-                  \(I_{\mathrm{CCD}}\): CCD에서 측정된 pixel intensity
+                  \(I_{\mathrm{CCD}}\):
+                  CCD에서 측정된 pixel intensity
+                  \([\mathrm{DN}]\)
                 </li>
 
                 <li>
-                  \(\overline{D}\): 충분한 수의 dark frame을 평균한
+                  \(\overline{D}\):
+                  충분한 수의 dark frame을 평균한
                   pixel-wise dark image
+                  \([\mathrm{DN}]\)
                 </li>
               </ul>
             </article>
@@ -763,15 +777,21 @@
               <ul class="description-list">
                 <li>
                   \(I_{\mathrm{raw},i}\):
-                  \(I_{\mathrm{raw}}\)에서 ROI 내 \(i\)번째 pixel intensity
+                  \(I_{\mathrm{raw}}\)에서 ROI 내 \(i\)번째
+                  pixel intensity
+                  \([\mathrm{DN}]\)
                 </li>
 
                 <li>
-                  \(N\): 전체 pixel 수
+                  \(N\):
+                  전체 pixel 수
+                  \([\mathrm{dimensionless}]\)
                 </li>
 
                 <li>
-                  \(\mu_I\): 프레임별 평균 intensity
+                  \(\mu_I\):
+                  프레임별 평균 intensity
+                  \([\mathrm{DN}]\)
                 </li>
               </ul>
             </article>
@@ -795,8 +815,9 @@
 
               <ul class="description-list">
                 <li>
-                  \(\sigma_I^2\): 한 프레임 내 pixel intensity의
-                  spatial variance
+                  \(\sigma_I^2\):
+                  한 프레임 내 pixel intensity의 spatial variance
+                  \([\mathrm{DN^2}]\)
                 </li>
               </ul>
             </article>
@@ -831,6 +852,12 @@
 
               <div class="equation">
                 \[
+                  \sigma_{\mathrm{shot}}^2
+                  =
+                  \frac{\mu_I}{g}
+                \]
+
+                \[
                   K_{\mathrm{shot}}^2
                   =
                   \frac{
@@ -855,16 +882,33 @@
                   <span class="definition-symbol">
                     \(g\)
                   </span>
-                  : inverse system gain,
-                  \(2.4\ \mathrm{e^- / DN}\)
+                  : inverse system gain
+                  \([\,\mathrm{e^-/DN}\,]\),
+                  \(g=2.4\ \mathrm{e^-/DN}\)
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
+                    \(\mu_I\)
+                  </span>
+                  : 평균 pixel intensity
+                  \([\mathrm{DN}]\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
                     \(\sigma_{\mathrm{shot}}^2\)
                   </span>
-                  : shot-noise variance,
-                  \(\sigma_{\mathrm{shot}}^2=\mu_I/g\)
+                  : shot-noise variance
+                  \([\mathrm{DN^2}]\)
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
+                    \(K_{\mathrm{shot}}^2\)
+                  </span>
+                  : shot-noise contrast contribution
+                  \([\mathrm{dimensionless}]\)
                 </li>
               </ul>
             </article>
@@ -876,10 +920,28 @@
 
               <div class="equation">
                 \[
+                  \sigma_{\mathrm{dark}}
+                  =
+                  \frac{
+                    \sigma_{\mathrm{dark,e^-}}
+                  }{
+                    g
+                  }
+                \]
+
+                \[
                   K_{\mathrm{dark}}^2
                   =
                   \frac{
                     \sigma_{\mathrm{dark}}^2
+                  }{
+                    \mu_I^2
+                  }
+                  =
+                  \frac{
+                    \left(
+                      \sigma_{\mathrm{dark,e^-}}/g
+                    \right)^2
                   }{
                     \mu_I^2
                   }
@@ -898,15 +960,25 @@
                   <span class="definition-symbol">
                     \(\sigma_{\mathrm{dark,e^-}}\)
                   </span>
-                  : temporal dark noise,
-                  \(24.7\ \mathrm{e^-}\)
+                  : 카메라 사양의 temporal dark noise
+                  \([\mathrm{e^-}]\),
+                  \(\sigma_{\mathrm{dark,e^-}}=24.7\ \mathrm{e^-}\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
                     \(\sigma_{\mathrm{dark}}\)
                   </span>
-                  : \(\sigma_{\mathrm{dark,e^-}}/g\)
+                  : DN 단위로 환산한 temporal dark noise
+                  \([\mathrm{DN}]\)
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
+                    \(K_{\mathrm{dark}}^2\)
+                  </span>
+                  : temporal dark-noise contrast contribution
+                  \([\mathrm{dimensionless}]\)
                 </li>
               </ul>
             </article>
@@ -917,6 +989,12 @@
               </div>
 
               <div class="equation">
+                \[
+                  \sigma_q
+                  =
+                  \frac{\Delta}{\sqrt{12}}
+                \]
+
                 \[
                   K_q^2
                   =
@@ -939,23 +1017,34 @@
                   <span class="definition-symbol">
                     Quantization noise
                   </span>
-                  : ADC(Analog-to-Digital Converter)의 discrete DN 변환 오차
+                  :
+                  ADC(Analog-to-Digital Converter)의
+                  discrete DN 변환 오차
                 </li>
 
                 <li>
                   <span class="definition-symbol">
                     \(\Delta\)
                   </span>
-                  : quantization step,
-                  \(1\ \mathrm{DN/LSB}\)
+                  : quantization step
+                  \([\mathrm{DN}]\),
+                  \(\Delta=1\ \mathrm{DN/LSB}\)
                 </li>
 
                 <li>
                   <span class="definition-symbol">
                     \(\sigma_q\)
                   </span>
-                  : quantization-noise RMS,
-                  \(\Delta/\sqrt{12}\)
+                  : quantization-noise RMS
+                  \([\mathrm{DN}]\)
+                </li>
+
+                <li>
+                  <span class="definition-symbol">
+                    \(K_q^2\)
+                  </span>
+                  : quantization-noise contrast contribution
+                  \([\mathrm{dimensionless}]\)
                 </li>
               </ul>
             </article>
@@ -963,52 +1052,95 @@
           </div>
         </section>
 
-      </div>
+        <!-- Speckle Contrast Correction -->
+        <section class="calculation-column">
+          <h2 class="section-title">
+            Speckle Contrast Correction
+          </h2>
 
-      <!-- Speckle Contrast Correction -->
-      <section class="analysis-section">
-        <h2 class="section-title">
-          Speckle Contrast Correction
-        </h2>
+          <div class="final-equation-box">
+            <h3 class="final-equation-title">
+              Noise-Corrected Speckle Contrast
+            </h3>
 
-        <div class="final-equation-box">
-          <h3 class="final-equation-title">
-            Noise-Corrected Speckle Contrast
-          </h3>
+            <div class="final-equation">
+              \[
+                K_f^2
+                =
+                \frac{
+                  \max\left(
+                    \sigma_I^2
+                    -
+                    \sigma_{\mathrm{shot}}^2
+                    -
+                    \sigma_{\mathrm{dark}}^2
+                    -
+                    \sigma_q^2,
+                    0
+                  \right)
+                }{
+                  \mu_I^2
+                }
+              \]
 
-          <div class="final-equation">
-            \[
-              K_f^2
-              =
-              K_{\mathrm{raw}}^2
-              -
-              K_{\mathrm{shot}}^2
-              -
-              K_{\mathrm{dark}}^2
-              -
-              K_q^2
-            \]
+              \[
+                K_f^2
+                =
+                \max\left(
+                  K_{\mathrm{raw}}^2
+                  -
+                  K_{\mathrm{shot}}^2
+                  -
+                  K_{\mathrm{dark}}^2
+                  -
+                  K_q^2,
+                  0
+                \right)
+              \]
+            </div>
+
+            <ul class="final-description">
+              <li>
+                \(K_f^2\):
+                혈류에 의해 형성된 실제 동적 speckle contrast
+                \([\mathrm{dimensionless}]\)
+              </li>
+
+              <li>
+                \(K_{\mathrm{raw}}^2\):
+                noise correction 이전의 squared speckle contrast
+                \([\mathrm{dimensionless}]\)
+              </li>
+
+              <li>
+                \(K_{\mathrm{shot}}^2\):
+                shot-noise contribution
+                \([\mathrm{dimensionless}]\)
+              </li>
+
+              <li>
+                \(K_{\mathrm{dark}}^2\):
+                temporal dark-noise contribution
+                \([\mathrm{dimensionless}]\)
+              </li>
+
+              <li>
+                \(K_q^2\):
+                ADC quantization-noise contribution
+                \([\mathrm{dimensionless}]\)
+              </li>
+
+              <li>
+                \(\max(\cdot,0)\):
+                보정된 분산이 음수가 되지 않도록 적용한
+                clipping operation
+                \([\mathrm{dimensionless}]\)
+              </li>
+            </ul>
           </div>
+        </section>
 
-          <ul class="final-description">
-            <li>
-              \(K_f^2\): 최종 noise-corrected squared speckle contrast
-            </li>
-
-            <li>
-              \(K_{\mathrm{shot}}^2\): shot-noise contribution
-            </li>
-
-            <li>
-              \(K_{\mathrm{dark}}^2\): temporal dark-noise contribution
-            </li>
-
-            <li>
-              \(K_q^2\): ADC quantization-noise contribution
-            </li>
-          </ul>
-        </div>
-      </section>
+      </div>
 
     </main>
   </div>
