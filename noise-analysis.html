@@ -7,6 +7,24 @@
 
   <title>Noise Analysis</title>
 
+  <!-- MathJax: 분수, 아래첨자 및 위첨자를 수학식 형태로 표시 -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]]
+      },
+      svg: {
+        fontCache: "global"
+      }
+    };
+  </script>
+
+  <script
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -51,8 +69,8 @@
           transparent 32%
         ),
         linear-gradient(
-          rgba(0, 0, 0, 0.38),
-          rgba(0, 0, 0, 0.82)
+          rgba(0, 0, 0, 0.40),
+          rgba(0, 0, 0, 0.84)
         );
       z-index: 0;
       pointer-events: none;
@@ -66,7 +84,10 @@
       padding: 34px;
     }
 
-    /* Navigation buttons */
+    /* =========================
+       Navigation
+       ========================= */
+
     .nav-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -94,17 +115,20 @@
     .nav-button:hover {
       background: rgba(255, 255, 255, 0.18);
       transform: translateX(-3px);
-      box-shadow: 0 0 18px rgba(211, 140, 255, 0.38);
+      box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
     }
 
-    /* Main layout */
+    /* =========================
+       Main layout
+       ========================= */
+
     .page-shell {
       width: min(1450px, 96vw);
       margin: 0;
     }
 
     .page-header {
-      margin-bottom: 40px;
+      margin-bottom: 34px;
     }
 
     h1 {
@@ -133,28 +157,45 @@
       box-shadow: 0 0 12px rgba(190, 120, 255, 0.55);
     }
 
-    /* Overview */
+    /* =========================
+       Intro bullets
+       ========================= */
+
     .overview {
       max-width: 1120px;
-      margin-bottom: 45px;
+      margin-bottom: 44px;
     }
 
-    .overview p {
+    .overview-list {
       margin: 0;
+      padding-left: 26px;
+    }
+
+    .overview-list li {
+      margin: 10px 0;
+      padding-left: 6px;
       font-size: 18px;
-      line-height: 1.85;
+      line-height: 1.75;
       color: rgba(255, 255, 255, 0.90);
       text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
     }
 
-    /* Section */
+    .overview-list li::marker {
+      color: rgba(211, 140, 255, 0.95);
+      font-size: 1.15em;
+    }
+
+    /* =========================
+       Common section
+       ========================= */
+
     .analysis-section {
-      margin-bottom: 48px;
+      margin-bottom: 50px;
     }
 
     .analysis-section h2 {
       display: inline-block;
-      margin: 0 0 22px;
+      margin: 0 0 24px;
       padding-bottom: 8px;
       font-size: clamp(25px, 2.4vw, 34px);
       line-height: 1.25;
@@ -165,88 +206,48 @@
         0 0 16px rgba(211, 140, 255, 0.25);
     }
 
-    .analysis-section > p {
-      max-width: 1120px;
-      margin: 0 0 22px;
-      font-size: 17px;
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.87);
-    }
+    /* =========================
+       Image configuration
+       ========================= */
 
-    /* Workflow */
-    .workflow-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(220px, 1fr));
-      gap: 18px;
-    }
-
-    .workflow-item {
-      position: relative;
-      min-height: 210px;
-      padding: 22px;
-      border-left: 3px solid rgba(211, 140, 255, 0.75);
-      background: linear-gradient(
-        135deg,
-        rgba(20, 12, 30, 0.72),
-        rgba(30, 18, 48, 0.52)
-      );
-      box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.25),
-        0 0 18px rgba(170, 100, 255, 0.10);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-
-    .step-number {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: rgba(220, 175, 255, 0.90);
-    }
-
-    .workflow-item h3 {
-      margin: 0 0 12px;
-      font-size: 20px;
-      line-height: 1.35;
-      color: rgba(255, 255, 255, 0.97);
-    }
-
-    .workflow-item p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.78);
-    }
-
-    /* Data configuration */
     .configuration-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
       gap: 18px;
     }
 
     .configuration-item {
-      padding: 21px;
-      background: rgba(0, 0, 0, 0.48);
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.52);
       border-top: 2px solid rgba(120, 190, 255, 0.72);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.24),
+        0 0 16px rgba(80, 160, 255, 0.08);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
 
     .configuration-item h3 {
-      margin: 0 0 10px;
-      font-size: 19px;
-      color: rgba(255, 255, 255, 0.96);
+      margin: 0 0 14px;
+      font-size: 21px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.97);
     }
 
-    .configuration-item p {
+    .configuration-list {
       margin: 0;
+      padding-left: 21px;
+    }
+
+    .configuration-list li {
+      margin: 8px 0;
       font-size: 15px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .configuration-list li::marker {
+      color: rgba(120, 200, 255, 0.90);
     }
 
     .highlight-value {
@@ -254,161 +255,168 @@
       font-weight: 700;
     }
 
-    /* Equations */
+    .parameter-note {
+      display: block;
+      margin-top: 13px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    /* =========================
+       Equation layout
+       ========================= */
+
     .equation-list {
       display: grid;
-      gap: 18px;
-      max-width: 1100px;
+      gap: 20px;
+      max-width: 1160px;
     }
 
     .equation-row {
       display: grid;
-      grid-template-columns: minmax(220px, 0.8fr) minmax(300px, 1.2fr);
+      grid-template-columns: minmax(240px, 0.8fr) minmax(360px, 1.2fr);
       align-items: center;
-      gap: 24px;
-      padding: 20px 22px;
-      background: rgba(0, 0, 0, 0.48);
+      gap: 22px;
+      padding: 24px 26px;
+      background: rgba(0, 0, 0, 0.50);
       border-left: 3px solid rgba(102, 204, 255, 0.72);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
 
     .equation-name {
-      font-size: 17px;
+      font-size: 22px;
+      line-height: 1.4;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.94);
+      color: rgba(255, 255, 255, 0.97);
     }
 
     .equation {
-      overflow-wrap: anywhere;
-      font-family: "Times New Roman", serif;
-      font-size: 22px;
-      line-height: 1.55;
-      color: rgba(230, 210, 255, 0.98);
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 4px;
+      font-size: 25px;
+      line-height: 1.8;
+      color: rgba(238, 218, 255, 0.99);
+    }
+
+    .equation mjx-container {
+      margin: 0 !important;
+      text-align: left !important;
     }
 
     .equation-description {
       grid-column: 1 / -1;
-      margin: -8px 0 0;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-      font-size: 14px;
-      line-height: 1.65;
-      color: rgba(255, 255, 255, 0.68);
-    }
-
-    /* Correction comparison */
-    .correction-table-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      background: rgba(0, 0, 0, 0.42);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-
-    .correction-table {
-      width: 100%;
-      min-width: 900px;
-      border-collapse: collapse;
-    }
-
-    .correction-table th,
-    .correction-table td {
-      padding: 16px 18px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-    }
-
-    .correction-table th {
-      font-size: 15px;
-      color: rgba(235, 215, 255, 0.98);
-      background: rgba(125, 70, 165, 0.32);
-    }
-
-    .correction-table td {
-      font-size: 14px;
-      line-height: 1.65;
-      color: rgba(255, 255, 255, 0.79);
-    }
-
-    .correction-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .variable {
-      font-family: "Times New Roman", serif;
-      font-size: 17px;
-      color: #d9a7ff;
-    }
-
-    /* Outputs */
-    .output-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(240px, 1fr));
-      gap: 18px;
-    }
-
-    .output-item {
-      padding: 22px;
-      background: linear-gradient(
-        145deg,
-        rgba(15, 15, 25, 0.72),
-        rgba(25, 20, 40, 0.58)
-      );
-      border-bottom: 2px solid rgba(211, 140, 255, 0.66);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-
-    .output-item h3 {
-      margin: 0 0 12px;
-      font-size: 19px;
-      color: rgba(255, 255, 255, 0.96);
-    }
-
-    .output-item p {
       margin: 0;
-      font-size: 15px;
+    }
+
+    .description-list {
+      margin: 0;
+      padding-left: 23px;
+    }
+
+    .description-list li {
+      margin: 6px 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      font-size: 16px;
       line-height: 1.7;
-      color: rgba(255, 255, 255, 0.77);
+      color: rgba(255, 255, 255, 0.78);
     }
 
-    .file-format {
-      display: inline-block;
-      margin-top: 13px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(211, 140, 255, 0.16);
-      border: 1px solid rgba(211, 140, 255, 0.42);
-      font-size: 13px;
-      color: rgba(240, 220, 255, 0.94);
+    .description-list li::marker {
+      color: rgba(211, 140, 255, 0.90);
     }
 
-    /* Notes */
-    .analysis-note {
-      max-width: 1100px;
-      padding: 20px 22px;
-      border-left: 4px solid rgba(255, 200, 100, 0.82);
-      background: rgba(45, 30, 10, 0.48);
-      font-size: 15px;
+    /* =========================
+       Correction result
+       ========================= */
+
+    .correction-intro {
+      max-width: 1120px;
+      margin: 0 0 22px;
+    }
+
+    .correction-intro-list {
+      margin: 0;
+      padding-left: 25px;
+    }
+
+    .correction-intro-list li {
+      margin: 8px 0;
+      font-size: 17px;
       line-height: 1.75;
-      color: rgba(255, 245, 220, 0.86);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      color: rgba(255, 255, 255, 0.86);
     }
 
-    .analysis-note strong {
-      color: rgba(255, 220, 150, 0.98);
+    .correction-intro-list li::marker {
+      color: rgba(211, 140, 255, 0.95);
     }
 
-    @media screen and (max-width: 1150px) {
-      .workflow-grid {
-        grid-template-columns: repeat(2, minmax(240px, 1fr));
-      }
+    .final-equation-box {
+      max-width: 1160px;
+      padding: 30px 28px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(42, 20, 55, 0.70),
+          rgba(14, 20, 38, 0.66)
+        );
+      border-left: 4px solid rgba(211, 140, 255, 0.90);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.28),
+        0 0 24px rgba(175, 100, 255, 0.13);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
 
-      .configuration-grid,
-      .output-grid {
-        grid-template-columns: repeat(2, minmax(240px, 1fr));
+    .final-equation-title {
+      margin: 0 0 18px;
+      font-size: 23px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .final-equation {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 10px 3px;
+      font-size: 28px;
+      line-height: 1.8;
+      color: rgba(242, 222, 255, 0.99);
+    }
+
+    .final-equation mjx-container {
+      margin: 0 !important;
+      text-align: left !important;
+    }
+
+    .final-description {
+      margin: 18px 0 0;
+      padding-left: 23px;
+    }
+
+    .final-description li {
+      margin: 7px 0;
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .final-description li::marker {
+      color: rgba(211, 140, 255, 0.90);
+    }
+
+    /* =========================
+       Responsive design
+       ========================= */
+
+    @media screen and (max-width: 1100px) {
+      .configuration-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -430,28 +438,25 @@
         font-size: 14px;
       }
 
-      .page-header {
-        margin-bottom: 32px;
-      }
-
       h1 {
         font-size: 42px;
       }
 
-      .workflow-grid,
-      .configuration-grid,
-      .output-grid {
-        grid-template-columns: 1fr;
-      }
-
       .equation-row {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 12px;
       }
 
       .equation-description {
         grid-column: auto;
-        margin-top: 0;
+      }
+
+      .equation {
+        font-size: 22px;
+      }
+
+      .final-equation {
+        font-size: 24px;
       }
     }
 
@@ -464,31 +469,39 @@
         font-size: 34px;
       }
 
-      .overview p,
-      .analysis-section > p {
+      .overview-list li {
         font-size: 16px;
       }
 
       .analysis-section {
-        margin-bottom: 38px;
+        margin-bottom: 40px;
       }
 
       .analysis-section h2 {
         font-size: 25px;
       }
 
-      .workflow-item,
       .configuration-item,
-      .output-item {
+      .equation-row,
+      .final-equation-box {
         padding: 18px;
       }
 
-      .equation-row {
-        padding: 17px;
+      .equation-name {
+        font-size: 20px;
       }
 
       .equation {
         font-size: 19px;
+      }
+
+      .description-list li,
+      .final-description li {
+        font-size: 15px;
+      }
+
+      .final-equation {
+        font-size: 20px;
       }
     }
   </style>
@@ -515,354 +528,516 @@
       </header>
 
       <section class="overview">
-        <p>
-          Raw diffuse speckle images are analyzed frame by frame to quantify
-          signal intensity, spatial variance, speckle contrast, dark noise,
-          and shot noise. The analysis compares raw and noise-corrected
-          speckle contrast values for the 15 mm and 20 mm
-          source-detector separation channels.
-        </p>
+        <ul class="overview-list">
+          <li>
+            Raw speckle image에서 프레임별 평균 intensity와 spatial
+            variance를 계산하여 \(K_{\mathrm{raw}}^{2}\)를 구합니다.
+          </li>
+
+          <li>
+            15 mm와 20 mm SDS 채널에서 shot noise와 dark noise가
+            제거된 \(K_{\mathrm{corrected}}^{2}\)를 계산합니다.
+          </li>
+        </ul>
       </section>
 
+      <!-- Image Configuration -->
       <section class="analysis-section">
-        <h2>Analysis Workflow</h2>
-
-        <div class="workflow-grid">
-
-          <article class="workflow-item">
-            <span class="step-number">STEP 01</span>
-            <h3>Raw Image Loading</h3>
-            <p>
-              The raw CSV file is loaded using chunk-based streaming so that
-              long measurements can be processed without loading the entire
-              dataset into memory.
-            </p>
-          </article>
-
-          <article class="workflow-item">
-            <span class="step-number">STEP 02</span>
-            <h3>Frame Reconstruction</h3>
-            <p>
-              Every 22 rows are interpreted as one stored frame. The first
-              21 rows are used to reconstruct the 21 × 21 pixel images, while
-              incomplete remaining rows are excluded.
-            </p>
-          </article>
-
-          <article class="workflow-item">
-            <span class="step-number">STEP 03</span>
-            <h3>Channel Separation</h3>
-            <p>
-              Pixel columns 0–20 are assigned to the 15 mm channel, and
-              columns 21–41 are assigned to the 20 mm channel. Each channel
-              therefore contains 441 pixels per frame.
-            </p>
-          </article>
-
-          <article class="workflow-item">
-            <span class="step-number">STEP 04</span>
-            <h3>Noise Correction</h3>
-            <p>
-              Measured dark variance, camera specification-based dark
-              variance, and intensity-dependent shot variance are subtracted
-              from the measured spatial variance.
-            </p>
-          </article>
-
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2>Image and Camera Configuration</h2>
+        <h2>Image Configuration</h2>
 
         <div class="configuration-grid">
 
           <article class="configuration-item">
             <h3>Image Region</h3>
-            <p>
-              Image size:
-              <span class="highlight-value">21 × 21 pixels</span><br>
-              Pixels per image:
-              <span class="highlight-value">441</span><br>
-              Rows per stored frame:
-              <span class="highlight-value">22</span>
-            </p>
+
+            <ul class="configuration-list">
+              <li>
+                ROI:
+                <span class="highlight-value">21 × 21 pixels</span>
+              </li>
+
+              <li>
+                Pixels per image:
+                <span class="highlight-value">441 pixels</span>
+              </li>
+
+              <li>
+                분석 방식:
+                <span class="highlight-value">
+                  Spatial speckle contrast
+                </span>
+              </li>
+            </ul>
           </article>
 
           <article class="configuration-item">
             <h3>Measurement Channels</h3>
-            <p>
-              Channel 1:
-              <span class="highlight-value">15 mm SDS</span><br>
-              Channel 2:
-              <span class="highlight-value">20 mm SDS</span><br>
-              SDS: Source-Detector Separation
-            </p>
+
+            <ul class="configuration-list">
+              <li>
+                Ch. 1:
+                <span class="highlight-value">15 mm SDS</span>
+              </li>
+
+              <li>
+                Ch. 2:
+                <span class="highlight-value">20 mm SDS</span>
+              </li>
+
+              <li>
+                SDS:
+                <span class="highlight-value">
+                  Source-Detector Separation
+                </span>
+              </li>
+            </ul>
           </article>
 
           <article class="configuration-item">
-            <h3>Detector Parameters</h3>
-            <p>
-              Inverse gain:
-              <span class="highlight-value">2.4 e⁻/DN</span><br>
-              Exposure time:
-              <span class="highlight-value">2 ms</span><br>
-              Quantum efficiency:
-              <span class="highlight-value">0.35</span>
-            </p>
+            <h3>Detector Specifications</h3>
+
+            <ul class="configuration-list">
+              <li>
+                Camera:
+                <span class="highlight-value">
+                  Basler acA1300-60gm GigE Camera
+                </span>
+              </li>
+
+              <li>
+                Sensor:
+                <span class="highlight-value">
+                  e2v EV76C560 CMOS
+                </span>
+              </li>
+
+              <li>
+                Resolution:
+                <span class="highlight-value">
+                  1282 × 1026 pixels
+                </span>
+              </li>
+
+              <li>
+                Sensor format:
+                <span class="highlight-value">1/1.8 inch</span>
+              </li>
+
+              <li>
+                Pixel size:
+                <span class="highlight-value">
+                  5.3 × 5.3 μm
+                </span>
+              </li>
+
+              <li>
+                Maximum frame rate:
+                <span class="highlight-value">60 fps</span>
+              </li>
+
+              <li>
+                Image type:
+                <span class="highlight-value">Monochrome</span>
+              </li>
+
+              <li>
+                Camera interface:
+                <span class="highlight-value">GigE</span>
+              </li>
+
+              <li>
+                Exposure time used:
+                <span class="highlight-value">2 ms</span>
+              </li>
+
+              <li>
+                Inverse system gain used:
+                <span class="highlight-value">2.4 e⁻/DN</span>
+              </li>
+
+              <li>
+                Quantum efficiency used:
+                <span class="highlight-value">0.35</span>
+              </li>
+
+              <li>
+                Specification dark noise used:
+                <span class="highlight-value">24.7 e⁻</span>
+              </li>
+            </ul>
+
+            <span class="parameter-note">
+              Exposure time, inverse system gain, quantum efficiency 및
+              specification dark noise는 현재 Python 분석 코드에 입력된
+              노이즈 계산 파라미터입니다.
+            </span>
           </article>
 
         </div>
       </section>
 
+      <!-- Signal Calculation -->
       <section class="analysis-section">
-        <h2>Frame-Level Signal Calculation</h2>
-
-        <p>
-          For every reconstructed image, all 441 pixels are flattened into
-          one vector. The mean intensity and spatial standard deviation are
-          then used to calculate the raw speckle contrast.
-        </p>
+        <h2>Signal Calculation</h2>
 
         <div class="equation-list">
 
-          <div class="equation-row">
-            <div class="equation-name">Mean intensity</div>
-            <div class="equation">
-              μ<sub>I</sub> = (1 / N) Σ I<sub>i</sub>
+          <article class="equation-row">
+            <div class="equation-name">
+              Mean Intensity
             </div>
-            <p class="equation-description">
-              N is the number of pixels and I<sub>i</sub> is the intensity
-              of the i-th pixel in DN.
-            </p>
-          </div>
 
-          <div class="equation-row">
-            <div class="equation-name">Spatial variance</div>
             <div class="equation">
-              σ<sub>I</sub><sup>2</sup>
-              = [1 / (N − 1)] Σ (I<sub>i</sub> − μ<sub>I</sub>)<sup>2</sup>
+              \[
+                \mu_I
+                =
+                \frac{1}{N}
+                \sum_{i=1}^{N} I_i
+              \]
             </div>
-            <p class="equation-description">
-              The sample variance of the pixel intensities is used to
-              quantify spatial intensity fluctuation within each speckle image.
-            </p>
-          </div>
 
-          <div class="equation-row">
-            <div class="equation-name">Raw speckle contrast</div>
-            <div class="equation">
-              K<sub>raw</sub> = σ<sub>I</sub> / μ<sub>I</sub>
-            </div>
-            <p class="equation-description">
-              K is the speckle contrast calculated from the spatial standard
-              deviation divided by the mean pixel intensity.
-            </p>
-          </div>
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  \(I_i\): ROI 내 \(i\)번째 pixel의 intensity
+                </li>
 
-          <div class="equation-row">
-            <div class="equation-name">Raw squared contrast</div>
-            <div class="equation">
-              K<sub>raw</sub><sup>2</sup>
-              = σ<sub>I</sub><sup>2</sup> / μ<sub>I</sub><sup>2</sup>
+                <li>
+                  \(N = 441\): 한 영상에서 분석되는 전체 pixel 수
+                </li>
+
+                <li>
+                  단위는 DN(Digital Number)입니다.
+                </li>
+              </ul>
             </div>
-            <p class="equation-description">
-              The squared speckle contrast is used for variance-based noise
-              subtraction.
-            </p>
-          </div>
+          </article>
+
+          <article class="equation-row">
+            <div class="equation-name">
+              Spatial Variance
+            </div>
+
+            <div class="equation">
+              \[
+                \sigma_I^2
+                =
+                \frac{1}{N-1}
+                \sum_{i=1}^{N}
+                \left(I_i-\mu_I\right)^2
+              \]
+            </div>
+
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  한 프레임 내 pixel intensity의 공간적 변동을 나타냅니다.
+                </li>
+
+                <li>
+                  Python 코드에서는 sample variance를 사용하므로
+                  분모가 \(N-1\)입니다.
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="equation-row">
+            <div class="equation-name">
+              Speckle Contrast
+            </div>
+
+            <div class="equation">
+              \[
+                K_{\mathrm{raw}}^2
+                =
+                \frac{\sigma_I^2}{\mu_I^2}
+              \]
+            </div>
+
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  측정된 전체 spatial variance를 평균 intensity의
+                  제곱으로 정규화한 값입니다.
+                </li>
+
+                <li>
+                  Speckle fluctuation뿐만 아니라 shot noise와 dark noise의
+                  영향도 포함합니다.
+                </li>
+              </ul>
+            </div>
+          </article>
 
         </div>
       </section>
 
+      <!-- Noise Components -->
       <section class="analysis-section">
         <h2>Noise Components</h2>
 
         <div class="equation-list">
 
-          <div class="equation-row">
-            <div class="equation-name">Measured dark variance</div>
-            <div class="equation">
-              σ<sub>dark,measured</sub><sup>2</sup>
-              = SD(I<sub>dark</sub>)<sup>2</sup>
+          <article class="equation-row">
+            <div class="equation-name">
+              Raw Speckle Contrast
             </div>
-            <p class="equation-description">
-              A separately acquired 128 × 128 background image is used to
-              calculate the measured dark mean, standard deviation, and
-              variance.
-            </p>
-          </div>
 
-          <div class="equation-row">
-            <div class="equation-name">Specification dark variance</div>
             <div class="equation">
-              σ<sub>dark,spec</sub><sup>2</sup>
-              = (24.7 e⁻ / 2.4 e⁻·DN⁻¹)<sup>2</sup>
+              \[
+                K_{\mathrm{raw}}^2
+                =
+                \frac{\sigma_{\mathrm{raw}}^2}{\mu_I^2}
+              \]
             </div>
-            <p class="equation-description">
-              The camera specification dark noise is converted from electrons
-              to DN using the inverse system gain.
-            </p>
-          </div>
 
-          <div class="equation-row">
-            <div class="equation-name">Shot-noise variance</div>
-            <div class="equation">
-              σ<sub>shot</sub><sup>2</sup>
-              = μ<sub>I</sub> / g
-            </div>
-            <p class="equation-description">
-              Here, g is the inverse system gain in e⁻/DN. The shot-noise
-              variance therefore changes with the measured mean intensity.
-            </p>
-          </div>
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  \(\sigma_{\mathrm{raw}}^2\)는 raw image에서 측정된
+                  전체 pixel variance입니다.
+                </li>
 
-          <div class="equation-row">
-            <div class="equation-name">Shot noise</div>
-            <div class="equation">
-              σ<sub>shot,e⁻</sub>
-              = √(μ<sub>I</sub>g)
+                <li>
+                  혈류에 의한 speckle fluctuation과 detector noise가
+                  모두 포함되어 있습니다.
+                </li>
+              </ul>
             </div>
-            <p class="equation-description">
-              The mean signal is converted to electrons before calculating
-              the Poisson shot-noise standard deviation.
-            </p>
-          </div>
+          </article>
+
+          <article class="equation-row">
+            <div class="equation-name">
+              Shot-Noise Contrast
+            </div>
+
+            <div class="equation">
+              \[
+                \sigma_{\mathrm{shot}}^2
+                =
+                \frac{\mu_I}{g}
+              \]
+
+              \[
+                K_{\mathrm{shot}}^2
+                =
+                \frac{\sigma_{\mathrm{shot}}^2}{\mu_I^2}
+                =
+                \frac{1}{g\mu_I}
+              \]
+            </div>
+
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  \(g = 2.4\ \mathrm{e^- / DN}\)은 Python 코드에 사용된
+                  inverse system gain입니다.
+                </li>
+
+                <li>
+                  Photon arrival의 Poisson fluctuation으로 발생하는
+                  intensity-dependent noise입니다.
+                </li>
+
+                <li>
+                  평균 intensity가 낮을수록
+                  \(K_{\mathrm{shot}}^2\)의 상대적 영향이 커집니다.
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="equation-row">
+            <div class="equation-name">
+              Measured Dark-Noise Contrast
+            </div>
+
+            <div class="equation">
+              \[
+                \sigma_{\mathrm{dark,measured}}^2
+                =
+                \frac{1}{M-1}
+                \sum_{j=1}^{M}
+                \left(
+                  D_j-\overline{D}
+                \right)^2
+              \]
+
+              \[
+                K_{\mathrm{dark,measured}}^2
+                =
+                \frac{
+                  \sigma_{\mathrm{dark,measured}}^2
+                }{
+                  \mu_I^2
+                }
+              \]
+            </div>
+
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  Laser-off background image의 pixel 분산으로부터
+                  직접 측정합니다.
+                </li>
+
+                <li>
+                  Python 코드에서는 128 × 128 background array를
+                  이용하여 dark variance를 계산합니다.
+                </li>
+
+                <li>
+                  \(D_j\)는 background image의 \(j\)번째 pixel 값입니다.
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="equation-row">
+            <div class="equation-name">
+              Specification Dark-Noise Contrast
+            </div>
+
+            <div class="equation">
+              \[
+                \sigma_{\mathrm{dark,spec}}^2
+                =
+                \left(
+                  \frac{
+                    \sigma_{\mathrm{dark,e^-}}
+                  }{
+                    g
+                  }
+                \right)^2
+              \]
+
+              \[
+                K_{\mathrm{dark,spec}}^2
+                =
+                \frac{
+                  \sigma_{\mathrm{dark,spec}}^2
+                }{
+                  \mu_I^2
+                }
+              \]
+            </div>
+
+            <div class="equation-description">
+              <ul class="description-list">
+                <li>
+                  코드에 입력된 dark noise \(24.7\ \mathrm{e^-}\)를
+                  DN 단위로 변환합니다.
+                </li>
+
+                <li>
+                  측정된 background variance 대신 사양 기반 noise
+                  variance를 사용하는 비교 모델입니다.
+                </li>
+              </ul>
+            </div>
+          </article>
 
         </div>
       </section>
 
+      <!-- Speckle Contrast Correction -->
       <section class="analysis-section">
         <h2>Speckle Contrast Correction</h2>
 
-        <p>
-          Four corrected squared speckle contrast values are generated to
-          compare measured and specification-based dark-noise models, with
-          and without shot-noise subtraction.
-        </p>
+        <div class="correction-intro">
+          <ul class="correction-intro-list">
+            <li>
+              Raw \(K^2\)에서 shot-noise contrast와 dark-noise
+              contrast를 차감합니다.
+            </li>
 
-        <div class="correction-table-wrapper">
-          <table class="correction-table">
-            <thead>
-              <tr>
-                <th>Output variable</th>
-                <th>Subtracted noise</th>
-                <th>Calculation</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td>
-                  <span class="variable">
-                    K² measured-dark corrected
-                  </span>
-                </td>
-                <td>
-                  Measured dark variance
-                </td>
-                <td>
-                  max(σ² − σ²<sub>dark,measured</sub>, 0) / μ²
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <span class="variable">
-                    K² specification-dark corrected
-                  </span>
-                </td>
-                <td>
-                  Camera specification dark variance
-                </td>
-                <td>
-                  max(σ² − σ²<sub>dark,spec</sub>, 0) / μ²
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <span class="variable">
-                    K² measured-dark and shot corrected
-                  </span>
-                </td>
-                <td>
-                  Measured dark variance and shot variance
-                </td>
-                <td>
-                  max(σ² − σ²<sub>dark,measured</sub>
-                  − σ²<sub>shot</sub>, 0) / μ²
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <span class="variable">
-                    K² specification-dark and shot corrected
-                  </span>
-                </td>
-                <td>
-                  Specification dark variance and shot variance
-                </td>
-                <td>
-                  max(σ² − σ²<sub>dark,spec</sub>
-                  − σ²<sub>shot</sub>, 0) / μ²
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <li>
+              노이즈 차감 후 variance가 음수가 되는 경우에는
+              Python 코드와 동일하게 0으로 제한합니다.
+            </li>
+          </ul>
         </div>
-      </section>
 
-      <section class="analysis-section">
-        <h2>Saved Analysis Results</h2>
+        <div class="final-equation-box">
+          <h3 class="final-equation-title">
+            Noise-Corrected Speckle Contrast
+          </h3>
 
-        <div class="output-grid">
+          <div class="final-equation">
+            \[
+              K_{\mathrm{corrected}}^2
+              =
+              \max
+              \left(
+                K_{\mathrm{raw}}^2
+                -
+                K_{\mathrm{shot}}^2
+                -
+                K_{\mathrm{dark}}^2,
+                \ 0
+              \right)
+            \]
+          </div>
 
-          <article class="output-item">
-            <h3>Frame-Level Time Series</h3>
-            <p>
-              Mean intensity, pixel standard deviation, raw K, raw K²,
-              noise variances, and all corrected K² values are stored for
-              every frame and channel.
-            </p>
-            <span class="file-format">CSV / XLSX</span>
-          </article>
+          <ul class="final-description">
+            <li>
+              측정 dark image를 사용할 경우:
+              \(K_{\mathrm{dark}}^2
+              =
+              K_{\mathrm{dark,measured}}^2\)
+            </li>
 
-          <article class="output-item">
-            <h3>Subject-Level Summary</h3>
-            <p>
-              Mean, standard deviation, minimum, and maximum values are
-              calculated for the intensity, pixel variation, raw contrast,
-              corrected contrast, and camera-noise parameters.
-            </p>
-            <span class="file-format">XLSX</span>
-          </article>
-
-          <article class="output-item">
-            <h3>Signal Visualization</h3>
-            <p>
-              Time-series figures are generated for the mean pixel intensity
-              and spatial pixel standard deviation of the 15 mm and 20 mm
-              channels.
-            </p>
-            <span class="file-format">PNG · 300 DPI</span>
-          </article>
-
+            <li>
+              사양 기반 dark noise를 사용할 경우:
+              \(K_{\mathrm{dark}}^2
+              =
+              K_{\mathrm{dark,spec}}^2\)
+            </li>
+          </ul>
         </div>
-      </section>
 
-      <section class="analysis-section">
-        <h2>Important Interpretation Note</h2>
+        <div
+          class="final-equation-box"
+          style="margin-top: 20px;"
+        >
+          <h3 class="final-equation-title">
+            Variance-Domain Expression
+          </h3>
 
-        <div class="analysis-note">
-          <strong>Noise subtraction is applied to the variance, not directly
-          to K or K².</strong>
-          Negative corrected variances are clipped to zero before division by
-          the squared mean intensity. Therefore, a corrected K² value of zero
-          indicates that the estimated noise variance was equal to or greater
-          than the measured spatial variance under the selected noise model.
+          <div class="final-equation">
+            \[
+              K_{\mathrm{corrected}}^2
+              =
+              \frac{
+                \max
+                \left(
+                  \sigma_{\mathrm{raw}}^2
+                  -
+                  \sigma_{\mathrm{shot}}^2
+                  -
+                  \sigma_{\mathrm{dark}}^2,
+                  \ 0
+                \right)
+              }{
+                \mu_I^2
+              }
+            \]
+          </div>
+
+          <ul class="final-description">
+            <li>
+              실제 Python 코드에서는 먼저 variance 영역에서 noise를
+              차감한 후 \(\mu_I^2\)로 정규화합니다.
+            </li>
+
+            <li>
+              따라서 위 식은 코드에서 계산하는
+              \(K_{\mathrm{corrected}}^2\)와 동일합니다.
+            </li>
+          </ul>
         </div>
+
       </section>
 
     </main>
