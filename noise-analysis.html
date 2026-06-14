@@ -28,7 +28,6 @@
       position: relative;
     }
 
-    /* Background image */
     body::before {
       content: "";
       position: fixed;
@@ -41,7 +40,6 @@
       pointer-events: none;
     }
 
-    /* Background overlay */
     body::after {
       content: "";
       position: fixed;
@@ -49,12 +47,12 @@
       background:
         radial-gradient(
           circle at 18% 18%,
-          rgba(185, 110, 255, 0.18),
+          rgba(175, 100, 255, 0.17),
           transparent 32%
         ),
         linear-gradient(
-          rgba(0, 0, 0, 0.36),
-          rgba(0, 0, 0, 0.78)
+          rgba(0, 0, 0, 0.38),
+          rgba(0, 0, 0, 0.82)
         );
       z-index: 0;
       pointer-events: none;
@@ -63,6 +61,7 @@
     .page-container {
       position: relative;
       z-index: 1;
+      width: 100%;
       min-height: 100vh;
       padding: 34px;
     }
@@ -72,7 +71,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 18px;
+      margin-bottom: 28px;
     }
 
     .nav-button {
@@ -86,7 +85,6 @@
       font-size: 15px;
       font-weight: 500;
       line-height: 1.2;
-      cursor: pointer;
       transition:
         background 0.25s ease,
         transform 0.25s ease,
@@ -99,65 +97,319 @@
       box-shadow: 0 0 18px rgba(211, 140, 255, 0.38);
     }
 
-    /* Main page area */
+    /* Main layout */
     .page-shell {
       width: min(1450px, 96vw);
       margin: 0;
     }
 
-    .main-card {
-      width: 100%;
-      min-height: 520px;
-      padding: 28px;
-      border-radius: 22px;
-      background: rgba(0, 0, 0, 0.58);
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.12),
-        0 0 36px rgba(190, 120, 255, 0.18);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
+    .page-header {
+      margin-bottom: 40px;
     }
 
     h1 {
-      margin: 0 0 20px;
-      font-size: clamp(30px, 3vw, 38px);
+      margin: 0;
+      font-size: clamp(38px, 4.5vw, 64px);
       color: rgba(255, 255, 255, 0.98);
-      line-height: 1.18;
+      line-height: 1.15;
       font-weight: 700;
       text-align: left;
       text-shadow:
-        0 0 8px rgba(211, 140, 255, 0.58),
-        0 0 18px rgba(211, 140, 255, 0.38);
+        0 0 8px rgba(211, 140, 255, 0.65),
+        0 0 18px rgba(211, 140, 255, 0.42),
+        0 0 30px rgba(150, 80, 255, 0.24);
     }
 
-    .subtitle {
-      max-width: 980px;
+    .header-line {
+      width: min(320px, 70vw);
+      height: 2px;
+      margin-top: 18px;
+      background: linear-gradient(
+        90deg,
+        rgba(220, 170, 255, 0.95),
+        rgba(150, 100, 255, 0.45),
+        transparent
+      );
+      box-shadow: 0 0 12px rgba(190, 120, 255, 0.55);
+    }
+
+    /* Overview */
+    .overview {
+      max-width: 1120px;
+      margin-bottom: 45px;
+    }
+
+    .overview p {
       margin: 0;
       font-size: 18px;
-      line-height: 1.65;
-      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.85;
+      color: rgba(255, 255, 255, 0.90);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
     }
 
-    /* Content area for future additions */
-    .content-area {
-      width: 100%;
-      min-height: 360px;
-      margin-top: 26px;
-      padding: 24px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow:
-        inset 0 0 24px rgba(80, 30, 110, 0.08),
-        0 0 16px rgba(211, 140, 255, 0.10);
+    /* Section */
+    .analysis-section {
+      margin-bottom: 48px;
     }
 
-    .content-placeholder {
-      margin: 0;
+    .analysis-section h2 {
+      display: inline-block;
+      margin: 0 0 22px;
+      padding-bottom: 8px;
+      font-size: clamp(25px, 2.4vw, 34px);
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.98);
+      border-bottom: 2px solid rgba(211, 140, 255, 0.72);
+      text-shadow:
+        0 0 8px rgba(211, 140, 255, 0.50),
+        0 0 16px rgba(211, 140, 255, 0.25);
+    }
+
+    .analysis-section > p {
+      max-width: 1120px;
+      margin: 0 0 22px;
       font-size: 17px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.87);
+    }
+
+    /* Workflow */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .workflow-item {
+      position: relative;
+      min-height: 210px;
+      padding: 22px;
+      border-left: 3px solid rgba(211, 140, 255, 0.75);
+      background: linear-gradient(
+        135deg,
+        rgba(20, 12, 30, 0.72),
+        rgba(30, 18, 48, 0.52)
+      );
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25),
+        0 0 18px rgba(170, 100, 255, 0.10);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .step-number {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: rgba(220, 175, 255, 0.90);
+    }
+
+    .workflow-item h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .workflow-item p {
+      margin: 0;
+      font-size: 15px;
       line-height: 1.7;
-      color: rgba(255, 255, 255, 0.76);
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    /* Data configuration */
+    .configuration-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .configuration-item {
+      padding: 21px;
+      background: rgba(0, 0, 0, 0.48);
+      border-top: 2px solid rgba(120, 190, 255, 0.72);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .configuration-item h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .configuration-item p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .highlight-value {
+      color: #d9a7ff;
+      font-weight: 700;
+    }
+
+    /* Equations */
+    .equation-list {
+      display: grid;
+      gap: 18px;
+      max-width: 1100px;
+    }
+
+    .equation-row {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.8fr) minmax(300px, 1.2fr);
+      align-items: center;
+      gap: 24px;
+      padding: 20px 22px;
+      background: rgba(0, 0, 0, 0.48);
+      border-left: 3px solid rgba(102, 204, 255, 0.72);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .equation-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .equation {
+      overflow-wrap: anywhere;
+      font-family: "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.55;
+      color: rgba(230, 210, 255, 0.98);
+    }
+
+    .equation-description {
+      grid-column: 1 / -1;
+      margin: -8px 0 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    /* Correction comparison */
+    .correction-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      background: rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .correction-table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+    }
+
+    .correction-table th,
+    .correction-table td {
+      padding: 16px 18px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .correction-table th {
+      font-size: 15px;
+      color: rgba(235, 215, 255, 0.98);
+      background: rgba(125, 70, 165, 0.32);
+    }
+
+    .correction-table td {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.79);
+    }
+
+    .correction-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .variable {
+      font-family: "Times New Roman", serif;
+      font-size: 17px;
+      color: #d9a7ff;
+    }
+
+    /* Outputs */
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .output-item {
+      padding: 22px;
+      background: linear-gradient(
+        145deg,
+        rgba(15, 15, 25, 0.72),
+        rgba(25, 20, 40, 0.58)
+      );
+      border-bottom: 2px solid rgba(211, 140, 255, 0.66);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .output-item h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .output-item p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.77);
+    }
+
+    .file-format {
+      display: inline-block;
+      margin-top: 13px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(211, 140, 255, 0.16);
+      border: 1px solid rgba(211, 140, 255, 0.42);
+      font-size: 13px;
+      color: rgba(240, 220, 255, 0.94);
+    }
+
+    /* Notes */
+    .analysis-note {
+      max-width: 1100px;
+      padding: 20px 22px;
+      border-left: 4px solid rgba(255, 200, 100, 0.82);
+      background: rgba(45, 30, 10, 0.48);
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(255, 245, 220, 0.86);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .analysis-note strong {
+      color: rgba(255, 220, 150, 0.98);
+    }
+
+    @media screen and (max-width: 1150px) {
+      .workflow-grid {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+      }
+
+      .configuration-grid,
+      .output-grid {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+      }
     }
 
     @media screen and (max-width: 900px) {
@@ -165,9 +417,12 @@
         padding: 22px;
       }
 
+      .page-shell {
+        width: 100%;
+      }
+
       .nav-buttons {
-        gap: 10px;
-        margin-bottom: 18px;
+        margin-bottom: 24px;
       }
 
       .nav-button {
@@ -175,23 +430,28 @@
         font-size: 14px;
       }
 
-      .page-shell {
-        width: 100%;
-      }
-
-      .main-card {
-        min-height: 480px;
-        padding: 20px;
+      .page-header {
+        margin-bottom: 32px;
       }
 
       h1 {
-        font-size: 30px;
+        font-size: 42px;
       }
 
-      .content-area {
-        min-height: 320px;
-        padding: 18px;
-        border-radius: 16px;
+      .workflow-grid,
+      .configuration-grid,
+      .output-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .equation-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .equation-description {
+        grid-column: auto;
+        margin-top: 0;
       }
     }
 
@@ -201,27 +461,34 @@
       }
 
       h1 {
-        font-size: 26px;
+        font-size: 34px;
       }
 
-      .subtitle {
+      .overview p,
+      .analysis-section > p {
         font-size: 16px;
       }
 
-      .main-card {
-        min-height: 440px;
-        padding: 16px;
-        border-radius: 18px;
+      .analysis-section {
+        margin-bottom: 38px;
       }
 
-      .content-area {
-        min-height: 280px;
-        margin-top: 22px;
-        padding: 14px;
+      .analysis-section h2 {
+        font-size: 25px;
       }
 
-      .content-placeholder {
-        font-size: 15px;
+      .workflow-item,
+      .configuration-item,
+      .output-item {
+        padding: 18px;
+      }
+
+      .equation-row {
+        padding: 17px;
+      }
+
+      .equation {
+        font-size: 19px;
       }
     }
   </style>
@@ -231,40 +498,374 @@
   <div class="page-container">
 
     <nav class="nav-buttons" aria-label="Page navigation">
-      <a
-        class="nav-button"
-        href="javascript:history.back()"
-      >
-        ← Back
+      <a class="nav-button" href="index.html">
+        ← Back to Homepage
       </a>
 
-      <a
-        class="nav-button"
-        href="index.html"
-      >
+      <a class="nav-button" href="index.html">
         Homepage
       </a>
     </nav>
 
     <main class="page-shell">
-      <section class="main-card">
 
+      <header class="page-header">
         <h1>Noise Analysis</h1>
+        <div class="header-line"></div>
+      </header>
 
-        <p class="subtitle">
-          Analysis of noise sources and correction methods in biomedical
-          optical measurement systems.
+      <section class="overview">
+        <p>
+          Raw diffuse speckle images are analyzed frame by frame to quantify
+          signal intensity, spatial variance, speckle contrast, dark noise,
+          and shot noise. The analysis compares raw and noise-corrected
+          speckle contrast values for the 15 mm and 20 mm
+          source-detector separation channels.
+        </p>
+      </section>
+
+      <section class="analysis-section">
+        <h2>Analysis Workflow</h2>
+
+        <div class="workflow-grid">
+
+          <article class="workflow-item">
+            <span class="step-number">STEP 01</span>
+            <h3>Raw Image Loading</h3>
+            <p>
+              The raw CSV file is loaded using chunk-based streaming so that
+              long measurements can be processed without loading the entire
+              dataset into memory.
+            </p>
+          </article>
+
+          <article class="workflow-item">
+            <span class="step-number">STEP 02</span>
+            <h3>Frame Reconstruction</h3>
+            <p>
+              Every 22 rows are interpreted as one stored frame. The first
+              21 rows are used to reconstruct the 21 × 21 pixel images, while
+              incomplete remaining rows are excluded.
+            </p>
+          </article>
+
+          <article class="workflow-item">
+            <span class="step-number">STEP 03</span>
+            <h3>Channel Separation</h3>
+            <p>
+              Pixel columns 0–20 are assigned to the 15 mm channel, and
+              columns 21–41 are assigned to the 20 mm channel. Each channel
+              therefore contains 441 pixels per frame.
+            </p>
+          </article>
+
+          <article class="workflow-item">
+            <span class="step-number">STEP 04</span>
+            <h3>Noise Correction</h3>
+            <p>
+              Measured dark variance, camera specification-based dark
+              variance, and intensity-dependent shot variance are subtracted
+              from the measured spatial variance.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2>Image and Camera Configuration</h2>
+
+        <div class="configuration-grid">
+
+          <article class="configuration-item">
+            <h3>Image Region</h3>
+            <p>
+              Image size:
+              <span class="highlight-value">21 × 21 pixels</span><br>
+              Pixels per image:
+              <span class="highlight-value">441</span><br>
+              Rows per stored frame:
+              <span class="highlight-value">22</span>
+            </p>
+          </article>
+
+          <article class="configuration-item">
+            <h3>Measurement Channels</h3>
+            <p>
+              Channel 1:
+              <span class="highlight-value">15 mm SDS</span><br>
+              Channel 2:
+              <span class="highlight-value">20 mm SDS</span><br>
+              SDS: Source-Detector Separation
+            </p>
+          </article>
+
+          <article class="configuration-item">
+            <h3>Detector Parameters</h3>
+            <p>
+              Inverse gain:
+              <span class="highlight-value">2.4 e⁻/DN</span><br>
+              Exposure time:
+              <span class="highlight-value">2 ms</span><br>
+              Quantum efficiency:
+              <span class="highlight-value">0.35</span>
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2>Frame-Level Signal Calculation</h2>
+
+        <p>
+          For every reconstructed image, all 441 pixels are flattened into
+          one vector. The mean intensity and spatial standard deviation are
+          then used to calculate the raw speckle contrast.
         </p>
 
-        <div class="content-area">
-          <p class="content-placeholder">
-            Noise analysis contents will be added to this section.
-          </p>
+        <div class="equation-list">
+
+          <div class="equation-row">
+            <div class="equation-name">Mean intensity</div>
+            <div class="equation">
+              μ<sub>I</sub> = (1 / N) Σ I<sub>i</sub>
+            </div>
+            <p class="equation-description">
+              N is the number of pixels and I<sub>i</sub> is the intensity
+              of the i-th pixel in DN.
+            </p>
+          </div>
+
+          <div class="equation-row">
+            <div class="equation-name">Spatial variance</div>
+            <div class="equation">
+              σ<sub>I</sub><sup>2</sup>
+              = [1 / (N − 1)] Σ (I<sub>i</sub> − μ<sub>I</sub>)<sup>2</sup>
+            </div>
+            <p class="equation-description">
+              The sample variance of the pixel intensities is used to
+              quantify spatial intensity fluctuation within each speckle image.
+            </p>
+          </div>
+
+          <div class="equation-row">
+            <div class="equation-name">Raw speckle contrast</div>
+            <div class="equation">
+              K<sub>raw</sub> = σ<sub>I</sub> / μ<sub>I</sub>
+            </div>
+            <p class="equation-description">
+              K is the speckle contrast calculated from the spatial standard
+              deviation divided by the mean pixel intensity.
+            </p>
+          </div>
+
+          <div class="equation-row">
+            <div class="equation-name">Raw squared contrast</div>
+            <div class="equation">
+              K<sub>raw</sub><sup>2</sup>
+              = σ<sub>I</sub><sup>2</sup> / μ<sub>I</sub><sup>2</sup>
+            </div>
+            <p class="equation-description">
+              The squared speckle contrast is used for variance-based noise
+              subtraction.
+            </p>
+          </div>
+
         </div>
-
       </section>
-    </main>
 
+      <section class="analysis-section">
+        <h2>Noise Components</h2>
+
+        <div class="equation-list">
+
+          <div class="equation-row">
+            <div class="equation-name">Measured dark variance</div>
+            <div class="equation">
+              σ<sub>dark,measured</sub><sup>2</sup>
+              = SD(I<sub>dark</sub>)<sup>2</sup>
+            </div>
+            <p class="equation-description">
+              A separately acquired 128 × 128 background image is used to
+              calculate the measured dark mean, standard deviation, and
+              variance.
+            </p>
+          </div>
+
+          <div class="equation-row">
+            <div class="equation-name">Specification dark variance</div>
+            <div class="equation">
+              σ<sub>dark,spec</sub><sup>2</sup>
+              = (24.7 e⁻ / 2.4 e⁻·DN⁻¹)<sup>2</sup>
+            </div>
+            <p class="equation-description">
+              The camera specification dark noise is converted from electrons
+              to DN using the inverse system gain.
+            </p>
+          </div>
+
+          <div class="equation-row">
+            <div class="equation-name">Shot-noise variance</div>
+            <div class="equation">
+              σ<sub>shot</sub><sup>2</sup>
+              = μ<sub>I</sub> / g
+            </div>
+            <p class="equation-description">
+              Here, g is the inverse system gain in e⁻/DN. The shot-noise
+              variance therefore changes with the measured mean intensity.
+            </p>
+          </div>
+
+          <div class="equation-row">
+            <div class="equation-name">Shot noise</div>
+            <div class="equation">
+              σ<sub>shot,e⁻</sub>
+              = √(μ<sub>I</sub>g)
+            </div>
+            <p class="equation-description">
+              The mean signal is converted to electrons before calculating
+              the Poisson shot-noise standard deviation.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2>Speckle Contrast Correction</h2>
+
+        <p>
+          Four corrected squared speckle contrast values are generated to
+          compare measured and specification-based dark-noise models, with
+          and without shot-noise subtraction.
+        </p>
+
+        <div class="correction-table-wrapper">
+          <table class="correction-table">
+            <thead>
+              <tr>
+                <th>Output variable</th>
+                <th>Subtracted noise</th>
+                <th>Calculation</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>
+                  <span class="variable">
+                    K² measured-dark corrected
+                  </span>
+                </td>
+                <td>
+                  Measured dark variance
+                </td>
+                <td>
+                  max(σ² − σ²<sub>dark,measured</sub>, 0) / μ²
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="variable">
+                    K² specification-dark corrected
+                  </span>
+                </td>
+                <td>
+                  Camera specification dark variance
+                </td>
+                <td>
+                  max(σ² − σ²<sub>dark,spec</sub>, 0) / μ²
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="variable">
+                    K² measured-dark and shot corrected
+                  </span>
+                </td>
+                <td>
+                  Measured dark variance and shot variance
+                </td>
+                <td>
+                  max(σ² − σ²<sub>dark,measured</sub>
+                  − σ²<sub>shot</sub>, 0) / μ²
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="variable">
+                    K² specification-dark and shot corrected
+                  </span>
+                </td>
+                <td>
+                  Specification dark variance and shot variance
+                </td>
+                <td>
+                  max(σ² − σ²<sub>dark,spec</sub>
+                  − σ²<sub>shot</sub>, 0) / μ²
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2>Saved Analysis Results</h2>
+
+        <div class="output-grid">
+
+          <article class="output-item">
+            <h3>Frame-Level Time Series</h3>
+            <p>
+              Mean intensity, pixel standard deviation, raw K, raw K²,
+              noise variances, and all corrected K² values are stored for
+              every frame and channel.
+            </p>
+            <span class="file-format">CSV / XLSX</span>
+          </article>
+
+          <article class="output-item">
+            <h3>Subject-Level Summary</h3>
+            <p>
+              Mean, standard deviation, minimum, and maximum values are
+              calculated for the intensity, pixel variation, raw contrast,
+              corrected contrast, and camera-noise parameters.
+            </p>
+            <span class="file-format">XLSX</span>
+          </article>
+
+          <article class="output-item">
+            <h3>Signal Visualization</h3>
+            <p>
+              Time-series figures are generated for the mean pixel intensity
+              and spatial pixel standard deviation of the 15 mm and 20 mm
+              channels.
+            </p>
+            <span class="file-format">PNG · 300 DPI</span>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2>Important Interpretation Note</h2>
+
+        <div class="analysis-note">
+          <strong>Noise subtraction is applied to the variance, not directly
+          to K or K².</strong>
+          Negative corrected variances are clipped to zero before division by
+          the squared mean intensity. Therefore, a corrected K² value of zero
+          indicates that the estimated noise variance was equal to or greater
+          than the measured spatial variance under the selected noise model.
+        </div>
+      </section>
+
+    </main>
   </div>
 </body>
 </html>
