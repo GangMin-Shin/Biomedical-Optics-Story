@@ -1,11 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LMM Analysis</title>
-
-  <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LMM Analysis</title>
+<script>
     window.MathJax = {
       tex: {
         inlineMath: [["\\(", "\\)"]],
@@ -16,9 +16,8 @@
       }
     };
   </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
-  <style>
+<script async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
     * {
       box-sizing: border-box;
     }
@@ -31,6 +30,10 @@
       --muted: rgba(255, 255, 255, 0.68);
       --panel: rgba(0, 0, 0, 0.56);
       --border: rgba(255, 255, 255, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     html,
@@ -89,7 +92,7 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 12px;
       width: 100%;
       margin-bottom: 28px;
@@ -373,7 +376,7 @@
 
     .pipeline {
       display: grid;
-      grid-template-columns: repeat(7, minmax(150px, 1fr));
+      grid-template-columns: repeat(6, minmax(180px, 1fr));
       gap: 12px;
       align-items: stretch;
     }
@@ -611,10 +614,10 @@
       }
 
       .pipeline {
-        grid-template-columns: repeat(4, minmax(160px, 1fr));
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
       }
 
-      .pipeline-step:nth-child(4)::after {
+      .pipeline-step:nth-child(3n)::after {
         display: none;
       }
     }
@@ -631,10 +634,6 @@
       }
 
       .pipeline-step:nth-child(even)::after {
-        display: none;
-      }
-
-      .pipeline-step:nth-child(4)::after {
         display: none;
       }
     }
@@ -726,273 +725,385 @@
         font-size: 18px;
       }
     }
-  </style>
+  
+
+    .top-navigation {
+      justify-content: flex-start;
+    }
+
+    .top-navigation .nav-button {
+      min-height: 38px;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      box-shadow: none;
+    }
+
+    .top-navigation .nav-button:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.18);
+    }
+
+    .section-tabs {
+      position: sticky;
+      top: 12px;
+      z-index: 12;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: min(1760px, 96vw);
+      margin: 0 0 34px;
+      padding: 12px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      background: rgba(8, 8, 18, 0.76);
+      border: 1px solid rgba(211, 170, 255, 0.24);
+      box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.28),
+        0 0 16px rgba(150, 95, 220, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .section-tabs a {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(211, 170, 255, 0.45);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(116, 70, 180, 0.42),
+          rgba(38, 94, 158, 0.36)
+        );
+      color: rgba(255, 255, 255, 0.90);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .section-tabs a:hover,
+    .section-tabs a:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(225, 195, 255, 0.95);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(135, 78, 205, 0.72),
+          rgba(43, 112, 185, 0.62)
+        );
+      box-shadow: 0 0 14px rgba(188, 120, 255, 0.28);
+      outline: none;
+    }
+
+    .analysis-section,
+    .configuration-smoothing-grid > .analysis-section {
+      scroll-margin-top: 92px;
+    }
+
+    .configuration-smoothing-grid {
+      display: grid;
+      grid-template-columns: minmax(390px, 0.78fr) minmax(620px, 1.22fr);
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 52px;
+    }
+
+    .configuration-smoothing-grid .analysis-section {
+      margin-bottom: 0;
+      min-width: 0;
+    }
+
+    .configuration-card,
+    .smoothing-card {
+      height: calc(100% - 66px);
+    }
+
+    .configuration-list {
+      display: grid;
+      gap: 0;
+      margin: 0;
+    }
+
+    .configuration-row {
+      display: grid;
+      grid-template-columns: minmax(155px, 0.78fr) minmax(0, 1.22fr);
+      gap: 16px;
+      align-items: center;
+      padding: 16px 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+    }
+
+    .configuration-row:last-child {
+      border-bottom: 0;
+    }
+
+    .configuration-row dt,
+    .configuration-row dd {
+      margin: 0;
+    }
+
+    .configuration-row dt {
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .configuration-row dd {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: #dfb5ff;
+    }
+
+    .smoothing-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .sg-equation {
+      padding-top: 2px;
+      font-size: clamp(19px, 1.55vw, 25px);
+    }
+
+    .compact-parameter-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 18px;
+      margin-top: 6px;
+    }
+
+    .compact-parameter-list li {
+      margin: 0;
+    }
+
+    .reference-note {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.58);
+    }
+
+    @media screen and (max-width: 1250px) {
+      .configuration-smoothing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .configuration-card,
+      .smoothing-card {
+        height: auto;
+      }
+    }
+
+    @media screen and (max-width: 900px) {
+      .section-tabs {
+        width: 100%;
+        margin-bottom: 28px;
+      }
+
+      .configuration-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+    }
+
+    @media screen and (max-width: 560px) {
+      .top-navigation {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .top-navigation > .nav-button {
+        width: auto;
+      }
+
+      .section-tabs {
+        top: 6px;
+        padding: 9px;
+      }
+
+      .compact-parameter-list {
+        grid-template-columns: 1fr;
+      }
+    }
+</style>
 </head>
-
 <body>
-  <div class="page-container">
-    <nav class="top-navigation" aria-label="Page navigation">
-      <a class="nav-button" href="index.html">← Back to Homepage</a>
-
-      <div class="submenu-group">
-        <a class="submenu-tab" href="noise-analysis.html">
-          <span class="tab-icon" aria-hidden="true">◫</span>
-          Noise Analysis
-        </a>
-
-        <a class="submenu-tab" href="machine-vision.html">
-          <span class="tab-icon" aria-hidden="true">▣</span>
-          Machine Vision
-        </a>
-
-        <a class="submenu-tab" href="lmm-analysis.html" aria-current="page">
-          <span class="tab-icon" aria-hidden="true">Σ</span>
-          LMM Analysis
-        </a>
+<div class="page-container">
+<nav aria-label="Page navigation" class="top-navigation">
+<a class="nav-button" href="index.html">Home</a>
+<a class="nav-button" href="noise-analysis.html">← Back to Noise Analysis</a>
+</nav>
+<main class="page-shell">
+<header class="page-header">
+<h1>Linear Mixed Model Analysis</h1>
+<div class="header-line"></div>
+</header>
+<section class="overview">
+<ul class="overview-list">
+<li>
+      LMM (Linear Mixed Model, 선형혼합모형)은 전체 집단에서 공통적으로 나타나는
+      <span class="highlight">fixed effects</span>와 피험자마다 달라지는
+      <span class="highlight">random effects</span>를 하나의 모형에서 함께 추정합니다.
+    </li>
+<li>
+      fNIRS, DCS 및 speckle 기반 혈류 연구에서는 동일 피험자에서 반복 측정된
+      task, channel, measurement day 또는 장비 조건 사이의 상관을 고려하기 위해
+      LMM을 사용합니다.
+    </li>
+<li>
+      본 분석에서는 BFI와 BVI의 N-back load, SDS 및 processing 효과를 검정하면서
+      피험자별 평균 수준과 load-response 차이를 random effects로 반영합니다.
+    </li>
+</ul>
+</section><nav aria-label="Analysis section shortcuts" class="section-tabs">
+<a href="#configuration">Configuration</a>
+<a href="#smoothing">SG Smoothing</a>
+<a href="#pipeline">Pipeline</a>
+<a href="#normalization">Normalization</a>
+<a href="#model-input">Model Input</a>
+<a href="#primary-lmm">Primary LMM</a>
+<a href="#contrasts">Contrasts</a>
+<a href="#secondary-lmm">Secondary LMM</a>
+<a href="#random-effects">Random Effects</a>
+<a href="#inference">Inference</a>
+<a href="#lrt">LRT</a>
+<a href="#random-summary">Random Summary</a>
+<a href="#descriptives">Descriptives</a>
+<a href="#outputs">Outputs</a>
+<a href="#notes">Notes</a>
+<a href="#references">References</a>
+</nav>
+<div class="configuration-smoothing-grid">
+<section class="analysis-section compact-section" id="configuration">
+<h2 class="section-title">Analysis Configuration</h2>
+<div class="info-card configuration-card">
+<dl class="configuration-list">
+<div class="configuration-row">
+<dt>Participants</dt>
+<dd>N = 20</dd>
+</div>
+<div class="configuration-row">
+<dt>Signals</dt>
+<dd>BFI &amp; BVI</dd>
+</div>
+<div class="configuration-row">
+<dt>Measurement Depth</dt>
+<dd>15 &amp; 20 mm</dd>
+</div>
+<div class="configuration-row">
+<dt>Processing</dt>
+<dd>Savitzky–Golay Smoothing &amp; Normalization</dd>
+</div>
+</dl>
+</div>
+</section>
+<section class="analysis-section compact-section" id="smoothing">
+<h2 class="section-title">Savitzky–Golay Smoothing</h2>
+<article class="equation-card smoothing-card">
+<h3 class="card-title">Local Polynomial Method</h3>
+<div class="equation sg-equation">
+        \[
+          \widehat{\mathbf{a}}_i
+          =
+          \underset{\mathbf{a}}{\operatorname{arg\,min}}
+          \sum_{j=-m}^{m}
+          \left[
+            y_{i+j}
+            -
+            \sum_{r=0}^{p} a_r j^r
+          \right]^2,
+          \qquad
+          \widetilde{y}_i=\widehat{a}_{i,0}
+        \]
       </div>
-    </nav>
+<ul class="definition-list compact-parameter-list">
+<li>Sampling rate: \(200\ \mathrm{Hz}\)</li>
+<li>Window length: \(30\ \mathrm{sec}\)</li>
+<li>Polynomial order: \(3\)</li>
+<li>Boundary mode: <code>interp</code></li>
+</ul>
+</article>
+</section>
+</div>
+<section class="analysis-section" id="pipeline">
+<h2 class="section-title">Processing Pipeline</h2>
+<div class="pipeline">
+<div class="pipeline-step">
+<span class="step-number">1</span>
+<span class="step-title">Data Preparation</span>
+<span class="step-text">
+        BFI/BVI Excel 신호와 Segments.xlsx를 불러오고, 비수치·결측값을 제거한 뒤
+        time 순으로 정렬합니다. 전체 시계열에 Savitzky–Golay smoothing을 적용하고
+        baseline 및 1–4 back 구간을 연결합니다.
+      </span>
+</div>
+<div class="pipeline-step">
+<span class="step-number">2</span>
+<span class="step-title">Window Mean</span>
+<span class="step-text">
+        각 baseline 및 N-back segment에서 중앙의 최대 120초를 선택합니다.
+        구간이 120초보다 짧으면 전체 구간을 사용하고, 선택된 sample의 평균을
+        해당 조건의 대표값으로 계산합니다.
+      </span>
+</div>
+<div class="pipeline-step">
+<span class="step-number">3</span>
+<span class="step-title">Normalization</span>
+<span class="step-text">
+        BFI는 task mean과 baseline mean의 log ratio로 변환하고,
+        BVI는 task mean에서 baseline mean을 뺀 difference로 변환하여
+        피험자별 절대 신호 수준 차이를 줄입니다.
+      </span>
+</div>
+<div class="pipeline-step">
+<span class="step-number">4</span>
+<span class="step-title">Model-Input Construction</span>
+<span class="step-text">
+        관측값을 Subject × Processing × SDS × Load의 long-format 자료로 구성합니다.
+        Load 1–4는 평균 2.5를 기준으로 중심화하여 Load_c = Load − 2.5로 정의합니다.
+      </span>
+</div>
+<div class="pipeline-step">
+<span class="step-number">5</span>
+<span class="step-title">LMM Fitting</span>
+<span class="step-text">
+        Primary model은 NoiseReduced 자료의 Load × SDS를 검정하고,
+        Secondary model은 RawDarkOnly와 NoiseReduced 자료의
+        Load × Processing을 SDS 보정과 함께 검정합니다.
+      </span>
+</div>
+<div class="pipeline-step">
+<span class="step-number">6</span>
+<span class="step-title">Inference and Export</span>
+<span class="step-text">
+        fixed effects, linear contrasts, Wald z test, likelihood-ratio test,
+        random-effect variance와 ICC를 계산합니다. 적합 정보와 기술통계를
+        BFI/BVI별 Excel 결과 파일에 저장합니다.
+      </span>
+</div>
+</div>
+</section>
 
-    <main class="page-shell">
-      <header class="page-header">
-        <h1>Linear Mixed Model Analysis</h1>
-        <div class="header-line"></div>
-      </header>
 
-      <section class="overview">
-        <ul class="overview-list">
-          <li>
-            20명 피험자의 BFI와 BVI 시계열을 Savitzky–Golay 필터로 평활화한 뒤,
-            baseline과 1–4 back 구간의 대표값을 계산합니다.
-          </li>
-          <li>
-            피험자 내 반복측정 구조를 고려하기 위해 LMM
-            (Linear Mixed Model, 선형혼합모형)을 적용하고,
-            N-back load, SDS 및 noise-reduction processing의 영향을 검정합니다.
-          </li>
-          <li>
-            최종 LMM 관측 단위는 개별 frame이 아니라
-            <span class="highlight">Subject × Processing × SDS × Load</span> 조합입니다.
-          </li>
-        </ul>
-      </section>
 
-      <section class="analysis-section">
-        <h2 class="section-title">Analysis Configuration</h2>
-
-        <div class="card-grid">
-          <article class="info-card">
-            <h3 class="card-title">Participants</h3>
-            <span class="metric-value">20 Subjects</span>
-            <ul class="text-list">
-              <li>Subject_1–Subject_20</li>
-              <li>피험자별 반복측정 자료</li>
-              <li>Subject를 grouping factor로 사용</li>
-            </ul>
-          </article>
-
-          <article class="info-card">
-            <h3 class="card-title">Signals</h3>
-            <span class="metric-value">BFI &amp; BVI</span>
-            <ul class="text-list">
-              <li>BFI: Blood Flow Index</li>
-              <li>BVI: Blood Volume Index</li>
-              <li>각 metric을 별도의 LMM으로 분석</li>
-            </ul>
-          </article>
-
-          <article class="info-card">
-            <h3 class="card-title">Measurement Depth</h3>
-            <span class="metric-value">15 / 20 mm</span>
-            <ul class="text-list">
-              <li>SDS: Source–Detector Separation</li>
-              <li>Reference category: 15 mm</li>
-              <li>20 mm 효과는 15 mm 대비 차이</li>
-            </ul>
-          </article>
-
-          <article class="info-card">
-            <h3 class="card-title">Processing</h3>
-            <span class="metric-value">Raw vs Corrected</span>
-            <ul class="text-list">
-              <li>RawDarkOnly: dark subtraction 기반</li>
-              <li>NoiseReduced: 추가 noise correction</li>
-              <li>Reference category: RawDarkOnly</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Processing Pipeline</h2>
-
-        <div class="pipeline">
-          <div class="pipeline-step">
-            <span class="step-number">1</span>
-            <span class="step-title">Signal Import</span>
-            <span class="step-text">Excel 첫 번째 열을 time, 두 번째 열을 signal로 읽습니다.</span>
-          </div>
-
-          <div class="pipeline-step">
-            <span class="step-number">2</span>
-            <span class="step-title">Data Cleaning</span>
-            <span class="step-text">NaN 및 비수치 값을 제거하고 time 기준으로 정렬합니다.</span>
-          </div>
-
-          <div class="pipeline-step">
-            <span class="step-number">3</span>
-            <span class="step-title">SG Filtering</span>
-            <span class="step-text">6001-point, 3rd-order Savitzky–Golay smoothing을 적용합니다.</span>
-          </div>
-
-          <div class="pipeline-step">
-            <span class="step-number">4</span>
-            <span class="step-title">Segmentation</span>
-            <span class="step-text">Segments.xlsx의 baseline 및 1–4 back 구간을 추출합니다.</span>
-          </div>
-
-          <div class="pipeline-step">
-            <span class="step-number">5</span>
-            <span class="step-title">Window Mean</span>
-            <span class="step-text">각 segment 중앙의 최대 120초 평균을 계산합니다.</span>
-          </div>
-
-          <div class="pipeline-step">
-            <span class="step-number">6</span>
-            <span class="step-title">Normalization</span>
-            <span class="step-text">BFI는 log ratio, BVI는 baseline difference로 변환합니다.</span>
-          </div>
-
-          <div class="pipeline-step">
-            <span class="step-number">7</span>
-            <span class="step-title">LMM Inference</span>
-            <span class="step-text">고정효과, contrast, LRT 및 random effects를 추정합니다.</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Signal Import and Quality Control</h2>
-
-        <div class="card-grid three">
-          <article class="method-card">
-            <h3 class="card-title">Signal File Reading</h3>
-            <ul class="text-list">
-              <li>Excel 파일의 첫 번째 열: time</li>
-              <li>Excel 파일의 두 번째 열: BFI 또는 BVI</li>
-              <li>숫자로 변환할 수 없는 행은 제외</li>
-              <li>유효한 sample이 4개 미만이면 처리 실패</li>
-            </ul>
-          </article>
-
-          <article class="method-card">
-            <h3 class="card-title">Temporal Ordering</h3>
-            <ul class="text-list">
-              <li>유효 sample을 time 오름차순으로 재정렬</li>
-              <li>입력 파일의 행 순서가 뒤섞여 있어도 순서 복원</li>
-              <li>중복 timestamp와 sampling interval은 별도로 검사하지 않음</li>
-            </ul>
-          </article>
-
-          <article class="note-card">
-            <h3 class="card-title">Sampling Setting</h3>
-            <ul class="warning-list">
-              <li>설정 sampling rate: <span class="highlight">200 Hz</span></li>
-              <li><code>FS</code>는 SG window의 초 환산과 metadata에 사용</li>
-              <li>코드 내부에서 resampling 또는 200 Hz 여부 검증은 수행하지 않음</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Savitzky–Golay Filtering</h2>
-
-        <div class="model-block">
-          <article class="equation-card">
-            <h3 class="card-title">Local Polynomial Smoothing</h3>
-            <div class="equation large">
-              \[
-                \widetilde{y}(t)
-                =
-                \operatorname{SG}
-                \left(
-                  y(t);\ W=6001,\ p=3
-                \right)
-              \]
-            </div>
-            <ul class="definition-list">
-              <li>Sampling rate: \(F_s=200\ \mathrm{Hz}\)</li>
-              <li>Window length: \(W=6001\) samples</li>
-              <li>Polynomial order: \(p=3\)</li>
-              <li>Boundary mode: <code>interp</code></li>
-              <li>Window duration: \(6001/200=30.005\ \mathrm{s}\)</li>
-            </ul>
-          </article>
-
-          <article class="note-card">
-            <h3 class="card-title">Filter Interpretation</h3>
-            <ul class="warning-list">
-              <li>약 30초 길이의 강한 smoothing으로 빠른 생리 진동을 억제합니다.</li>
-              <li>심박 및 호흡 성분보다는 task-level의 느린 변화가 강조됩니다.</li>
-              <li>필터는 segment 분리 전에 전체 시계열에 먼저 적용됩니다.</li>
-              <li>따라서 task 경계 부근에는 인접 구간 정보가 섞일 수 있습니다.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Segment Definition and Averaging</h2>
-
-        <div class="card-grid two">
-          <article class="method-card">
-            <h3 class="card-title">Segment Selection</h3>
-            <ul class="text-list">
-              <li><code>Segments.xlsx</code>의 Segment, Start(s), End(s) 열 사용</li>
-              <li>End(s) &gt; Start(s)인 구간만 유지</li>
-              <li>1st rest, 2nd rest, 3rd rest 구간은 제외</li>
-              <li>이름에 baseline 또는 base가 포함된 첫 번째 구간을 baseline으로 선택</li>
-              <li>정규표현식 <code>([1-4])back</code>으로 load 1–4 추출</li>
-            </ul>
-          </article>
-
-          <article class="equation-card">
-            <h3 class="card-title">Centered Analysis Window</h3>
-            <div class="equation">
-              \[
-                T_{\mathrm{used}}
-                =
-                \min
-                \left(
-                  120\ \mathrm{s},\ T_{\mathrm{segment}}
-                \right)
-              \]
-            </div>
-            <div class="equation">
-              \[
-                \overline{y}_{\mathrm{segment}}
-                =
-                \frac{1}{N}
-                \sum_{k=1}^{N}
-                \widetilde{y}_k
-              \]
-            </div>
-            <ul class="definition-list">
-              <li>120초보다 긴 구간: 중앙 120초 사용</li>
-              <li>120초 이하 구간: 전체 구간 사용</li>
-              <li>동일 load의 segment가 여러 개면 segment mean을 동일 가중 평균</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Outcome Normalization</h2>
-
-        <div class="card-grid two">
-          <article class="equation-card">
-            <h3 class="card-title">BFI Log-Ratio Outcome</h3>
-            <div class="equation large">
+<section class="analysis-section" id="normalization">
+<h2 class="section-title">Outcome Normalization</h2>
+<div class="card-grid two">
+<article class="equation-card">
+<h3 class="card-title">BFI Log-Ratio Outcome</h3>
+<div class="equation large">
               \[
                 Y_{\mathrm{BFI}}
                 =
@@ -1006,17 +1117,16 @@
                 \right)
               \]
             </div>
-            <ul class="definition-list">
-              <li>\(Y=0\): baseline과 동일</li>
-              <li>\(Y&gt;0\): task BFI 증가</li>
-              <li>\(Y&lt;0\): task BFI 감소</li>
-              <li>baseline 또는 task mean이 \(10^{-12}\) 이하이면 제외</li>
-            </ul>
-          </article>
-
-          <article class="equation-card">
-            <h3 class="card-title">BVI Baseline-Difference Outcome</h3>
-            <div class="equation large">
+<ul class="definition-list">
+<li>\(Y=0\): baseline과 동일</li>
+<li>\(Y&gt;0\): task BFI 증가</li>
+<li>\(Y&lt;0\): task BFI 감소</li>
+<li>baseline 또는 task mean이 \(10^{-12}\) 이하이면 제외</li>
+</ul>
+</article>
+<article class="equation-card">
+<h3 class="card-title">BVI Baseline-Difference Outcome</h3>
+<div class="equation large">
               \[
                 Y_{\mathrm{BVI}}
                 =
@@ -1025,97 +1135,91 @@
                 \overline{\mathrm{BVI}}_{\mathrm{baseline}}
               \]
             </div>
-            <ul class="definition-list">
-              <li>\(Y=0\): baseline과 동일</li>
-              <li>\(Y&gt;0\): task BVI 증가</li>
-              <li>\(Y&lt;0\): task BVI 감소</li>
-              <li>BFI와 달리 logarithmic ratio를 추가로 적용하지 않음</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Model-Input Structure</h2>
-
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Variable</th>
-                <th>Role</th>
-                <th>Levels / Definition</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Subject</th>
-                <td>Grouping factor</td>
-                <td>Subject_1–Subject_20</td>
-              </tr>
-              <tr>
-                <th>Outcome</th>
-                <td>Dependent variable</td>
-                <td>BFI log ratio 또는 BVI baseline difference</td>
-              </tr>
-              <tr>
-                <th>Load</th>
-                <td>Within-subject predictor</td>
-                <td>1, 2, 3, 4 back</td>
-              </tr>
-              <tr>
-                <th>Load_c</th>
-                <td>Centered continuous predictor</td>
-                <td>Load − 2.5</td>
-              </tr>
-              <tr>
-                <th>SDS</th>
-                <td>Within-subject categorical predictor</td>
-                <td>15 mm reference, 20 mm comparison</td>
-              </tr>
-              <tr>
-                <th>Processing</th>
-                <td>Within-subject categorical predictor</td>
-                <td>RawDarkOnly reference, NoiseReduced comparison</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="load-grid">
-          <div class="load-item">
-            <span class="load-name">1-back</span>
-            <span class="load-value">−1.5</span>
-          </div>
-          <div class="load-item">
-            <span class="load-name">2-back</span>
-            <span class="load-value">−0.5</span>
-          </div>
-          <div class="load-item">
-            <span class="load-name">3-back</span>
-            <span class="load-value">+0.5</span>
-          </div>
-          <div class="load-item">
-            <span class="load-name">4-back</span>
-            <span class="load-value">+1.5</span>
-          </div>
-        </div>
-
-        <div class="callout">
+<ul class="definition-list">
+<li>\(Y=0\): baseline과 동일</li>
+<li>\(Y&gt;0\): task BVI 증가</li>
+<li>\(Y&lt;0\): task BVI 감소</li>
+<li>BFI와 달리 logarithmic ratio를 추가로 적용하지 않음</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="analysis-section" id="model-input">
+<h2 class="section-title">Model-Input Structure</h2>
+<div class="data-table-wrap">
+<table class="data-table">
+<thead>
+<tr>
+<th>Variable</th>
+<th>Role</th>
+<th>Levels / Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Subject</th>
+<td>Grouping factor</td>
+<td>Subject_1–Subject_20</td>
+</tr>
+<tr>
+<th>Outcome</th>
+<td>Dependent variable</td>
+<td>BFI log ratio 또는 BVI baseline difference</td>
+</tr>
+<tr>
+<th>Load</th>
+<td>Within-subject predictor</td>
+<td>1, 2, 3, 4 back</td>
+</tr>
+<tr>
+<th>Load_c</th>
+<td>Centered continuous predictor</td>
+<td>Load − 2.5</td>
+</tr>
+<tr>
+<th>SDS</th>
+<td>Within-subject categorical predictor</td>
+<td>15 mm reference, 20 mm comparison</td>
+</tr>
+<tr>
+<th>Processing</th>
+<td>Within-subject categorical predictor</td>
+<td>RawDarkOnly reference, NoiseReduced comparison</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="load-grid">
+<div class="load-item">
+<span class="load-name">1-back</span>
+<span class="load-value">−1.5</span>
+</div>
+<div class="load-item">
+<span class="load-name">2-back</span>
+<span class="load-value">−0.5</span>
+</div>
+<div class="load-item">
+<span class="load-name">3-back</span>
+<span class="load-value">+0.5</span>
+</div>
+<div class="load-item">
+<span class="load-name">4-back</span>
+<span class="load-value">+1.5</span>
+</div>
+</div>
+<div class="callout">
           완전한 자료가 모두 존재하면 metric 하나당 Secondary model은 최대
           \(20\times2\times2\times4=320\) observations,
           NoiseReduced만 사용하는 Primary model은 최대 \(160\) observations를 가집니다.
         </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Primary LMM: Load × SDS</h2>
-
-        <div class="model-block">
-          <article class="equation-card">
-            <h3 class="card-title">Noise-Reduced Data Only</h3>
-            <div class="formula-label">Model formula</div>
-            <div class="equation large">
+</section>
+<section class="analysis-section" id="primary-lmm">
+<h2 class="section-title">Primary LMM: Load × SDS</h2>
+<div class="model-block">
+<article class="equation-card">
+<h3 class="card-title">Noise-Reduced Data Only</h3>
+<div class="formula-label">Model formula</div>
+<div class="equation large">
               \[
                 \mathrm{Outcome}
                 \sim
@@ -1124,7 +1228,7 @@
                 \mathrm{SDS}
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 Y_{ijs}
                 =
@@ -1137,95 +1241,88 @@
                 +\varepsilon_{ijs}
               \]
             </div>
-          </article>
-
-          <article class="info-card">
-            <h3 class="card-title">Primary Question</h3>
-            <ul class="text-list">
-              <li>NoiseReduced 데이터에서 load에 따른 변화가 존재하는가?</li>
-              <li>15 mm와 20 mm의 load slope가 서로 다른가?</li>
-              <li>평균 load에서 SDS 간 반응 차이가 존재하는가?</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="term-table-wrap" style="margin-top: 20px;">
-          <table class="term-table">
-            <thead>
-              <tr>
-                <th>Fixed-Effect Term</th>
-                <th>Statistical Meaning</th>
-                <th>Interpretation</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Intercept</th>
-                <td>\(\beta_0\)</td>
-                <td>15 mm, load 2.5에서 예상되는 baseline-normalized Outcome</td>
-              </tr>
-              <tr>
-                <th>Load_c</th>
-                <td>\(\beta_1\)</td>
-                <td>15 mm에서 load가 한 단계 증가할 때의 변화</td>
-              </tr>
-              <tr>
-                <th>C(SDS)[T.20mm]</th>
-                <td>\(\beta_2\)</td>
-                <td>평균 load에서 20 mm − 15 mm 차이</td>
-              </tr>
-              <tr>
-                <th>Load_c:C(SDS)[T.20mm]</th>
-                <td>\(\beta_3\)</td>
-                <td>20 mm slope − 15 mm slope</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Primary Linear Contrasts</h2>
-
-        <div class="card-grid two">
-          <article class="method-card">
-            <h3 class="card-title">Load Slopes</h3>
-            <div class="equation">
+</article>
+<article class="info-card">
+<h3 class="card-title">Primary Question</h3>
+<ul class="text-list">
+<li>NoiseReduced 데이터에서 load에 따른 변화가 존재하는가?</li>
+<li>15 mm와 20 mm의 load slope가 서로 다른가?</li>
+<li>평균 load에서 SDS 간 반응 차이가 존재하는가?</li>
+</ul>
+</article>
+</div>
+<div class="term-table-wrap" style="margin-top: 20px;">
+<table class="term-table">
+<thead>
+<tr>
+<th>Fixed-Effect Term</th>
+<th>Statistical Meaning</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Intercept</th>
+<td>\(\beta_0\)</td>
+<td>15 mm, load 2.5에서 예상되는 baseline-normalized Outcome</td>
+</tr>
+<tr>
+<th>Load_c</th>
+<td>\(\beta_1\)</td>
+<td>15 mm에서 load가 한 단계 증가할 때의 변화</td>
+</tr>
+<tr>
+<th>C(SDS)[T.20mm]</th>
+<td>\(\beta_2\)</td>
+<td>평균 load에서 20 mm − 15 mm 차이</td>
+</tr>
+<tr>
+<th>Load_c:C(SDS)[T.20mm]</th>
+<td>\(\beta_3\)</td>
+<td>20 mm slope − 15 mm slope</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="analysis-section" id="contrasts">
+<h2 class="section-title">Primary Linear Contrasts</h2>
+<div class="card-grid two">
+<article class="method-card">
+<h3 class="card-title">Load Slopes</h3>
+<div class="equation">
               \[
                 \mathrm{Slope}_{15\,mm}=\beta_1
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 \mathrm{Slope}_{20\,mm}=\beta_1+\beta_3
               \]
             </div>
-          </article>
-
-          <article class="method-card">
-            <h3 class="card-title">Between-SDS Contrasts</h3>
-            <div class="equation">
+</article>
+<article class="method-card">
+<h3 class="card-title">Between-SDS Contrasts</h3>
+<div class="equation">
               \[
                 \Delta\mathrm{Slope}_{20-15}=\beta_3
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 \Delta\mathrm{SDS}_{20-15}\big|_{L_c=0}=\beta_2
               \]
             </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Secondary LMM: Load × Processing</h2>
-
-        <div class="model-block">
-          <article class="equation-card">
-            <h3 class="card-title">RawDarkOnly and NoiseReduced</h3>
-            <div class="formula-label">Model formula</div>
-            <div class="equation large">
+</article>
+</div>
+</section>
+<section class="analysis-section" id="secondary-lmm">
+<h2 class="section-title">Secondary LMM: Load × Processing</h2>
+<div class="model-block">
+<article class="equation-card">
+<h3 class="card-title">RawDarkOnly and NoiseReduced</h3>
+<div class="formula-label">Model formula</div>
+<div class="equation large">
               \[
                 \mathrm{Outcome}
                 \sim
@@ -1236,7 +1333,7 @@
                 \mathrm{SDS}
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 Y
                 =
@@ -1245,203 +1342,186 @@
                 +b_0+b_1L+\varepsilon
               \]
             </div>
-          </article>
-
-          <article class="info-card">
-            <h3 class="card-title">Secondary Question</h3>
-            <ul class="text-list">
-              <li>RawDarkOnly에서 load slope가 존재하는가?</li>
-              <li>NoiseReduced에서 load slope가 존재하는가?</li>
-              <li>두 processing의 load slope가 서로 다른가?</li>
-              <li>SDS를 보정한 processing 평균 차이가 존재하는가?</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="term-table-wrap" style="margin-top: 20px;">
-          <table class="term-table">
-            <thead>
-              <tr>
-                <th>Fixed-Effect Term</th>
-                <th>Interpretation</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Intercept</th>
-                <td>RawDarkOnly, 15 mm, load 2.5에서 예상되는 Outcome</td>
-              </tr>
-              <tr>
-                <th>Load_c</th>
-                <td>RawDarkOnly에서 load가 한 단계 증가할 때의 변화</td>
-              </tr>
-              <tr>
-                <th>C(Processing)[T.NoiseReduced]</th>
-                <td>평균 load에서 NoiseReduced − RawDarkOnly 차이</td>
-              </tr>
-              <tr>
-                <th>Load_c:C(Processing)[T.NoiseReduced]</th>
-                <td>NoiseReduced slope − RawDarkOnly slope</td>
-              </tr>
-              <tr>
-                <th>C(SDS)[T.20mm]</th>
-                <td>Load와 Processing을 보정한 평균적인 20 mm − 15 mm 차이</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout warning">
+</article>
+<article class="info-card">
+<h3 class="card-title">Secondary Question</h3>
+<ul class="text-list">
+<li>RawDarkOnly에서 load slope가 존재하는가?</li>
+<li>NoiseReduced에서 load slope가 존재하는가?</li>
+<li>두 processing의 load slope가 서로 다른가?</li>
+<li>SDS를 보정한 processing 평균 차이가 존재하는가?</li>
+</ul>
+</article>
+</div>
+<div class="term-table-wrap" style="margin-top: 20px;">
+<table class="term-table">
+<thead>
+<tr>
+<th>Fixed-Effect Term</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Intercept</th>
+<td>RawDarkOnly, 15 mm, load 2.5에서 예상되는 Outcome</td>
+</tr>
+<tr>
+<th>Load_c</th>
+<td>RawDarkOnly에서 load가 한 단계 증가할 때의 변화</td>
+</tr>
+<tr>
+<th>C(Processing)[T.NoiseReduced]</th>
+<td>평균 load에서 NoiseReduced − RawDarkOnly 차이</td>
+</tr>
+<tr>
+<th>Load_c:C(Processing)[T.NoiseReduced]</th>
+<td>NoiseReduced slope − RawDarkOnly slope</td>
+</tr>
+<tr>
+<th>C(SDS)[T.20mm]</th>
+<td>Load와 Processing을 보정한 평균적인 20 mm − 15 mm 차이</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout warning">
           이 Secondary model에는 Processing × SDS, Load × SDS 및
           Load × Processing × SDS interaction이 없습니다. 따라서
           noise-reduction 효과가 15 mm와 20 mm에서 서로 다른지는 이 모델만으로 직접 검정하지 않습니다.
         </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Random Effects and Model Fitting</h2>
-
-        <div class="card-grid three">
-          <article class="method-card">
-            <h3 class="card-title">Initial Random Structure</h3>
-            <div class="equation">
+</section>
+<section class="analysis-section" id="random-effects">
+<h2 class="section-title">Random Effects and Model Fitting</h2>
+<div class="card-grid three">
+<article class="method-card">
+<h3 class="card-title">Initial Random Structure</h3>
+<div class="equation">
               \[
                 (1+\mathrm{Load}_c\mid\mathrm{Subject})
               \]
             </div>
-            <ul class="text-list">
-              <li>피험자별 random intercept</li>
-              <li>피험자별 random load slope</li>
-              <li>intercept–slope covariance</li>
-            </ul>
-          </article>
-
-          <article class="method-card">
-            <h3 class="card-title">Fallback Structure</h3>
-            <div class="equation">
+<ul class="text-list">
+<li>피험자별 random intercept</li>
+<li>피험자별 random load slope</li>
+<li>intercept–slope covariance</li>
+</ul>
+</article>
+<article class="method-card">
+<h3 class="card-title">Fallback Structure</h3>
+<div class="equation">
               \[
                 (1\mid\mathrm{Subject})
               \]
             </div>
-            <ul class="text-list">
-              <li>random-slope model 실패 시 적용</li>
-              <li>피험자별 평균 수준 차이만 모델링</li>
-              <li>최소 2개 이상의 load를 가진 subject만 유지</li>
-            </ul>
-          </article>
-
-          <article class="method-card">
-            <h3 class="card-title">Optimization</h3>
-            <ul class="text-list">
-              <li>Estimation: Maximum Likelihood</li>
-              <li>REML: False</li>
-              <li>Optimizers: L-BFGS, Powell, CG</li>
-              <li>Maximum iterations: 2000</li>
-              <li>수렴 시도와 warning을 Excel에 기록</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Statistical Inference</h2>
-
-        <div class="card-grid three">
-          <article class="equation-card">
-            <h3 class="card-title">Wald z Test</h3>
-            <div class="equation">
+<ul class="text-list">
+<li>random-slope model 실패 시 적용</li>
+<li>피험자별 평균 수준 차이만 모델링</li>
+<li>최소 2개 이상의 load를 가진 subject만 유지</li>
+</ul>
+</article>
+<article class="method-card">
+<h3 class="card-title">Optimization</h3>
+<ul class="text-list">
+<li>Estimation: Maximum Likelihood</li>
+<li>REML: False</li>
+<li>Optimizers: L-BFGS, Powell, CG</li>
+<li>Maximum iterations: 2000</li>
+<li>수렴 시도와 warning을 Excel에 기록</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="analysis-section" id="inference">
+<h2 class="section-title">Statistical Inference</h2>
+<div class="card-grid three">
+<article class="equation-card">
+<h3 class="card-title">Wald z Test</h3>
+<div class="equation">
               \[
                 z=\frac{\widehat{\beta}}{SE(\widehat{\beta})}
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 p=2\Phi(-|z|)
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 CI_{95\%}=\widehat{\beta}\pm1.96SE
               \]
             </div>
-          </article>
-
-          <article class="equation-card">
-            <h3 class="card-title">Likelihood-Ratio Test</h3>
-            <div class="equation">
+</article>
+<article class="equation-card">
+<h3 class="card-title">Likelihood-Ratio Test</h3>
+<div class="equation">
               \[
                 LR=2\left(\ell_{full}-\ell_{reduced}\right)
               \]
             </div>
-            <ul class="text-list">
-              <li>Full model과 nested reduced model 비교</li>
-              <li>동일한 random-effect structure 사용</li>
-              <li>두 모델 모두 수렴하고 관측 수가 같을 때 유효</li>
-            </ul>
-          </article>
-
-          <article class="equation-card">
-            <h3 class="card-title">BFI Effect Conversion</h3>
-            <div class="equation">
+<ul class="text-list">
+<li>Full model과 nested reduced model 비교</li>
+<li>동일한 random-effect structure 사용</li>
+<li>두 모델 모두 수렴하고 관측 수가 같을 때 유효</li>
+</ul>
+</article>
+<article class="equation-card">
+<h3 class="card-title">BFI Effect Conversion</h3>
+<div class="equation">
               \[
                 \mathrm{Ratio}=e^{\widehat{\beta}}
               \]
             </div>
-            <div class="equation">
+<div class="equation">
               \[
                 \%\Delta=100\left(e^{\widehat{\beta}}-1\right)
               \]
             </div>
-            <ul class="text-list">
-              <li>BFI log-ratio coefficient만 변환</li>
-              <li>BVI coefficient에는 적용하지 않음</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Likelihood-Ratio Tests</h2>
-
-        <div class="card-grid two">
-          <article class="method-card">
-            <h3 class="card-title">Primary Model Tests</h3>
-            <ul class="text-list">
-              <li><span class="highlight">Load × SDS</span>: interaction 제거 모델과 비교</li>
-              <li><span class="highlight">All load terms</span>: load main effect와 interaction 동시 제거</li>
-              <li><span class="highlight">All SDS terms</span>: SDS main effect와 interaction 동시 제거</li>
-            </ul>
-          </article>
-
-          <article class="method-card">
-            <h3 class="card-title">Secondary Model Tests</h3>
-            <ul class="text-list">
-              <li><span class="highlight">Load × Processing</span>: interaction 제거 모델과 비교</li>
-              <li><span class="highlight">All processing terms</span>: processing 관련 항 동시 제거</li>
-              <li><span class="highlight">All load terms</span>: load 관련 항 동시 제거</li>
-              <li><span class="highlight">Adjusted SDS</span>: SDS 항 제거 모델과 비교</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Random-Effect Summary</h2>
-
-        <div class="card-grid two">
-          <article class="equation-card">
-            <h3 class="card-title">Covariance Components</h3>
-            <ul class="text-list">
-              <li>Random-intercept variance</li>
-              <li>Random-load-slope variance</li>
-              <li>Intercept–slope covariance</li>
-              <li>Residual variance</li>
-            </ul>
-          </article>
-
-          <article class="equation-card">
-            <h3 class="card-title">ICC at Mean Load</h3>
-            <div class="equation">
+<ul class="text-list">
+<li>BFI log-ratio coefficient만 변환</li>
+<li>BVI coefficient에는 적용하지 않음</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="analysis-section" id="lrt">
+<h2 class="section-title">Likelihood-Ratio Tests</h2>
+<div class="card-grid two">
+<article class="method-card">
+<h3 class="card-title">Primary Model Tests</h3>
+<ul class="text-list">
+<li><span class="highlight">Load × SDS</span>: interaction 제거 모델과 비교</li>
+<li><span class="highlight">All load terms</span>: load main effect와 interaction 동시 제거</li>
+<li><span class="highlight">All SDS terms</span>: SDS main effect와 interaction 동시 제거</li>
+</ul>
+</article>
+<article class="method-card">
+<h3 class="card-title">Secondary Model Tests</h3>
+<ul class="text-list">
+<li><span class="highlight">Load × Processing</span>: interaction 제거 모델과 비교</li>
+<li><span class="highlight">All processing terms</span>: processing 관련 항 동시 제거</li>
+<li><span class="highlight">All load terms</span>: load 관련 항 동시 제거</li>
+<li><span class="highlight">Adjusted SDS</span>: SDS 항 제거 모델과 비교</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="analysis-section" id="random-summary">
+<h2 class="section-title">Random-Effect Summary</h2>
+<div class="card-grid two">
+<article class="equation-card">
+<h3 class="card-title">Covariance Components</h3>
+<ul class="text-list">
+<li>Random-intercept variance</li>
+<li>Random-load-slope variance</li>
+<li>Intercept–slope covariance</li>
+<li>Residual variance</li>
+</ul>
+</article>
+<article class="equation-card">
+<h3 class="card-title">ICC at Mean Load</h3>
+<div class="equation">
               \[
                 ICC_{L_c=0}
                 =
@@ -1449,145 +1529,156 @@
                 {\sigma_{b0}^{2}+\sigma_{\varepsilon}^{2}}
               \]
             </div>
-            <ul class="text-list">
-              <li>ICC: Intraclass Correlation Coefficient</li>
-              <li>Load_c = 0, 즉 load 2.5에서 계산</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Descriptive Statistics</h2>
-
-        <div class="method-card">
-          <h3 class="card-title">Processing × SDS × Load Cells</h3>
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Statistic</th>
-                  <th>Definition</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>N_subjects</th>
-                  <td>해당 cell에 포함된 고유 피험자 수</td>
-                </tr>
-                <tr>
-                  <th>N_observations</th>
-                  <td>해당 cell의 전체 Outcome 관측 수</td>
-                </tr>
-                <tr>
-                  <th>Mean / SD</th>
-                  <td>Outcome의 산술평균과 표준편차</td>
-                </tr>
-                <tr>
-                  <th>SEM</th>
-                  <td>\(SD/\sqrt{N_{subjects}}\)</td>
-                </tr>
-                <tr>
-                  <th>Median</th>
-                  <td>Outcome의 중앙값</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Output Files</h2>
-
-        <div class="output-grid">
-          <article class="info-card">
-            <h3 class="card-title">Common Outputs</h3>
-            <ul class="text-list">
-              <li><code>SG_LMM_model_input_all_metrics.xlsx</code></li>
-              <li><code>SG_LMM_processing_log.xlsx</code></li>
-              <li>전체 BFI/BVI model input과 처리 상태 저장</li>
-            </ul>
-          </article>
-
-          <article class="info-card">
-            <h3 class="card-title">Metric-Specific Outputs</h3>
-            <ul class="text-list">
-              <li><code>BFI_SG_LMM_results.xlsx</code></li>
-              <li><code>BVI_SG_LMM_results.xlsx</code></li>
-              <li>각 metric의 text summary도 별도 저장</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="method-card" style="margin-top: 18px;">
-          <h3 class="card-title">Excel Worksheets</h3>
-          <div class="sheet-list">
-            <div class="sheet-item"><span class="blue-highlight">Model_input</span><br>실제 LMM 입력 자료</div>
-            <div class="sheet-item"><span class="blue-highlight">Descriptives</span><br>cell별 기술통계</div>
-            <div class="sheet-item"><span class="blue-highlight">Primary_ModelInfo</span><br>Primary model 적합 정보</div>
-            <div class="sheet-item"><span class="blue-highlight">Primary_FixedEffects</span><br>Primary 고정효과</div>
-            <div class="sheet-item"><span class="blue-highlight">Primary_Contrasts</span><br>SDS별 slope 및 차이</div>
-            <div class="sheet-item"><span class="blue-highlight">Primary_LRT</span><br>Primary 우도비 검정</div>
-            <div class="sheet-item"><span class="blue-highlight">Primary_RandomEffects</span><br>분산·공분산 및 ICC</div>
-            <div class="sheet-item"><span class="blue-highlight">Process_ModelInfo</span><br>Processing model 적합 정보</div>
-            <div class="sheet-item"><span class="blue-highlight">Process_FixedEffects</span><br>Processing 고정효과</div>
-            <div class="sheet-item"><span class="blue-highlight">Process_Contrasts</span><br>Processing별 slope 및 차이</div>
-            <div class="sheet-item"><span class="blue-highlight">Process_LRT</span><br>Processing 우도비 검정</div>
-            <div class="sheet-item"><span class="blue-highlight">Fit_attempts / Metadata</span><br>수렴 시도와 분석 환경</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Interpretation Notes</h2>
-
-        <div class="card-grid two">
-          <article class="note-card">
-            <h3 class="card-title">Model Assumptions</h3>
-            <ul class="warning-list">
-              <li>Load 1–4를 continuous predictor로 사용하므로 선형 load trend를 가정합니다.</li>
-              <li>4-back에서 감소하는 inverted-U와 같은 비선형 반응은 직접 모델링하지 않습니다.</li>
-              <li>Wald z 및 chi-square LRT는 asymptotic approximation을 사용합니다.</li>
-              <li>잔차 정규성, 이분산성 및 영향점 진단은 코드에 포함되어 있지 않습니다.</li>
-            </ul>
-          </article>
-
-          <article class="note-card">
-            <h3 class="card-title">Design-Specific Considerations</h3>
-            <ul class="warning-list">
-              <li>모든 load가 동일 baseline을 공유하므로 baseline error가 여러 Outcome에 공통으로 들어갑니다.</li>
-              <li>RawDarkOnly와 NoiseReduced는 동일 원신호에서 파생된 paired data입니다.</li>
-              <li>현재 Secondary model은 동일 Subject × SDS × Load pair의 추가 상관을 별도로 모델링하지 않습니다.</li>
-              <li>여러 fixed effects와 contrasts에 대한 다중검정 보정은 적용하지 않습니다.</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="analysis-section">
-        <h2 class="section-title">Method References</h2>
-        <div class="info-card">
-          <ol class="reference-list">
-            <li>
-              Savitzky, A., &amp; Golay, M. J. E. (1964).
-              Smoothing and Differentiation of Data by Simplified Least Squares Procedures.
-              Analytical Chemistry, 36(8), 1627–1639.
-            </li>
-            <li>
-              Bates, D., Mächler, M., Bolker, B., &amp; Walker, S. (2015).
-              Fitting Linear Mixed-Effects Models Using lme4.
-              Journal of Statistical Software, 67(1), 1–48.
-            </li>
-            <li>
-              Kenward, M. G., &amp; Roger, J. H. (1997).
-              Small Sample Inference for Fixed Effects from Restricted Maximum Likelihood.
-              Biometrics, 53(3), 983–997.
-            </li>
-          </ol>
-        </div>
-      </section>
-    </main>
-  </div>
+<ul class="text-list">
+<li>ICC: Intraclass Correlation Coefficient</li>
+<li>Load_c = 0, 즉 load 2.5에서 계산</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="analysis-section" id="descriptives">
+<h2 class="section-title">Descriptive Statistics</h2>
+<div class="method-card">
+<h3 class="card-title">Processing × SDS × Load Cells</h3>
+<div class="data-table-wrap">
+<table class="data-table">
+<thead>
+<tr>
+<th>Statistic</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>N_subjects</th>
+<td>해당 cell에 포함된 고유 피험자 수</td>
+</tr>
+<tr>
+<th>N_observations</th>
+<td>해당 cell의 전체 Outcome 관측 수</td>
+</tr>
+<tr>
+<th>Mean / SD</th>
+<td>Outcome의 산술평균과 표준편차</td>
+</tr>
+<tr>
+<th>SEM</th>
+<td>\(SD/\sqrt{N_{subjects}}\)</td>
+</tr>
+<tr>
+<th>Median</th>
+<td>Outcome의 중앙값</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section class="analysis-section" id="outputs">
+<h2 class="section-title">Output Files</h2>
+<div class="output-grid">
+<article class="info-card">
+<h3 class="card-title">Common Outputs</h3>
+<ul class="text-list">
+<li><code>SG_LMM_model_input_all_metrics.xlsx</code></li>
+<li><code>SG_LMM_processing_log.xlsx</code></li>
+<li>전체 BFI/BVI model input과 처리 상태 저장</li>
+</ul>
+</article>
+<article class="info-card">
+<h3 class="card-title">Metric-Specific Outputs</h3>
+<ul class="text-list">
+<li><code>BFI_SG_LMM_results.xlsx</code></li>
+<li><code>BVI_SG_LMM_results.xlsx</code></li>
+<li>각 metric의 text summary도 별도 저장</li>
+</ul>
+</article>
+</div>
+<div class="method-card" style="margin-top: 18px;">
+<h3 class="card-title">Excel Worksheets</h3>
+<div class="sheet-list">
+<div class="sheet-item"><span class="blue-highlight">Model_input</span><br/>실제 LMM 입력 자료</div>
+<div class="sheet-item"><span class="blue-highlight">Descriptives</span><br/>cell별 기술통계</div>
+<div class="sheet-item"><span class="blue-highlight">Primary_ModelInfo</span><br/>Primary model 적합 정보</div>
+<div class="sheet-item"><span class="blue-highlight">Primary_FixedEffects</span><br/>Primary 고정효과</div>
+<div class="sheet-item"><span class="blue-highlight">Primary_Contrasts</span><br/>SDS별 slope 및 차이</div>
+<div class="sheet-item"><span class="blue-highlight">Primary_LRT</span><br/>Primary 우도비 검정</div>
+<div class="sheet-item"><span class="blue-highlight">Primary_RandomEffects</span><br/>분산·공분산 및 ICC</div>
+<div class="sheet-item"><span class="blue-highlight">Process_ModelInfo</span><br/>Processing model 적합 정보</div>
+<div class="sheet-item"><span class="blue-highlight">Process_FixedEffects</span><br/>Processing 고정효과</div>
+<div class="sheet-item"><span class="blue-highlight">Process_Contrasts</span><br/>Processing별 slope 및 차이</div>
+<div class="sheet-item"><span class="blue-highlight">Process_LRT</span><br/>Processing 우도비 검정</div>
+<div class="sheet-item"><span class="blue-highlight">Fit_attempts / Metadata</span><br/>수렴 시도와 분석 환경</div>
+</div>
+</div>
+</section>
+<section class="analysis-section" id="notes">
+<h2 class="section-title">Interpretation Notes</h2>
+<div class="card-grid two">
+<article class="note-card">
+<h3 class="card-title">Model Assumptions</h3>
+<ul class="warning-list">
+<li>Load 1–4를 continuous predictor로 사용하므로 선형 load trend를 가정합니다.</li>
+<li>4-back에서 감소하는 inverted-U와 같은 비선형 반응은 직접 모델링하지 않습니다.</li>
+<li>Wald z 및 chi-square LRT는 asymptotic approximation을 사용합니다.</li>
+<li>잔차 정규성, 이분산성 및 영향점 진단은 코드에 포함되어 있지 않습니다.</li>
+</ul>
+</article>
+<article class="note-card">
+<h3 class="card-title">Design-Specific Considerations</h3>
+<ul class="warning-list">
+<li>모든 load가 동일 baseline을 공유하므로 baseline error가 여러 Outcome에 공통으로 들어갑니다.</li>
+<li>RawDarkOnly와 NoiseReduced는 동일 원신호에서 파생된 paired data입니다.</li>
+<li>현재 Secondary model은 동일 Subject × SDS × Load pair의 추가 상관을 별도로 모델링하지 않습니다.</li>
+<li>여러 fixed effects와 contrasts에 대한 다중검정 보정은 적용하지 않습니다.</li>
+</ul>
+</article>
+</div>
+</section>
+<section class="analysis-section" id="references">
+<h2 class="section-title">Method References</h2>
+<div class="info-card">
+<ol class="reference-list">
+<li>
+        Kreiss, L., et al. (2025).
+        <em>Beneath the surface: revealing deep-tissue blood flow in human subjects
+        with massively parallelized diffuse correlation spectroscopy.</em>
+        Neurophotonics, 12(2), 025007. DOI: 10.1117/1.NPh.12.2.025007.
+        <span class="reference-note">
+          반복 trial의 control 및 cognitive-task 혈류 값을 linear mixed-effects model로 비교한 pDCS 연구입니다.
+        </span>
+</li>
+<li>
+        Sunwoo, J., et al. (2022).
+        <em>Diffuse correlation spectroscopy blood flow monitoring for intraventricular
+        hemorrhage vulnerability in extremely low gestational age newborns.</em>
+        Scientific Reports, 12, 12798. DOI: 10.1038/s41598-022-16499-3.
+        <span class="reference-note">
+          동일 신생아에서 여러 날 반복 측정된 DCS 지표를 subject random effect가 포함된 LMM으로 분석했습니다.
+        </span>
+</li>
+<li>
+        Favilla, C. G., et al. (2024).
+        <em>Validation of the Openwater wearable optical system: cerebral hemodynamic
+        monitoring during a breath-hold maneuver.</em>
+        Neurophotonics, 11(1), 015008. DOI: 10.1117/1.NPh.11.1.015008.
+        <span class="reference-note">
+          speckle 기반 optical blood-flow signal과 TCD의 beat-to-beat 측정값 관계를 mixed-effects linear model로 평가했습니다.
+        </span>
+</li>
+<li>
+        An, J., et al. (2025).
+        <em>Functional near-infrared spectroscopy short-channel regression improves
+        cortical activation estimates of working memory load.</em>
+        Neurophotonics, 12(3), 035009. DOI: 10.1117/1.NPh.12.3.035009.
+        <span class="reference-note">
+          working-memory load 및 short-channel regression에 따른 fNIRS cortical activation 차이를 LMM으로 검정했습니다.
+        </span>
+</li>
+</ol>
+</div>
+</section>
+</main>
+</div>
 </body>
 </html>
