@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMM Analysis</title>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]]
+      },
+      svg: {
+        fontCache: "global"
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --purple: rgba(211, 140, 255, 0.95);
+      --purple-soft: rgba(211, 140, 255, 0.72);
+      --blue: rgba(102, 204, 255, 0.88);
+      --text: rgba(255, 255, 255, 0.90);
+      --muted: rgba(255, 255, 255, 0.68);
+      --panel: rgba(0, 0, 0, 0.56);
+      --border: rgba(255, 255, 255, 0.15);
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: white;
+      overflow-x: hidden;
+      background-color: #000;
+    }
+
+    body {
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("images/lmm%20background.jpeg") center / cover no-repeat;
+      opacity: 0.7;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 18% 18%,
+          rgba(175, 100, 255, 0.17),
+          transparent 32%
+        ),
+        linear-gradient(
+          rgba(0, 0, 0, 0.40),
+          rgba(0, 0, 0, 0.88)
+        );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      padding: 34px;
+    }
+
+    .top-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .submenu-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .nav-button,
+    .submenu-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .nav-button {
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-3px);
+      box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
+    }
+
+    .submenu-tab {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(116, 70, 180, 0.60),
+          rgba(38, 94, 158, 0.52)
+        );
+      border: 1px solid rgba(211, 170, 255, 0.72);
+      box-shadow:
+        0 0 12px rgba(180, 105, 255, 0.18),
+        inset 0 0 12px rgba(255, 255, 255, 0.04);
+    }
+
+    .submenu-tab::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          110deg,
+          transparent 20%,
+          rgba(255, 255, 255, 0.18) 50%,
+          transparent 80%
+        );
+      transform: translateX(-120%);
+      transition: transform 0.45s ease;
+    }
+
+    .submenu-tab:hover,
+    .submenu-tab[aria-current="page"] {
+      border-color: rgba(225, 195, 255, 0.96);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(135, 78, 205, 0.76),
+          rgba(43, 112, 185, 0.68)
+        );
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 18px rgba(188, 120, 255, 0.38),
+        0 8px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    .submenu-tab:hover::before {
+      transform: translateX(120%);
+    }
+
+    .tab-icon {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+
+    .page-shell {
+      width: min(1800px, 96vw);
+      margin: 0;
+    }
+
+    .page-header {
+      margin-bottom: 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 4.5vw, 64px);
+      line-height: 1.15;
+      font-weight: 700;
+      text-align: left;
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow:
+        0 0 8px rgba(211, 140, 255, 0.65),
+        0 0 18px rgba(211, 140, 255, 0.42),
+        0 0 30px rgba(150, 80, 255, 0.24);
+    }
+
+    .header-line {
+      width: min(360px, 72vw);
+      height: 2px;
+      margin-top: 18px;
+      background: linear-gradient(
+        90deg,
+        rgba(220, 170, 255, 0.95),
+        rgba(150, 100, 255, 0.45),
+        transparent
+      );
+      box-shadow: 0 0 12px rgba(190, 120, 255, 0.55);
+    }
+
+    .overview {
+      max-width: 1320px;
+      margin-bottom: 42px;
+    }
+
+    .overview-list {
+      margin: 0;
+      padding-left: 26px;
+    }
+
+    .overview-list li {
+      margin: 10px 0;
+      padding-left: 6px;
+      font-size: 18px;
+      line-height: 1.75;
+      color: var(--text);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
+    }
+
+    .overview-list li::marker {
+      color: var(--purple);
+      font-size: 1.15em;
+    }
+
+    .analysis-section {
+      margin-bottom: 52px;
+    }
+
+    .section-title {
+      display: inline-block;
+      margin: 0 0 24px;
+      padding-bottom: 8px;
+      font-size: clamp(25px, 2.4vw, 34px);
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.98);
+      border-bottom: 2px solid var(--purple-soft);
+      text-shadow:
+        0 0 8px rgba(211, 140, 255, 0.50),
+        0 0 16px rgba(211, 140, 255, 0.25);
+    }
+
+    .subsection-title {
+      margin: 0 0 14px;
+      font-size: 22px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .card-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card-grid.three {
+      grid-template-columns: repeat(3, minmax(250px, 1fr));
+    }
+
+    .info-card,
+    .method-card,
+    .equation-card,
+    .note-card {
+      min-width: 0;
+      padding: 23px 24px;
+      background: var(--panel);
+      border-top: 2px solid rgba(102, 204, 255, 0.72);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.24),
+        0 0 16px rgba(80, 160, 255, 0.07);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .method-card {
+      border-left: 3px solid rgba(102, 204, 255, 0.72);
+      border-top: 0;
+    }
+
+    .equation-card {
+      border-left: 4px solid rgba(211, 140, 255, 0.88);
+      border-top: 0;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(42, 20, 55, 0.72),
+          rgba(14, 20, 38, 0.70)
+        );
+    }
+
+    .note-card {
+      border-top-color: rgba(255, 196, 102, 0.82);
+    }
+
+    .card-title {
+      margin: 0 0 14px;
+      font-size: 21px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .metric-value {
+      display: block;
+      margin: 4px 0 10px;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #dfb5ff;
+    }
+
+    .text-list,
+    .definition-list,
+    .warning-list {
+      margin: 0;
+      padding-left: 21px;
+    }
+
+    .text-list li,
+    .definition-list li,
+    .warning-list li {
+      margin: 8px 0;
+      font-size: 15px;
+      line-height: 1.68;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .text-list li::marker,
+    .definition-list li::marker {
+      color: rgba(120, 200, 255, 0.90);
+    }
+
+    .warning-list li::marker {
+      color: rgba(255, 196, 102, 0.95);
+    }
+
+    .highlight {
+      color: #dfb5ff;
+      font-weight: 700;
+    }
+
+    .blue-highlight {
+      color: #8fd8ff;
+      font-weight: 700;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(150px, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .pipeline-step {
+      position: relative;
+      min-height: 150px;
+      padding: 19px 16px;
+      background: rgba(0, 0, 0, 0.58);
+      border: 1px solid rgba(211, 170, 255, 0.40);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
+    }
+
+    .pipeline-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -13px;
+      z-index: 2;
+      transform: translateY(-50%);
+      font-size: 22px;
+      color: rgba(211, 170, 255, 0.95);
+      text-shadow: 0 0 8px rgba(211, 140, 255, 0.60);
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 12px;
+      border-radius: 50%;
+      background: rgba(131, 79, 190, 0.68);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .step-title {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .step-text {
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.70);
+    }
+
+    .equation {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 9px 2px 13px;
+      font-size: 23px;
+      line-height: 1.8;
+      color: rgba(242, 222, 255, 0.99);
+    }
+
+    .equation.large {
+      font-size: 26px;
+    }
+
+    .equation mjx-container {
+      margin: 0 !important;
+      text-align: left !important;
+      max-width: 100%;
+    }
+
+    .formula-label {
+      margin: 0 0 10px;
+      font-size: 19px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.96);
+    }
+
+    .model-block {
+      display: grid;
+      grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.72fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .term-table-wrap,
+    .data-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.48);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .term-table {
+      min-width: 720px;
+    }
+
+    .data-table {
+      min-width: 670px;
+    }
+
+    th,
+    td {
+      padding: 12px 11px;
+      border-right: 1px solid rgba(255, 255, 255, 0.11);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+      vertical-align: top;
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: 0;
+    }
+
+    tbody tr:last-child td,
+    tbody tr:last-child th {
+      border-bottom: 0;
+    }
+
+    thead th {
+      background: rgba(138, 79, 190, 0.34);
+      color: rgba(255, 255, 255, 0.98);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tbody th {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(229, 190, 255, 0.98);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    td {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #dcb2ff;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.94em;
+      word-break: break-word;
+    }
+
+    .load-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .load-item {
+      padding: 17px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.54);
+      border: 1px solid rgba(211, 170, 255, 0.34);
+    }
+
+    .load-name {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .load-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #dfb5ff;
+    }
+
+    .callout {
+      margin-top: 18px;
+      padding: 18px 20px;
+      background: rgba(33, 18, 48, 0.72);
+      border-left: 4px solid rgba(211, 140, 255, 0.88);
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .callout.warning {
+      background: rgba(49, 34, 14, 0.68);
+      border-left-color: rgba(255, 196, 102, 0.90);
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .sheet-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .sheet-item {
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.77);
+    }
+
+    .reference-list {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .reference-list li {
+      margin: 9px 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    @media screen and (max-width: 1500px) {
+      .card-grid {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+      }
+
+      .pipeline {
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+      }
+
+      .pipeline-step:nth-child(4)::after {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 1150px) {
+      .card-grid.three,
+      .model-block,
+      .output-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pipeline-step:nth-child(even)::after {
+        display: none;
+      }
+
+      .pipeline-step:nth-child(4)::after {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 900px) {
+      .page-container {
+        padding: 22px;
+      }
+
+      .page-shell {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .card-grid,
+      .card-grid.two,
+      .card-grid.three {
+        grid-template-columns: 1fr;
+      }
+
+      .load-grid,
+      .sheet-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .equation,
+      .equation.large {
+        font-size: 21px;
+      }
+    }
+
+    @media screen and (max-width: 560px) {
+      .page-container {
+        padding: 16px;
+      }
+
+      .top-navigation {
+        align-items: stretch;
+      }
+
+      .top-navigation > .nav-button,
+      .submenu-group {
+        width: 100%;
+      }
+
+      .submenu-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-button,
+      .submenu-tab {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .overview-list li {
+        font-size: 16px;
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline-step::after {
+        display: none !important;
+      }
+
+      .load-grid,
+      .sheet-list {
+        grid-template-columns: 1fr;
+      }
+
+      .info-card,
+      .method-card,
+      .equation-card,
+      .note-card {
+        padding: 18px;
+      }
+
+      .equation,
+      .equation.large {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-container">
+    <nav class="top-navigation" aria-label="Page navigation">
+      <a class="nav-button" href="index.html">← Back to Homepage</a>
+
+      <div class="submenu-group">
+        <a class="submenu-tab" href="noise-analysis.html">
+          <span class="tab-icon" aria-hidden="true">◫</span>
+          Noise Analysis
+        </a>
+
+        <a class="submenu-tab" href="machine-vision.html">
+          <span class="tab-icon" aria-hidden="true">▣</span>
+          Machine Vision
+        </a>
+
+        <a class="submenu-tab" href="lmm-analysis.html" aria-current="page">
+          <span class="tab-icon" aria-hidden="true">Σ</span>
+          LMM Analysis
+        </a>
+      </div>
+    </nav>
+
+    <main class="page-shell">
+      <header class="page-header">
+        <h1>Linear Mixed Model Analysis</h1>
+        <div class="header-line"></div>
+      </header>
+
+      <section class="overview">
+        <ul class="overview-list">
+          <li>
+            20명 피험자의 BFI와 BVI 시계열을 Savitzky–Golay 필터로 평활화한 뒤,
+            baseline과 1–4 back 구간의 대표값을 계산합니다.
+          </li>
+          <li>
+            피험자 내 반복측정 구조를 고려하기 위해 LMM
+            (Linear Mixed Model, 선형혼합모형)을 적용하고,
+            N-back load, SDS 및 noise-reduction processing의 영향을 검정합니다.
+          </li>
+          <li>
+            최종 LMM 관측 단위는 개별 frame이 아니라
+            <span class="highlight">Subject × Processing × SDS × Load</span> 조합입니다.
+          </li>
+        </ul>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Analysis Configuration</h2>
+
+        <div class="card-grid">
+          <article class="info-card">
+            <h3 class="card-title">Participants</h3>
+            <span class="metric-value">20 Subjects</span>
+            <ul class="text-list">
+              <li>Subject_1–Subject_20</li>
+              <li>피험자별 반복측정 자료</li>
+              <li>Subject를 grouping factor로 사용</li>
+            </ul>
+          </article>
+
+          <article class="info-card">
+            <h3 class="card-title">Signals</h3>
+            <span class="metric-value">BFI &amp; BVI</span>
+            <ul class="text-list">
+              <li>BFI: Blood Flow Index</li>
+              <li>BVI: Blood Volume Index</li>
+              <li>각 metric을 별도의 LMM으로 분석</li>
+            </ul>
+          </article>
+
+          <article class="info-card">
+            <h3 class="card-title">Measurement Depth</h3>
+            <span class="metric-value">15 / 20 mm</span>
+            <ul class="text-list">
+              <li>SDS: Source–Detector Separation</li>
+              <li>Reference category: 15 mm</li>
+              <li>20 mm 효과는 15 mm 대비 차이</li>
+            </ul>
+          </article>
+
+          <article class="info-card">
+            <h3 class="card-title">Processing</h3>
+            <span class="metric-value">Raw vs Corrected</span>
+            <ul class="text-list">
+              <li>RawDarkOnly: dark subtraction 기반</li>
+              <li>NoiseReduced: 추가 noise correction</li>
+              <li>Reference category: RawDarkOnly</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Processing Pipeline</h2>
+
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <span class="step-number">1</span>
+            <span class="step-title">Signal Import</span>
+            <span class="step-text">Excel 첫 번째 열을 time, 두 번째 열을 signal로 읽습니다.</span>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-number">2</span>
+            <span class="step-title">Data Cleaning</span>
+            <span class="step-text">NaN 및 비수치 값을 제거하고 time 기준으로 정렬합니다.</span>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-number">3</span>
+            <span class="step-title">SG Filtering</span>
+            <span class="step-text">6001-point, 3rd-order Savitzky–Golay smoothing을 적용합니다.</span>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-number">4</span>
+            <span class="step-title">Segmentation</span>
+            <span class="step-text">Segments.xlsx의 baseline 및 1–4 back 구간을 추출합니다.</span>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-number">5</span>
+            <span class="step-title">Window Mean</span>
+            <span class="step-text">각 segment 중앙의 최대 120초 평균을 계산합니다.</span>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-number">6</span>
+            <span class="step-title">Normalization</span>
+            <span class="step-text">BFI는 log ratio, BVI는 baseline difference로 변환합니다.</span>
+          </div>
+
+          <div class="pipeline-step">
+            <span class="step-number">7</span>
+            <span class="step-title">LMM Inference</span>
+            <span class="step-text">고정효과, contrast, LRT 및 random effects를 추정합니다.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Signal Import and Quality Control</h2>
+
+        <div class="card-grid three">
+          <article class="method-card">
+            <h3 class="card-title">Signal File Reading</h3>
+            <ul class="text-list">
+              <li>Excel 파일의 첫 번째 열: time</li>
+              <li>Excel 파일의 두 번째 열: BFI 또는 BVI</li>
+              <li>숫자로 변환할 수 없는 행은 제외</li>
+              <li>유효한 sample이 4개 미만이면 처리 실패</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3 class="card-title">Temporal Ordering</h3>
+            <ul class="text-list">
+              <li>유효 sample을 time 오름차순으로 재정렬</li>
+              <li>입력 파일의 행 순서가 뒤섞여 있어도 순서 복원</li>
+              <li>중복 timestamp와 sampling interval은 별도로 검사하지 않음</li>
+            </ul>
+          </article>
+
+          <article class="note-card">
+            <h3 class="card-title">Sampling Setting</h3>
+            <ul class="warning-list">
+              <li>설정 sampling rate: <span class="highlight">200 Hz</span></li>
+              <li><code>FS</code>는 SG window의 초 환산과 metadata에 사용</li>
+              <li>코드 내부에서 resampling 또는 200 Hz 여부 검증은 수행하지 않음</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Savitzky–Golay Filtering</h2>
+
+        <div class="model-block">
+          <article class="equation-card">
+            <h3 class="card-title">Local Polynomial Smoothing</h3>
+            <div class="equation large">
+              \[
+                \widetilde{y}(t)
+                =
+                \operatorname{SG}
+                \left(
+                  y(t);\ W=6001,\ p=3
+                \right)
+              \]
+            </div>
+            <ul class="definition-list">
+              <li>Sampling rate: \(F_s=200\ \mathrm{Hz}\)</li>
+              <li>Window length: \(W=6001\) samples</li>
+              <li>Polynomial order: \(p=3\)</li>
+              <li>Boundary mode: <code>interp</code></li>
+              <li>Window duration: \(6001/200=30.005\ \mathrm{s}\)</li>
+            </ul>
+          </article>
+
+          <article class="note-card">
+            <h3 class="card-title">Filter Interpretation</h3>
+            <ul class="warning-list">
+              <li>약 30초 길이의 강한 smoothing으로 빠른 생리 진동을 억제합니다.</li>
+              <li>심박 및 호흡 성분보다는 task-level의 느린 변화가 강조됩니다.</li>
+              <li>필터는 segment 분리 전에 전체 시계열에 먼저 적용됩니다.</li>
+              <li>따라서 task 경계 부근에는 인접 구간 정보가 섞일 수 있습니다.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Segment Definition and Averaging</h2>
+
+        <div class="card-grid two">
+          <article class="method-card">
+            <h3 class="card-title">Segment Selection</h3>
+            <ul class="text-list">
+              <li><code>Segments.xlsx</code>의 Segment, Start(s), End(s) 열 사용</li>
+              <li>End(s) &gt; Start(s)인 구간만 유지</li>
+              <li>1st rest, 2nd rest, 3rd rest 구간은 제외</li>
+              <li>이름에 baseline 또는 base가 포함된 첫 번째 구간을 baseline으로 선택</li>
+              <li>정규표현식 <code>([1-4])back</code>으로 load 1–4 추출</li>
+            </ul>
+          </article>
+
+          <article class="equation-card">
+            <h3 class="card-title">Centered Analysis Window</h3>
+            <div class="equation">
+              \[
+                T_{\mathrm{used}}
+                =
+                \min
+                \left(
+                  120\ \mathrm{s},\ T_{\mathrm{segment}}
+                \right)
+              \]
+            </div>
+            <div class="equation">
+              \[
+                \overline{y}_{\mathrm{segment}}
+                =
+                \frac{1}{N}
+                \sum_{k=1}^{N}
+                \widetilde{y}_k
+              \]
+            </div>
+            <ul class="definition-list">
+              <li>120초보다 긴 구간: 중앙 120초 사용</li>
+              <li>120초 이하 구간: 전체 구간 사용</li>
+              <li>동일 load의 segment가 여러 개면 segment mean을 동일 가중 평균</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Outcome Normalization</h2>
+
+        <div class="card-grid two">
+          <article class="equation-card">
+            <h3 class="card-title">BFI Log-Ratio Outcome</h3>
+            <div class="equation large">
+              \[
+                Y_{\mathrm{BFI}}
+                =
+                \ln
+                \left(
+                  \frac{
+                    \overline{\mathrm{BFI}}_{\mathrm{task}}
+                  }{
+                    \overline{\mathrm{BFI}}_{\mathrm{baseline}}
+                  }
+                \right)
+              \]
+            </div>
+            <ul class="definition-list">
+              <li>\(Y=0\): baseline과 동일</li>
+              <li>\(Y&gt;0\): task BFI 증가</li>
+              <li>\(Y&lt;0\): task BFI 감소</li>
+              <li>baseline 또는 task mean이 \(10^{-12}\) 이하이면 제외</li>
+            </ul>
+          </article>
+
+          <article class="equation-card">
+            <h3 class="card-title">BVI Baseline-Difference Outcome</h3>
+            <div class="equation large">
+              \[
+                Y_{\mathrm{BVI}}
+                =
+                \overline{\mathrm{BVI}}_{\mathrm{task}}
+                -
+                \overline{\mathrm{BVI}}_{\mathrm{baseline}}
+              \]
+            </div>
+            <ul class="definition-list">
+              <li>\(Y=0\): baseline과 동일</li>
+              <li>\(Y&gt;0\): task BVI 증가</li>
+              <li>\(Y&lt;0\): task BVI 감소</li>
+              <li>BFI와 달리 logarithmic ratio를 추가로 적용하지 않음</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Model-Input Structure</h2>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>Role</th>
+                <th>Levels / Definition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Subject</th>
+                <td>Grouping factor</td>
+                <td>Subject_1–Subject_20</td>
+              </tr>
+              <tr>
+                <th>Outcome</th>
+                <td>Dependent variable</td>
+                <td>BFI log ratio 또는 BVI baseline difference</td>
+              </tr>
+              <tr>
+                <th>Load</th>
+                <td>Within-subject predictor</td>
+                <td>1, 2, 3, 4 back</td>
+              </tr>
+              <tr>
+                <th>Load_c</th>
+                <td>Centered continuous predictor</td>
+                <td>Load − 2.5</td>
+              </tr>
+              <tr>
+                <th>SDS</th>
+                <td>Within-subject categorical predictor</td>
+                <td>15 mm reference, 20 mm comparison</td>
+              </tr>
+              <tr>
+                <th>Processing</th>
+                <td>Within-subject categorical predictor</td>
+                <td>RawDarkOnly reference, NoiseReduced comparison</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="load-grid">
+          <div class="load-item">
+            <span class="load-name">1-back</span>
+            <span class="load-value">−1.5</span>
+          </div>
+          <div class="load-item">
+            <span class="load-name">2-back</span>
+            <span class="load-value">−0.5</span>
+          </div>
+          <div class="load-item">
+            <span class="load-name">3-back</span>
+            <span class="load-value">+0.5</span>
+          </div>
+          <div class="load-item">
+            <span class="load-name">4-back</span>
+            <span class="load-value">+1.5</span>
+          </div>
+        </div>
+
+        <div class="callout">
+          완전한 자료가 모두 존재하면 metric 하나당 Secondary model은 최대
+          \(20\times2\times2\times4=320\) observations,
+          NoiseReduced만 사용하는 Primary model은 최대 \(160\) observations를 가집니다.
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Primary LMM: Load × SDS</h2>
+
+        <div class="model-block">
+          <article class="equation-card">
+            <h3 class="card-title">Noise-Reduced Data Only</h3>
+            <div class="formula-label">Model formula</div>
+            <div class="equation large">
+              \[
+                \mathrm{Outcome}
+                \sim
+                \mathrm{Load}_c
+                *
+                \mathrm{SDS}
+              \]
+            </div>
+            <div class="equation">
+              \[
+                Y_{ijs}
+                =
+                \beta_0
+                +\beta_1L_{ij}
+                +\beta_2S_s
+                +\beta_3L_{ij}S_s
+                +b_{0i}
+                +b_{1i}L_{ij}
+                +\varepsilon_{ijs}
+              \]
+            </div>
+          </article>
+
+          <article class="info-card">
+            <h3 class="card-title">Primary Question</h3>
+            <ul class="text-list">
+              <li>NoiseReduced 데이터에서 load에 따른 변화가 존재하는가?</li>
+              <li>15 mm와 20 mm의 load slope가 서로 다른가?</li>
+              <li>평균 load에서 SDS 간 반응 차이가 존재하는가?</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="term-table-wrap" style="margin-top: 20px;">
+          <table class="term-table">
+            <thead>
+              <tr>
+                <th>Fixed-Effect Term</th>
+                <th>Statistical Meaning</th>
+                <th>Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Intercept</th>
+                <td>\(\beta_0\)</td>
+                <td>15 mm, load 2.5에서 예상되는 baseline-normalized Outcome</td>
+              </tr>
+              <tr>
+                <th>Load_c</th>
+                <td>\(\beta_1\)</td>
+                <td>15 mm에서 load가 한 단계 증가할 때의 변화</td>
+              </tr>
+              <tr>
+                <th>C(SDS)[T.20mm]</th>
+                <td>\(\beta_2\)</td>
+                <td>평균 load에서 20 mm − 15 mm 차이</td>
+              </tr>
+              <tr>
+                <th>Load_c:C(SDS)[T.20mm]</th>
+                <td>\(\beta_3\)</td>
+                <td>20 mm slope − 15 mm slope</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Primary Linear Contrasts</h2>
+
+        <div class="card-grid two">
+          <article class="method-card">
+            <h3 class="card-title">Load Slopes</h3>
+            <div class="equation">
+              \[
+                \mathrm{Slope}_{15\,mm}=\beta_1
+              \]
+            </div>
+            <div class="equation">
+              \[
+                \mathrm{Slope}_{20\,mm}=\beta_1+\beta_3
+              \]
+            </div>
+          </article>
+
+          <article class="method-card">
+            <h3 class="card-title">Between-SDS Contrasts</h3>
+            <div class="equation">
+              \[
+                \Delta\mathrm{Slope}_{20-15}=\beta_3
+              \]
+            </div>
+            <div class="equation">
+              \[
+                \Delta\mathrm{SDS}_{20-15}\big|_{L_c=0}=\beta_2
+              \]
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Secondary LMM: Load × Processing</h2>
+
+        <div class="model-block">
+          <article class="equation-card">
+            <h3 class="card-title">RawDarkOnly and NoiseReduced</h3>
+            <div class="formula-label">Model formula</div>
+            <div class="equation large">
+              \[
+                \mathrm{Outcome}
+                \sim
+                \mathrm{Load}_c
+                *
+                \mathrm{Processing}
+                +
+                \mathrm{SDS}
+              \]
+            </div>
+            <div class="equation">
+              \[
+                Y
+                =
+                \beta_0+\beta_1L+\beta_2P
+                +\beta_3LP+\beta_4S
+                +b_0+b_1L+\varepsilon
+              \]
+            </div>
+          </article>
+
+          <article class="info-card">
+            <h3 class="card-title">Secondary Question</h3>
+            <ul class="text-list">
+              <li>RawDarkOnly에서 load slope가 존재하는가?</li>
+              <li>NoiseReduced에서 load slope가 존재하는가?</li>
+              <li>두 processing의 load slope가 서로 다른가?</li>
+              <li>SDS를 보정한 processing 평균 차이가 존재하는가?</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="term-table-wrap" style="margin-top: 20px;">
+          <table class="term-table">
+            <thead>
+              <tr>
+                <th>Fixed-Effect Term</th>
+                <th>Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Intercept</th>
+                <td>RawDarkOnly, 15 mm, load 2.5에서 예상되는 Outcome</td>
+              </tr>
+              <tr>
+                <th>Load_c</th>
+                <td>RawDarkOnly에서 load가 한 단계 증가할 때의 변화</td>
+              </tr>
+              <tr>
+                <th>C(Processing)[T.NoiseReduced]</th>
+                <td>평균 load에서 NoiseReduced − RawDarkOnly 차이</td>
+              </tr>
+              <tr>
+                <th>Load_c:C(Processing)[T.NoiseReduced]</th>
+                <td>NoiseReduced slope − RawDarkOnly slope</td>
+              </tr>
+              <tr>
+                <th>C(SDS)[T.20mm]</th>
+                <td>Load와 Processing을 보정한 평균적인 20 mm − 15 mm 차이</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          이 Secondary model에는 Processing × SDS, Load × SDS 및
+          Load × Processing × SDS interaction이 없습니다. 따라서
+          noise-reduction 효과가 15 mm와 20 mm에서 서로 다른지는 이 모델만으로 직접 검정하지 않습니다.
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Random Effects and Model Fitting</h2>
+
+        <div class="card-grid three">
+          <article class="method-card">
+            <h3 class="card-title">Initial Random Structure</h3>
+            <div class="equation">
+              \[
+                (1+\mathrm{Load}_c\mid\mathrm{Subject})
+              \]
+            </div>
+            <ul class="text-list">
+              <li>피험자별 random intercept</li>
+              <li>피험자별 random load slope</li>
+              <li>intercept–slope covariance</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3 class="card-title">Fallback Structure</h3>
+            <div class="equation">
+              \[
+                (1\mid\mathrm{Subject})
+              \]
+            </div>
+            <ul class="text-list">
+              <li>random-slope model 실패 시 적용</li>
+              <li>피험자별 평균 수준 차이만 모델링</li>
+              <li>최소 2개 이상의 load를 가진 subject만 유지</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3 class="card-title">Optimization</h3>
+            <ul class="text-list">
+              <li>Estimation: Maximum Likelihood</li>
+              <li>REML: False</li>
+              <li>Optimizers: L-BFGS, Powell, CG</li>
+              <li>Maximum iterations: 2000</li>
+              <li>수렴 시도와 warning을 Excel에 기록</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Statistical Inference</h2>
+
+        <div class="card-grid three">
+          <article class="equation-card">
+            <h3 class="card-title">Wald z Test</h3>
+            <div class="equation">
+              \[
+                z=\frac{\widehat{\beta}}{SE(\widehat{\beta})}
+              \]
+            </div>
+            <div class="equation">
+              \[
+                p=2\Phi(-|z|)
+              \]
+            </div>
+            <div class="equation">
+              \[
+                CI_{95\%}=\widehat{\beta}\pm1.96SE
+              \]
+            </div>
+          </article>
+
+          <article class="equation-card">
+            <h3 class="card-title">Likelihood-Ratio Test</h3>
+            <div class="equation">
+              \[
+                LR=2\left(\ell_{full}-\ell_{reduced}\right)
+              \]
+            </div>
+            <ul class="text-list">
+              <li>Full model과 nested reduced model 비교</li>
+              <li>동일한 random-effect structure 사용</li>
+              <li>두 모델 모두 수렴하고 관측 수가 같을 때 유효</li>
+            </ul>
+          </article>
+
+          <article class="equation-card">
+            <h3 class="card-title">BFI Effect Conversion</h3>
+            <div class="equation">
+              \[
+                \mathrm{Ratio}=e^{\widehat{\beta}}
+              \]
+            </div>
+            <div class="equation">
+              \[
+                \%\Delta=100\left(e^{\widehat{\beta}}-1\right)
+              \]
+            </div>
+            <ul class="text-list">
+              <li>BFI log-ratio coefficient만 변환</li>
+              <li>BVI coefficient에는 적용하지 않음</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Likelihood-Ratio Tests</h2>
+
+        <div class="card-grid two">
+          <article class="method-card">
+            <h3 class="card-title">Primary Model Tests</h3>
+            <ul class="text-list">
+              <li><span class="highlight">Load × SDS</span>: interaction 제거 모델과 비교</li>
+              <li><span class="highlight">All load terms</span>: load main effect와 interaction 동시 제거</li>
+              <li><span class="highlight">All SDS terms</span>: SDS main effect와 interaction 동시 제거</li>
+            </ul>
+          </article>
+
+          <article class="method-card">
+            <h3 class="card-title">Secondary Model Tests</h3>
+            <ul class="text-list">
+              <li><span class="highlight">Load × Processing</span>: interaction 제거 모델과 비교</li>
+              <li><span class="highlight">All processing terms</span>: processing 관련 항 동시 제거</li>
+              <li><span class="highlight">All load terms</span>: load 관련 항 동시 제거</li>
+              <li><span class="highlight">Adjusted SDS</span>: SDS 항 제거 모델과 비교</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Random-Effect Summary</h2>
+
+        <div class="card-grid two">
+          <article class="equation-card">
+            <h3 class="card-title">Covariance Components</h3>
+            <ul class="text-list">
+              <li>Random-intercept variance</li>
+              <li>Random-load-slope variance</li>
+              <li>Intercept–slope covariance</li>
+              <li>Residual variance</li>
+            </ul>
+          </article>
+
+          <article class="equation-card">
+            <h3 class="card-title">ICC at Mean Load</h3>
+            <div class="equation">
+              \[
+                ICC_{L_c=0}
+                =
+                \frac{\sigma_{b0}^{2}}
+                {\sigma_{b0}^{2}+\sigma_{\varepsilon}^{2}}
+              \]
+            </div>
+            <ul class="text-list">
+              <li>ICC: Intraclass Correlation Coefficient</li>
+              <li>Load_c = 0, 즉 load 2.5에서 계산</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Descriptive Statistics</h2>
+
+        <div class="method-card">
+          <h3 class="card-title">Processing × SDS × Load Cells</h3>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Statistic</th>
+                  <th>Definition</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>N_subjects</th>
+                  <td>해당 cell에 포함된 고유 피험자 수</td>
+                </tr>
+                <tr>
+                  <th>N_observations</th>
+                  <td>해당 cell의 전체 Outcome 관측 수</td>
+                </tr>
+                <tr>
+                  <th>Mean / SD</th>
+                  <td>Outcome의 산술평균과 표준편차</td>
+                </tr>
+                <tr>
+                  <th>SEM</th>
+                  <td>\(SD/\sqrt{N_{subjects}}\)</td>
+                </tr>
+                <tr>
+                  <th>Median</th>
+                  <td>Outcome의 중앙값</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Output Files</h2>
+
+        <div class="output-grid">
+          <article class="info-card">
+            <h3 class="card-title">Common Outputs</h3>
+            <ul class="text-list">
+              <li><code>SG_LMM_model_input_all_metrics.xlsx</code></li>
+              <li><code>SG_LMM_processing_log.xlsx</code></li>
+              <li>전체 BFI/BVI model input과 처리 상태 저장</li>
+            </ul>
+          </article>
+
+          <article class="info-card">
+            <h3 class="card-title">Metric-Specific Outputs</h3>
+            <ul class="text-list">
+              <li><code>BFI_SG_LMM_results.xlsx</code></li>
+              <li><code>BVI_SG_LMM_results.xlsx</code></li>
+              <li>각 metric의 text summary도 별도 저장</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="method-card" style="margin-top: 18px;">
+          <h3 class="card-title">Excel Worksheets</h3>
+          <div class="sheet-list">
+            <div class="sheet-item"><span class="blue-highlight">Model_input</span><br>실제 LMM 입력 자료</div>
+            <div class="sheet-item"><span class="blue-highlight">Descriptives</span><br>cell별 기술통계</div>
+            <div class="sheet-item"><span class="blue-highlight">Primary_ModelInfo</span><br>Primary model 적합 정보</div>
+            <div class="sheet-item"><span class="blue-highlight">Primary_FixedEffects</span><br>Primary 고정효과</div>
+            <div class="sheet-item"><span class="blue-highlight">Primary_Contrasts</span><br>SDS별 slope 및 차이</div>
+            <div class="sheet-item"><span class="blue-highlight">Primary_LRT</span><br>Primary 우도비 검정</div>
+            <div class="sheet-item"><span class="blue-highlight">Primary_RandomEffects</span><br>분산·공분산 및 ICC</div>
+            <div class="sheet-item"><span class="blue-highlight">Process_ModelInfo</span><br>Processing model 적합 정보</div>
+            <div class="sheet-item"><span class="blue-highlight">Process_FixedEffects</span><br>Processing 고정효과</div>
+            <div class="sheet-item"><span class="blue-highlight">Process_Contrasts</span><br>Processing별 slope 및 차이</div>
+            <div class="sheet-item"><span class="blue-highlight">Process_LRT</span><br>Processing 우도비 검정</div>
+            <div class="sheet-item"><span class="blue-highlight">Fit_attempts / Metadata</span><br>수렴 시도와 분석 환경</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Interpretation Notes</h2>
+
+        <div class="card-grid two">
+          <article class="note-card">
+            <h3 class="card-title">Model Assumptions</h3>
+            <ul class="warning-list">
+              <li>Load 1–4를 continuous predictor로 사용하므로 선형 load trend를 가정합니다.</li>
+              <li>4-back에서 감소하는 inverted-U와 같은 비선형 반응은 직접 모델링하지 않습니다.</li>
+              <li>Wald z 및 chi-square LRT는 asymptotic approximation을 사용합니다.</li>
+              <li>잔차 정규성, 이분산성 및 영향점 진단은 코드에 포함되어 있지 않습니다.</li>
+            </ul>
+          </article>
+
+          <article class="note-card">
+            <h3 class="card-title">Design-Specific Considerations</h3>
+            <ul class="warning-list">
+              <li>모든 load가 동일 baseline을 공유하므로 baseline error가 여러 Outcome에 공통으로 들어갑니다.</li>
+              <li>RawDarkOnly와 NoiseReduced는 동일 원신호에서 파생된 paired data입니다.</li>
+              <li>현재 Secondary model은 동일 Subject × SDS × Load pair의 추가 상관을 별도로 모델링하지 않습니다.</li>
+              <li>여러 fixed effects와 contrasts에 대한 다중검정 보정은 적용하지 않습니다.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Method References</h2>
+        <div class="info-card">
+          <ol class="reference-list">
+            <li>
+              Savitzky, A., &amp; Golay, M. J. E. (1964).
+              Smoothing and Differentiation of Data by Simplified Least Squares Procedures.
+              Analytical Chemistry, 36(8), 1627–1639.
+            </li>
+            <li>
+              Bates, D., Mächler, M., Bolker, B., &amp; Walker, S. (2015).
+              Fitting Linear Mixed-Effects Models Using lme4.
+              Journal of Statistical Software, 67(1), 1–48.
+            </li>
+            <li>
+              Kenward, M. G., &amp; Roger, J. H. (1997).
+              Small Sample Inference for Fixed Effects from Restricted Maximum Likelihood.
+              Biometrics, 53(3), 983–997.
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
