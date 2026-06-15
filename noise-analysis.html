@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Noise Analysis</title>
 
   <script>
@@ -18,11 +16,7 @@
       }
     };
   </script>
-
-  <script
-    async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
   <style>
     * {
@@ -83,10 +77,6 @@
       padding: 34px;
     }
 
-    /* =========================
-       Navigation
-       ========================= */
-
     .top-navigation {
       display: flex;
       flex-wrap: wrap;
@@ -95,6 +85,14 @@
       gap: 12px;
       width: 100%;
       margin-bottom: 28px;
+    }
+
+    .submenu-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
     }
 
     .nav-button,
@@ -181,10 +179,6 @@
       font-size: 16px;
     }
 
-    /* =========================
-       Main layout
-       ========================= */
-
     .page-shell {
       width: min(1800px, 96vw);
       margin: 0;
@@ -220,10 +214,6 @@
       box-shadow: 0 0 12px rgba(190, 120, 255, 0.55);
     }
 
-    /* =========================
-       Overview
-       ========================= */
-
     .overview {
       max-width: 1180px;
       margin-bottom: 44px;
@@ -248,10 +238,6 @@
       font-size: 1.15em;
     }
 
-    /* =========================
-       Common section
-       ========================= */
-
     .analysis-section {
       margin-bottom: 50px;
     }
@@ -268,10 +254,6 @@
         0 0 8px rgba(211, 140, 255, 0.50),
         0 0 16px rgba(211, 140, 255, 0.25);
     }
-
-    /* =========================
-       Image Configuration
-       ========================= */
 
     .configuration-grid {
       display: grid;
@@ -327,10 +309,6 @@
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.64);
     }
-
-    /* =========================
-       Signal + Noise + Correction
-       ========================= */
 
     .calculation-layout {
       display: grid;
@@ -457,10 +435,6 @@
       font-weight: 700;
     }
 
-    /* =========================
-       Correction
-       ========================= */
-
     .final-equation-box {
       width: 100%;
       padding: 32px 30px;
@@ -515,10 +489,6 @@
     .final-description li::marker {
       color: rgba(211, 140, 255, 0.90);
     }
-
-    /* =========================
-       Calculated noise table
-       ========================= */
 
     .noise-value-box {
       flex: 1;
@@ -602,10 +572,6 @@
       color: rgba(255, 255, 255, 0.62);
     }
 
-    /* =========================
-       Responsive
-       ========================= */
-
     @media screen and (max-width: 1450px) {
       .calculation-layout {
         grid-template-columns:
@@ -677,9 +643,14 @@
         align-items: stretch;
       }
 
-      .top-navigation .nav-button,
-      .top-navigation .submenu-tab {
-        flex: 1 1 100%;
+      .top-navigation > .nav-button,
+      .submenu-group {
+        width: 100%;
+      }
+
+      .submenu-group {
+        flex-direction: column;
+        align-items: stretch;
       }
 
       .nav-button,
@@ -729,616 +700,319 @@
       }
     }
   </style>
-
 </head>
 
 <body>
   <div class="page-container">
+    <nav class="top-navigation" aria-label="Page navigation">
+      <a class="nav-button" href="index.html">
+        ← Back to Homepage
+      </a>
 
+      <div class="submenu-group">
+        <a class="submenu-tab" href="machine-vision.html">
+          <span class="tab-icon" aria-hidden="true">▣</span>
+          Machine Vision
+        </a>
 
-<nav class="top-navigation" aria-label="Page navigation">
-  <a class="nav-button" href="index.html">
-    ← Back to Homepage
-  </a>
+        <a class="submenu-tab" href="lmm-analysis.html">
+          <span class="tab-icon" aria-hidden="true">Σ</span>
+          LMM Analysis
+        </a>
+      </div>
+    </nav>
 
-  <a class="submenu-tab" href="machine-vision.html">
-    <span class="tab-icon" aria-hidden="true">▣</span>
-    Machine Vision
-  </a>
-</nav>
+    <main class="page-shell">
+      <header class="page-header">
+        <h1>Noise Analysis</h1>
+        <div class="header-line"></div>
+      </header>
 
-<main class="page-shell">
-
-  <header class="page-header">
-    <h1>Noise Analysis</h1>
-    <div class="header-line"></div>
-  </header>
-
-  <section class="overview">
-    <ul class="overview-list">
-      <li>
-        CCD에서 측정된 영상에 평균 dark image를 픽셀별로 차감한
-        영상을 본 분석의 raw image로 사용합니다.
-      </li>
-
-      <li>
-        Raw \(K^2\)에서 shot noise, temporal dark noise 및
-        quantization noise 성분을 분리하여 보정된
-        speckle contrast를 계산합니다.
-      </li>
-    </ul>
-  </section>
-
-  <section class="analysis-section">
-    <h2 class="section-title">Image Configuration</h2>
-
-    <div class="configuration-grid">
-
-      <article class="configuration-item">
-        <h3>Image Region</h3>
-
-        <ul class="configuration-list">
+      <section class="overview">
+        <ul class="overview-list">
           <li>
-            ROI:
-            <span class="highlight-value">21 × 21 [pixel]</span>
+            CCD에서 측정된 영상에 평균 dark image를 픽셀별로 차감한
+            영상을 본 분석의 raw image로 사용합니다.
           </li>
-
           <li>
-            Pixels per image:
-            <span class="highlight-value">441 [pixel]</span>
-          </li>
-
-          <li>
-            Analysis:
-            <span class="highlight-value">
-              Spatial speckle contrast
-            </span>
+            Raw \(K^2\)에서 shot noise, temporal dark noise 및
+            quantization noise 성분을 분리하여 보정된
+            speckle contrast를 계산합니다.
           </li>
         </ul>
-      </article>
+      </section>
 
-      <article class="configuration-item">
-        <h3>Measurement Channels</h3>
+      <section class="analysis-section">
+        <h2 class="section-title">Image Configuration</h2>
 
-        <ul class="configuration-list">
-          <li>
-            Ch. 1:
-            <span class="highlight-value">15 [mm] SDS</span>
-          </li>
+        <div class="configuration-grid">
+          <article class="configuration-item">
+            <h3>Image Region</h3>
+            <ul class="configuration-list">
+              <li>ROI: <span class="highlight-value">21 × 21 [pixel]</span></li>
+              <li>Pixels per image: <span class="highlight-value">441 [pixel]</span></li>
+              <li>Analysis: <span class="highlight-value">Spatial speckle contrast</span></li>
+            </ul>
+          </article>
 
-          <li>
-            Ch. 2:
-            <span class="highlight-value">20 [mm] SDS</span>
-          </li>
+          <article class="configuration-item">
+            <h3>Measurement Channels</h3>
+            <ul class="configuration-list">
+              <li>Ch. 1: <span class="highlight-value">15 [mm] SDS</span></li>
+              <li>Ch. 2: <span class="highlight-value">20 [mm] SDS</span></li>
+              <li>SDS: <span class="highlight-value">Source-Detector Separation</span></li>
+            </ul>
+          </article>
 
-          <li>
-            SDS:
-            <span class="highlight-value">
-              Source-Detector Separation
+          <article class="configuration-item">
+            <h3>Detector Specifications</h3>
+            <ul class="configuration-list">
+              <li>Camera: <span class="highlight-value">Basler acA1300-60gm GigE Camera</span></li>
+              <li>Sensor: <span class="highlight-value">e2v EV76C560 CMOS</span></li>
+              <li>Resolution: <span class="highlight-value">1282 × 1026 [pixel]</span></li>
+              <li>Pixel size: <span class="highlight-value">5.3 × 5.3 [μm]</span></li>
+              <li>Image type: <span class="highlight-value">Monochrome</span></li>
+              <li>Interface: <span class="highlight-value">GigE</span></li>
+              <li>Exposure time: <span class="highlight-value">2 [ms]</span></li>
+              <li>Inverse system gain: <span class="highlight-value">2.4 [e⁻/DN]</span></li>
+              <li>Temporal dark noise: <span class="highlight-value">24.7 [e⁻ RMS]</span></li>
+              <li>ADC bit depth: <span class="highlight-value">12 [bit]</span></li>
+              <li>ADC range: <span class="highlight-value">0–4095 [DN]</span></li>
+              <li>Quantization step: <span class="highlight-value">1 [DN/LSB]</span></li>
+            </ul>
+            <span class="parameter-note">
+              ADC: Analog-to-Digital Converter,
+              DN: Digital Number,
+              LSB: Least Significant Bit,
+              RMS: Root Mean Square.
             </span>
-          </li>
-        </ul>
-      </article>
-
-      <article class="configuration-item">
-        <h3>Detector Specifications</h3>
-
-        <ul class="configuration-list">
-          <li>
-            Camera:
-            <span class="highlight-value">
-              Basler acA1300-60gm GigE Camera
-            </span>
-          </li>
-
-          <li>
-            Sensor:
-            <span class="highlight-value">
-              e2v EV76C560 CMOS
-            </span>
-          </li>
-
-          <li>
-            Resolution:
-            <span class="highlight-value">
-              1282 × 1026 [pixel]
-            </span>
-          </li>
-
-          <li>
-            Pixel size:
-            <span class="highlight-value">
-              5.3 × 5.3 [μm]
-            </span>
-          </li>
-
-          <li>
-            Image type:
-            <span class="highlight-value">
-              Monochrome
-            </span>
-          </li>
-
-          <li>
-            Interface:
-            <span class="highlight-value">
-              GigE
-            </span>
-          </li>
-
-          <li>
-            Exposure time:
-            <span class="highlight-value">
-              2 [ms]
-            </span>
-          </li>
-
-          <li>
-            Inverse system gain:
-            <span class="highlight-value">
-              2.4 [e⁻/DN]
-            </span>
-          </li>
-
-          <li>
-            Temporal dark noise:
-            <span class="highlight-value">
-              24.7 [e⁻ RMS]
-            </span>
-          </li>
-
-          <li>
-            ADC bit depth:
-            <span class="highlight-value">
-              12 [bit]
-            </span>
-          </li>
-
-          <li>
-            ADC range:
-            <span class="highlight-value">
-              0–4095 [DN]
-            </span>
-          </li>
-
-          <li>
-            Quantization step:
-            <span class="highlight-value">
-              1 [DN/LSB]
-            </span>
-          </li>
-        </ul>
-
-        <span class="parameter-note">
-          ADC: Analog-to-Digital Converter,
-          DN: Digital Number,
-          LSB: Least Significant Bit,
-          RMS: Root Mean Square.
-        </span>
-      </article>
-
-    </div>
-  </section>
-
-  <div class="calculation-layout">
-
-    <section class="calculation-column">
-      <h2 class="section-title">Signal Calculation</h2>
-
-      <div class="equation-list">
-
-        <article class="equation-row">
-          <div class="equation-name">
-            Dark-Subtracted Raw Image
-          </div>
-
-          <div class="equation">
-            \[
-              I_{\mathrm{raw}}(x,y,t)
-              =
-              I_{\mathrm{CCD}}(x,y,t)
-              -
-              \overline{D}(x,y)
-            \]
-          </div>
-
-          <ul class="description-list">
-            <li>
-              \(I_{\mathrm{CCD}}\) [DN]:
-              CCD에서 측정된 pixel intensity
-            </li>
-
-            <li>
-              \(\overline{D}\) [DN]:
-              충분한 수의 dark frame을 평균한
-              pixel-wise dark image
-            </li>
-
-            <li>
-              \(I_{\mathrm{raw}}\) [DN]:
-              평균 dark image가 차감된 pixel intensity
-            </li>
-
-            <li>
-              \(x,y\) [pixel]:
-              ROI 내부의 공간 좌표
-            </li>
-
-            <li>
-              \(t\) [s]:
-              영상이 측정된 시간
-            </li>
-          </ul>
-        </article>
-
-        <article class="equation-row">
-          <div class="equation-name">
-            Mean Intensity
-          </div>
-
-          <div class="equation">
-            \[
-              \mu_I
-              =
-              \frac{1}{N}
-              \sum_{i=1}^{N} I_{\mathrm{raw},i}
-            \]
-          </div>
-
-          <ul class="description-list">
-            <li>
-              \(I_{\mathrm{raw},i}\) [DN]:
-              \(I_{\mathrm{raw}}\)에서 ROI 내 \(i\)번째 pixel intensity
-            </li>
-
-            <li>
-              \(N\) [pixel]:
-              전체 pixel 수
-            </li>
-
-            <li>
-              \(\mu_I\) [DN]:
-              프레임별 평균 intensity
-            </li>
-          </ul>
-        </article>
-
-        <article class="equation-row">
-          <div class="equation-name">
-            Spatial Variance
-          </div>
-
-          <div class="equation">
-            \[
-              \sigma_I^2
-              =
-              \frac{1}{N-1}
-              \sum_{i=1}^{N}
-              \left(
-                I_{\mathrm{raw},i}-\mu_I
-              \right)^2
-            \]
-          </div>
-
-          <ul class="description-list">
-            <li>
-              \(\sigma_I^2\) [DN²]:
-              한 프레임 내 pixel intensity의 spatial variance
-            </li>
-          </ul>
-        </article>
-
-        <article class="equation-row">
-          <div class="equation-name">
-            Speckle Contrast
-          </div>
-
-          <div class="equation">
-            \[
-              K_{\mathrm{raw}}^2
-              =
-              \frac{\sigma_I^2}{\mu_I^2}
-            \]
-          </div>
-
-          <ul class="description-list">
-            <li>
-              \(K_{\mathrm{raw}}^2\):
-              noise 성분을 포함한 raw squared speckle contrast
-            </li>
-          </ul>
-        </article>
-
-      </div>
-    </section>
-
-    <section class="calculation-column">
-      <h2 class="section-title">Noise Components</h2>
-
-      <div class="equation-list">
-
-        <article class="equation-row noise-row">
-          <div class="equation-name">
-            Shot-Noise Contrast
-          </div>
-
-          <div class="equation">
-            \[
-              K_{\mathrm{shot}}^2
-              =
-              \frac{
-                \sigma_{\mathrm{shot}}^2
-              }{
-                \mu_I^2
-              }
-              =
-              \frac{1}{g\mu_I}
-            \]
-          </div>
-
-          <ul class="definition-list">
-            <li>
-              <span class="definition-symbol">
-                Shot noise
-              </span>
-              : photon-counting Poisson noise
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(g\) [e⁻/DN]
-              </span>
-              : inverse system gain,
-              \(2.4\ \mathrm{[e^- / DN]}\)
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\mu_I\) [DN]
-              </span>
-              : 프레임별 평균 pixel intensity
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\sigma_{\mathrm{shot}}^2\) [DN²]
-              </span>
-              : shot-noise variance,
-              \(\sigma_{\mathrm{shot}}^2=\mu_I/g\)
-            </li>
-          </ul>
-        </article>
-
-        <article class="equation-row noise-row">
-          <div class="equation-name">
-            Temporal Dark-Noise Contrast
-          </div>
-
-          <div class="equation">
-            \[
-              K_{\mathrm{dark}}^2
-              =
-              \frac{
-                \sigma_{\mathrm{dark}}^2
-              }{
-                \mu_I^2
-              }
-            \]
-          </div>
-
-          <ul class="definition-list">
-            <li>
-              <span class="definition-symbol">
-                Temporal dark noise
-              </span>
-              : exposure 중 detector에서 발생하는 temporal noise
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\sigma_{\mathrm{dark,e^-}}\) [e⁻ RMS]
-              </span>
-              : electron domain의 temporal dark noise,
-              \(24.7\ \mathrm{[e^- RMS]}\)
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\sigma_{\mathrm{dark}}\) [DN RMS]
-              </span>
-              : DN domain의 temporal dark noise,
-              \(\sigma_{\mathrm{dark,e^-}}/g\)
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\sigma_{\mathrm{dark}}^2\) [DN²]
-              </span>
-              : temporal dark-noise variance
-            </li>
-          </ul>
-        </article>
-
-        <article class="equation-row noise-row">
-          <div class="equation-name">
-            Quantization-Noise Contrast
-          </div>
-
-          <div class="equation">
-            \[
-              K_q^2
-              =
-              \frac{
-                \sigma_q^2
-              }{
-                \mu_I^2
-              }
-              =
-              \frac{
-                \Delta^2
-              }{
-                12\mu_I^2
-              }
-            \]
-          </div>
-
-          <ul class="definition-list">
-            <li>
-              <span class="definition-symbol">
-                Quantization noise
-              </span>
-              : ADC의 discrete DN 변환 오차
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\Delta\) [DN/LSB]
-              </span>
-              : quantization step,
-              \(1\ \mathrm{[DN/LSB]}\)
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\sigma_q\) [DN RMS]
-              </span>
-              : quantization-noise RMS,
-              \(\Delta/\sqrt{12}\)
-            </li>
-
-            <li>
-              <span class="definition-symbol">
-                \(\sigma_q^2\) [DN²]
-              </span>
-              : quantization-noise variance,
-              \(\Delta^2/12\)
-            </li>
-          </ul>
-        </article>
-
-      </div>
-    </section>
-
-    <section class="calculation-column correction-column">
-      <h2 class="section-title">
-        Speckle Contrast Correction
-      </h2>
-
-      <div class="correction-stack">
-        <div class="final-equation-box">
-          <h3 class="final-equation-title">
-            Noise-Corrected Speckle Contrast
-          </h3>
-
-        <div class="final-equation">
-          \[
-            K_f^2
-            =
-            K_{\mathrm{raw}}^2
-            -
-            K_{\mathrm{shot}}^2
-            -
-            K_{\mathrm{dark}}^2
-            -
-            K_q^2
-          \]
+          </article>
         </div>
+      </section>
 
-        <ul class="final-description">
-          <li>
-            \(K_f^2\):
-            혈류에 의해 형성된 실제 동적 speckle contrast
-          </li>
+      <div class="calculation-layout">
+        <section class="calculation-column">
+          <h2 class="section-title">Signal Calculation</h2>
 
-          <li>
-            \(K_{\mathrm{raw}}^2\):
-            측정된 raw squared speckle contrast
-          </li>
+          <div class="equation-list">
+            <article class="equation-row">
+              <div class="equation-name">Dark-Subtracted Raw Image</div>
+              <div class="equation">
+                \[
+                  I_{\mathrm{raw}}(x,y,t)
+                  =
+                  I_{\mathrm{CCD}}(x,y,t)
+                  -
+                  \overline{D}(x,y)
+                \]
+              </div>
+              <ul class="description-list">
+                <li>\(I_{\mathrm{CCD}}\) [DN]: CCD에서 측정된 pixel intensity</li>
+                <li>\(\overline{D}\) [DN]: 충분한 수의 dark frame을 평균한 pixel-wise dark image</li>
+                <li>\(I_{\mathrm{raw}}\) [DN]: 평균 dark image가 차감된 pixel intensity</li>
+                <li>\(x,y\) [pixel]: ROI 내부의 공간 좌표</li>
+                <li>\(t\) [s]: 영상이 측정된 시간</li>
+              </ul>
+            </article>
 
-          <li>
-            \(K_{\mathrm{shot}}^2\):
-            shot-noise contribution
-          </li>
+            <article class="equation-row">
+              <div class="equation-name">Mean Intensity</div>
+              <div class="equation">
+                \[
+                  \mu_I
+                  =
+                  \frac{1}{N}
+                  \sum_{i=1}^{N}I_{\mathrm{raw},i}
+                \]
+              </div>
+              <ul class="description-list">
+                <li>\(I_{\mathrm{raw},i}\) [DN]: ROI 내 \(i\)번째 pixel intensity</li>
+                <li>\(N\) [pixel]: 전체 pixel 수</li>
+                <li>\(\mu_I\) [DN]: 프레임별 평균 intensity</li>
+              </ul>
+            </article>
 
-          <li>
-            \(K_{\mathrm{dark}}^2\):
-            temporal dark-noise contribution
-          </li>
+            <article class="equation-row">
+              <div class="equation-name">Spatial Variance</div>
+              <div class="equation">
+                \[
+                  \sigma_I^2
+                  =
+                  \frac{1}{N-1}
+                  \sum_{i=1}^{N}
+                  \left(I_{\mathrm{raw},i}-\mu_I\right)^2
+                \]
+              </div>
+              <ul class="description-list">
+                <li>\(\sigma_I^2\) [DN²]: 한 프레임 내 pixel intensity의 spatial variance</li>
+              </ul>
+            </article>
 
-          <li>
-            \(K_q^2\):
-            ADC quantization-noise contribution
-          </li>
-          </ul>
-        </div>
-
-        <div class="noise-value-box">
-          <h3 class="noise-value-title">Calculation Noise Value</h3>
-
-          <div class="noise-table-wrap">
-            <table class="noise-value-table">
-              <thead>
-                <tr>
-                  <th scope="col">Parameter</th>
-                  <th scope="col">15 mm BFI</th>
-                  <th scope="col">20 mm BFI</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Mean intensity [DN]</th>
-                  <td>1704.6 ± 364.2</td>
-                  <td>509.3 ± 123.6</td>
-                </tr>
-                <tr>
-                  <th scope="row">K<sub>raw</sub><sup>2</sup></th>
-                  <td>0.005914 ± 0.001749</td>
-                  <td>0.014085 ± 0.004071</td>
-                </tr>
-                <tr>
-                  <th scope="row">K<sub>shot</sub><sup>2</sup></th>
-                  <td>0.000256 ± 0.000057</td>
-                  <td>0.000865 ± 0.000204</td>
-                </tr>
-                <tr>
-                  <th scope="row">K<sub>dark/read</sub><sup>2</sup></th>
-                  <td>4.19×10<sup>−5</sup> ± 1.89×10<sup>−5</sup></td>
-                  <td>0.000481 ± 0.000221</td>
-                </tr>
-                <tr>
-                  <th scope="row">K<sub>q</sub><sup>2</sup></th>
-                  <td>3.30×10<sup>−8</sup> ± 1.49×10<sup>−8</sup></td>
-                  <td>3.79×10<sup>−7</sup> ± 1.74×10<sup>−7</sup></td>
-                </tr>
-                <tr>
-                  <th scope="row">Total noise K<sub>noise</sub><sup>2</sup></th>
-                  <td>0.000298 ± 0.000076</td>
-                  <td>0.001347 ± 0.000425</td>
-                </tr>
-                <tr>
-                  <th scope="row">Total noise fraction [%]</th>
-                  <td>5.60 ± 1.53</td>
-                  <td>9.64 ± 0.56</td>
-                </tr>
-                <tr>
-                  <th scope="row">K<sub>corr</sub><sup>2</sup></th>
-                  <td>0.005616 ± 0.001740</td>
-                  <td>0.012738 ± 0.003650</td>
-                </tr>
-              </tbody>
-            </table>
+            <article class="equation-row">
+              <div class="equation-name">Speckle Contrast</div>
+              <div class="equation">
+                \[
+                  K_{\mathrm{raw}}^2
+                  =
+                  \frac{\sigma_I^2}{\mu_I^2}
+                \]
+              </div>
+              <ul class="description-list">
+                <li>\(K_{\mathrm{raw}}^2\): noise 성분을 포함한 raw squared speckle contrast</li>
+              </ul>
+            </article>
           </div>
+        </section>
 
-          <p class="table-note">
-            mean ± standard deviation
-          </p>
-        </div>
+        <section class="calculation-column">
+          <h2 class="section-title">Noise Components</h2>
+
+          <div class="equation-list">
+            <article class="equation-row noise-row">
+              <div class="equation-name">Shot-Noise Contrast</div>
+              <div class="equation">
+                \[
+                  K_{\mathrm{shot}}^2
+                  =
+                  \frac{\sigma_{\mathrm{shot}}^2}{\mu_I^2}
+                  =
+                  \frac{1}{g\mu_I}
+                \]
+              </div>
+              <ul class="definition-list">
+                <li><span class="definition-symbol">Shot noise</span>: photon-counting Poisson noise</li>
+                <li><span class="definition-symbol">\(g\) [e⁻/DN]</span>: inverse system gain, \(2.4\ \mathrm{[e^-/DN]}\)</li>
+                <li><span class="definition-symbol">\(\mu_I\) [DN]</span>: 프레임별 평균 pixel intensity</li>
+                <li><span class="definition-symbol">\(\sigma_{\mathrm{shot}}^2\) [DN²]</span>: \(\sigma_{\mathrm{shot}}^2=\mu_I/g\)</li>
+              </ul>
+            </article>
+
+            <article class="equation-row noise-row">
+              <div class="equation-name">Temporal Dark-Noise Contrast</div>
+              <div class="equation">
+                \[
+                  K_{\mathrm{dark}}^2
+                  =
+                  \frac{\sigma_{\mathrm{dark}}^2}{\mu_I^2}
+                \]
+              </div>
+              <ul class="definition-list">
+                <li><span class="definition-symbol">Temporal dark noise</span>: exposure 중 detector에서 발생하는 temporal noise</li>
+                <li><span class="definition-symbol">\(\sigma_{\mathrm{dark,e^-}}\) [e⁻ RMS]</span>: \(24.7\ \mathrm{[e^- RMS]}\)</li>
+                <li><span class="definition-symbol">\(\sigma_{\mathrm{dark}}\) [DN RMS]</span>: \(\sigma_{\mathrm{dark,e^-}}/g\)</li>
+                <li><span class="definition-symbol">\(\sigma_{\mathrm{dark}}^2\) [DN²]</span>: temporal dark-noise variance</li>
+              </ul>
+            </article>
+
+            <article class="equation-row noise-row">
+              <div class="equation-name">Quantization-Noise Contrast</div>
+              <div class="equation">
+                \[
+                  K_q^2
+                  =
+                  \frac{\sigma_q^2}{\mu_I^2}
+                  =
+                  \frac{\Delta^2}{12\mu_I^2}
+                \]
+              </div>
+              <ul class="definition-list">
+                <li><span class="definition-symbol">Quantization noise</span>: ADC의 discrete DN 변환 오차</li>
+                <li><span class="definition-symbol">\(\Delta\) [DN/LSB]</span>: quantization step, \(1\ \mathrm{[DN/LSB]}\)</li>
+                <li><span class="definition-symbol">\(\sigma_q\) [DN RMS]</span>: \(\Delta/\sqrt{12}\)</li>
+                <li><span class="definition-symbol">\(\sigma_q^2\) [DN²]</span>: \(\Delta^2/12\)</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="calculation-column correction-column">
+          <h2 class="section-title">Speckle Contrast Correction</h2>
+
+          <div class="correction-stack">
+            <div class="final-equation-box">
+              <h3 class="final-equation-title">Noise-Corrected Speckle Contrast</h3>
+              <div class="final-equation">
+                \[
+                  K_f^2
+                  =
+                  K_{\mathrm{raw}}^2
+                  -K_{\mathrm{shot}}^2
+                  -K_{\mathrm{dark}}^2
+                  -K_q^2
+                \]
+              </div>
+              <ul class="final-description">
+                <li>\(K_f^2\): 혈류에 의해 형성된 실제 동적 speckle contrast</li>
+                <li>\(K_{\mathrm{raw}}^2\): 측정된 raw squared speckle contrast</li>
+                <li>\(K_{\mathrm{shot}}^2\): shot-noise contribution</li>
+                <li>\(K_{\mathrm{dark}}^2\): temporal dark-noise contribution</li>
+                <li>\(K_q^2\): ADC quantization-noise contribution</li>
+              </ul>
+            </div>
+
+            <div class="noise-value-box">
+              <h3 class="noise-value-title">Calculation Noise Value</h3>
+
+              <div class="noise-table-wrap">
+                <table class="noise-value-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Parameter</th>
+                      <th scope="col">15 mm BFI</th>
+                      <th scope="col">20 mm BFI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Mean intensity [DN]</th>
+                      <td>1704.6 ± 364.2</td>
+                      <td>509.3 ± 123.6</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>raw</sub><sup>2</sup></th>
+                      <td>0.005914 ± 0.001749</td>
+                      <td>0.014085 ± 0.004071</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>shot</sub><sup>2</sup></th>
+                      <td>0.000256 ± 0.000057</td>
+                      <td>0.000865 ± 0.000204</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>dark/read</sub><sup>2</sup></th>
+                      <td>4.19×10<sup>−5</sup> ± 1.89×10<sup>−5</sup></td>
+                      <td>0.000481 ± 0.000221</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>q</sub><sup>2</sup></th>
+                      <td>3.30×10<sup>−8</sup> ± 1.49×10<sup>−8</sup></td>
+                      <td>3.79×10<sup>−7</sup> ± 1.74×10<sup>−7</sup></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total noise K<sub>noise</sub><sup>2</sup></th>
+                      <td>0.000298 ± 0.000076</td>
+                      <td>0.001347 ± 0.000425</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total noise fraction [%]</th>
+                      <td>5.60 ± 1.53</td>
+                      <td>9.64 ± 0.56</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>corr</sub><sup>2</sup></th>
+                      <td>0.005616 ± 0.001740</td>
+                      <td>0.012738 ± 0.003650</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="table-note">mean ± standard deviation</p>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-
-  </div>
-
-</main>
+    </main>
   </div>
 </body>
 </html>
