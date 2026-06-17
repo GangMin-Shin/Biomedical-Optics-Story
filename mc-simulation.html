@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MC Simulation</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family:
+        Arial,
+        "Noto Sans KR",
+        "Apple SD Gothic Neo",
+        "Malgun Gothic",
+        sans-serif;
+      color: white;
+      overflow-x: hidden;
+      background-color: #000;
+    }
+
+    body {
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        url("images/MC%20Simulation%20background.jpeg")
+        center / cover no-repeat;
+      opacity: 0.7;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 18% 18%,
+          rgba(175, 100, 255, 0.17),
+          transparent 32%
+        ),
+        linear-gradient(
+          rgba(0, 0, 0, 0.40),
+          rgba(0, 0, 0, 0.84)
+        );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      padding: 34px;
+    }
+
+    .top-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .submenu-group {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 10px;
+      min-width: 190px;
+    }
+
+    .nav-button,
+    .submenu-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .nav-button {
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateX(-3px);
+      box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
+    }
+
+    .submenu-tab {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(116, 70, 180, 0.60),
+          rgba(38, 94, 158, 0.52)
+        );
+      border: 1px solid rgba(211, 170, 255, 0.72);
+      box-shadow:
+        0 0 12px rgba(180, 105, 255, 0.18),
+        inset 0 0 12px rgba(255, 255, 255, 0.04);
+    }
+
+    .submenu-tab::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          110deg,
+          transparent 20%,
+          rgba(255, 255, 255, 0.18) 50%,
+          transparent 80%
+        );
+      transform: translateX(-120%);
+      transition: transform 0.45s ease;
+    }
+
+    .submenu-tab:hover {
+      border-color: rgba(225, 195, 255, 0.96);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(135, 78, 205, 0.76),
+          rgba(43, 112, 185, 0.68)
+        );
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 18px rgba(188, 120, 255, 0.38),
+        0 8px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    .submenu-tab:hover::before {
+      transform: translateX(120%);
+    }
+
+    .nav-button:focus-visible,
+    .submenu-tab:focus-visible {
+      outline: 3px solid rgba(211, 170, 255, 0.95);
+      outline-offset: 3px;
+    }
+
+    .tab-icon {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1800px;
+      margin: 0;
+    }
+
+    .page-header {
+      margin-bottom: 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 4.5vw, 64px);
+      color: rgba(255, 255, 255, 0.98);
+      line-height: 1.15;
+      font-weight: 700;
+      text-align: left;
+      text-shadow:
+        0 0 8px rgba(211, 140, 255, 0.65),
+        0 0 18px rgba(211, 140, 255, 0.42),
+        0 0 30px rgba(150, 80, 255, 0.24);
+    }
+
+    .header-line {
+      width: min(320px, 70vw);
+      height: 2px;
+      margin-top: 18px;
+      background: linear-gradient(
+        90deg,
+        rgba(220, 170, 255, 0.95),
+        rgba(150, 100, 255, 0.45),
+        transparent
+      );
+      box-shadow: 0 0 12px rgba(190, 120, 255, 0.55);
+    }
+
+    .overview {
+      max-width: 1180px;
+      margin-bottom: 44px;
+    }
+
+    .overview-list {
+      margin: 0;
+      padding-left: 26px;
+    }
+
+    .overview-list li {
+      margin: 10px 0;
+      padding-left: 6px;
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.90);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.85);
+    }
+
+    .overview-list li::marker {
+      color: rgba(211, 140, 255, 0.95);
+      font-size: 1.15em;
+    }
+
+    .analysis-section {
+      margin-bottom: 50px;
+    }
+
+    .section-title {
+      display: inline-block;
+      margin: 0 0 24px;
+      padding-bottom: 8px;
+      font-size: clamp(25px, 2.4vw, 34px);
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.98);
+      border-bottom: 2px solid rgba(211, 140, 255, 0.72);
+      text-shadow:
+        0 0 8px rgba(211, 140, 255, 0.50),
+        0 0 16px rgba(211, 140, 255, 0.25);
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 24px;
+    }
+
+    .result-panel {
+      min-width: 0;
+      padding: 26px;
+      background: rgba(0, 0, 0, 0.55);
+      border-top: 2px solid rgba(120, 190, 255, 0.72);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.28),
+        0 0 20px rgba(80, 160, 255, 0.08);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .result-panel.table-panel {
+      border-top-color: rgba(211, 140, 255, 0.78);
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      font-size: 23px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.97);
+    }
+
+    .panel-description {
+      margin: 0 0 20px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .placeholder {
+      display: flex;
+      min-height: 330px;
+      align-items: center;
+      justify-content: center;
+      padding: 26px;
+      border: 1px dashed rgba(211, 170, 255, 0.48);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(116, 70, 180, 0.11),
+          rgba(38, 94, 158, 0.08)
+        );
+      text-align: center;
+    }
+
+    .placeholder-content {
+      max-width: 520px;
+    }
+
+    .placeholder-icon {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 40px;
+      color: rgba(220, 180, 255, 0.86);
+      text-shadow: 0 0 16px rgba(175, 100, 255, 0.45);
+    }
+
+    .placeholder-title {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .placeholder-text {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    @media screen and (max-width: 1000px) {
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media screen and (max-width: 900px) {
+      .page-container {
+        padding: 22px;
+      }
+
+      .page-shell {
+        width: 100%;
+      }
+
+      .top-navigation {
+        margin-bottom: 24px;
+      }
+
+      .nav-button,
+      .submenu-tab {
+        padding: 9px 14px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+    }
+
+    @media screen and (max-width: 520px) {
+      .page-container {
+        padding: 16px;
+      }
+
+      .top-navigation {
+        align-items: stretch;
+      }
+
+      .top-navigation > .nav-button,
+      .submenu-group {
+        width: 100%;
+      }
+
+      .nav-button,
+      .submenu-tab {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .overview-list li {
+        font-size: 16px;
+      }
+
+      .analysis-section {
+        margin-bottom: 40px;
+      }
+
+      .section-title {
+        font-size: 25px;
+      }
+
+      .result-panel {
+        padding: 18px;
+      }
+
+      .placeholder {
+        min-height: 260px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-container">
+    <nav class="top-navigation" aria-label="Page navigation">
+      <a class="nav-button" href="index.html">
+        ← Back to Homepage
+      </a>
+
+      <div class="submenu-group">
+        <a class="submenu-tab" href="machine-vision.html">
+          <span class="tab-icon" aria-hidden="true">▣</span>
+          Machine Vision
+        </a>
+
+        <a class="submenu-tab" href="lmm-analysis.html">
+          <span class="tab-icon" aria-hidden="true">Σ</span>
+          LMM Analysis
+        </a>
+
+        <a class="submenu-tab" href="noise-analysis.html">
+          <span class="tab-icon" aria-hidden="true">≈</span>
+          Noise Analysis
+        </a>
+      </div>
+    </nav>
+
+    <main class="page-shell">
+      <header class="page-header">
+        <h1>MC Simulation</h1>
+        <div class="header-line"></div>
+      </header>
+
+      <section class="overview">
+        <ul class="overview-list">
+          <li>
+            SDS(Source-Detector Separation)에 따른 광자 이동 경로와
+            조직 내부 sensitivity volume을 비교합니다.
+          </li>
+          <li>
+            각 SDS에서 생성된 sensitivity map과 조직 레이어별
+            기여 비율을 함께 제시합니다.
+          </li>
+        </ul>
+      </section>
+
+      <section class="analysis-section">
+        <h2 class="section-title">Monte Carlo Simulation Results</h2>
+
+        <div class="result-grid">
+          <article class="result-panel">
+            <h3 class="panel-title">Sensitivity Volume Images</h3>
+            <p class="panel-description">
+              SDS별 sensitivity volume 이미지가 이 영역에 추가될 예정입니다.
+            </p>
+
+            <div class="placeholder">
+              <div class="placeholder-content">
+                <span class="placeholder-icon" aria-hidden="true">◎</span>
+                <h4 class="placeholder-title">Image Results Placeholder</h4>
+                <p class="placeholder-text">
+                  이미지 파일명과 SDS 구성을 전달하면 각 결과를 카드 또는
+                  탭 형태로 배치할 수 있습니다.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="result-panel table-panel">
+            <h3 class="panel-title">Layer Contribution Table</h3>
+            <p class="panel-description">
+              각 SDS의 sensitivity volume에 포함된 조직 레이어별 비율이
+              이 영역에 추가될 예정입니다.
+            </p>
+
+            <div class="placeholder">
+              <div class="placeholder-content">
+                <span class="placeholder-icon" aria-hidden="true">▦</span>
+                <h4 class="placeholder-title">Layer Percentage Table Placeholder</h4>
+                <p class="placeholder-text">
+                  레이어 이름과 SDS별 percentage 값을 전달하면 기존 페이지와
+                  동일한 표 스타일로 구성할 수 있습니다.
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
