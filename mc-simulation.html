@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MC Simulation</title>
 
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+  </script>
+
   <style>
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     html,
@@ -53,9 +62,14 @@
           rgba(175, 100, 255, 0.17),
           transparent 32%
         ),
+        radial-gradient(
+          circle at 82% 30%,
+          rgba(70, 160, 255, 0.10),
+          transparent 30%
+        ),
         linear-gradient(
           rgba(0, 0, 0, 0.40),
-          rgba(0, 0, 0, 0.84)
+          rgba(0, 0, 0, 0.88)
         );
       z-index: 0;
       pointer-events: none;
@@ -72,24 +86,12 @@
     .top-navigation {
       display: flex;
       flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
+      align-items: center;
       gap: 12px;
-      width: 100%;
       margin-bottom: 28px;
     }
 
-    .submenu-group {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-      gap: 10px;
-      min-width: 190px;
-    }
-
-    .nav-button,
-    .submenu-tab {
+    .nav-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -98,6 +100,8 @@
       border-radius: 999px;
       text-decoration: none;
       color: white;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
       font-size: 15px;
       font-weight: 600;
       line-height: 1.2;
@@ -108,83 +112,27 @@
         box-shadow 0.25s ease;
     }
 
-    .nav-button {
-      background: rgba(255, 255, 255, 0.10);
-      border: 1px solid rgba(255, 255, 255, 0.55);
-    }
-
     .nav-button:hover {
       background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.80);
       transform: translateX(-3px);
       box-shadow: 0 0 18px rgba(102, 204, 255, 0.35);
     }
 
-    .submenu-tab {
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(
-          135deg,
-          rgba(116, 70, 180, 0.60),
-          rgba(38, 94, 158, 0.52)
-        );
-      border: 1px solid rgba(211, 170, 255, 0.72);
-      box-shadow:
-        0 0 12px rgba(180, 105, 255, 0.18),
-        inset 0 0 12px rgba(255, 255, 255, 0.04);
-    }
-
-    .submenu-tab::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(
-          110deg,
-          transparent 20%,
-          rgba(255, 255, 255, 0.18) 50%,
-          transparent 80%
-        );
-      transform: translateX(-120%);
-      transition: transform 0.45s ease;
-    }
-
-    .submenu-tab:hover {
-      border-color: rgba(225, 195, 255, 0.96);
-      background:
-        linear-gradient(
-          135deg,
-          rgba(135, 78, 205, 0.76),
-          rgba(43, 112, 185, 0.68)
-        );
-      transform: translateY(-2px);
-      box-shadow:
-        0 0 18px rgba(188, 120, 255, 0.38),
-        0 8px 20px rgba(0, 0, 0, 0.22);
-    }
-
-    .submenu-tab:hover::before {
-      transform: translateX(120%);
-    }
-
     .nav-button:focus-visible,
-    .submenu-tab:focus-visible {
+    .sds-select:focus-visible,
+    .file-label:focus-visible {
       outline: 3px solid rgba(211, 170, 255, 0.95);
       outline-offset: 3px;
     }
 
-    .tab-icon {
-      margin-right: 8px;
-      font-size: 16px;
-    }
-
     .page-shell {
-      width: 100%;
-      max-width: 1800px;
+      width: min(1800px, 96vw);
       margin: 0;
     }
 
     .page-header {
+      max-width: 1180px;
       margin-bottom: 34px;
     }
 
@@ -257,15 +205,15 @@
 
     .result-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: stretch;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      align-items: start;
       gap: 24px;
     }
 
     .result-panel {
       min-width: 0;
       padding: 26px;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0, 0, 0, 0.58);
       border-top: 2px solid rgba(120, 190, 255, 0.72);
       box-shadow:
         0 10px 30px rgba(0, 0, 0, 0.28),
@@ -278,8 +226,16 @@
       border-top-color: rgba(211, 140, 255, 0.78);
     }
 
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
     .panel-title {
-      margin: 0 0 14px;
+      margin: 0;
       font-size: 23px;
       line-height: 1.35;
       color: rgba(255, 255, 255, 0.97);
@@ -292,54 +248,280 @@
       color: rgba(255, 255, 255, 0.72);
     }
 
-    .placeholder {
+    .sds-control {
       display: flex;
-      min-height: 330px;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 9px;
+    }
+
+    .sds-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(226, 236, 255, 0.88);
+      white-space: nowrap;
+    }
+
+    .sds-select {
+      min-width: 118px;
+      height: 39px;
+      padding: 0 36px 0 13px;
+      border: 1px solid rgba(211, 170, 255, 0.62);
+      border-radius: 7px;
+      color: white;
+      background-color: rgba(31, 23, 52, 0.94);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .sds-select:hover {
+      border-color: rgba(225, 195, 255, 0.95);
+      box-shadow: 0 0 14px rgba(180, 110, 255, 0.22);
+    }
+
+    .sds-select option {
+      color: white;
+      background: #171322;
+    }
+
+    .image-frame {
+      display: flex;
+      min-height: 430px;
       align-items: center;
       justify-content: center;
-      padding: 26px;
-      border: 1px dashed rgba(211, 170, 255, 0.48);
+      padding: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(211, 170, 255, 0.34);
       background:
         linear-gradient(
           135deg,
-          rgba(116, 70, 180, 0.11),
+          rgba(116, 70, 180, 0.10),
           rgba(38, 94, 158, 0.08)
-        );
-      text-align: center;
+        ),
+        rgba(0, 0, 0, 0.40);
     }
 
-    .placeholder-content {
-      max-width: 520px;
-    }
-
-    .placeholder-icon {
+    .result-image {
       display: block;
-      margin-bottom: 14px;
-      font-size: 40px;
-      color: rgba(220, 180, 255, 0.86);
-      text-shadow: 0 0 16px rgba(175, 100, 255, 0.45);
+      width: 100%;
+      height: auto;
+      max-height: 680px;
+      object-fit: contain;
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity 0.22s ease,
+        transform 0.22s ease;
     }
 
-    .placeholder-title {
-      margin: 0 0 10px;
-      font-size: 20px;
-      color: rgba(255, 255, 255, 0.94);
+    .result-image.is-changing {
+      opacity: 0;
+      transform: scale(0.985);
     }
 
-    .placeholder-text {
+    .image-fallback {
+      display: none;
+      max-width: 540px;
       margin: 0;
+      padding: 24px;
+      text-align: center;
       font-size: 15px;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.74);
     }
 
-    @media screen and (max-width: 1000px) {
+    .image-caption {
+      margin: 13px 0 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.66);
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      background: rgba(0, 0, 0, 0.42);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
+    }
+
+    .contribution-table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .contribution-table th,
+    .contribution-table td {
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      vertical-align: middle;
+      font-size: 14px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .contribution-table th {
+      color: rgba(245, 238, 255, 0.98);
+      background: rgba(116, 70, 180, 0.38);
+      font-weight: 700;
+    }
+
+    .contribution-table th:first-child,
+    .contribution-table td:first-child {
+      width: 90px;
+      font-weight: 700;
+    }
+
+    .contribution-table td {
+      color: rgba(255, 255, 255, 0.82);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .contribution-table tbody tr {
+      transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .contribution-table tbody tr:hover {
+      background: rgba(125, 185, 255, 0.09);
+    }
+
+    .contribution-table tbody tr.is-selected {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(120, 190, 255, 0.16),
+          rgba(211, 140, 255, 0.13)
+        );
+      box-shadow: inset 3px 0 0 rgba(150, 210, 255, 0.90);
+    }
+
+    .loading-cell,
+    .error-cell {
+      padding: 28px !important;
+      text-align: center !important;
+      font-size: 15px !important;
+      line-height: 1.75 !important;
+    }
+
+    .loading-cell {
+      color: rgba(231, 238, 255, 0.76) !important;
+    }
+
+    .error-cell {
+      color: rgba(255, 206, 206, 0.92) !important;
+    }
+
+    .metric-explanations {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .metric-note {
+      margin: 0;
+      padding: 13px 15px;
+      border-left: 3px solid rgba(211, 140, 255, 0.72);
+      background: rgba(38, 27, 56, 0.55);
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.77);
+    }
+
+    .metric-note strong {
+      color: rgba(235, 211, 255, 0.97);
+    }
+
+    .excel-status {
+      margin: 18px 0 0;
+      padding: 12px 14px;
+      border: 1px solid rgba(120, 190, 255, 0.22);
+      background: rgba(25, 43, 66, 0.46);
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(219, 233, 255, 0.74);
+    }
+
+    .excel-status.is-error {
+      border-color: rgba(255, 145, 145, 0.34);
+      background: rgba(71, 28, 36, 0.52);
+      color: rgba(255, 218, 218, 0.88);
+    }
+
+    .excel-status.is-success {
+      border-color: rgba(139, 222, 190, 0.34);
+      background: rgba(24, 65, 51, 0.50);
+      color: rgba(212, 255, 238, 0.88);
+    }
+
+    .file-loader {
+      display: none;
+      margin-top: 13px;
+    }
+
+    .file-loader.is-visible {
+      display: block;
+    }
+
+    .file-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 39px;
+      padding: 9px 14px;
+      border: 1px solid rgba(211, 170, 255, 0.58);
+      border-radius: 7px;
+      color: rgba(248, 239, 255, 0.96);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(116, 70, 180, 0.56),
+          rgba(38, 94, 158, 0.48)
+        );
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .file-label:hover {
+      transform: translateY(-2px);
+      border-color: rgba(225, 195, 255, 0.94);
+      box-shadow: 0 0 14px rgba(180, 110, 255, 0.24);
+    }
+
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media screen and (max-width: 1120px) {
       .result-grid {
         grid-template-columns: 1fr;
       }
+
+      .image-frame {
+        min-height: 360px;
+      }
     }
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 760px) {
       .page-container {
         padding: 22px;
       }
@@ -348,18 +530,22 @@
         width: 100%;
       }
 
-      .top-navigation {
-        margin-bottom: 24px;
-      }
-
-      .nav-button,
-      .submenu-tab {
-        padding: 9px 14px;
-        font-size: 14px;
-      }
-
       h1 {
         font-size: 42px;
+      }
+
+      .panel-header {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .sds-control {
+        justify-content: flex-end;
+      }
+
+      .image-frame {
+        min-height: 280px;
+        padding: 10px;
       }
     }
 
@@ -372,13 +558,7 @@
         align-items: stretch;
       }
 
-      .top-navigation > .nav-button,
-      .submenu-group {
-        width: 100%;
-      }
-
-      .nav-button,
-      .submenu-tab {
+      .nav-button {
         width: 100%;
       }
 
@@ -402,9 +582,17 @@
         padding: 18px;
       }
 
-      .placeholder {
-        min-height: 260px;
-        padding: 20px;
+      .sds-control {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .sds-select {
+        width: 100%;
+      }
+
+      .image-frame {
+        min-height: 220px;
       }
     }
   </style>
@@ -414,25 +602,12 @@
   <div class="page-container">
     <nav class="top-navigation" aria-label="Page navigation">
       <a class="nav-button" href="index.html">
-        ← Back to Homepage
+        Home
       </a>
 
-      <div class="submenu-group">
-        <a class="submenu-tab" href="machine-vision.html">
-          <span class="tab-icon" aria-hidden="true">▣</span>
-          Machine Vision
-        </a>
-
-        <a class="submenu-tab" href="lmm-analysis.html">
-          <span class="tab-icon" aria-hidden="true">Σ</span>
-          LMM Analysis
-        </a>
-
-        <a class="submenu-tab" href="noise-analysis.html">
-          <span class="tab-icon" aria-hidden="true">≈</span>
-          Noise Analysis
-        </a>
-      </div>
+      <a class="nav-button" href="noise-analysis.html">
+        ← Back to Noise Analysis
+      </a>
     </nav>
 
     <main class="page-shell">
@@ -448,8 +623,8 @@
             조직 내부 sensitivity volume을 비교합니다.
           </li>
           <li>
-            각 SDS에서 생성된 sensitivity map과 조직 레이어별
-            기여 비율을 함께 제시합니다.
+            각 SDS에서 생성된 sensitivity map과 피질 기여 지표를
+            함께 제시합니다.
           </li>
         </ul>
       </section>
@@ -459,44 +634,568 @@
 
         <div class="result-grid">
           <article class="result-panel">
-            <h3 class="panel-title">Sensitivity Volume Images</h3>
-            <p class="panel-description">
-              SDS별 sensitivity volume 이미지가 이 영역에 추가될 예정입니다.
-            </p>
+            <div class="panel-header">
+              <h3 class="panel-title">Sensitivity Volume Images</h3>
 
-            <div class="placeholder">
-              <div class="placeholder-content">
-                <span class="placeholder-icon" aria-hidden="true">◎</span>
-                <h4 class="placeholder-title">Image Results Placeholder</h4>
-                <p class="placeholder-text">
-                  이미지 파일명과 SDS 구성을 전달하면 각 결과를 카드 또는
-                  탭 형태로 배치할 수 있습니다.
-                </p>
+              <div class="sds-control">
+                <label class="sds-label" for="sdsSelect">
+                  SDS 선택
+                </label>
+
+                <select
+                  class="sds-select"
+                  id="sdsSelect"
+                  aria-label="Select source-detector separation">
+                  <option value="5">SDS 5 mm</option>
+                  <option value="10">SDS 10 mm</option>
+                  <option value="15" selected>SDS 15 mm</option>
+                  <option value="20">SDS 20 mm</option>
+                  <option value="25">SDS 25 mm</option>
+                  <option value="30">SDS 30 mm</option>
+                  <option value="35">SDS 35 mm</option>
+                </select>
               </div>
             </div>
+
+            <p class="panel-description">
+              오른쪽 상단의 목록에서 SDS를 선택하면 해당 sensitivity mapping
+              이미지가 표시됩니다.
+            </p>
+
+            <div class="image-frame">
+              <img
+                class="result-image"
+                id="sensitivityImage"
+                src="MC%20simulation%20result%20image/SDS_15mm_Sensitivity_Mapping.png"
+                alt="SDS 15 mm sensitivity mapping">
+
+              <p class="image-fallback" id="imageFallback">
+                선택한 SDS의 이미지를 불러오지 못했습니다.<br>
+                HTML 파일 기준으로
+                <strong>MC simulation result image</strong> 폴더와 이미지 파일명이
+                정확한지 확인하십시오.
+              </p>
+            </div>
+
+            <p class="image-caption" id="imageCaption">
+              MC simulation result image/SDS_15mm_Sensitivity_Mapping.png
+            </p>
           </article>
 
           <article class="result-panel table-panel">
             <h3 class="panel-title">Layer Contribution Table</h3>
+
             <p class="panel-description">
-              각 SDS의 sensitivity volume에 포함된 조직 레이어별 비율이
-              이 영역에 추가될 예정입니다.
+              Excel 파일의 <strong>All_SDS_Summary</strong> 시트에서 SDS별 피질
+              기여 지표를 읽어 숫자형으로 표시합니다.
             </p>
 
-            <div class="placeholder">
-              <div class="placeholder-content">
-                <span class="placeholder-icon" aria-hidden="true">▦</span>
-                <h4 class="placeholder-title">Layer Percentage Table Placeholder</h4>
-                <p class="placeholder-text">
-                  레이어 이름과 SDS별 percentage 값을 전달하면 기존 페이지와
-                  동일한 표 스타일로 구성할 수 있습니다.
-                </p>
-              </div>
+            <div class="table-wrapper">
+              <table class="contribution-table">
+                <thead>
+                  <tr>
+                    <th>SDS [mm]</th>
+                    <th>Cortex-reaching detected photons [%]</th>
+                    <th>Cortical local weighted path-density fraction [%]</th>
+                    <th>Cortical geometric pathlength fraction [%]</th>
+                  </tr>
+                </thead>
+
+                <tbody id="contributionTableBody">
+                  <tr>
+                    <td class="loading-cell" colspan="4">
+                      All_SDS_Summary 시트를 불러오는 중입니다.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="metric-explanations">
+              <p class="metric-note">
+                <strong>Cortex-reaching detected photons [%]</strong><br>
+                검출된 광자 중 피질에 한 번이라도 들어간 광자의 비율
+              </p>
+
+              <p class="metric-note">
+                <strong>
+                  Cortical local weighted path-density fraction [%]
+                </strong><br>
+                광자가 각 위치를 지날 당시의 weight를 반영한 전체 경로밀도 중
+                피질이 차지하는 비율
+              </p>
+
+              <p class="metric-note">
+                <strong>
+                  Cortical geometric pathlength fraction [%]
+                </strong><br>
+                광자 weight를 무시한 전체 이동거리 중 피질 내부 이동거리가
+                차지하는 비율
+              </p>
+            </div>
+
+            <p class="excel-status" id="excelStatus" aria-live="polite">
+              Excel 파일을 확인하고 있습니다.
+            </p>
+
+            <div class="file-loader" id="fileLoader">
+              <label class="file-label" for="excelFileInput" tabindex="0">
+                Excel 파일 직접 선택
+              </label>
+
+              <input
+                class="file-input"
+                id="excelFileInput"
+                type="file"
+                accept=".xlsx,.xls,.xlsm">
             </div>
           </article>
         </div>
       </section>
     </main>
   </div>
+
+  <script>
+    const SDS_VALUES = [5, 10, 15, 20, 25, 30, 35];
+    const RESULT_FOLDER = "MC simulation result image";
+    const DEFAULT_SDS = 15;
+
+    const IMAGE_FILES = {
+      5: "SDS_5mm_Sensitivity_Mapping.png",
+      10: "SDS_10mm_Sensitivity_Mapping.png",
+      15: "SDS_15mm_Sensitivity_Mapping.png",
+      20: "SDS_20mm_Sensitivity_Mapping.png",
+      25: "SDS_25mm_Sensitivity_Mapping.png",
+      30: "SDS_30mm_Sensitivity_Mapping.png",
+      35: "SDS_35mm_Sensitivity_Mapping.png"
+    };
+
+    const EXCEL_FILE_CANDIDATES = [
+      `${RESULT_FOLDER}/MC_785nm_layer_sensitivity_summary.xlsx`,
+      `${RESULT_FOLDER}/All_SDS_Summary.xlsx`,
+      `${RESULT_FOLDER}/MC_simulation_summary.xlsx`,
+      `${RESULT_FOLDER}/MC_Simulation_Result.xlsx`
+    ];
+
+    const REQUIRED_SHEET_NAME = "All_SDS_Summary";
+
+    const COLUMN_ALIASES = {
+      sds: [
+        "sds_mm",
+        "sds",
+        "source_detector_separation_mm",
+        "source_detector_separation"
+      ],
+      reach: [
+        "cortical_reach_count_percent"
+      ],
+      weighted: [
+        "cortical_local_weighted_path_fraction_percent"
+      ],
+      geometric: [
+        "cortical_geometric_pathlength_fraction_percent"
+      ]
+    };
+
+    const sdsSelect = document.getElementById("sdsSelect");
+    const sensitivityImage = document.getElementById("sensitivityImage");
+    const imageFallback = document.getElementById("imageFallback");
+    const imageCaption = document.getElementById("imageCaption");
+    const contributionTableBody = document.getElementById(
+      "contributionTableBody"
+    );
+    const excelStatus = document.getElementById("excelStatus");
+    const fileLoader = document.getElementById("fileLoader");
+    const excelFileInput = document.getElementById("excelFileInput");
+
+    let loadedSummaryRows = [];
+
+    function buildImageRelativePath(sdsMm) {
+      const fileName = IMAGE_FILES[sdsMm];
+
+      if (!fileName) {
+        throw new Error(`지원하지 않는 SDS 값입니다: ${sdsMm} mm`);
+      }
+
+      return `${RESULT_FOLDER}/${fileName}`;
+    }
+
+    function buildImageUrl(sdsMm) {
+      return encodeURI(buildImageRelativePath(sdsMm));
+    }
+
+    function updateSensitivityImage(sdsMm) {
+      const relativePath = buildImageRelativePath(sdsMm);
+
+      sensitivityImage.classList.add("is-changing");
+      sensitivityImage.style.display = "block";
+      imageFallback.style.display = "none";
+
+      window.setTimeout(() => {
+        sensitivityImage.src = buildImageUrl(sdsMm);
+        sensitivityImage.alt = `SDS ${sdsMm} mm sensitivity mapping`;
+        imageCaption.textContent = relativePath;
+      }, 120);
+
+      highlightSelectedTableRow(sdsMm);
+    }
+
+    sensitivityImage.addEventListener("load", () => {
+      sensitivityImage.style.display = "block";
+      imageFallback.style.display = "none";
+      sensitivityImage.classList.remove("is-changing");
+    });
+
+    sensitivityImage.addEventListener("error", () => {
+      sensitivityImage.style.display = "none";
+      imageFallback.style.display = "block";
+      sensitivityImage.classList.remove("is-changing");
+    });
+
+    sdsSelect.addEventListener("change", (event) => {
+      updateSensitivityImage(Number(event.target.value));
+    });
+
+    function normalizeKey(value) {
+      return String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s,()\[\]{}%\-\/]+/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/^_|_$/g, "");
+    }
+
+    function getNormalizedRow(row) {
+      const normalized = {};
+
+      Object.entries(row).forEach(([key, value]) => {
+        normalized[normalizeKey(key)] = value;
+      });
+
+      return normalized;
+    }
+
+    function getFirstMatchingValue(normalizedRow, aliases) {
+      for (const alias of aliases) {
+        const key = normalizeKey(alias);
+
+        if (
+          Object.prototype.hasOwnProperty.call(normalizedRow, key) &&
+          normalizedRow[key] !== "" &&
+          normalizedRow[key] !== null &&
+          normalizedRow[key] !== undefined
+        ) {
+          return normalizedRow[key];
+        }
+      }
+
+      return null;
+    }
+
+    function parseNumericValue(value) {
+      if (typeof value === "number") {
+        return Number.isFinite(value) ? value : null;
+      }
+
+      if (value === null || value === undefined) {
+        return null;
+      }
+
+      const cleaned = String(value)
+        .trim()
+        .replace(/,/g, "")
+        .replace(/%/g, "");
+
+      if (cleaned === "") {
+        return null;
+      }
+
+      const parsed = Number(cleaned);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    function parseSdsValue(value) {
+      const numericValue = parseNumericValue(value);
+
+      if (numericValue !== null) {
+        return numericValue;
+      }
+
+      const match = String(value ?? "").match(/-?\d+(?:\.\d+)?/);
+      return match ? Number(match[0]) : null;
+    }
+
+    function formatDecimal(value) {
+      const numericValue = parseNumericValue(value);
+
+      if (numericValue === null) {
+        return "—";
+      }
+
+      if (numericValue === 0) {
+        return "0";
+      }
+
+      const absoluteValue = Math.abs(numericValue);
+      let decimalPlaces = 6;
+
+      if (absoluteValue < 0.000001) {
+        decimalPlaces = 12;
+      } else if (absoluteValue < 0.001) {
+        decimalPlaces = 10;
+      } else if (absoluteValue < 0.1) {
+        decimalPlaces = 8;
+      } else if (absoluteValue < 1) {
+        decimalPlaces = 6;
+      } else if (absoluteValue < 100) {
+        decimalPlaces = 4;
+      } else {
+        decimalPlaces = 2;
+      }
+
+      return numericValue
+        .toFixed(decimalPlaces)
+        .replace(/\.0+$/, "")
+        .replace(/(\.\d*?[1-9])0+$/, "$1");
+    }
+
+    function extractSummaryRows(rawRows) {
+      const rowsBySds = new Map();
+
+      rawRows.forEach((rawRow) => {
+        const row = getNormalizedRow(rawRow);
+        const sds = parseSdsValue(
+          getFirstMatchingValue(row, COLUMN_ALIASES.sds)
+        );
+
+        if (sds === null || !SDS_VALUES.includes(Number(sds))) {
+          return;
+        }
+
+        rowsBySds.set(Number(sds), {
+          sds: Number(sds),
+          reach: parseNumericValue(
+            getFirstMatchingValue(row, COLUMN_ALIASES.reach)
+          ),
+          weighted: parseNumericValue(
+            getFirstMatchingValue(row, COLUMN_ALIASES.weighted)
+          ),
+          geometric: parseNumericValue(
+            getFirstMatchingValue(row, COLUMN_ALIASES.geometric)
+          )
+        });
+      });
+
+      return SDS_VALUES.map((sds) => {
+        return rowsBySds.get(sds) ?? {
+          sds,
+          reach: null,
+          weighted: null,
+          geometric: null
+        };
+      });
+    }
+
+    function renderContributionTable(rows) {
+      loadedSummaryRows = rows;
+      contributionTableBody.innerHTML = "";
+
+      rows.forEach((row) => {
+        const tableRow = document.createElement("tr");
+        tableRow.dataset.sds = String(row.sds);
+
+        tableRow.innerHTML = `
+          <td>${row.sds}</td>
+          <td>${formatDecimal(row.reach)}</td>
+          <td>${formatDecimal(row.weighted)}</td>
+          <td>${formatDecimal(row.geometric)}</td>
+        `;
+
+        contributionTableBody.appendChild(tableRow);
+      });
+
+      highlightSelectedTableRow(Number(sdsSelect.value));
+    }
+
+    function renderTableError(message) {
+      contributionTableBody.innerHTML = `
+        <tr>
+          <td class="error-cell" colspan="4">${message}</td>
+        </tr>
+      `;
+    }
+
+    function highlightSelectedTableRow(sdsMm) {
+      const rows = contributionTableBody.querySelectorAll("tr[data-sds]");
+
+      rows.forEach((row) => {
+        row.classList.toggle(
+          "is-selected",
+          Number(row.dataset.sds) === Number(sdsMm)
+        );
+      });
+    }
+
+    function setExcelStatus(message, state = "normal") {
+      excelStatus.textContent = message;
+      excelStatus.classList.remove("is-error", "is-success");
+
+      if (state === "error") {
+        excelStatus.classList.add("is-error");
+      }
+
+      if (state === "success") {
+        excelStatus.classList.add("is-success");
+      }
+    }
+
+    function workbookToSummaryRows(workbook) {
+      const sheet = workbook.Sheets[REQUIRED_SHEET_NAME];
+
+      if (!sheet) {
+        throw new Error(
+          `Excel 파일에 '${REQUIRED_SHEET_NAME}' 시트가 없습니다.`
+        );
+      }
+
+      const rawRows = XLSX.utils.sheet_to_json(sheet, {
+        defval: null,
+        raw: true
+      });
+
+      if (rawRows.length === 0) {
+        throw new Error(
+          `'${REQUIRED_SHEET_NAME}' 시트에 읽을 데이터가 없습니다.`
+        );
+      }
+
+      const rows = extractSummaryRows(rawRows);
+      const validRowCount = rows.filter((row) => {
+        return (
+          row.reach !== null ||
+          row.weighted !== null ||
+          row.geometric !== null
+        );
+      }).length;
+
+      if (validRowCount === 0) {
+        throw new Error(
+          "요청한 cortical 지표 열을 찾지 못했습니다. 열 이름을 확인하십시오."
+        );
+      }
+
+      return rows;
+    }
+
+    async function readWorkbookFromUrl(url) {
+      const response = await fetch(encodeURI(url), {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+
+      return XLSX.read(arrayBuffer, {
+        type: "array"
+      });
+    }
+
+    async function tryLoadExcelCandidates() {
+      let lastError = null;
+
+      for (const candidate of EXCEL_FILE_CANDIDATES) {
+        try {
+          const workbook = await readWorkbookFromUrl(candidate);
+          const rows = workbookToSummaryRows(workbook);
+
+          renderContributionTable(rows);
+          setExcelStatus(
+            `Excel 데이터 로드 완료: ${candidate} / ${REQUIRED_SHEET_NAME}`,
+            "success"
+          );
+          fileLoader.classList.remove("is-visible");
+          return;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      renderTableError(
+        "Excel 파일을 자동으로 불러오지 못했습니다. 아래 버튼에서 파일을 직접 선택하십시오."
+      );
+
+      setExcelStatus(
+        "자동 로드 실패: 브라우저에서 HTML을 file:// 방식으로 직접 열면 Excel fetch가 차단될 수 있습니다. Excel 파일을 직접 선택하거나 로컬 웹 서버에서 페이지를 실행하십시오.",
+        "error"
+      );
+
+      fileLoader.classList.add("is-visible");
+
+      if (lastError) {
+        console.warn("Excel automatic loading failed:", lastError);
+      }
+    }
+
+    excelFileInput.addEventListener("change", async (event) => {
+      const file = event.target.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, {
+          type: "array"
+        });
+        const rows = workbookToSummaryRows(workbook);
+
+        renderContributionTable(rows);
+        setExcelStatus(
+          `Excel 데이터 로드 완료: ${file.name} / ${REQUIRED_SHEET_NAME}`,
+          "success"
+        );
+      } catch (error) {
+        renderTableError(error.message);
+        setExcelStatus(`Excel 읽기 실패: ${error.message}`, "error");
+      }
+    });
+
+    document.querySelector(".file-label").addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        excelFileInput.click();
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      sdsSelect.value = String(DEFAULT_SDS);
+      updateSensitivityImage(DEFAULT_SDS);
+
+      const waitForSheetJs = window.setInterval(() => {
+        if (typeof XLSX !== "undefined") {
+          window.clearInterval(waitForSheetJs);
+          tryLoadExcelCandidates();
+        }
+      }, 60);
+
+      window.setTimeout(() => {
+        if (typeof XLSX === "undefined") {
+          window.clearInterval(waitForSheetJs);
+          renderTableError(
+            "Excel parser 라이브러리를 불러오지 못했습니다. 인터넷 연결 또는 CDN 접근 상태를 확인하십시오."
+          );
+          setExcelStatus(
+            "SheetJS 라이브러리 로드 실패로 Excel 파일을 읽을 수 없습니다.",
+            "error"
+          );
+          fileLoader.classList.add("is-visible");
+        }
+      }, 8000);
+    });
+  </script>
 </body>
 </html>
