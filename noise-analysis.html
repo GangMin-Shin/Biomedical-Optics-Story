@@ -80,7 +80,7 @@
     .top-navigation {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
       width: 100%;
@@ -89,10 +89,11 @@
 
     .submenu-group {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 10px;
+      min-width: 190px;
     }
 
     .nav-button,
@@ -503,6 +504,75 @@
       -webkit-backdrop-filter: blur(5px);
     }
 
+
+    .noise-value-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .noise-value-header .noise-value-title {
+      margin: 0;
+    }
+
+    .exposure-tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .exposure-tab {
+      min-width: 54px;
+      padding: 7px 11px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .exposure-tab:hover {
+      color: white;
+      background: rgba(211, 140, 255, 0.13);
+    }
+
+    .exposure-tab[aria-selected="true"] {
+      color: white;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(135, 78, 205, 0.88),
+          rgba(43, 112, 185, 0.78)
+        );
+      border-color: rgba(225, 195, 255, 0.72);
+      box-shadow: 0 0 12px rgba(188, 120, 255, 0.24);
+    }
+
+    .exposure-tab:focus-visible {
+      outline: 2px solid rgba(225, 195, 255, 0.95);
+      outline-offset: 2px;
+    }
+
+    .exposure-panel[hidden] {
+      display: none;
+    }
+
     .noise-value-title {
       margin: 0 0 16px;
       font-size: 23px;
@@ -681,6 +751,16 @@
         padding: 18px;
       }
 
+      .noise-value-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .exposure-tabs {
+        justify-content: center;
+        align-self: flex-start;
+      }
+
       .equation-name {
         font-size: 20px;
       }
@@ -718,6 +798,11 @@
         <a class="submenu-tab" href="lmm-analysis.html">
           <span class="tab-icon" aria-hidden="true">Σ</span>
           LMM Analysis
+        </a>
+
+        <a class="submenu-tab" href="mc-simulation.html">
+          <span class="tab-icon" aria-hidden="true">◎</span>
+          MC Simulation
         </a>
       </div>
     </nav>
@@ -951,9 +1036,52 @@
             </div>
 
             <div class="noise-value-box">
-              <h3 class="noise-value-title">Calculation Noise Value</h3>
+              <div class="noise-value-header">
+                <h3 class="noise-value-title">Calculation Noise Value</h3>
 
-              <div class="noise-table-wrap">
+                <div class="exposure-tabs" role="tablist" aria-label="Exposure time">
+                  <button
+                    class="exposure-tab"
+                    id="tab-2ms"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="panel-2ms"
+                    data-exposure="2ms"
+                  >
+                    2 ms
+                  </button>
+                  <button
+                    class="exposure-tab"
+                    id="tab-4ms"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-4ms"
+                    data-exposure="4ms"
+                  >
+                    4 ms
+                  </button>
+                  <button
+                    class="exposure-tab"
+                    id="tab-6ms"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panel-6ms"
+                    data-exposure="6ms"
+                  >
+                    6 ms
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="noise-table-wrap exposure-panel"
+                id="panel-2ms"
+                role="tabpanel"
+                aria-labelledby="tab-2ms"
+              >
                 <table class="noise-value-table">
                   <thead>
                     <tr>
@@ -1007,6 +1135,124 @@
                 </table>
               </div>
 
+              <div
+                class="noise-table-wrap exposure-panel"
+                id="panel-4ms"
+                role="tabpanel"
+                aria-labelledby="tab-4ms" hidden
+              >
+                <table class="noise-value-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Parameter</th>
+                      <th scope="col">15 mm BFI</th>
+                      <th scope="col">20 mm BFI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Mean intensity [DN]</th>
+                      <td>3409.2 ± 728.5</td>
+                      <td>1018.6 ± 247.3</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>raw</sub><sup>2</sup></th>
+                      <td>0.003317 ± 0.000886</td>
+                      <td>0.008697 ± 0.002369</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>shot</sub><sup>2</sup></th>
+                      <td>0.000128 ± 0.000028</td>
+                      <td>0.000432 ± 0.000102</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>dark/read</sub><sup>2</sup></th>
+                      <td>2.09×10<sup>−5</sup> ± 9.45×10<sup>−6</sup></td>
+                      <td>0.000241 ± 0.000111</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>q</sub><sup>2</sup></th>
+                      <td>1.65×10<sup>−8</sup> ± 7.43×10<sup>−9</sup></td>
+                      <td>1.89×10<sup>−7</sup> ± 8.70×10<sup>−8</sup></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total noise K<sub>noise</sub><sup>2</sup></th>
+                      <td>0.000149 ± 0.000038</td>
+                      <td>0.000673 ± 0.000213</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total noise fraction [%]</th>
+                      <td>4.89 ± 1.26</td>
+                      <td>7.79 ± 0.63</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>corr</sub><sup>2</sup></th>
+                      <td>0.003168 ± 0.000880</td>
+                      <td>0.008024 ± 0.002161</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="noise-table-wrap exposure-panel"
+                id="panel-6ms"
+                role="tabpanel"
+                aria-labelledby="tab-6ms" hidden
+              >
+                <table class="noise-value-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Parameter</th>
+                      <th scope="col">15 mm BFI</th>
+                      <th scope="col">20 mm BFI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Mean intensity [DN]</th>
+                      <td>5113.8 ± 1092.7</td>
+                      <td>1527.9 ± 370.9</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>raw</sub><sup>2</sup></th>
+                      <td>0.002426 ± 0.000595</td>
+                      <td>0.006844 ± 0.001799</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>shot</sub><sup>2</sup></th>
+                      <td>0.000085 ± 0.000019</td>
+                      <td>0.000288 ± 0.000068</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>dark/read</sub><sup>2</sup></th>
+                      <td>1.40×10<sup>−5</sup> ± 6.30×10<sup>−6</sup></td>
+                      <td>0.000160 ± 0.000074</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>q</sub><sup>2</sup></th>
+                      <td>1.10×10<sup>−8</sup> ± 4.95×10<sup>−9</sup></td>
+                      <td>1.26×10<sup>−7</sup> ± 5.80×10<sup>−8</sup></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total noise K<sub>noise</sub><sup>2</sup></th>
+                      <td>0.000099 ± 0.000025</td>
+                      <td>0.000449 ± 0.000142</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total noise fraction [%]</th>
+                      <td>4.40 ± 1.09</td>
+                      <td>6.59 ± 0.63</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">K<sub>corr</sub><sup>2</sup></th>
+                      <td>0.002327 ± 0.000590</td>
+                      <td>0.006395 ± 0.001661</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
               <p class="table-note">mean ± standard deviation</p>
             </div>
           </div>
@@ -1014,5 +1260,45 @@
       </div>
     </main>
   </div>
+
+  <script>
+    const exposureTabs = document.querySelectorAll(".exposure-tab");
+    const exposurePanels = document.querySelectorAll(".exposure-panel");
+
+    exposureTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const selectedExposure = tab.dataset.exposure;
+
+        exposureTabs.forEach((item) => {
+          const isSelected = item === tab;
+          item.setAttribute("aria-selected", String(isSelected));
+          item.tabIndex = isSelected ? 0 : -1;
+        });
+
+        exposurePanels.forEach((panel) => {
+          panel.hidden = panel.id !== `panel-${selectedExposure}`;
+        });
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+          return;
+        }
+
+        event.preventDefault();
+        const tabs = Array.from(exposureTabs);
+        const currentIndex = tabs.indexOf(tab);
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = (currentIndex + direction + tabs.length) % tabs.length;
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      });
+    });
+
+    exposureTabs.forEach((tab, index) => {
+      tab.tabIndex = index === 0 ? 0 : -1;
+    });
+  </script>
+
 </body>
 </html>
