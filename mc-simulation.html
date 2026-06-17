@@ -4,13 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MC Simulation</title>
-
-  <script
-    defer
-    src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
-  </script>
-
-  <style>
+<style>
     * {
       box-sizing: border-box;
     }
@@ -120,8 +114,7 @@
     }
 
     .nav-button:focus-visible,
-    .sds-select:focus-visible,
-    .file-label:focus-visible {
+    .sds-select:focus-visible {
       outline: 3px solid rgba(211, 170, 255, 0.95);
       outline-offset: 3px;
     }
@@ -438,78 +431,6 @@
       color: rgba(235, 211, 255, 0.97);
     }
 
-    .excel-status {
-      margin: 18px 0 0;
-      padding: 12px 14px;
-      border: 1px solid rgba(120, 190, 255, 0.22);
-      background: rgba(25, 43, 66, 0.46);
-      font-size: 13px;
-      line-height: 1.65;
-      color: rgba(219, 233, 255, 0.74);
-    }
-
-    .excel-status.is-error {
-      border-color: rgba(255, 145, 145, 0.34);
-      background: rgba(71, 28, 36, 0.52);
-      color: rgba(255, 218, 218, 0.88);
-    }
-
-    .excel-status.is-success {
-      border-color: rgba(139, 222, 190, 0.34);
-      background: rgba(24, 65, 51, 0.50);
-      color: rgba(212, 255, 238, 0.88);
-    }
-
-    .file-loader {
-      display: none;
-      margin-top: 13px;
-    }
-
-    .file-loader.is-visible {
-      display: block;
-    }
-
-    .file-label {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 39px;
-      padding: 9px 14px;
-      border: 1px solid rgba(211, 170, 255, 0.58);
-      border-radius: 7px;
-      color: rgba(248, 239, 255, 0.96);
-      background:
-        linear-gradient(
-          135deg,
-          rgba(116, 70, 180, 0.56),
-          rgba(38, 94, 158, 0.48)
-        );
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .file-label:hover {
-      transform: translateY(-2px);
-      border-color: rgba(225, 195, 255, 0.94);
-      box-shadow: 0 0 14px rgba(180, 110, 255, 0.24);
-    }
-
-    .file-input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
 
     @media screen and (max-width: 1120px) {
       .result-grid {
@@ -656,13 +577,7 @@
                 </select>
               </div>
             </div>
-
-            <p class="panel-description">
-              오른쪽 상단의 목록에서 SDS를 선택하면 해당 sensitivity mapping
-              이미지가 표시됩니다.
-            </p>
-
-            <div class="image-frame">
+<div class="image-frame">
               <img
                 class="result-image"
                 id="sensitivityImage"
@@ -684,13 +599,7 @@
 
           <article class="result-panel table-panel">
             <h3 class="panel-title">Layer Contribution Table</h3>
-
-            <p class="panel-description">
-              Excel 파일의 <strong>All_SDS_Summary</strong> 시트에서 SDS별 피질
-              기여 지표를 읽어 숫자형으로 표시합니다.
-            </p>
-
-            <div class="table-wrapper">
+<div class="table-wrapper">
               <table class="contribution-table">
                 <thead>
                   <tr>
@@ -702,10 +611,47 @@
                 </thead>
 
                 <tbody id="contributionTableBody">
-                  <tr>
-                    <td class="loading-cell" colspan="4">
-                      All_SDS_Summary 시트를 불러오는 중입니다.
-                    </td>
+                  <tr data-sds="5">
+                    <td>5</td>
+                    <td>5.225638</td>
+                    <td>1.849390</td>
+                    <td>6.449529</td>
+                  </tr>
+                  <tr data-sds="10">
+                    <td>10</td>
+                    <td>18.402523</td>
+                    <td>4.012258</td>
+                    <td>11.181191</td>
+                  </tr>
+                  <tr data-sds="15" class="is-selected">
+                    <td>15</td>
+                    <td>38.851212</td>
+                    <td>6.867418</td>
+                    <td>16.174666</td>
+                  </tr>
+                  <tr data-sds="20">
+                    <td>20</td>
+                    <td>60.483739</td>
+                    <td>9.956524</td>
+                    <td>20.448659</td>
+                  </tr>
+                  <tr data-sds="25">
+                    <td>25</td>
+                    <td>77.213947</td>
+                    <td>12.567356</td>
+                    <td>24.102116</td>
+                  </tr>
+                  <tr data-sds="30">
+                    <td>30</td>
+                    <td>87.780076</td>
+                    <td>14.289678</td>
+                    <td>26.365706</td>
+                  </tr>
+                  <tr data-sds="35">
+                    <td>35</td>
+                    <td>93.652254</td>
+                    <td>15.399969</td>
+                    <td>27.869878</td>
                   </tr>
                 </tbody>
               </table>
@@ -733,69 +679,15 @@
                 차지하는 비율
               </p>
             </div>
-
-            <p class="excel-status" id="excelStatus" aria-live="polite">
-              Excel 파일을 확인하고 있습니다.
-            </p>
-
-            <div class="file-loader" id="fileLoader">
-              <label class="file-label" for="excelFileInput" tabindex="0">
-                Excel 파일 직접 선택
-              </label>
-
-              <input
-                class="file-input"
-                id="excelFileInput"
-                type="file"
-                accept=".xlsx,.xls,.xlsm">
-            </div>
-          </article>
+</article>
         </div>
       </section>
     </main>
   </div>
 
   <script>
-    const SDS_VALUES = [5, 10, 15, 20, 25, 30, 35];
     const RESULT_FOLDER = "MC simulation result image";
     const DEFAULT_SDS = 15;
-
-    const IMAGE_FILES = {
-      5: "SDS_5mm_Sensitivity_Mapping.png",
-      10: "SDS_10mm_Sensitivity_Mapping.png",
-      15: "SDS_15mm_Sensitivity_Mapping.png",
-      20: "SDS_20mm_Sensitivity_Mapping.png",
-      25: "SDS_25mm_Sensitivity_Mapping.png",
-      30: "SDS_30mm_Sensitivity_Mapping.png",
-      35: "SDS_35mm_Sensitivity_Mapping.png"
-    };
-
-    const EXCEL_FILE_CANDIDATES = [
-      `${RESULT_FOLDER}/MC_785nm_layer_sensitivity_summary.xlsx`,
-      `${RESULT_FOLDER}/All_SDS_Summary.xlsx`,
-      `${RESULT_FOLDER}/MC_simulation_summary.xlsx`,
-      `${RESULT_FOLDER}/MC_Simulation_Result.xlsx`
-    ];
-
-    const REQUIRED_SHEET_NAME = "All_SDS_Summary";
-
-    const COLUMN_ALIASES = {
-      sds: [
-        "sds_mm",
-        "sds",
-        "source_detector_separation_mm",
-        "source_detector_separation"
-      ],
-      reach: [
-        "cortical_reach_count_percent"
-      ],
-      weighted: [
-        "cortical_local_weighted_path_fraction_percent"
-      ],
-      geometric: [
-        "cortical_geometric_pathlength_fraction_percent"
-      ]
-    };
 
     const sdsSelect = document.getElementById("sdsSelect");
     const sensitivityImage = document.getElementById("sensitivityImage");
@@ -804,24 +696,24 @@
     const contributionTableBody = document.getElementById(
       "contributionTableBody"
     );
-    const excelStatus = document.getElementById("excelStatus");
-    const fileLoader = document.getElementById("fileLoader");
-    const excelFileInput = document.getElementById("excelFileInput");
-
-    let loadedSummaryRows = [];
 
     function buildImageRelativePath(sdsMm) {
-      const fileName = IMAGE_FILES[sdsMm];
-
-      if (!fileName) {
-        throw new Error(`지원하지 않는 SDS 값입니다: ${sdsMm} mm`);
-      }
-
-      return `${RESULT_FOLDER}/${fileName}`;
+      return `${RESULT_FOLDER}/SDS_${sdsMm}mm_Sensitivity_Mapping.png`;
     }
 
     function buildImageUrl(sdsMm) {
       return encodeURI(buildImageRelativePath(sdsMm));
+    }
+
+    function highlightSelectedTableRow(sdsMm) {
+      const rows = contributionTableBody.querySelectorAll("tr[data-sds]");
+
+      rows.forEach((row) => {
+        row.classList.toggle(
+          "is-selected",
+          Number(row.dataset.sds) === Number(sdsMm)
+        );
+      });
     }
 
     function updateSensitivityImage(sdsMm) {
@@ -856,345 +748,9 @@
       updateSensitivityImage(Number(event.target.value));
     });
 
-    function normalizeKey(value) {
-      return String(value ?? "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\s,()\[\]{}%\-\/]+/g, "_")
-        .replace(/_+/g, "_")
-        .replace(/^_|_$/g, "");
-    }
-
-    function getNormalizedRow(row) {
-      const normalized = {};
-
-      Object.entries(row).forEach(([key, value]) => {
-        normalized[normalizeKey(key)] = value;
-      });
-
-      return normalized;
-    }
-
-    function getFirstMatchingValue(normalizedRow, aliases) {
-      for (const alias of aliases) {
-        const key = normalizeKey(alias);
-
-        if (
-          Object.prototype.hasOwnProperty.call(normalizedRow, key) &&
-          normalizedRow[key] !== "" &&
-          normalizedRow[key] !== null &&
-          normalizedRow[key] !== undefined
-        ) {
-          return normalizedRow[key];
-        }
-      }
-
-      return null;
-    }
-
-    function parseNumericValue(value) {
-      if (typeof value === "number") {
-        return Number.isFinite(value) ? value : null;
-      }
-
-      if (value === null || value === undefined) {
-        return null;
-      }
-
-      const cleaned = String(value)
-        .trim()
-        .replace(/,/g, "")
-        .replace(/%/g, "");
-
-      if (cleaned === "") {
-        return null;
-      }
-
-      const parsed = Number(cleaned);
-      return Number.isFinite(parsed) ? parsed : null;
-    }
-
-    function parseSdsValue(value) {
-      const numericValue = parseNumericValue(value);
-
-      if (numericValue !== null) {
-        return numericValue;
-      }
-
-      const match = String(value ?? "").match(/-?\d+(?:\.\d+)?/);
-      return match ? Number(match[0]) : null;
-    }
-
-    function formatDecimal(value) {
-      const numericValue = parseNumericValue(value);
-
-      if (numericValue === null) {
-        return "—";
-      }
-
-      if (numericValue === 0) {
-        return "0";
-      }
-
-      const absoluteValue = Math.abs(numericValue);
-      let decimalPlaces = 6;
-
-      if (absoluteValue < 0.000001) {
-        decimalPlaces = 12;
-      } else if (absoluteValue < 0.001) {
-        decimalPlaces = 10;
-      } else if (absoluteValue < 0.1) {
-        decimalPlaces = 8;
-      } else if (absoluteValue < 1) {
-        decimalPlaces = 6;
-      } else if (absoluteValue < 100) {
-        decimalPlaces = 4;
-      } else {
-        decimalPlaces = 2;
-      }
-
-      return numericValue
-        .toFixed(decimalPlaces)
-        .replace(/\.0+$/, "")
-        .replace(/(\.\d*?[1-9])0+$/, "$1");
-    }
-
-    function extractSummaryRows(rawRows) {
-      const rowsBySds = new Map();
-
-      rawRows.forEach((rawRow) => {
-        const row = getNormalizedRow(rawRow);
-        const sds = parseSdsValue(
-          getFirstMatchingValue(row, COLUMN_ALIASES.sds)
-        );
-
-        if (sds === null || !SDS_VALUES.includes(Number(sds))) {
-          return;
-        }
-
-        rowsBySds.set(Number(sds), {
-          sds: Number(sds),
-          reach: parseNumericValue(
-            getFirstMatchingValue(row, COLUMN_ALIASES.reach)
-          ),
-          weighted: parseNumericValue(
-            getFirstMatchingValue(row, COLUMN_ALIASES.weighted)
-          ),
-          geometric: parseNumericValue(
-            getFirstMatchingValue(row, COLUMN_ALIASES.geometric)
-          )
-        });
-      });
-
-      return SDS_VALUES.map((sds) => {
-        return rowsBySds.get(sds) ?? {
-          sds,
-          reach: null,
-          weighted: null,
-          geometric: null
-        };
-      });
-    }
-
-    function renderContributionTable(rows) {
-      loadedSummaryRows = rows;
-      contributionTableBody.innerHTML = "";
-
-      rows.forEach((row) => {
-        const tableRow = document.createElement("tr");
-        tableRow.dataset.sds = String(row.sds);
-
-        tableRow.innerHTML = `
-          <td>${row.sds}</td>
-          <td>${formatDecimal(row.reach)}</td>
-          <td>${formatDecimal(row.weighted)}</td>
-          <td>${formatDecimal(row.geometric)}</td>
-        `;
-
-        contributionTableBody.appendChild(tableRow);
-      });
-
-      highlightSelectedTableRow(Number(sdsSelect.value));
-    }
-
-    function renderTableError(message) {
-      contributionTableBody.innerHTML = `
-        <tr>
-          <td class="error-cell" colspan="4">${message}</td>
-        </tr>
-      `;
-    }
-
-    function highlightSelectedTableRow(sdsMm) {
-      const rows = contributionTableBody.querySelectorAll("tr[data-sds]");
-
-      rows.forEach((row) => {
-        row.classList.toggle(
-          "is-selected",
-          Number(row.dataset.sds) === Number(sdsMm)
-        );
-      });
-    }
-
-    function setExcelStatus(message, state = "normal") {
-      excelStatus.textContent = message;
-      excelStatus.classList.remove("is-error", "is-success");
-
-      if (state === "error") {
-        excelStatus.classList.add("is-error");
-      }
-
-      if (state === "success") {
-        excelStatus.classList.add("is-success");
-      }
-    }
-
-    function workbookToSummaryRows(workbook) {
-      const sheet = workbook.Sheets[REQUIRED_SHEET_NAME];
-
-      if (!sheet) {
-        throw new Error(
-          `Excel 파일에 '${REQUIRED_SHEET_NAME}' 시트가 없습니다.`
-        );
-      }
-
-      const rawRows = XLSX.utils.sheet_to_json(sheet, {
-        defval: null,
-        raw: true
-      });
-
-      if (rawRows.length === 0) {
-        throw new Error(
-          `'${REQUIRED_SHEET_NAME}' 시트에 읽을 데이터가 없습니다.`
-        );
-      }
-
-      const rows = extractSummaryRows(rawRows);
-      const validRowCount = rows.filter((row) => {
-        return (
-          row.reach !== null ||
-          row.weighted !== null ||
-          row.geometric !== null
-        );
-      }).length;
-
-      if (validRowCount === 0) {
-        throw new Error(
-          "요청한 cortical 지표 열을 찾지 못했습니다. 열 이름을 확인하십시오."
-        );
-      }
-
-      return rows;
-    }
-
-    async function readWorkbookFromUrl(url) {
-      const response = await fetch(encodeURI(url), {
-        cache: "no-store"
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const arrayBuffer = await response.arrayBuffer();
-
-      return XLSX.read(arrayBuffer, {
-        type: "array"
-      });
-    }
-
-    async function tryLoadExcelCandidates() {
-      let lastError = null;
-
-      for (const candidate of EXCEL_FILE_CANDIDATES) {
-        try {
-          const workbook = await readWorkbookFromUrl(candidate);
-          const rows = workbookToSummaryRows(workbook);
-
-          renderContributionTable(rows);
-          setExcelStatus(
-            `Excel 데이터 로드 완료: ${candidate} / ${REQUIRED_SHEET_NAME}`,
-            "success"
-          );
-          fileLoader.classList.remove("is-visible");
-          return;
-        } catch (error) {
-          lastError = error;
-        }
-      }
-
-      renderTableError(
-        "Excel 파일을 자동으로 불러오지 못했습니다. 아래 버튼에서 파일을 직접 선택하십시오."
-      );
-
-      setExcelStatus(
-        "자동 로드 실패: 브라우저에서 HTML을 file:// 방식으로 직접 열면 Excel fetch가 차단될 수 있습니다. Excel 파일을 직접 선택하거나 로컬 웹 서버에서 페이지를 실행하십시오.",
-        "error"
-      );
-
-      fileLoader.classList.add("is-visible");
-
-      if (lastError) {
-        console.warn("Excel automatic loading failed:", lastError);
-      }
-    }
-
-    excelFileInput.addEventListener("change", async (event) => {
-      const file = event.target.files?.[0];
-
-      if (!file) {
-        return;
-      }
-
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, {
-          type: "array"
-        });
-        const rows = workbookToSummaryRows(workbook);
-
-        renderContributionTable(rows);
-        setExcelStatus(
-          `Excel 데이터 로드 완료: ${file.name} / ${REQUIRED_SHEET_NAME}`,
-          "success"
-        );
-      } catch (error) {
-        renderTableError(error.message);
-        setExcelStatus(`Excel 읽기 실패: ${error.message}`, "error");
-      }
-    });
-
-    document.querySelector(".file-label").addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        excelFileInput.click();
-      }
-    });
-
     window.addEventListener("DOMContentLoaded", () => {
       sdsSelect.value = String(DEFAULT_SDS);
       updateSensitivityImage(DEFAULT_SDS);
-
-      const waitForSheetJs = window.setInterval(() => {
-        if (typeof XLSX !== "undefined") {
-          window.clearInterval(waitForSheetJs);
-          tryLoadExcelCandidates();
-        }
-      }, 60);
-
-      window.setTimeout(() => {
-        if (typeof XLSX === "undefined") {
-          window.clearInterval(waitForSheetJs);
-          renderTableError(
-            "Excel parser 라이브러리를 불러오지 못했습니다. 인터넷 연결 또는 CDN 접근 상태를 확인하십시오."
-          );
-          setExcelStatus(
-            "SheetJS 라이브러리 로드 실패로 Excel 파일을 읽을 수 없습니다.",
-            "error"
-          );
-          fileLoader.classList.add("is-visible");
-        }
-      }, 8000);
     });
   </script>
 </body>
